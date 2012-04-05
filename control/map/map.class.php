@@ -30,13 +30,31 @@
         public function getOptions(){
             $options = new stdClass();
             $options->date = date('d').'-'.date('m').'-'.date('y');
-            $options->start_point = $this->getLatestPoint($acct);
+            $options->cars = $this->getUserCars();
 
             return $options;
         }
 
         public function __destruct(){
             $this->deInit();
+        }
+
+        private function getUserCars(){
+            $query = "
+                SELECT
+                    `id`,
+                    `name`,
+                    `model`,
+                    `make`,
+                    `g_id`
+                FROM
+                    `cars`
+                WHERE
+                    `user_id` = 1 &&
+                    `active` = 1
+            ";
+
+            return $this->db->assocMulti($query);
         }
 
         private function getLatestPoint($acct, $dev){

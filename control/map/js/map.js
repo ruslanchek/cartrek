@@ -342,7 +342,6 @@ core.map = {
         this.setMapsPrototypes();
         this.createMapControls(this.map);
         this.binds();
-        this.loadData(0, 200);
         this.resizeMap(true);
         this.createDatepicker();
     }
