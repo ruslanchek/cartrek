@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-05 15:36:08
+<?php /* Smarty version Smarty-3.1.7, created on 2012-04-05 18:20:09
          compiled from "Z:/home/loc/gps/control/templates\common\head.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:105654f72e3fd140033-76492709%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '1d2a1ddf4573ddc0213f4f0dbc97c2b42e8957ff' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\common\\head.tpl',
-      1 => 1333486355,
+      1 => 1333635039,
       2 => 'file',
     ),
   ),
@@ -31,8 +31,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <link rel="stylesheet" href="/control/resources/css/style.css" type="text/css" media="all" />
 <link rel="stylesheet" href="/control/resources/plugins/datepicker/kube.datepicker.css" type="text/css" media="all" />
 
-<script src="http://api-maps.yandex.ru/1.1/index.xml?key=<?php echo $_smarty_tpl->tpl_vars['core']->value->config->yandex_maps_api_key;?>
-"></script>
+<script src="https://maps.google.com/maps/api/js?sensor=false"></script>
 <script src="/control/resources/js/jquery-1.7.2.min.js"></script>
 <script src="/control/resources/js/jquery.cookie.js"></script>
 <script src="/control/resources/bootsrtap/js/bootstrap.min.js"></script>

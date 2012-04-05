@@ -1,6 +1,6 @@
 <?php
     Class Map extends Core {
-        private $table = 'test';
+        private $table = 'tracks';
 
         public function __construct(){
             parent::__construct();
@@ -30,7 +30,7 @@
         public function getOptions(){
             $options = new stdClass();
             $options->date = date('d').'-'.date('m').'-'.date('y');
-            $options->start_point = $this->getLatestPoint();
+            $options->start_point = $this->getLatestPoint($acct);
 
             return $options;
         }
@@ -39,7 +39,7 @@
             $this->deInit();
         }
 
-        private function getLatestPoint(){
+        private function getLatestPoint($acct, $dev){
             $query = "
                 SELECT
                     `id`,
@@ -52,6 +52,9 @@
                     `g_time` DESC
                 LIMIT
                     1
+                WHERE
+                    `acct` = '".$this->db->quote($acct)."',
+                    `dev` = '".$this->db->quote($dev)."'
             ";
 
             return $this->db->assocItem($query);

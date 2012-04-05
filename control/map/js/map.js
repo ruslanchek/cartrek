@@ -31,25 +31,19 @@ core.map = {
     },
 
     createMapControls: function(map){
-        map.addControl(new YMaps.TypeControl());
-        map.addControl(new YMaps.ToolBar());
-        map.addControl(new YMaps.Zoom());
-        map.addControl(new YMaps.MiniMap());
-        map.addControl(new YMaps.ScaleLine());
 
-        map.enableHotKeys();
     },
 
     createMap: function(options){
-        var map = new YMaps.Map(YMaps.jQuery(options.selector)[0]);
+        var latlng = new google.maps.LatLng(options.lat, options.lng);
 
-        map.setCenter(
-            new YMaps.GeoPoint(
-                options.lat,
-                options.lng
-            ),
-            options.zoom
-        );
+        var myOptions = {
+            zoom      : options.zoom,
+            center    : latlng,
+            mapTypeId : google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById(options.map_container_id), myOptions);
 
         return map;
     },
@@ -74,7 +68,6 @@ core.map = {
         };
 
         this.registered.average_speed += velocity;
-
         this.registered.total_markers = i;
     },
 
@@ -83,7 +76,7 @@ core.map = {
 
         $('#max_speed').html(this.convertKnotsToKms(this.registered.max_speed) + ' км/ч');
         $('#average_speed').html(this.convertKnotsToKms(this.registered.average_speed) + ' км/ч');
-        $('#distance_driven').html(YMaps.humanDistance(this.registered.distance));
+        $('#distance_driven').html(this.registered.distance);
     },
 
     focusToMarker: function(marker, open_balloon){
@@ -98,40 +91,34 @@ core.map = {
     },
 
     createWaypointMarker: function(i, options){
-        this.markers['marker_'+i] = new YMaps.Placemark(
-            new YMaps.GeoPoint(
+        this.markers['marker_'+i] = new google.maps.Marker({
+            position: new google.maps.LatLng(
                 this.convertNMEAtoWGS84(options.lat),
                 this.convertNMEAtoWGS84(options.lng)
-            ), {
-                style: "marker#waypoint_marker",
-                hideIcon: false
-            });
+            ),
+            map: this.map,
+            title: options.id,
+            data: options,
+            description: this.makeMarkerDescription(options)
+        });
 
-        this.markers['marker_'+i].data = options;
-        this.markers['marker_'+i].name = options.dev;
-        this.markers['marker_'+i].description = this.makeMarkerDescription(options);
-
-        this.map.addOverlay(this.markers['marker_'+i]);
         this.registerMarkerData(i);
-
         return this.markers['marker_'+i];
     },
 
     createCurrentPositionMarker: function(i, options){
-        this.markers['marker_'+i] = new YMaps.Placemark(
-            new YMaps.GeoPoint(
+        this.markers['marker_'+i] = new google.maps.Marker({
+            position: new google.maps.LatLng(
                 this.convertNMEAtoWGS84(options.lat),
                 this.convertNMEAtoWGS84(options.lng)
-            ), {
-                style: "default#carIcon",
-                hideIcon: true
-            });
+            ),
+            map: this.map,
+            title: options.dev,
+            data: options,
+            description: this.makeMarkerDescription(options)
+        });
 
-        this.markers['marker_'+i].data = options;
-        this.markers['marker_'+i].name = options.dev;
-        this.markers['marker_'+i].description = this.makeMarkerDescription(options);
-
-        this.map.addOverlay(this.markers['marker_'+i]);
+        var desc = this.makeMarkerDescription(options);
         this.registerMarkerData(i);
 
         return this.markers['marker_'+i];
@@ -142,7 +129,7 @@ core.map = {
 
         if(points && points.length > 0){
             if(this.last_marker){
-                this.last_marker.setStyle("marker#waypoint_marker");
+                //this.last_marker.setStyle("marker#waypoint_marker");
             };
 
             for(var i = 1, l = points.length - 1; i < l; i++){
@@ -151,9 +138,7 @@ core.map = {
 
             this.last_marker = this.createCurrentPositionMarker(points.length, points[points.length - 1]);
 
-            console.log(points[points.length - 1]);
-
-            this.map.panTo(this.last_marker.getGeoPoint());
+            this.map.panTo(this.last_marker.getPosition());
         };
     },
 
@@ -173,18 +158,23 @@ core.map = {
 
     },
 
-    getPathDistance: function(polyline){
-        var distance = 0;
-
-        for (var i = 1, l = polyline.getNumPoints(), point; i < l; i++) {
-            if(point){
-                distance += point.distance(polyline.getPoint(i));
-            };
-
-            point = polyline.getPoint(i);
+    setMapsPrototypes: function(){
+        google.maps.LatLng.prototype.kmTo = function(a){
+            var e = Math, ra = e.PI/180;
+            var b = this.lat() * ra, c = a.lat() * ra, d = b - c;
+            var g = this.lng() * ra - a.lng() * ra;
+            var f = 2 * e.asin(e.sqrt(e.pow(e.sin(d/2), 2) + e.cos(b) * e.cos
+            (c) * e.pow(e.sin(g/2), 2)));
+            return f * 6378.137;
         };
 
-        return distance;
+        google.maps.Polyline.prototype.inKm = function(n){
+            var a = this.getPath(n), len = a.getLength(), dist = 0;
+            for (var i=0; i < len-1; i++) {
+               dist += a.getAt(i).kmTo(a.getAt(i+1));
+            };
+            return dist.toFixed(2)+' км';
+        };
     },
 
     drawPath: function(points){
@@ -193,23 +183,23 @@ core.map = {
 
             for(var i = 1, l = points.length; i < l; i++){
                 polyline_shape.push(
-                    new YMaps.GeoPoint(
+                    new google.maps.LatLng(
                         this.convertNMEAtoWGS84(points[i].lat),
                         this.convertNMEAtoWGS84(points[i].lng)
                     )
                 );
             };
 
-            var polyline = new YMaps.Polyline(
-                polyline_shape, {
-                    hasBalloon: false,
-                    interactive: YMaps.Interactivity.NONE,
-                    style: "line#line"
-                }
-            );
+            var polyline = new google.maps.Polyline({
+                path: polyline_shape,
+                strokeColor: "#02DEAD",
+                strokeOpacity: 0.75,
+                strokeWeight: 3,
+                clickable: false
+            });
 
-            this.map.addOverlay(polyline);
-            this.registered.distance = this.getPathDistance(polyline);
+            polyline.setMap(this.map);
+            this.registered.distance = polyline.inKm();
         };
     },
 
@@ -308,23 +298,6 @@ core.map = {
         });
     },
 
-    createOverlayStyles: function(){
-        //Polyline styles
-        var polyline_style = new YMaps.Style();
-        polyline_style.lineStyle = new YMaps.LineStyle();
-        polyline_style.lineStyle.strokeColor = '02dead65';
-        polyline_style.lineStyle.strokeWidth = '5';
-        YMaps.Styles.add("line#line", polyline_style);
-
-        //Waypoint marker styles
-        var waypoint_marker_style = new YMaps.Style();
-        waypoint_marker_style.iconStyle = new YMaps.IconStyle();
-        waypoint_marker_style.iconStyle.href = "/control/map/img/waypoint_marker.png";
-        waypoint_marker_style.iconStyle.size = new YMaps.Point(7, 7);
-        waypoint_marker_style.iconStyle.offset = new YMaps.Point(-4, -10);
-        YMaps.Styles.add("marker#waypoint_marker", waypoint_marker_style);
-    },
-
     changeDate: function(date){
         alert(date)
     },
@@ -336,9 +309,9 @@ core.map = {
             today       : true,
             callback    : function(event, date, year, month, day){
                 core.map.changeDate({
-                    year: year,
-                    month:month,
-                    day:day
+                    year    : year,
+                    month   : month,
+                    day     : day
                 });
             }
         });
@@ -360,17 +333,15 @@ core.map = {
         this.options = $.extend(this.options, $.parseJSON(options));
 
         this.map = this.createMap({
-            selector: '#map',
+            map_container_id: 'map',
             lat: this.convertNMEAtoWGS84(this.options.start_point.lat),
             lng: this.convertNMEAtoWGS84(this.options.start_point.lng),
             zoom: 12
         });
 
-        console.log(this.options);
-
+        this.setMapsPrototypes();
         this.createMapControls(this.map);
         this.binds();
-        this.createOverlayStyles();
         this.loadData(0, 200);
         this.resizeMap(true);
         this.createDatepicker();
