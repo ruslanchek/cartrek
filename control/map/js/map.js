@@ -74,6 +74,7 @@ core.map = {
         };
 
         this.registered.average_speed += velocity;
+
         this.registered.total_markers = i;
     },
 
