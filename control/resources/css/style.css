@@ -135,3 +135,12 @@ h1 {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
 }
+
+.g_id {
+    border: 1px solid #ccc;
+    padding: 0.2em 0.3em;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    color: #777;
+}

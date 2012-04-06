@@ -5,6 +5,8 @@
         public function __construct(){
             parent::__construct();
 
+            $this->acct = 'test01';
+
             $this->init(array(
                 'name'  => 'map',
                 'title' => 'Карта'
@@ -17,7 +19,7 @@
                     }; break;
 
                     case 'getPoints' : {
-                        print json_encode($this->getPoints());
+                        print json_encode($this->getPoints($_GET['device_id']));
                     }; break;
                 };
 
@@ -43,12 +45,13 @@
         private function getUserDevices(){
             $query = "
                 SELECT
-                    `devices`.`id`,
-                    `devices`.`secret`,
-                    `devices`.`name`,
-                    `devices`.`model`,
-                    `devices`.`make`,
-                    `devices`.`g_id`
+                    `id`,
+                    `secret`,
+                    `name`,
+                    `model`,
+                    `make`,
+                    `g_id`,
+                    `color`
                 FROM
                     `devices`
                 WHERE
@@ -60,16 +63,43 @@
             $result = array();
 
             foreach($devices as $device){
-                $last_point = $this->getLatestPoint('test01', $device['id'].':'.$device['secret']);
+                $device['point'] = $this->getLatestDevicePoint($device['id']);
                 unset($device['secret']);
-                $result[] = array_merge($device, $last_point);
+                $result[] = $device;
             };
 
             return $result;
         }
 
+        //Get data of user device, selected by id
+        private function getUserDevice($id){
+            $query = "
+                SELECT
+                    `devices`.`id`,
+                    `devices`.`secret`,
+                    `devices`.`name`,
+                    `devices`.`model`,
+                    `devices`.`make`,
+                    `devices`.`g_id`
+                FROM
+                    `devices`
+                WHERE
+                    `user_id` = 1 &&
+                    `active` = 1 &&
+                    `id` = ".intval($id)."
+            ";
+
+            return $this->db->assocItem($query);
+        }
+
+        private function getUserDeviceCode($id){
+            $device = $this->getUserDevice($id);
+
+            return $device['id'].':'.$device['secret'];
+        }
+
         //Last registered device point
-        private function getLatestPoint($acct, $dev){
+        private function getLatestDevicePoint($id){
             $query = "
                 SELECT
                     `id`,
@@ -85,8 +115,8 @@
                 FROM
                     `".$this->db->quote($this->table)."`
                 WHERE
-                    `acct` = '".$this->db->quote($acct)."' &&
-                    `dev` = '".$this->db->quote($dev)."'
+                    `acct` = '".$this->db->quote($this->acct)."' &&
+                    `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."'
                 ORDER BY
                     `g_date` DESC,
                     `g_time` DESC
@@ -97,7 +127,7 @@
             return $this->db->assocItem($query);
         }
 
-        private function getPoints(){
+        private function getPoints($id){
             $query = "
                 SELECT
                     `id`,
@@ -112,6 +142,9 @@
                     `g_time`        AS `time`
                 FROM
                     `".$this->db->quote($this->table)."`
+                WHERE
+                    `acct` = '".$this->db->quote($this->acct)."' &&
+                    `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."'
                 ORDER BY
                     `g_date` ASC,
                     `g_time` ASC

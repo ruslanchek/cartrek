@@ -8,12 +8,6 @@ core.map = {
         }
     },
 
-    registered: {
-        max_speed: 0,
-        average_speed: 0,
-        total_markers: 0
-    },
-
     convertNMEAtoWGS84: function(value){
         var nTemp = value / 100.0;
         nTemp = nTemp - (nTemp%1);
@@ -49,7 +43,7 @@ core.map = {
             for (var i=0; i < len-1; i++) {
                dist += a.getAt(i).kmTo(a.getAt(i+1));
             };
-            return dist.toFixed(2)+' км';
+            return dist.toFixed(2);
         };
     },
 
@@ -67,35 +61,14 @@ core.map = {
         return map;
     },
 
-    makeMarkerDescription: function(point_data){
+    makeMarkerDescription: function(data){
         var text = new String();
 
-        text += '<p>Уникальный номер метки: <b>' + point_data.id + '</b></p>';
-        text += '<p>Время: <b>' + this.humanizeGPSTime(point_data.time) + '</b></p>';
-        text += '<p>Скорость: <b>' + this.convertKnotsToKms(point_data.velocity) + ' км/ч</b></p>';
+        text += '<p>Уникальный номер метки: <b>' + data.point.id + '</b></p>';
+        text += '<p>Время: <b>' + this.humanizeGPSTime(data.point.time) + '</b></p>';
+        text += '<p>Скорость: <b>' + this.convertKnotsToKms(data.point.velocity) + ' км/ч</b></p>';
 
         return text;
-    },
-
-    registerMarkerData: function(i){
-        var marker = this.markers['marker_'+i],
-            velocity = parseFloat(marker.data.velocity);
-
-        if(this.registered.max_speed < velocity){
-            this.registered.max_speed = marker.data.velocity;
-            this.registered.max_speed_marker = marker;
-        };
-
-        this.registered.average_speed += velocity;
-        this.registered.total_markers = i;
-    },
-
-    showRegisteredData: function(){
-        this.registered.average_speed = this.registered.average_speed/this.registered.total_markers;
-
-        $('#max_speed').html(this.convertKnotsToKms(this.registered.max_speed) + ' км/ч');
-        $('#average_speed').html(this.convertKnotsToKms(this.registered.average_speed) + ' км/ч');
-        $('#distance_driven').html(this.registered.distance);
     },
 
     focusToMarker: function(marker, open_balloon){
@@ -112,13 +85,13 @@ core.map = {
     createCurrentPositionMarker: function(options){
         var marker = new google.maps.Marker({
             position: new google.maps.LatLng(
-                this.convertNMEAtoWGS84(options.data.lat),
-                this.convertNMEAtoWGS84(options.data.lng)
+                this.convertNMEAtoWGS84(options.device.point.lat),
+                this.convertNMEAtoWGS84(options.device.point.lng)
             ),
             map: options.map,
-            title: options.data.dev,
-            data: options.data,
-            description: this.makeMarkerDescription(options.data)
+            title: options.device.name+' ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
+            device: options.device,
+            description: this.makeMarkerDescription(options.device)
         });
 
         google.maps.event.addListener(marker, 'click', function(){
@@ -159,62 +132,6 @@ core.map = {
 
     hideWaypointMarkers: function(){
 
-    },
-
-    drawPath: function(points){
-        if(points && points.length > 0){
-            var polyline_shape = new Array();
-
-            for(var i = 1, l = points.length; i < l; i++){
-                polyline_shape.push(
-                    new google.maps.LatLng(
-                        this.convertNMEAtoWGS84(points[i].lat),
-                        this.convertNMEAtoWGS84(points[i].lng)
-                    )
-                );
-            };
-
-            var polyline = new google.maps.Polyline({
-                path: polyline_shape,
-                strokeColor: "#02DEAD",
-                strokeOpacity: 0.75,
-                strokeWeight: 3,
-                clickable: false
-            });
-
-            polyline.setMap(this.map);
-            this.registered.distance = polyline.inKm();
-        };
-    },
-
-    loadData: function(){
-        if(this.data_loading_process){
-            this.data_loading_process.abort();
-        };
-
-        this.data_loading_process = $.ajax({
-            url : '/control/map/?ajax',
-            data : {
-                action  : 'getPoints'
-            },
-            dataType : 'json',
-            type : 'get',
-            beforeSend: function(){
-                core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
-            },
-            success: function(data){
-                setTimeout(function(){
-                    core.loading.unsetLoading('global', false);
-                }, 200);
-
-                core.map.drawPath(data);
-                core.map.drawMarkers(data);
-                core.map.showRegisteredData();
-            },
-            error: function(){
-                core.loading.unsetLoading('global', false);
-            }
-        });
     },
 
     execSettings: function(settings){
@@ -313,18 +230,26 @@ core.map = {
         };
     },
 
+    getDeviceIndexById: function(id){
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            if(this.options.devices[i].id == id){
+                return i;
+            };
+        };
+    },
+
     setDeviceFocus: function(marker){
         core.map.map.panTo(marker.getPosition());
-        $('#car_name_info').text(marker.data.name);
+        $('#car_name_info').html(marker.device.name+' &mdash; '+marker.device.make+' '+marker.device.model+' <span class="g_id">'+marker.device.g_id+'</span>');
 
-
+        this.showDevicePath(marker.device.id);
     },
 
     drawDevices: function(){
         for(var i = 0, l = this.options.devices.length; i < l; i++){
             this.options.devices[i].current_position_marker = this.createCurrentPositionMarker({
                 map         : this.map,
-                data        : this.options.devices[i],
+                device      : this.options.devices[i],
                 click       : function(marker){
                     core.map.setDeviceFocus(marker);
                 }
@@ -332,12 +257,129 @@ core.map = {
         };
     },
 
-    loadOptions: function(){
-        if(this.data_loading_process){
-            this.data_loading_process.abort();
+    hideAllDievicesPaths: function(){
+        for(var i = 1, l = this.options.devices.length; i < l; i++){
+            if(this.options.devices[i].path){
+                this.options.devices[i].path.polyline.setVisible(false);
+            };
+        };
+    },
+
+    showDevicePath: function(device_id){
+        var device_data = this.options.devices[this.getDeviceIndexById(device_id)];
+
+        if(device_data.path){
+            this.hideAllDievicesPaths();
+
+            //Polyline show
+            device_data.path.polyline.setVisible(true);
+
+        }else{
+            //Load points
+            this.loadDevicePathData(device_id);
+        };
+    },
+
+    drawPath: function(points, device, map){
+        if(points && points.length > 0){
+            var polyline_shape = new Array();
+
+            for(var i = 1, l = points.length; i < l; i++){
+                polyline_shape.push(
+                    new google.maps.LatLng(
+                        this.convertNMEAtoWGS84(points[i].lat),
+                        this.convertNMEAtoWGS84(points[i].lng)
+                    )
+                );
+            };
+
+            var polyline = new google.maps.Polyline({
+                path            : polyline_shape,
+                strokeColor     : device.color,
+                strokeOpacity   : 0.75,
+                strokeWeight    : 3,
+                clickable       : false,
+                visible         : false
+            });
+
+            polyline.setMap(map);
+
+            return polyline;
+        };
+    },
+
+    getAverageSpeed: function(points){
+        var average_speed = 0;
+
+        for(var i = 0, l = points.length; i < l; i++){
+            average_speed += parseFloat(points[i].velocity);
         };
 
-        this.data_loading_process = $.ajax({
+        return this.convertKnotsToKms(average_speed/points.length);
+    },
+
+    getMaxSpeed: function(points){
+        var max_speed = 0;
+
+        for(var i = 0, l = points.length; i < l; i++){
+            if(points[i].velocity > max_speed){
+                max_speed = parseFloat(points[i].velocity);
+            };
+        };
+
+        return this.convertKnotsToKms(max_speed);
+    },
+
+    createDevicePathData: function(device_id, points){
+        var polyline = this.drawPath(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
+            device = core.map.options.devices[core.map.getDeviceIndexById(device_id)].path = {
+            points      : points,
+            polyline    : polyline,
+            statistics  : {
+                distance        : polyline.inKm(),
+                average_speed   : this.getAverageSpeed(points),
+                max_speed       : this.getMaxSpeed(points)
+            }
+        };
+    },
+
+    loadDevicePathData: function(device_id){
+        if(this.path_loading_process){
+            this.path_loading_process.abort();
+        };
+
+        this.path_loading_process = $.ajax({
+            url : '/control/map/?ajax',
+            data : {
+                action      : 'getPoints',
+                device_id   : device_id
+            },
+            dataType : 'json',
+            type : 'get',
+            beforeSend: function(){
+                core.loading.unsetLoading('global', false);
+                core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+            },
+            success: function(points){
+                setTimeout(function(){
+                    core.loading.unsetLoading('global', false);
+                }, 200);
+
+                core.map.createDevicePathData(device_id, points);
+                core.map.showDevicePath(device_id);
+            },
+            error: function(){
+                core.loading.unsetLoading('global', false);
+            }
+        });
+    },
+
+    loadOptions: function(){
+        if(this.options_loading_process){
+            this.options_loading_process.abort();
+        };
+
+        this.options_loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
                 action  : 'getOptions'
@@ -366,8 +408,8 @@ core.map = {
         var lat, lng;
 
         if(this.options.devices.length > 0){
-            lat = this.options.devices[0].lat;
-            lng = this.options.devices[0].lng;
+            lat = this.options.devices[0].point.lat;
+            lng = this.options.devices[0].point.lng;
         }else{
             lat = this.options.default_position.lat;
             lng = this.options.default_position.lng;
