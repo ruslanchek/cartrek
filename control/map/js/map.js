@@ -245,7 +245,7 @@ core.map = {
 
         if(this.options.current_devece_id != device_id){
             $('#car_name_info').html(device.name+' &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
-            this.showDevicePath(device.id);
+            this.showDeviceData(device.id);
             this.options.current_devece_id = device_id;
         };
     },
@@ -270,7 +270,7 @@ core.map = {
         };
     },
 
-    showDevicePath: function(device_id){
+    showDeviceData: function(device_id){
         var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
         if(device.path){
@@ -278,6 +278,24 @@ core.map = {
 
             //Path show
             device.path.polyline.setVisible(true);
+
+            //Show statistics
+            var html =  '<table class="table table-bordered table-condensed">' +
+                            '<tr>' +
+                                '<td>Максимальная скорость</td>' +
+                                '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+'</a></td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>Средняя скорость</td>' +
+                                '<td><span id="average_speed" class="label">'+device.path.statistics.average_speed+'</span></td>' +
+                            '</tr>' +
+                            '<tr>' +
+                                '<td>Пройдено пути</td>' +
+                                '<td><span id="distance_driven" class="label">'+device.path.statistics.distance+'</span></td>' +
+                            '</tr>' +
+                        '</table>';
+
+            $('#registered_data').html(html).fadeIn(200);
 
         }else{
             //Load points and recall this fn
@@ -371,7 +389,7 @@ core.map = {
                 }, 200);
 
                 core.map.createDevicePathData(device_id, points);
-                core.map.showDevicePath(device_id);
+                core.map.showDeviceData(device_id);
             },
             error: function(){
                 core.loading.unsetLoading('global', false);

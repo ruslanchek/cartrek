@@ -84,9 +84,8 @@ h1 {
 }
 
 #registered_data .label {
-    display: block;
+    display: none;
     text-align: center;
-
 }
 
 #registered_data table td {

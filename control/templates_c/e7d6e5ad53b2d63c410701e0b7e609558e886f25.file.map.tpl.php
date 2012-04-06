@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-06 14:52:28
+<?php /* Smarty version Smarty-3.1.7, created on 2012-04-06 19:12:12
          compiled from "Z:/home/loc/gps/control/templates\modules\map.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:65384f71f59ece95a1-43800246%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'e7d6e5ad53b2d63c410701e0b7e609558e886f25' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\modules\\map.tpl',
-      1 => 1333709526,
+      1 => 1333724762,
       2 => 'file',
     ),
   ),
@@ -44,7 +44,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                 <div id="datepicker"></div>
             </div>
 
-            
+            <div id="registered_data"></div>
         </div>
     </div>
 </div>

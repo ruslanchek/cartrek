@@ -23,22 +23,7 @@
                 <div id="datepicker"></div>
             </div>
 
-            {*<div id="registered_data">
-                <table class="table table-bordered table-condensed">
-                    <tr>
-                        <td>Максимальная скорость</td>
-                        <td><a id="max_speed" class="label label-info" href="javascript:void(0)">&mdash;</a></td>
-                    </tr>
-                    <tr>
-                        <td>Средняя скорость</td>
-                        <td><span id="average_speed" class="label">&mdash;</span></td>
-                    </tr>
-                    <tr>
-                        <td>Пройдено пути</td>
-                        <td><span id="distance_driven" class="label">&mdash;</span></td>
-                    </tr>
-                </table>
-            </div>*}
+            <div id="registered_data"></div>
         </div>
     </div>
 </div>
