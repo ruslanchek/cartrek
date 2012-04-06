@@ -1,6 +1,6 @@
 <div class="page-header">
     <div class="pull-left">
-        <h1>GPS-мониторинг <small>Volvo S40</small></h1>
+        <h1>GPS-мониторинг <small id="car_name_info"></small></h1>
     </div>
 
     <div class="pull-right">
@@ -23,7 +23,7 @@
                 <div id="datepicker"></div>
             </div>
 
-            <div id="registered_data">
+            {*<div id="registered_data">
                 <table class="table table-bordered table-condensed">
                     <tr>
                         <td>Максимальная скорость</td>
@@ -38,9 +38,9 @@
                         <td><span id="distance_driven" class="label">&mdash;</span></td>
                     </tr>
                 </table>
-            </div>
+            </div>*}
         </div>
     </div>
 </div>
 
-<script>core.map.init('{$options}');</script>
+<script>core.map.init();</script>

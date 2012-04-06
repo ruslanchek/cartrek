@@ -35,7 +35,6 @@
     margin: 5px auto 0;
 }
 
-
 /* Loading */
 body i.loading {
     position: absolute;
@@ -59,8 +58,6 @@ body i.loading.micro {
     margin: -8px 0 0 -8px;
 }
 
-
-
 h1 {
     margin-bottom: 0.5em;
 }
@@ -72,8 +69,6 @@ h1 {
 .page-header {
     padding-bottom: 0;
 }
-
-
 
 #map {
     width: 100%;

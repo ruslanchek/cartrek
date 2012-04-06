@@ -1,7 +1,11 @@
 core.map = {
     options: {
         show_tracks_on_map: 1,
-        show_markers_on_map: 1
+        show_markers_on_map: 1,
+        default_position : {
+            lat: 30,
+            lng: 30
+        }
     },
 
     registered: {
@@ -30,8 +34,23 @@ core.map = {
         return h + ':' + m + ':' + s;
     },
 
-    createMapControls: function(map){
+    setMapsPrototypes: function(){
+        google.maps.LatLng.prototype.kmTo = function(a){
+            var e = Math, ra = e.PI/180;
+            var b = this.lat() * ra, c = a.lat() * ra, d = b - c;
+            var g = this.lng() * ra - a.lng() * ra;
+            var f = 2 * e.asin(e.sqrt(e.pow(e.sin(d/2), 2) + e.cos(b) * e.cos
+            (c) * e.pow(e.sin(g/2), 2)));
+            return f * 6378.137;
+        };
 
+        google.maps.Polyline.prototype.inKm = function(n){
+            var a = this.getPath(n), len = a.getLength(), dist = 0;
+            for (var i=0; i < len-1; i++) {
+               dist += a.getAt(i).kmTo(a.getAt(i+1));
+            };
+            return dist.toFixed(2)+' км';
+        };
     },
 
     createMap: function(options){
@@ -90,38 +109,23 @@ core.map = {
         });
     },
 
-    createWaypointMarker: function(i, options){
-        this.markers['marker_'+i] = new google.maps.Marker({
+    createCurrentPositionMarker: function(options){
+        var marker = new google.maps.Marker({
             position: new google.maps.LatLng(
-                this.convertNMEAtoWGS84(options.lat),
-                this.convertNMEAtoWGS84(options.lng)
+                this.convertNMEAtoWGS84(options.data.lat),
+                this.convertNMEAtoWGS84(options.data.lng)
             ),
-            map: this.map,
-            title: options.id,
-            data: options,
-            description: this.makeMarkerDescription(options)
+            map: options.map,
+            title: options.data.dev,
+            data: options.data,
+            description: this.makeMarkerDescription(options.data)
         });
 
-        this.registerMarkerData(i);
-        return this.markers['marker_'+i];
-    },
-
-    createCurrentPositionMarker: function(i, options){
-        this.markers['marker_'+i] = new google.maps.Marker({
-            position: new google.maps.LatLng(
-                this.convertNMEAtoWGS84(options.lat),
-                this.convertNMEAtoWGS84(options.lng)
-            ),
-            map: this.map,
-            title: options.dev,
-            data: options,
-            description: this.makeMarkerDescription(options)
+        google.maps.event.addListener(marker, 'click', function(){
+            options.click(marker);
         });
 
-        var desc = this.makeMarkerDescription(options);
-        this.registerMarkerData(i);
-
-        return this.markers['marker_'+i];
+        return marker;
     },
 
     drawMarkers: function(points){
@@ -137,7 +141,6 @@ core.map = {
             };
 
             this.last_marker = this.createCurrentPositionMarker(points.length, points[points.length - 1]);
-
             this.map.panTo(this.last_marker.getPosition());
         };
     },
@@ -156,25 +159,6 @@ core.map = {
 
     hideWaypointMarkers: function(){
 
-    },
-
-    setMapsPrototypes: function(){
-        google.maps.LatLng.prototype.kmTo = function(a){
-            var e = Math, ra = e.PI/180;
-            var b = this.lat() * ra, c = a.lat() * ra, d = b - c;
-            var g = this.lng() * ra - a.lng() * ra;
-            var f = 2 * e.asin(e.sqrt(e.pow(e.sin(d/2), 2) + e.cos(b) * e.cos
-            (c) * e.pow(e.sin(g/2), 2)));
-            return f * 6378.137;
-        };
-
-        google.maps.Polyline.prototype.inKm = function(n){
-            var a = this.getPath(n), len = a.getLength(), dist = 0;
-            for (var i=0; i < len-1; i++) {
-               dist += a.getAt(i).kmTo(a.getAt(i+1));
-            };
-            return dist.toFixed(2)+' км';
-        };
     },
 
     drawPath: function(points){
@@ -329,20 +313,87 @@ core.map = {
         };
     },
 
-    init: function(options){
-        this.options = $.extend(this.options, $.parseJSON(options));
+    setDeviceFocus: function(marker){
+        core.map.map.panTo(marker.getPosition());
+        $('#car_name_info').text(marker.data.name);
+
+
+    },
+
+    drawDevices: function(){
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            this.options.devices[i].current_position_marker = this.createCurrentPositionMarker({
+                map         : this.map,
+                data        : this.options.devices[i],
+                click       : function(marker){
+                    core.map.setDeviceFocus(marker);
+                }
+            });
+        };
+    },
+
+    loadOptions: function(){
+        if(this.data_loading_process){
+            this.data_loading_process.abort();
+        };
+
+        this.data_loading_process = $.ajax({
+            url : '/control/map/?ajax',
+            data : {
+                action  : 'getOptions'
+            },
+            dataType : 'json',
+            type : 'get',
+            beforeSend: function(){
+                core.loading.unsetLoading('global', false);
+                core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+            },
+            success: function(options){
+                setTimeout(function(){
+                    core.loading.unsetLoading('global', false);
+                }, 200);
+
+                core.map.options = $.extend(core.map.options, options);
+                core.map.initGlobal();
+            },
+            error: function(){
+                core.loading.unsetLoading('global', false);
+            }
+        });
+    },
+
+    initGlobal: function(){
+        var lat, lng;
+
+        if(this.options.devices.length > 0){
+            lat = this.options.devices[0].lat;
+            lng = this.options.devices[0].lng;
+        }else{
+            lat = this.options.default_position.lat;
+            lng = this.options.default_position.lng;
+        };
 
         this.map = this.createMap({
             map_container_id: 'map',
-            lat: this.convertNMEAtoWGS84(this.options.start_point.lat),
-            lng: this.convertNMEAtoWGS84(this.options.start_point.lng),
+            lat: this.convertNMEAtoWGS84(lat),
+            lng: this.convertNMEAtoWGS84(lng),
             zoom: 12
         });
 
-        this.setMapsPrototypes();
-        this.createMapControls(this.map);
-        this.binds();
         this.resizeMap(true);
+        this.setMapsPrototypes();
+        this.drawDevices();
         this.createDatepicker();
+    },
+
+    init: function(){
+        this.loadOptions();
+
+        /*this.options = $.extend(this.options, $.parseJSON(options));
+
+        this.initGlobalMap();
+
+        this.binds();
+        this.createDatepicker();*/
     }
 }

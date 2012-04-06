@@ -30,7 +30,7 @@
         public function getOptions(){
             $options = new stdClass();
             $options->date = date('d').'-'.date('m').'-'.date('y');
-            $options->cars = $this->getUserCars();
+            $options->devices = $this->getUserDevices();
 
             return $options;
         }
@@ -39,40 +39,59 @@
             $this->deInit();
         }
 
-        private function getUserCars(){
+        //Get complete list of user's cars with last points
+        private function getUserDevices(){
             $query = "
                 SELECT
-                    `id`,
-                    `name`,
-                    `model`,
-                    `make`,
-                    `g_id`
+                    `devices`.`id`,
+                    `devices`.`secret`,
+                    `devices`.`name`,
+                    `devices`.`model`,
+                    `devices`.`make`,
+                    `devices`.`g_id`
                 FROM
-                    `cars`
+                    `devices`
                 WHERE
                     `user_id` = 1 &&
                     `active` = 1
             ";
 
-            return $this->db->assocMulti($query);
+            $devices = $this->db->assocMulti($query);
+            $result = array();
+
+            foreach($devices as $device){
+                $last_point = $this->getLatestPoint('test01', $device['id'].':'.$device['secret']);
+                unset($device['secret']);
+                $result[] = array_merge($device, $last_point);
+            };
+
+            return $result;
         }
 
+        //Last registered device point
         private function getLatestPoint($acct, $dev){
             $query = "
                 SELECT
                     `id`,
+                    `dev`,
+                    `g_lng`         AS `lng`,
+                    `g_lng_p`       AS `lng_p`,
                     `g_lat`         AS `lat`,
-                    `g_lng`         AS `lng`
+                    `g_lat_j`       AS `lat_j`,
+                    `g_velocity`    AS `velocity`,
+                    `g_bb`          AS `bb`,
+                    `g_date`        AS `date`,
+                    `g_time`        AS `time`
                 FROM
                     `".$this->db->quote($this->table)."`
+                WHERE
+                    `acct` = '".$this->db->quote($acct)."' &&
+                    `dev` = '".$this->db->quote($dev)."'
                 ORDER BY
                     `g_date` DESC,
                     `g_time` DESC
                 LIMIT
                     1
-                WHERE
-                    `acct` = '".$this->db->quote($acct)."',
-                    `dev` = '".$this->db->quote($dev)."'
             ";
 
             return $this->db->assocItem($query);
