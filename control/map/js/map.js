@@ -95,7 +95,7 @@ core.map = {
         });
 
         google.maps.event.addListener(marker, 'click', function(){
-            options.click(marker);
+            options.click(options.device.id);
         });
 
         return marker;
@@ -238,11 +238,16 @@ core.map = {
         };
     },
 
-    setDeviceFocus: function(marker){
-        core.map.map.panTo(marker.getPosition());
-        $('#car_name_info').html(marker.device.name+' &mdash; '+marker.device.make+' '+marker.device.model+' <span class="g_id">'+marker.device.g_id+'</span>');
+    setDeviceFocus: function(device_id){
+        var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
-        this.showDevicePath(marker.device.id);
+        core.map.map.panTo(device.current_position_marker.getPosition());
+
+        if(this.options.current_devece_id != device_id){
+            $('#car_name_info').html(device.name+' &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
+            this.showDevicePath(device.id);
+            this.options.current_devece_id = device_id;
+        };
     },
 
     drawDevices: function(){
@@ -250,15 +255,15 @@ core.map = {
             this.options.devices[i].current_position_marker = this.createCurrentPositionMarker({
                 map         : this.map,
                 device      : this.options.devices[i],
-                click       : function(marker){
-                    core.map.setDeviceFocus(marker);
+                click       : function(device_id){
+                    core.map.setDeviceFocus(device_id);
                 }
             });
         };
     },
 
     hideAllDievicesPaths: function(){
-        for(var i = 1, l = this.options.devices.length; i < l; i++){
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
             if(this.options.devices[i].path){
                 this.options.devices[i].path.polyline.setVisible(false);
             };
@@ -266,16 +271,16 @@ core.map = {
     },
 
     showDevicePath: function(device_id){
-        var device_data = this.options.devices[this.getDeviceIndexById(device_id)];
+        var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
-        if(device_data.path){
+        if(device.path){
             this.hideAllDievicesPaths();
 
-            //Polyline show
-            device_data.path.polyline.setVisible(true);
+            //Path show
+            device.path.polyline.setVisible(true);
 
         }else{
-            //Load points
+            //Load points and recall this fn
             this.loadDevicePathData(device_id);
         };
     },
@@ -438,4 +443,4 @@ core.map = {
         this.binds();
         this.createDatepicker();*/
     }
-}
+};
