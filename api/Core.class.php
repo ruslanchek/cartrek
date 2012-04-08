@@ -13,6 +13,7 @@
                 array('name' => 'map'       , 'title' => 'Карта')
             );
 
+
         // Классы API
         private $classes = array(
             'utils'                 => 'Utilities',
