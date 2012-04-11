@@ -1,4 +1,6 @@
 <?php
+    session_start();
+
     //Подключаем основные классы
     require_once($_SERVER['DOCUMENT_ROOT'].'/api/Core.class.php');
 

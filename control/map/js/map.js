@@ -18,6 +18,19 @@ core.map = {
                     coord: [5,0,6,1,6,2,6,3,6,4,6,5,5,6,1,6,0,5,0,4,0,3,0,2,0,1,1,0,5,0],
                     type: 'poly'
                 }
+            },
+            waypoint_stop: {
+                image: new google.maps.MarkerImage(
+                    'markers/waypoint_image_stop.png',
+                    new google.maps.Size(7,7),
+                    new google.maps.Point(0,0),
+                    new google.maps.Point(3,3)
+                ),
+                shadow: null,
+                shape: {
+                    coord: [5,0,6,1,6,2,6,3,6,4,6,5,5,6,1,6,0,5,0,4,0,3,0,2,0,1,1,0,5,0],
+                    type: 'poly'
+                }
             }
         }
     },
@@ -148,8 +161,14 @@ core.map = {
         return options;
     },
 
-    changeDate: function(date){
-        alert(date)
+    changeDate: function(date, event){
+        $('.kube_datepicker_day_select').removeClass('kube_datepicker_day_select');
+        $(event.originalEvent.srcElement).parent().addClass('kube_datepicker_day_select');
+
+        this.hideAllDevicesInfo();
+        this.hideAllDevicesCurrentPositions();
+
+        this.loadOptions(true);
     },
 
     createDatepicker: function(){
@@ -157,12 +176,27 @@ core.map = {
             embed       : true,
             format      : 'dd-mm-yy',
             today       : true,
+            setDate     : this.options.date,
             callback    : function(event, date, year, month, day){
-                core.map.changeDate({
-                    year    : year,
-                    month   : month,
-                    day     : day
-                });
+                if(core.map.date_loading_process){
+                    core.map.date_loading_process.abort();
+                };
+
+                core.map.date_loading_process = $.ajax({
+                    url: '/control/map/?ajax',
+                    data: {
+                        action: 'setCurrentDate',
+                        date: date
+                    },
+                    beforeSend: function(){
+                        core.loading.unsetLoading('global', false);
+                        core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+                    },
+                    success: function(){
+                        core.loading.unsetLoading('global', false);
+                        core.map.changeDate(date, event);
+                    }
+                })
             }
         });
     },
@@ -178,7 +212,9 @@ core.map = {
             });
         };
 
-        google.maps.event.trigger(this.map, 'resize');
+        if(this.map){
+            google.maps.event.trigger(this.map, 'resize');
+        };
     },
 
     getDeviceIndexById: function(id){
@@ -211,12 +247,30 @@ core.map = {
         };
     },
 
+    hideAllDevicesCurrentPositions: function(){
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            if(this.options.devices[i].current_position_marker){
+                this.options.devices[i].current_position_marker.setMap(null);
+            };
+        };
+    },
+
+    hideAllDevicesInfo: function(){
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            this.hideDeviceInfo(this.options.devices[i].id);
+        };
+
+        $('#where_is_my_car').fadeOut(100);
+    },
+
     hideDeviceInfo: function(id){
         var device = this.options.devices[this.getDeviceIndexById(id)];
-        device.path.polyline.setVisible(false);
+        if(device.path){
+            device.path.polyline.setVisible(false);
 
-        for(var i = 0, l = device.path.waypoint_markers.length; i < l; i++){
-            device.path.waypoint_markers[i].setVisible(false);
+            for(var i = 0, l = device.path.waypoint_markers.length; i < l; i++){
+                device.path.waypoint_markers[i].setVisible(false);
+            };
         };
 
         $('#registered_data, #car_name_info').html('');
@@ -255,11 +309,13 @@ core.map = {
                             '</tr>' +
                         '</table>';
 
-            $('#registered_data').html(html).fadeIn(200);
+            $('#registered_data').html(html).fadeIn(150);
 
             $('#car_name_info').html(device.name+' &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
 
             this.options.current_devece_id = device_id;
+
+            $('#where_is_my_car').fadeIn();
 
         }else{
             //Load points and recall this fn
@@ -315,34 +371,44 @@ core.map = {
     },
 
     createCurrentPositionMarker: function(options){
-        var marker = new google.maps.Marker({
-            position    : new google.maps.LatLng(
-                this.convertNMEAtoWGS84(options.device.point.lat),
-                this.convertNMEAtoWGS84(options.device.point.lng)
-            ),
-            point       : options.device.point,
-            map         : options.map,
-            title       : options.device.name+' ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
-            device_id   : options.device.id,
-            description : this.makeMarkerDescription(options.device)
-        });
+        if(options.device.point){
+            var marker = new google.maps.Marker({
+                position    : new google.maps.LatLng(
+                    this.convertNMEAtoWGS84(options.device.point.lat),
+                    this.convertNMEAtoWGS84(options.device.point.lng)
+                ),
+                point       : options.device.point,
+                map         : options.map,
+                title       : options.device.name+' ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
+                device_id   : options.device.id,
+                description : this.makeMarkerDescription(options.device)
+            });
 
-        google.maps.event.addListener(marker, 'click', function(){
-            options.click(marker);
-        });
+            google.maps.event.addListener(marker, 'click', function(){
+                options.click(marker);
+            });
 
-        return marker;
+            return marker;
+        };
     },
 
     createWaypointMarker: function(options){
+        var style;
+
+        if(options.point.velocity <= 0){
+            style = this.options.marker_styles.waypoint_stop;
+        }else{
+            style = this.options.marker_styles.waypoint;
+        };
+
         var marker = new google.maps.Marker({
             position    : new google.maps.LatLng(
                 this.convertNMEAtoWGS84(options.point.lat),
                 this.convertNMEAtoWGS84(options.point.lng)
             ),
-            icon        : this.options.marker_styles.waypoint.image,
-            shadow      : this.options.marker_styles.waypoint.shadow,
-            shape       : this.options.marker_styles.waypoint.shape,
+            icon        : style.image,
+            shadow      : style.shadow,
+            shape       : style.shape,
             point       : options.point,
             map         : options.map,
             title       : options.device.name+' ('+this.convertKnotsToKms(options.point.velocity)+' км/ч)',
@@ -372,18 +438,20 @@ core.map = {
     },
 
     getMaxSpeed: function(markers){
-        var max_speed = 0,
-            result = {};
+        if(markers){
+            var max_speed = 0,
+                result = {};
 
-        for(var i = 0, l = markers.length; i < l; i++){
-            if(markers[i].point.velocity > max_speed){
-                result.marker = markers[i];
-                max_speed = parseFloat(markers[i].point.velocity);
+            for(var i = 0, l = markers.length; i < l; i++){
+                if(markers[i].point.velocity > max_speed){
+                    result.marker = markers[i];
+                    max_speed = parseFloat(markers[i].point.velocity);
+                };
             };
-        };
-        result.value = this.convertKnotsToKms(max_speed);
+            result.value = this.convertKnotsToKms(max_speed);
 
-        return result;
+            return result;
+        };
     },
 
     createDevicePathData: function(device_id, points){
@@ -426,8 +494,10 @@ core.map = {
                     core.loading.unsetLoading('global', false);
                 }, 200);
 
-                core.map.createDevicePathData(device_id, points);
-                core.map.showDeviceData(device_id);
+                if(points.length > 0){
+                    core.map.createDevicePathData(device_id, points);
+                    core.map.showDeviceData(device_id);
+                };
             },
             error: function(){
                 core.loading.unsetLoading('global', false);
@@ -435,7 +505,7 @@ core.map = {
         });
     },
 
-    loadOptions: function(){
+    loadOptions: function(reinit){
         if(this.options_loading_process){
             this.options_loading_process.abort();
         };
@@ -457,7 +527,12 @@ core.map = {
                 }, 200);
 
                 core.map.options = $.extend(core.map.options, options);
-                core.map.initGlobal();
+
+                if(reinit){
+                    core.map.reinitGlobal();
+                }else{
+                    core.map.initGlobal();
+                };
             },
             error: function(){
                 core.loading.unsetLoading('global', false);
@@ -469,16 +544,36 @@ core.map = {
         marker.map.panTo(marker.getPosition());
     },
 
+    reinitGlobal: function(){
+        this.drawDevices();
+
+        if(this.options.current_devece_id){
+            this.showDeviceData(this.options.devices[this.getDeviceIndexById(this.options.current_devece_id)].id);
+        };
+    },
+
+    notyfyAboutNoRegisteredPoints: function(){
+
+    },
+
     initGlobal: function(){
         var lat, lng;
 
-        if(this.options.devices.length > 0){
+        if(this.options.devices.length > 0 && this.options.devices[0].point){
             lat = this.options.devices[0].point.lat;
             lng = this.options.devices[0].point.lng;
         }else{
             lat = this.options.default_position.lat;
             lng = this.options.default_position.lng;
         };
+
+        var cars_menu_html = new String();
+
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            cars_menu_html += '<li><a href="#">'+this.options.devices[i].name+' &mdash; '+this.options.devices[i].make+' '+this.options.devices[i].model+' <span class="g_id">'+this.options.devices[i].g_id+'</span></a></li>';
+        };
+
+        $('.select_car .dropdown-menu').html(cars_menu_html);
 
         this.map = this.createMap({
             map_container_id: 'map',
@@ -487,9 +582,8 @@ core.map = {
             zoom: 12
         });
 
-        this.resizeMap(true);
-        this.setMapsPrototypes();
         this.drawDevices();
+        this.resizeMap(true);
         this.createDatepicker();
     },
 
@@ -518,6 +612,7 @@ core.map = {
     },
 
     init: function(){
+        this.setMapsPrototypes();
         this.loadOptions();
         this.binds();
     }

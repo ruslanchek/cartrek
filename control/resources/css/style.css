@@ -146,4 +146,34 @@ h1 {
     -moz-border-radius: 3px;
     border-radius: 3px;
     color: #777;
+    background: #fff;
+    margin: 0 0.2em;
+    -webkit-box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
+}
+
+#where_is_my_car {
+    display: none;
+}
+
+.select_car {
+    margin: 0 1em 0 2em;
+}
+
+.select_car ul li a {
+    position: relative;
+    padding: 6px 110px 6px 10px;
+}
+
+.select_car ul li a .g_id {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -12px;
+}
+
+.header_tools {
+    position: relative;
+    margin: 0 0 -3px;
 }

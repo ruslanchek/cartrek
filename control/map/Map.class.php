@@ -2,8 +2,12 @@
     Class Map extends Core {
         private $table = 'tracks';
 
+        public $current_date;
+
         public function __construct(){
             parent::__construct();
+
+            $this->setCurrentDate();
 
             $this->acct = 'test01';
 
@@ -21,6 +25,10 @@
                     case 'getPoints' : {
                         print json_encode($this->getPoints($_GET['device_id']));
                     }; break;
+
+                    case 'setCurrentDate' : {
+                        $this->setCurrentDate($_GET['date']);
+                    }; break;
                 };
 
                 exit;
@@ -29,9 +37,21 @@
             $this->smarty->assign('options', json_encode($this->getOptions()));
         }
 
+        private function setCurrentDate($date = false){
+            if(!$date){
+                if(!$_SESSION['current_date']){
+                    $_SESSION['current_date'] = date('d').'-'.date('m').'-'.date('y');
+                };
+            }else{
+                $_SESSION['current_date'] = $date;
+            };
+
+            $this->current_date = $_SESSION['current_date'];
+        }
+
         public function getOptions(){
             $options = new stdClass();
-            $options->date = date('d').'-'.date('m').'-'.date('y');
+            $options->date = $this->current_date;
             $options->devices = $this->getUserDevices();
 
             return $options;
@@ -100,6 +120,8 @@
 
         //Last registered device point
         private function getLatestDevicePoint($id){
+            $date = substr($this->current_date, 0, 2).substr($this->current_date, 3, 2).substr($this->current_date, 8, 2);
+
             $query = "
                 SELECT
                     `id`,
@@ -115,8 +137,9 @@
                 FROM
                     `".$this->db->quote($this->table)."`
                 WHERE
-                    `acct` = '".$this->db->quote($this->acct)."' &&
-                    `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."'
+                    `acct`  = '".$this->db->quote($this->acct)."' &&
+                    `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."' &&
+                    `g_date` = '".$this->db->quote($date)."'
                 ORDER BY
                     `g_date` DESC,
                     `g_time` DESC
@@ -128,6 +151,8 @@
         }
 
         private function getPoints($id){
+            $date = substr($this->current_date, 0, 2).substr($this->current_date, 3, 2).substr($this->current_date, 8, 2);
+
             $query = "
                 SELECT
                     `id`,
@@ -144,7 +169,8 @@
                     `".$this->db->quote($this->table)."`
                 WHERE
                     `acct` = '".$this->db->quote($this->acct)."' &&
-                    `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."'
+                    `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."' &&
+                    `g_date` = '".$this->db->quote($date)."'
                 ORDER BY
                     `g_date` ASC,
                     `g_time` ASC
