@@ -39,7 +39,7 @@
 
         private function setCurrentDate($date = false){
             if(!$date){
-                if(!$_SESSION['current_date']){
+                if(!isset($_SESSION['current_date'])){
                     $_SESSION['current_date'] = date('d').'-'.date('m').'-'.date('y');
                 };
             }else{
