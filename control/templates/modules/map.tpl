@@ -1,11 +1,13 @@
 <div class="page-header">
     <div class="pull-left">
         <h1>
-            GPS-мониторинг
+            GPS-мониторинг <small class="current_date">29 марта, 2011</small>
         </h1>
     </div>
 
-    <div class="pull-left header_tools">
+    <div class="clear"></div>
+
+    <div class="header_tools">
         <div class="pull-left">
             <div class="btn-group select_car">
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">

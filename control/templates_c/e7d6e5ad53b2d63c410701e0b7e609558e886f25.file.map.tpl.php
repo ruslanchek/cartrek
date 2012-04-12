@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-12 12:44:34
+<?php /* Smarty version Smarty-3.1.7, created on 2012-04-12 12:54:03
          compiled from "Z:/home/loc/gps/control/templates\modules\map.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:65384f71f59ece95a1-43800246%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'e7d6e5ad53b2d63c410701e0b7e609558e886f25' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\modules\\map.tpl',
-      1 => 1334220244,
+      1 => 1334220841,
       2 => 'file',
     ),
   ),
@@ -22,11 +22,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <?php if ($_valid && !is_callable('content_4f71f59ed263e')) {function content_4f71f59ed263e($_smarty_tpl) {?><div class="page-header">
     <div class="pull-left">
         <h1>
-            GPS-мониторинг
+            GPS-мониторинг <small class="current_date">29 марта, 2011</small>
         </h1>
     </div>
 
-    <div class="pull-left header_tools">
+    <div class="clear"></div>
+
+    <div class="header_tools">
         <div class="pull-left">
             <div class="btn-group select_car">
                 <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
