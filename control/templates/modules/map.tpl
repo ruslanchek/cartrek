@@ -1,12 +1,25 @@
 <div class="page-header">
     <div class="pull-left">
-        <h1>GPS-мониторинг <small id="car_name_info"></small></h1>
+        <h1>
+            GPS-мониторинг
+        </h1>
     </div>
 
-    <div class="pull-right">
-        <div id="tools_menu">
-            <a href="javascript:void(0)" id="where_is_my_car" class="btn"><i class="icon-flag"></i> Моя машина</a>
-            <a href="javascript:void(0)" id="view_settings" class="btn btn-info"><i class="icon-cog icon-white"></i> Настройка вида</a>
+    <div class="pull-left header_tools">
+        <div class="pull-left">
+            <div class="btn-group select_car">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span id="car_name_info">Выбрать машину</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="pull-left">
+            <div href="javascript:void(0)" id="where_is_my_car" class="btn btn-info"><i class="icon-flag icon-white"></i> Показать</div>
         </div>
     </div>
 

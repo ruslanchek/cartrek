@@ -1,10 +1,37 @@
 core.map = {
     options: {
-        show_tracks_on_map: 1,
-        show_markers_on_map: 1,
+        current_devece_id: null,
         default_position : {
             lat: 30,
             lng: 30
+        },
+        marker_styles: {
+            waypoint: {
+                image: new google.maps.MarkerImage(
+                    'markers/waypoint_image.png',
+                    new google.maps.Size(7,7),
+                    new google.maps.Point(0,0),
+                    new google.maps.Point(3,3)
+                ),
+                shadow: null,
+                shape: {
+                    coord: [5,0,6,1,6,2,6,3,6,4,6,5,5,6,1,6,0,5,0,4,0,3,0,2,0,1,1,0,5,0],
+                    type: 'poly'
+                }
+            },
+            waypoint_stop: {
+                image: new google.maps.MarkerImage(
+                    'markers/waypoint_image_stop.png',
+                    new google.maps.Size(7,7),
+                    new google.maps.Point(0,0),
+                    new google.maps.Point(3,3)
+                ),
+                shadow: null,
+                shape: {
+                    coord: [5,0,6,1,6,2,6,3,6,4,6,5,5,6,1,6,0,5,0,4,0,3,0,2,0,1,1,0,5,0],
+                    type: 'poly'
+                }
+            }
         }
     },
 
@@ -71,53 +98,6 @@ core.map = {
         return text;
     },
 
-    focusToMarker: function(marker, open_balloon){
-        this.map.panTo(marker.getGeoPoint(), {
-            flying: true,
-            callback: function(){
-                if(open_balloon){
-                    marker.openBalloon();
-                };
-            }
-        });
-    },
-
-    createCurrentPositionMarker: function(options){
-        var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(
-                this.convertNMEAtoWGS84(options.device.point.lat),
-                this.convertNMEAtoWGS84(options.device.point.lng)
-            ),
-            map: options.map,
-            title: options.device.name+' ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
-            device: options.device,
-            description: this.makeMarkerDescription(options.device)
-        });
-
-        google.maps.event.addListener(marker, 'click', function(){
-            options.click(options.device.id);
-        });
-
-        return marker;
-    },
-
-    drawMarkers: function(points){
-        this.markers = {};
-
-        if(points && points.length > 0){
-            if(this.last_marker){
-                //this.last_marker.setStyle("marker#waypoint_marker");
-            };
-
-            for(var i = 1, l = points.length - 1; i < l; i++){
-                this.createWaypointMarker(i, points[i]);
-            };
-
-            this.last_marker = this.createCurrentPositionMarker(points.length, points[points.length - 1]);
-            this.map.panTo(this.last_marker.getPosition());
-        };
-    },
-
     showPath: function(){
 
     },
@@ -181,26 +161,14 @@ core.map = {
         return options;
     },
 
-    binds: function(){
-        $(window).unload(function(){
-            core.map.map.destructor();
-        });
+    changeDate: function(date, event){
+        $('.kube_datepicker_day_select').removeClass('kube_datepicker_day_select');
+        $(event.originalEvent.srcElement).parent().addClass('kube_datepicker_day_select');
 
-        $('#max_speed').live('click', function(){
-            core.map.focusToMarker(core.map.registered.max_speed_marker, true);
-        });
+        this.hideAllDevicesInfo();
+        this.hideAllDevicesCurrentPositions();
 
-        $('#where_is_my_car').live('click', function(){
-            core.map.focusToMarker(core.map.last_marker, true);
-        });
-
-        $('#view_settings').live('click', function(){
-            core.modal.show(core.map.getVeiwSettingsContent());
-        });
-    },
-
-    changeDate: function(date){
-        alert(date)
+        this.loadOptions(true);
     },
 
     createDatepicker: function(){
@@ -208,12 +176,27 @@ core.map = {
             embed       : true,
             format      : 'dd-mm-yy',
             today       : true,
+            setDate     : this.options.date,
             callback    : function(event, date, year, month, day){
-                core.map.changeDate({
-                    year    : year,
-                    month   : month,
-                    day     : day
-                });
+                if(core.map.date_loading_process){
+                    core.map.date_loading_process.abort();
+                };
+
+                core.map.date_loading_process = $.ajax({
+                    url: '/control/map/?ajax',
+                    data: {
+                        action: 'setCurrentDate',
+                        date: date
+                    },
+                    beforeSend: function(){
+                        core.loading.unsetLoading('global', false);
+                        core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+                    },
+                    success: function(){
+                        core.loading.unsetLoading('global', false);
+                        core.map.changeDate(date, event);
+                    }
+                })
             }
         });
     },
@@ -228,6 +211,10 @@ core.map = {
                 core.map.resizeMap();
             });
         };
+
+        if(this.map){
+            google.maps.event.trigger(this.map, 'resize');
+        };
     },
 
     getDeviceIndexById: function(id){
@@ -238,15 +225,13 @@ core.map = {
         };
     },
 
-    setDeviceFocus: function(device_id){
-        var device = this.options.devices[this.getDeviceIndexById(device_id)];
+    setDeviceFocus: function(marker){
+        var device = this.options.devices[this.getDeviceIndexById(marker.device_id)];
 
-        core.map.map.panTo(device.current_position_marker.getPosition());
+        core.map.map.panTo(marker.getPosition());
 
-        if(this.options.current_devece_id != device_id){
-            $('#car_name_info').html(device.name+' &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
+        if(this.options.current_devece_id != marker.device_id){
             this.showDeviceData(device.id);
-            this.options.current_devece_id = device_id;
         };
     },
 
@@ -255,47 +240,82 @@ core.map = {
             this.options.devices[i].current_position_marker = this.createCurrentPositionMarker({
                 map         : this.map,
                 device      : this.options.devices[i],
-                click       : function(device_id){
-                    core.map.setDeviceFocus(device_id);
+                click       : function(marker){
+                    core.map.setDeviceFocus(marker);
                 }
             });
         };
     },
 
-    hideAllDievicesPaths: function(){
+    hideAllDevicesCurrentPositions: function(){
         for(var i = 0, l = this.options.devices.length; i < l; i++){
-            if(this.options.devices[i].path){
-                this.options.devices[i].path.polyline.setVisible(false);
+            if(this.options.devices[i].current_position_marker){
+                this.options.devices[i].current_position_marker.setMap(null);
             };
         };
+    },
+
+    hideAllDevicesInfo: function(){
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            this.hideDeviceInfo(this.options.devices[i].id);
+        };
+
+        $('#where_is_my_car').fadeOut(100);
+    },
+
+    hideDeviceInfo: function(id){
+        var device = this.options.devices[this.getDeviceIndexById(id)];
+        if(device.path){
+            device.path.polyline.setVisible(false);
+
+            for(var i = 0, l = device.path.waypoint_markers.length; i < l; i++){
+                device.path.waypoint_markers[i].setVisible(false);
+            };
+        };
+
+        $('#registered_data, #car_name_info').html('');
     },
 
     showDeviceData: function(device_id){
         var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
         if(device.path){
-            this.hideAllDievicesPaths();
+            if(this.options.current_devece_id > 0){
+                this.hideDeviceInfo(this.options.current_devece_id);
+            };
 
             //Path show
             device.path.polyline.setVisible(true);
+
+            if(device.path.waypoint_markers){
+                for(var i = 0, l = device.path.waypoint_markers.length; i < l; i++){
+                    device.path.waypoint_markers[i].setVisible(true);
+                };
+            };
 
             //Show statistics
             var html =  '<table class="table table-bordered table-condensed">' +
                             '<tr>' +
                                 '<td>Максимальная скорость</td>' +
-                                '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+'</a></td>' +
+                                '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
                             '</tr>' +
                             '<tr>' +
                                 '<td>Средняя скорость</td>' +
-                                '<td><span id="average_speed" class="label">'+device.path.statistics.average_speed+'</span></td>' +
+                                '<td><span id="average_speed" class="label">'+device.path.statistics.average_speed+' км/ч</span></td>' +
                             '</tr>' +
                             '<tr>' +
                                 '<td>Пройдено пути</td>' +
-                                '<td><span id="distance_driven" class="label">'+device.path.statistics.distance+'</span></td>' +
+                                '<td><span id="distance_driven" class="label">'+device.path.statistics.distance+' км</span></td>' +
                             '</tr>' +
                         '</table>';
 
-            $('#registered_data').html(html).fadeIn(200);
+            $('#registered_data').html(html).fadeIn(150);
+
+            $('#car_name_info').html(device.name+' &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
+
+            this.options.current_devece_id = device_id;
+
+            $('#where_is_my_car').fadeIn();
 
         }else{
             //Load points and recall this fn
@@ -319,8 +339,8 @@ core.map = {
             var polyline = new google.maps.Polyline({
                 path            : polyline_shape,
                 strokeColor     : device.color,
-                strokeOpacity   : 0.75,
-                strokeWeight    : 3,
+                strokeOpacity   : 0.65,
+                strokeWeight    : 5,
                 clickable       : false,
                 visible         : false
             });
@@ -329,6 +349,82 @@ core.map = {
 
             return polyline;
         };
+    },
+
+    drawWaypointMarkers: function(points, device, map){
+        if(points && points.length > 0){
+            var waypoint_markers = new Array();
+
+            for(var i = 1, l = points.length; i < l; i++){
+                waypoint_markers.push(this.createWaypointMarker({
+                    map         : map,
+                    device      : device,
+                    point       : points[i],
+                    click       : function(marker){
+                        core.map.showWaypointMarkerData(marker);
+                    }
+                }));
+            };
+
+            return waypoint_markers;
+        };
+    },
+
+    createCurrentPositionMarker: function(options){
+        if(options.device.point){
+            var marker = new google.maps.Marker({
+                position    : new google.maps.LatLng(
+                    this.convertNMEAtoWGS84(options.device.point.lat),
+                    this.convertNMEAtoWGS84(options.device.point.lng)
+                ),
+                point       : options.device.point,
+                map         : options.map,
+                title       : options.device.name+' ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
+                device_id   : options.device.id,
+                description : this.makeMarkerDescription(options.device)
+            });
+
+            google.maps.event.addListener(marker, 'click', function(){
+                options.click(marker);
+            });
+
+            return marker;
+        };
+    },
+
+    createWaypointMarker: function(options){
+        var style;
+
+        if(options.point.velocity <= 0){
+            style = this.options.marker_styles.waypoint_stop;
+        }else{
+            style = this.options.marker_styles.waypoint;
+        };
+
+        var marker = new google.maps.Marker({
+            position    : new google.maps.LatLng(
+                this.convertNMEAtoWGS84(options.point.lat),
+                this.convertNMEAtoWGS84(options.point.lng)
+            ),
+            icon        : style.image,
+            shadow      : style.shadow,
+            shape       : style.shape,
+            point       : options.point,
+            map         : options.map,
+            title       : options.device.name+' ('+this.convertKnotsToKms(options.point.velocity)+' км/ч)',
+            device_id   : options.device.id,
+            description : this.makeMarkerDescription(options.device)
+        });
+
+        google.maps.event.addListener(marker, 'click', function(){
+            options.click(marker);
+        });
+
+        return marker;
+    },
+
+    showWaypointMarkerData: function(marker){
+
     },
 
     getAverageSpeed: function(points){
@@ -341,27 +437,37 @@ core.map = {
         return this.convertKnotsToKms(average_speed/points.length);
     },
 
-    getMaxSpeed: function(points){
-        var max_speed = 0;
+    getMaxSpeed: function(markers){
+        if(markers){
+            var max_speed = 0,
+                result = {};
 
-        for(var i = 0, l = points.length; i < l; i++){
-            if(points[i].velocity > max_speed){
-                max_speed = parseFloat(points[i].velocity);
+            for(var i = 0, l = markers.length; i < l; i++){
+                if(markers[i].point.velocity > max_speed){
+                    result.marker = markers[i];
+                    max_speed = parseFloat(markers[i].point.velocity);
+                };
             };
-        };
+            result.value = this.convertKnotsToKms(max_speed);
 
-        return this.convertKnotsToKms(max_speed);
+            return result;
+        };
     },
 
     createDevicePathData: function(device_id, points){
         var polyline = this.drawPath(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
-            device = core.map.options.devices[core.map.getDeviceIndexById(device_id)].path = {
-            points      : points,
-            polyline    : polyline,
-            statistics  : {
+            waypoint_markers = this.drawWaypointMarkers(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
+            max_speed = this.getMaxSpeed(waypoint_markers);
+
+        this.options.devices[this.getDeviceIndexById(device_id)].max_speed_marker = max_speed.marker;
+        this.options.devices[this.getDeviceIndexById(device_id)].path = {
+            points          : points,
+            polyline        : polyline,
+            waypoint_markers: waypoint_markers,
+            statistics      : {
                 distance        : polyline.inKm(),
                 average_speed   : this.getAverageSpeed(points),
-                max_speed       : this.getMaxSpeed(points)
+                max_speed       : max_speed.value
             }
         };
     },
@@ -388,8 +494,10 @@ core.map = {
                     core.loading.unsetLoading('global', false);
                 }, 200);
 
-                core.map.createDevicePathData(device_id, points);
-                core.map.showDeviceData(device_id);
+                if(points.length > 0){
+                    core.map.createDevicePathData(device_id, points);
+                    core.map.showDeviceData(device_id);
+                };
             },
             error: function(){
                 core.loading.unsetLoading('global', false);
@@ -397,7 +505,7 @@ core.map = {
         });
     },
 
-    loadOptions: function(){
+    loadOptions: function(reinit){
         if(this.options_loading_process){
             this.options_loading_process.abort();
         };
@@ -419,7 +527,12 @@ core.map = {
                 }, 200);
 
                 core.map.options = $.extend(core.map.options, options);
-                core.map.initGlobal();
+
+                if(reinit){
+                    core.map.reinitGlobal();
+                }else{
+                    core.map.initGlobal();
+                };
             },
             error: function(){
                 core.loading.unsetLoading('global', false);
@@ -427,16 +540,40 @@ core.map = {
         });
     },
 
+    focusToMarker: function(marker){
+        marker.map.panTo(marker.getPosition());
+    },
+
+    reinitGlobal: function(){
+        this.drawDevices();
+
+        if(this.options.current_devece_id){
+            this.showDeviceData(this.options.devices[this.getDeviceIndexById(this.options.current_devece_id)].id);
+        };
+    },
+
+    notyfyAboutNoRegisteredPoints: function(){
+
+    },
+
     initGlobal: function(){
         var lat, lng;
 
-        if(this.options.devices.length > 0){
+        if(this.options.devices.length > 0 && this.options.devices[0].point){
             lat = this.options.devices[0].point.lat;
             lng = this.options.devices[0].point.lng;
         }else{
             lat = this.options.default_position.lat;
             lng = this.options.default_position.lng;
         };
+
+        var cars_menu_html = new String();
+
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            cars_menu_html += '<li><a href="#">'+this.options.devices[i].name+' &mdash; '+this.options.devices[i].make+' '+this.options.devices[i].model+' <span class="g_id">'+this.options.devices[i].g_id+'</span></a></li>';
+        };
+
+        $('.select_car .dropdown-menu').html(cars_menu_html);
 
         this.map = this.createMap({
             map_container_id: 'map',
@@ -445,20 +582,40 @@ core.map = {
             zoom: 12
         });
 
-        this.resizeMap(true);
-        this.setMapsPrototypes();
         this.drawDevices();
+        this.resizeMap(true);
         this.createDatepicker();
     },
 
+    binds: function(){
+        $('#max_speed').live('click', function(){
+            if(core.map.options.current_devece_id){
+                core.map.focusToMarker(core.map.options.devices[core.map.getDeviceIndexById(core.map.options.current_devece_id)].max_speed_marker);
+            };
+        });
+
+        $('#where_is_my_car').live('click', function(){
+            if(core.map.options.current_devece_id){
+                core.map.focusToMarker(core.map.options.devices[core.map.getDeviceIndexById(core.map.options.current_devece_id)].current_position_marker);
+            };
+        });
+
+        $('#hide_current_car_info').live('click', function(){
+            if(core.map.options.current_devece_id > 0){
+                core.map.hideDeviceInfo(core.map.options.current_devece_id);
+            };
+        });
+
+        /*$('#view_settings').live('click', function(){
+            core.modal.show(core.map.getVeiwSettingsContent());
+        });*/
+    },
+
     init: function(){
+        this.setMapsPrototypes();
         this.loadOptions();
-
-        /*this.options = $.extend(this.options, $.parseJSON(options));
-
-        this.initGlobalMap();
-
         this.binds();
-        this.createDatepicker();*/
     }
 };
+
+//todo: Нужно сделать так, чтобы при клике по тачке на карте все осталось как есть, а вот при клике в меню - загружалась последняя зарегистрированная точка и автоматом выбиралась дата...
