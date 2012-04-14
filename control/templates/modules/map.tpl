@@ -5,24 +5,22 @@
         </h1>
     </div>
 
-    <div class="clear"></div>
+    <div class="header_tools pull-right">
+        <div class="btn-group select_car pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span id="car_name_info"></span>
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" id="cars_menu">
 
-    <div class="header_tools">
-        <div class="pull-left">
-            <div class="btn-group select_car">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span id="car_name_info">Выбрать машину</span>
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-
-                </ul>
-            </div>
+            </ul>
         </div>
 
-        <div class="pull-left">
-            <div href="javascript:void(0)" id="where_is_my_car" class="btn btn-info"><i class="icon-flag icon-white"></i> Показать</div>
+        <div class="pull-right">
+            <div id="where_is_my_car" class="btn btn-info"><i class="icon-flag icon-white"></i> Показать</div>
         </div>
+
+        <div class="clear"></div>
     </div>
 
     <div class="clear"></div>

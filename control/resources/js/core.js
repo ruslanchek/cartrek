@@ -133,6 +133,8 @@ core.loading = {
             this.stopAnimation(name);
         };
 
+        this.stopAnimation(name);
+
         $loading.remove();
     },
 
@@ -163,13 +165,14 @@ core.loading = {
 
     startAnimation: function(name){
         var $loading = $('i.loading[name="'+name+'"]');
-
         this.stopAnimation(name);
 
-        $loading.data(
-            'animation_interval',
-            setInterval(function(){core.loading.animationIteration(name)}, 70)
-        );
+        if(!$loading.data('animation_interval')){
+            $loading.data(
+                'animation_interval',
+                setInterval(function(){core.loading.animationIteration(name)}, 70)
+            );
+        };
     },
 
     setLoadingToElementPos: function(name, obj, top, left, zIndex, micro){

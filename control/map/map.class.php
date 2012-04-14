@@ -40,7 +40,7 @@
         private function setCurrentDate($date = false){
             if(!$date){
                 if(!isset($_SESSION['current_date'])){
-                    $_SESSION['current_date'] = date('d').'-'.date('m').'-'.date('y');
+                    $_SESSION['current_date'] = date('d').'-'.date('m').'-'.date('Y');
                 };
             }else{
                 $_SESSION['current_date'] = $date;
@@ -83,7 +83,8 @@
             $result = array();
 
             foreach($devices as $device){
-                $device['point'] = $this->getLatestDevicePoint($device['id']);
+                $device['point'] = $this->getLatestDevicePoint($device['id'], false);
+                $device['last_registered_point'] = $this->getLatestDevicePoint($device['id'], true);
                 unset($device['secret']);
                 $result[] = $device;
             };
@@ -119,8 +120,14 @@
         }
 
         //Last registered device point
-        private function getLatestDevicePoint($id){
+        private function getLatestDevicePoint($id, $date_related = true){
             $date = substr($this->current_date, 0, 2).substr($this->current_date, 3, 2).substr($this->current_date, 8, 2);
+
+            $date_related_where = '';
+
+            if(!$date_related){
+                $date_related_where = "&& `g_date` = '".$this->db->quote($date)."'";
+            };
 
             $query = "
                 SELECT
@@ -138,8 +145,8 @@
                     `".$this->db->quote($this->table)."`
                 WHERE
                     `acct`  = '".$this->db->quote($this->acct)."' &&
-                    `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."' &&
-                    `g_date` = '".$this->db->quote($date)."'
+                    `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."'
+                    ".$date_related_where."
                 ORDER BY
                     `g_date` DESC,
                     `g_time` DESC

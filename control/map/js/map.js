@@ -2,8 +2,9 @@ core.map = {
     options: {
         current_devece_id: null,
         default_position : {
-            lat: 30,
-            lng: 30
+            lat: 55,
+            lng: 38,
+            zoom: 2
         },
         marker_styles: {
             waypoint: {
@@ -226,12 +227,14 @@ core.map = {
     },
 
     setDeviceFocus: function(marker){
-        var device = this.options.devices[this.getDeviceIndexById(marker.device_id)];
+        if(marker){
+            var device = this.options.devices[this.getDeviceIndexById(marker.device_id)];
 
-        core.map.map.panTo(marker.getPosition());
+            core.map.map.panTo(marker.getPosition());
 
-        if(this.options.current_devece_id != marker.device_id){
-            this.showDeviceData(device.id);
+            if(this.options.current_devece_id != marker.device_id){
+                this.showDeviceData(device.id);
+            };
         };
     },
 
@@ -253,6 +256,8 @@ core.map = {
                 this.options.devices[i].current_position_marker.setMap(null);
             };
         };
+
+        $('#registered_data').html('').fadeOut(100);
     },
 
     hideAllDevicesInfo: function(){
@@ -260,7 +265,7 @@ core.map = {
             this.hideDeviceInfo(this.options.devices[i].id);
         };
 
-        $('#where_is_my_car').fadeOut(100);
+        $('#registered_data').html('').fadeOut(100);
     },
 
     hideDeviceInfo: function(id){
@@ -272,8 +277,14 @@ core.map = {
                 device.path.waypoint_markers[i].setVisible(false);
             };
         };
+    },
 
-        $('#registered_data, #car_name_info').html('');
+    setCurrentDeviceName: function(device){
+        if(device){
+            $('#car_name_info').html('<b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
+        }else{
+            $('#car_name_info').html('<b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span>');
+        };
     },
 
     showDeviceData: function(device_id){
@@ -311,11 +322,13 @@ core.map = {
 
             $('#registered_data').html(html).fadeIn(150);
 
-            $('#car_name_info').html(device.name+' &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
+            this.setCurrentDeviceName(device);
 
             this.options.current_devece_id = device_id;
 
-            $('#where_is_my_car').fadeIn();
+            $('#where_is_my_car').fadeIn(100);
+
+            this.fitToDevicePathBounds();
 
         }else{
             //Load points and recall this fn
@@ -544,47 +557,162 @@ core.map = {
         marker.map.panTo(marker.getPosition());
     },
 
+    fitToDevicePathBounds: function(){
+        var bounds  = new google.maps.LatLngBounds(),
+            device  = this.options.devices[this.getDeviceIndexById(this.options.current_devece_id)];
+
+        if(device.path && device.path.waypoint_markers){
+            for(var i = 0, l = device.path.waypoint_markers.length; i < l; i++){
+                bounds.extend(device.path.waypoint_markers[i].getPosition());
+            };
+        };
+
+        this.map.fitBounds(bounds);
+    },
+
+    fitToAllDevicesMarkersBounds: function(){
+        var bounds = new google.maps.LatLngBounds();
+
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            if(this.options.devices[i].current_position_marker){
+                bounds.extend(this.options.devices[i].current_position_marker.getPosition());
+            };
+        };
+
+        // Don't zoom in too far on only one marker
+        if(bounds.getNorthEast().equals(bounds.getSouthWest())){
+            var extendPoint1 = new google.maps.LatLng(bounds.getNorthEast().lat() + 0.01, bounds.getNorthEast().lng() + 0.01);
+            var extendPoint2 = new google.maps.LatLng(bounds.getNorthEast().lat() - 0.01, bounds.getNorthEast().lng() - 0.01);
+            bounds.extend(extendPoint1);
+            bounds.extend(extendPoint2);
+        };
+
+        this.map.fitBounds(bounds);
+    },
+
+    selectCar: function(car_id){
+        if(car_id){
+            $.cookie('car_id', car_id, this.options.cookie_options);
+        }else{
+            if($.cookie('car_id')){
+                car_id = $.cookie('car_id');
+            }else{
+                car_id = 'all';
+            };
+        };
+
+        if(!$('#where_is_my_car').is(':visible')){
+            $('#where_is_my_car').fadeIn(100);
+        };
+
+        if(car_id == 'all'){
+            this.hideAllDevicesInfo();
+            this.fitToAllDevicesMarkersBounds();
+            this.options.current_devece_id = false;
+            this.setCurrentDeviceName();
+        }else{
+            this.hideAllDevicesInfo();
+            this.setCurrentDeviceName(this.options.devices[this.getDeviceIndexById(car_id)]);
+            this.setDeviceFocus(this.options.devices[this.getDeviceIndexById(car_id)].current_position_marker);
+        };
+
+        core.map.checkPeriodPoints();
+    },
+
+    showMapNotice: function(message){
+        var html = '<div class="map_notice">'+message+'</div>';
+
+        $('body').prepend(html);
+
+        var setMapNoticeSize = function(){
+            $('.map_notice').css({
+                width: ($('#map').width() * 0.55) - 50 ,
+                top: $('#map').offset().top + (($('#map').height() / 2) - ($('.map_notice').height() / 2)) - 25,
+                left: $('#map').offset().left + (($('#map').width() / 2) - ($('.map_notice').width() / 2)) - 25
+            });
+        };
+
+        setMapNoticeSize();
+        setMapNoticeSize();
+
+        $(window).on('resize', function(){
+            setMapNoticeSize();
+        });
+    },
+
+    hideMapNotice: function(){
+        $('.map_notice').remove();
+    },
+
+    checkPeriodPoints: function(){
+        this.hideMapNotice();
+
+        var no_points = true;
+
+        if($.cookie('car_id') == 'all'){
+            for(var i = 0, l = this.options.devices.length; i < l; i++){
+                if(this.options.devices[i].current_position_marker){
+                    no_points = false;
+                };
+            };
+
+            if(no_points){
+                this.showMapNotice('На выбранный период не зарегистрированно ни одной отметки.');
+                $('#where_is_my_car').fadeOut(100);
+            }else{
+                $('#where_is_my_car').fadeIn(100);
+            };
+        }else{
+            var device = this.options.devices[this.getDeviceIndexById($.cookie('car_id'))];
+            if(!device.current_position_marker){
+                var message = '<p>На выбранный период не зарегистрированно ни одной отметки для машины &laquo;'+device['name']+'&raquo;.</p><p>Последняя отметка была зарегистрированна '+device.last_registered_point.date+'</p>';
+                    message += '<div><a href="javascript:void(0)" class="btn btn-info">Перейти к дате</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="core.map.hideMapNotice()" class="btn">Закрыть</a></div>';
+
+                this.showMapNotice(message);
+                $('#where_is_my_car').fadeOut(100);
+            }else{
+                $('#where_is_my_car').fadeIn(100);
+            };
+        };
+    },
+
     reinitGlobal: function(){
         this.drawDevices();
+        this.fitToAllDevicesMarkersBounds();
 
         if(this.options.current_devece_id){
             this.showDeviceData(this.options.devices[this.getDeviceIndexById(this.options.current_devece_id)].id);
         };
-    },
 
-    notyfyAboutNoRegisteredPoints: function(){
-
+        this.checkPeriodPoints();
     },
 
     initGlobal: function(){
-        var lat, lng;
-
-        if(this.options.devices.length > 0 && this.options.devices[0].point){
-            lat = this.options.devices[0].point.lat;
-            lng = this.options.devices[0].point.lng;
-        }else{
-            lat = this.options.default_position.lat;
-            lng = this.options.default_position.lng;
-        };
-
-        var cars_menu_html = new String();
+        var cars_menu_html = '<li><a href="javascript:void(0)" rel="all"><b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span></a></li>';
 
         for(var i = 0, l = this.options.devices.length; i < l; i++){
-            cars_menu_html += '<li><a href="#">'+this.options.devices[i].name+' &mdash; '+this.options.devices[i].make+' '+this.options.devices[i].model+' <span class="g_id">'+this.options.devices[i].g_id+'</span></a></li>';
+            cars_menu_html += '<li><a href="javascript:void(0)" rel="'+this.options.devices[i].id+'"><b>'+this.options.devices[i].name+'</b> &mdash; '+this.options.devices[i].make+' '+this.options.devices[i].model+' <span class="g_id">'+this.options.devices[i].g_id+'</span></a></li>';
         };
 
-        $('.select_car .dropdown-menu').html(cars_menu_html);
+        $('#cars_menu').html(cars_menu_html);
+
+        $('#cars_menu li a').off('click').on('click', function(){
+            core.map.selectCar($(this).attr('rel'));
+        });
 
         this.map = this.createMap({
             map_container_id: 'map',
-            lat: this.convertNMEAtoWGS84(lat),
-            lng: this.convertNMEAtoWGS84(lng),
-            zoom: 12
+            lat: this.convertNMEAtoWGS84(this.options.default_position.lat),
+            lng: this.convertNMEAtoWGS84(this.options.default_position.lng),
+            zoom: this.options.default_position.zoom
         });
 
         this.drawDevices();
+        this.fitToAllDevicesMarkersBounds();
         this.resizeMap(true);
         this.createDatepicker();
+        this.selectCar();
+        this.checkPeriodPoints();
     },
 
     binds: function(){
@@ -597,6 +725,8 @@ core.map = {
         $('#where_is_my_car').live('click', function(){
             if(core.map.options.current_devece_id){
                 core.map.focusToMarker(core.map.options.devices[core.map.getDeviceIndexById(core.map.options.current_devece_id)].current_position_marker);
+            }else if($.cookie('car_id') == 'all'){
+                core.map.fitToAllDevicesMarkersBounds();
             };
         });
 
