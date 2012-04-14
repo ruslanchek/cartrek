@@ -742,6 +742,10 @@ core.map = {
     },
 
     init: function(){
+        if(!$.cookie('car_id')){
+            $.cookie('car_id', 'all', this.options.cookie_options);
+        };
+
         this.setMapsPrototypes();
         this.loadOptions();
         this.binds();
