@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-12 20:54:00
+<?php /* Smarty version Smarty-3.1.7, created on 2012-04-17 19:23:18
          compiled from "Z:/home/loc/gps/control/templates\modules\map.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:65384f71f59ece95a1-43800246%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'e7d6e5ad53b2d63c410701e0b7e609558e886f25' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\modules\\map.tpl',
-      1 => 1334220902,
+      1 => 1334675286,
       2 => 'file',
     ),
   ),
@@ -26,24 +26,22 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         </h1>
     </div>
 
-    <div class="clear"></div>
+    <div class="header_tools pull-right">
+        <div class="btn-group select_car pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <span id="car_name_info"></span>
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu" id="cars_menu">
 
-    <div class="header_tools">
-        <div class="pull-left">
-            <div class="btn-group select_car">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span id="car_name_info">Выбрать машину</span>
-                    <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-
-                </ul>
-            </div>
+            </ul>
         </div>
 
-        <div class="pull-left">
-            <div href="javascript:void(0)" id="where_is_my_car" class="btn btn-info"><i class="icon-flag icon-white"></i> Показать</div>
+        <div class="pull-right">
+            <div id="where_is_my_car" class="btn btn-info"><i class="icon-flag icon-white"></i> Показать</div>
         </div>
+
+        <div class="clear"></div>
     </div>
 
     <div class="clear"></div>

@@ -48,7 +48,38 @@ core.map = {
         return (value * 1.852).toFixed(1);
     },
 
-    humanizeGPSTime: function(value){
+    humanizeDate: function(value, type){
+        if(!type){
+            type = 'NMEA';
+        };
+
+        var d, m, y, m_humanized, month_names = [
+            'января',
+            'февраля',
+            'марта',
+            'апреля',
+            'мая',
+            'июня',
+            'июля',
+            'августа',
+            'сентября',
+            'октября',
+            'ноября',
+            'декабря'
+        ];
+
+        switch(type){
+            case 'NMEA' : {
+                d = value.substring(0, 2),
+                m = value.substring(2, 4),
+                y = value.substring(4, 6);
+            };
+        };
+
+        return d+' '+month_names[parseInt(m) - 1]+', 20'+y;
+    },
+
+    humanizeTime: function(value){
         var h = value.substring(0, 2),
             m = value.substring(2, 4),
             s = value.substring(4, 6);
@@ -89,12 +120,21 @@ core.map = {
         return map;
     },
 
-    makeMarkerDescription: function(data){
-        var text = new String();
+    makeMarkerDescription: function(marker){
+        var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
+            status;
 
-        text += '<p>Уникальный номер метки: <b>' + data.point.id + '</b></p>';
-        text += '<p>Время: <b>' + this.humanizeGPSTime(data.point.time) + '</b></p>';
-        text += '<p>Скорость: <b>' + this.convertKnotsToKms(data.point.velocity) + ' км/ч</b></p>';
+        if(marker.point.velocity > 0){
+            status = 'В пути';
+        }else{
+            status = 'Остановка';
+        };
+
+        var text = '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>';
+        text += '<p>Статус: <b>' + status + '</b></p>';
+        //text += '<p>Уникальный номер метки: <b>' + marker.point.id + '</b></p>';
+        text += '<p>Время: <b>' + this.humanizeTime(marker.point.time) + '</b></p>';
+        text += '<p>Скорость: <b>' + this.convertKnotsToKms(marker.point.velocity) + ' км/ч</b></p>';
 
         return text;
     },
@@ -392,9 +432,8 @@ core.map = {
                 ),
                 point       : options.device.point,
                 map         : options.map,
-                title       : options.device.name+' ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
-                device_id   : options.device.id,
-                description : this.makeMarkerDescription(options.device)
+                title       : options.device.name+' — текущее положение ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
+                device_id   : options.device.id
             });
 
             google.maps.event.addListener(marker, 'click', function(){
@@ -406,12 +445,14 @@ core.map = {
     },
 
     createWaypointMarker: function(options){
-        var style;
+        var style, title;
 
         if(options.point.velocity <= 0){
             style = this.options.marker_styles.waypoint_stop;
+            title = options.device.name+' — остановка';
         }else{
             style = this.options.marker_styles.waypoint;
+            title = options.device.name+' — в пути ('+this.convertKnotsToKms(options.point.velocity)+' км/ч)';
         };
 
         var marker = new google.maps.Marker({
@@ -424,9 +465,8 @@ core.map = {
             shape       : style.shape,
             point       : options.point,
             map         : options.map,
-            title       : options.device.name+' ('+this.convertKnotsToKms(options.point.velocity)+' км/ч)',
-            device_id   : options.device.id,
-            description : this.makeMarkerDescription(options.device)
+            title       : title,
+            device_id   : options.device.id
         });
 
         google.maps.event.addListener(marker, 'click', function(){
@@ -437,7 +477,17 @@ core.map = {
     },
 
     showWaypointMarkerData: function(marker){
+        if(this.infowindow){
+            this.infowindow.close();
+        };
 
+        var description = this.makeMarkerDescription(marker);
+
+        this.infowindow = new google.maps.InfoWindow({
+            content: description
+        });
+
+        this.infowindow.open(this.map, marker);
     },
 
     getAverageSpeed: function(points){
@@ -555,6 +605,7 @@ core.map = {
 
     focusToMarker: function(marker){
         marker.map.panTo(marker.getPosition());
+        google.maps.event.trigger(marker, 'click');
     },
 
     fitToDevicePathBounds: function(){
@@ -657,7 +708,12 @@ core.map = {
             };
 
             if(no_points){
-                this.showMapNotice('На выбранный период не зарегистрированно ни одной отметки.');
+                var html =  '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>' +
+                            '<div>' +
+                                '<a href="javascript:void(0)" onclick="core.map.hideMapNotice()" class="btn">Закрыть</a>' +
+                            '</div>';
+
+                this.showMapNotice(html);
                 $('#where_is_my_car').fadeOut(100);
             }else{
                 $('#where_is_my_car').fadeIn(100);
@@ -665,8 +721,12 @@ core.map = {
         }else{
             var device = this.options.devices[this.getDeviceIndexById($.cookie('car_id'))];
             if(!device.current_position_marker){
-                var message = '<p>На выбранный период не зарегистрированно ни одной отметки для машины &laquo;'+device['name']+'&raquo;.</p><p>Последняя отметка была зарегистрированна '+device.last_registered_point.date+'</p>';
-                    message += '<div><a href="javascript:void(0)" class="btn btn-info">Перейти к дате</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" onclick="core.map.hideMapNotice()" class="btn">Закрыть</a></div>';
+                var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;&laquo;'+device['name']+'&raquo;.</p>' +
+                                '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date)+'</b>.</p>' +
+                                '<div>' +
+                                    //'<a href="javascript:void(0)" class="btn btn-info">Перейти к дате</a>&nbsp;&nbsp;&nbsp;' +
+                                    '<a href="javascript:void(0)" onclick="core.map.hideMapNotice()" class="btn">Закрыть</a>' +
+                                '</div>';
 
                 this.showMapNotice(message);
                 $('#where_is_my_car').fadeOut(100);
@@ -677,6 +737,10 @@ core.map = {
     },
 
     reinitGlobal: function(){
+        if(this.infowindow){
+            this.infowindow.close();
+        };
+
         this.drawDevices();
         this.fitToAllDevicesMarkersBounds();
 
@@ -691,7 +755,13 @@ core.map = {
         var cars_menu_html = '<li><a href="javascript:void(0)" rel="all"><b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span></a></li>';
 
         for(var i = 0, l = this.options.devices.length; i < l; i++){
-            cars_menu_html += '<li><a href="javascript:void(0)" rel="'+this.options.devices[i].id+'"><b>'+this.options.devices[i].name+'</b> &mdash; '+this.options.devices[i].make+' '+this.options.devices[i].model+' <span class="g_id">'+this.options.devices[i].g_id+'</span></a></li>';
+            cars_menu_html +=   '<li>' +
+                                    '<a href="javascript:void(0)" rel="'+this.options.devices[i].id+'">' +
+                                        '<b>'+this.options.devices[i].name+'</b> &mdash; '+
+                                        this.options.devices[i].make+' '+this.options.devices[i].model+' ' +
+                                        '<span class="g_id">'+this.options.devices[i].g_id+'</span>' +
+                                    '</a>' +
+                                '</li>';
         };
 
         $('#cars_menu').html(cars_menu_html);
