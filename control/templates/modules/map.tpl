@@ -1,7 +1,7 @@
 <div class="page-header">
     <div class="pull-left">
         <h1>
-            GPS-мониторинг <small class="current_date">29 марта, 2011</small>
+            GPS-мониторинг <small class="current_date"></small>
         </h1>
     </div>
 

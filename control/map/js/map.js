@@ -4,7 +4,7 @@ core.map = {
         default_position : {
             lat: 55,
             lng: 38,
-            zoom: 2
+            zoom: 10
         },
         marker_styles: {
             waypoint: {
@@ -73,10 +73,18 @@ core.map = {
                 d = value.substring(0, 2),
                 m = value.substring(2, 4),
                 y = value.substring(4, 6);
-            };
-        };
 
-        return d+' '+month_names[parseInt(m) - 1]+', 20'+y;
+                return d+' '+month_names[parseInt(m) - 1]+', 20'+y;
+            }; break;
+
+            case 'COMMON' : {
+                d = value.substring(0, 2),
+                m = value.substring(3, 5),
+                y = value.substring(6, 11);
+
+                return d+' '+month_names[parseInt(m) - 1]+', '+y;
+            }; break;
+        };
     },
 
     humanizeTime: function(value){
@@ -130,13 +138,23 @@ core.map = {
             status = 'Остановка';
         };
 
-        var text = '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>';
-        text += '<p>Статус: <b>' + status + '</b></p>';
-        //text += '<p>Уникальный номер метки: <b>' + marker.point.id + '</b></p>';
-        text += '<p>Время: <b>' + this.humanizeTime(marker.point.time) + '</b></p>';
-        text += '<p>Скорость: <b>' + this.convertKnotsToKms(marker.point.velocity) + ' км/ч</b></p>';
+        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
+                    '<table class="table table-bordered table-condensed">' +
+                        '<tr>' +
+                            '<td>Статус</td>' +
+                            '<td><span class="label">'+status+'</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Время</td>' +
+                            '<td><span class="label">'+this.humanizeTime(marker.point.time)+'</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Скорость</td>' +
+                            '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
+                        '</tr>' +
+                    '</table>';
 
-        return text;
+        return html;
     },
 
     showPath: function(){
@@ -205,6 +223,7 @@ core.map = {
     changeDate: function(date, event){
         $('.kube_datepicker_day_select').removeClass('kube_datepicker_day_select');
         $(event.originalEvent.srcElement).parent().addClass('kube_datepicker_day_select');
+        $('.current_date').html(this.humanizeDate(date, 'COMMON'));
 
         this.hideAllDevicesInfo();
         this.hideAllDevicesCurrentPositions();
@@ -639,6 +658,8 @@ core.map = {
         };
 
         this.map.fitBounds(bounds);
+
+        console.log('bounds');
     },
 
     selectCar: function(car_id){
@@ -695,6 +716,15 @@ core.map = {
         $('.map_notice').remove();
     },
 
+    setMapToDefaultPoint: function(){
+        this.map.setCenter(new google.maps.LatLng(
+            this.options.default_position.lat,
+            this.options.default_position.lng
+        ), this.options.default_position.zoom);
+
+        console.log('def_pt');
+    },
+
     checkPeriodPoints: function(){
         this.hideMapNotice();
 
@@ -715,11 +745,14 @@ core.map = {
 
                 this.showMapNotice(html);
                 $('#where_is_my_car').fadeOut(100);
+
+                this.setMapToDefaultPoint();
             }else{
                 $('#where_is_my_car').fadeIn(100);
             };
         }else{
             var device = this.options.devices[this.getDeviceIndexById($.cookie('car_id'))];
+
             if(!device.current_position_marker){
                 var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;&laquo;'+device['name']+'&raquo;.</p>' +
                                 '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date)+'</b>.</p>' +
@@ -730,6 +763,8 @@ core.map = {
 
                 this.showMapNotice(message);
                 $('#where_is_my_car').fadeOut(100);
+
+                this.setMapToDefaultPoint();
             }else{
                 $('#where_is_my_car').fadeIn(100);
             };
@@ -763,6 +798,8 @@ core.map = {
                                     '</a>' +
                                 '</li>';
         };
+
+        $('.current_date').html(this.humanizeDate(this.options.date, 'COMMON'));
 
         $('#cars_menu').html(cars_menu_html);
 

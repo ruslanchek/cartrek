@@ -87,7 +87,7 @@ h1 {
 
 }
 
-#registered_data .label {
+.table .label {
     display: block;
     text-align: center;
 }
