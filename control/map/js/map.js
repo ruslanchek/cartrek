@@ -130,19 +130,21 @@ core.map = {
 
     makeMarkerDescription: function(marker){
         var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
-            status;
+            status, status_class;
 
         if(marker.point.velocity > 0){
             status = 'В пути';
+            status_class = 'label-success';
         }else{
             status = 'Остановка';
+            status_class = 'label-important';
         };
 
         var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
                     '<table class="table table-bordered table-condensed">' +
                         '<tr>' +
                             '<td>Статус</td>' +
-                            '<td><span class="label">'+status+'</span></td>' +
+                            '<td><span class="label '+status_class+'">'+status+'</span></td>' +
                         '</tr>' +
                         '<tr>' +
                             '<td>Время</td>' +
