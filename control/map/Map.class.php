@@ -148,8 +148,7 @@
                     `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."'
                     ".$date_related_where."
                 ORDER BY
-                    `g_date` DESC,
-                    `g_time` DESC
+                    `id` DESC
                 LIMIT
                     1
             ";
@@ -179,8 +178,7 @@
                     `dev` = '".$this->db->quote($this->getUserDeviceCode($id))."' &&
                     `g_date` = '".$this->db->quote($date)."'
                 ORDER BY
-                    `g_date` ASC,
-                    `g_time` ASC
+                    `id` ASC
             ";
 
             return $this->db->assocMulti($query);
