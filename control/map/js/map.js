@@ -128,37 +128,6 @@ core.map = {
         return map;
     },
 
-    makeMarkerDescription: function(marker){
-        var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
-            status, status_class;
-
-        if(marker.point.velocity > 0){
-            status = 'В пути';
-            status_class = 'label-success';
-        }else{
-            status = 'Остановка';
-            status_class = 'label-important';
-        };
-
-        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
-                    '<table class="table table-bordered table-condensed">' +
-                        '<tr>' +
-                            '<td>Статус</td>' +
-                            '<td><span class="label '+status_class+'">'+status+'</span></td>' +
-                        '</tr>' +
-                        '<tr>' +
-                            '<td>Время</td>' +
-                            '<td><span class="label">'+this.humanizeTime(marker.point.time)+'</span></td>' +
-                        '</tr>' +
-                        '<tr>' +
-                            '<td>Скорость</td>' +
-                            '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
-                        '</tr>' +
-                    '</table>';
-
-        return html;
-    },
-
     showPath: function(){
 
     },
@@ -289,21 +258,8 @@ core.map = {
 
     setDeviceFocus: function(marker){
         if(marker){
-            var device = this.options.devices[this.getDeviceIndexById(marker.device_id)];
-
-            if(this.options.current_devece_id != device.id){
-                this.setCurrentDeviceName(this.options.devices[this.getDeviceIndexById(device.id)]);
-                this.hideAllDevicesInfo();
-                this.hideAllDevicesCurrentPositions();
-                this.showDeviceData(device.id);
-                this.drawDevice(device.id);
-            };
-
-            core.map.map.panTo(marker.getPosition());
-
-            if(this.infowindow){
-                this.infowindow.close();
-            };
+            //this.map.panTo(marker.getPosition());
+            this.showMarkerData(marker);
         };
     },
 
@@ -354,7 +310,9 @@ core.map = {
         };
     },
 
-    setCurrentDeviceName: function(device){
+    setCurrentDeviceName: function(device_id){
+        var device = this.options.devices[this.getDeviceIndexById(device_id)];
+
         if(device){
             $('#car_name_info').html('<b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
         }else{
@@ -397,7 +355,7 @@ core.map = {
 
             $('#registered_data').html(html).fadeIn(150);
 
-            this.setCurrentDeviceName(device);
+            this.setCurrentDeviceName(device_id);
 
             this.options.current_devece_id = device_id;
 
@@ -449,7 +407,7 @@ core.map = {
                     device      : device,
                     point       : points[i],
                     click       : function(marker){
-                        core.map.showWaypointMarkerData(marker);
+                        core.map.showMarkerData(marker);
                     }
                 }));
             };
@@ -511,15 +469,40 @@ core.map = {
         return marker;
     },
 
-    showWaypointMarkerData: function(marker){
+    showMarkerData: function(marker){
+        var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
+            status, status_class;
+
+        if(marker.point.velocity > 0){
+            status = 'В пути';
+            status_class = 'label-success';
+        }else{
+            status = 'Остановка';
+            status_class = 'label-important';
+        };
+
+        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
+                    '<table class="table table-bordered table-condensed">' +
+                        '<tr>' +
+                            '<td>Статус</td>' +
+                            '<td><span class="label '+status_class+'">'+status+'</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Время</td>' +
+                            '<td><span class="label">'+this.humanizeTime(marker.point.time)+'</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Скорость</td>' +
+                            '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
+                        '</tr>' +
+                    '</table>';
+
         if(this.infowindow){
             this.infowindow.close();
         };
 
-        var description = this.makeMarkerDescription(marker);
-
         this.infowindow = new google.maps.InfoWindow({
-            content: description
+            content: html
         });
 
         this.infowindow.open(this.map, marker);
@@ -680,6 +663,10 @@ core.map = {
     },
 
     selectCar: function(car_id){
+        if(this.infowindow){
+            this.infowindow.close();
+        };
+
         if(car_id){
             $.cookie('car_id', car_id, this.options.cookie_options);
         }else{
@@ -698,14 +685,18 @@ core.map = {
             this.hideAllDevicesCurrentPositions();
             this.hideAllDevicesInfo();
             this.drawDevices();
-            this.fitToAllDevicesMarkersBounds();
             this.options.current_devece_id = false;
             this.setCurrentDeviceName();
+            this.fitToAllDevicesMarkersBounds();
         }else{
-            this.setDeviceFocus(this.options.devices[this.getDeviceIndexById(car_id)].current_position_marker);
+            this.hideAllDevicesCurrentPositions();
+            this.setCurrentDeviceName(car_id);
+            this.drawDevice(car_id);
+            this.showDeviceData(car_id);
+            this.fitToAllDevicesMarkersBounds();
         };
 
-        core.map.checkPeriodPoints();
+        this.checkPeriodPoints();
     },
 
     showMapNotice: function(message){
@@ -755,7 +746,7 @@ core.map = {
             };
 
             if(no_points){
-                var html =  '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>' +
+                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'COMMON')+'</b> не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>' +
                             '<div>' +
                                 '<a href="javascript:void(0)" onclick="core.map.hideMapNotice()" class="btn">Закрыть</a>' +
                             '</div>';
@@ -771,7 +762,7 @@ core.map = {
             var device = this.options.devices[this.getDeviceIndexById($.cookie('car_id'))];
 
             if(!device.current_position_marker){
-                var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;&laquo;'+device['name']+'&raquo;.</p>' +
+                var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b>.</p>' +
                                 '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date)+'</b>.</p>' +
                                 '<div>' +
                                     //'<a href="javascript:void(0)" class="btn btn-info">Перейти к дате</a>&nbsp;&nbsp;&nbsp;' +
@@ -789,21 +780,11 @@ core.map = {
     },
 
     reinitGlobal: function(){
-        if(this.infowindow){
-            this.infowindow.close();
-        };
-
-        this.drawDevices();
-        this.fitToAllDevicesMarkersBounds();
-        this.selectCar();
-
         if(this.options.current_devece_id){
-            this.hideAllDevicesCurrentPositions();
-            this.drawDevice(this.options.current_devece_id);
-            this.showDeviceData(this.options.current_devece_id);
+            this.selectCar(this.options.current_devece_id);
+        }else{
+            this.selectCar();
         };
-
-        this.checkPeriodPoints();
     },
 
     initGlobal: function(){
@@ -829,12 +810,11 @@ core.map = {
             zoom: this.options.default_position.zoom
         });
 
-        this.drawDevices();
-        this.fitToAllDevicesMarkersBounds();
+
         this.resizeMap(true);
         this.createDatepicker();
+
         this.selectCar();
-        this.checkPeriodPoints();
     },
 
     binds: function(){
