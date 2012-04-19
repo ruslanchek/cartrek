@@ -753,10 +753,7 @@ core.map = {
             };
 
             if(no_points){
-                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'COMMON')+'</b> не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>' +
-                            '<div>' +
-                                '<a href="javascript:void(0)" onclick="core.map.hideMapNotice()" class="btn">Закрыть</a>' +
-                            '</div>';
+                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'COMMON')+'</b> не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>';
 
                 this.showMapNotice(html);
                 $('#where_is_my_car').fadeOut(100);
@@ -770,11 +767,7 @@ core.map = {
 
             if(!device.current_position_marker){
                 var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b>.</p>' +
-                                '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date)+'</b>.</p>' +
-                                '<div>' +
-                                    //'<a href="javascript:void(0)" class="btn btn-info">Перейти к дате</a>&nbsp;&nbsp;&nbsp;' +
-                                    '<a href="javascript:void(0)" onclick="core.map.hideMapNotice()" class="btn">Закрыть</a>' +
-                                '</div>';
+                                '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date)+'</b>.</p>';
 
                 this.showMapNotice(message);
                 $('#where_is_my_car').fadeOut(100);
