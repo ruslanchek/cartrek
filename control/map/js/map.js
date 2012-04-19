@@ -196,9 +196,6 @@ core.map = {
         $(event.originalEvent.srcElement).parent().addClass('kube_datepicker_day_select');
         $('.current_date').html(this.humanizeDate(date, 'COMMON'));
 
-        this.hideAllDevicesInfo();
-        this.hideAllDevicesCurrentPositions();
-
         this.loadOptions(true);
     },
 
