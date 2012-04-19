@@ -691,13 +691,18 @@ core.map = {
         if(car_id == 'all'){
             this.setCurrentDeviceName();
             this.drawDevices();
+            this.fitToAllDevicesMarkersBounds();
         }else{
             this.setCurrentDeviceName(car_id);
             this.drawDevice(car_id);
             this.showDeviceData(car_id);
+            this.fitToAllDevicesMarkersBounds();
+
+            if(this.options.devices[this.getDeviceIndexById(car_id)].current_position_marker){
+            this.map.panTo(this.options.devices[this.getDeviceIndexById(car_id)].current_position_marker.getPosition());
+            };
         };
 
-        this.fitToAllDevicesMarkersBounds();
         this.checkPeriodPoints();
     },
 
@@ -822,10 +827,10 @@ core.map = {
         });
 
         $('#where_is_my_car').live('click', function(){
-            if(core.map.options.current_devece_id){
+            if(core.map.options.current_devece_id && core.map.options.current_devece_id != 'all'){
                 //core.map.focusToMarker(core.map.options.devices[core.map.getDeviceIndexById(core.map.options.current_devece_id)].current_position_marker);
                 core.map.fitToDevicePathBounds(core.map.options.current_devece_id);
-            }else if($.cookie('car_id') == 'all'){
+            }else{
                 core.map.fitToAllDevicesMarkersBounds();
             };
         });
