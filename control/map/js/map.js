@@ -473,12 +473,17 @@ core.map = {
         var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
             status, status_class;
 
-        if(marker.point.velocity > 0){
-            status = 'В пути';
-            status_class = 'label-success';
+        if(marker.point.id == device.current_position_marker.point.id){
+            status = 'Текущее положение';
+            status_class = 'label-info';
         }else{
-            status = 'Остановка';
-            status_class = 'label-important';
+            if(marker.point.velocity > 0){
+                status = 'В пути';
+                status_class = 'label-success';
+            }else{
+                status = 'Остановка';
+                status_class = 'label-important';
+            };
         };
 
         var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
