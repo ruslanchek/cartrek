@@ -17,7 +17,11 @@
         </div>
 
         <div class="pull-right">
-            <div id="where_is_my_car" class="btn btn-info"><i class="icon-flag icon-white"></i> Показать</div>
+            <button id="refresh_data" class="btn" title="Обновить данные"><i class="icon-refresh"></i></button>
+        </div>
+
+        <div class="pull-right">
+            <button id="where_is_my_car" class="btn btn-info" title="Показать машины/путь"><i class="icon-screenshot icon-white"></i></button>
         </div>
 
         <div class="clear"></div>

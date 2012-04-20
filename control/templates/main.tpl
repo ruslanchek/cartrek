@@ -15,7 +15,7 @@
                     </a>
 
                     <!-- Be sure to leave the brand out there if you want it shown -->
-                    <span class="brand">Car</span>
+                    <span class="brand">Автоконтроль</span>
 
                     <!-- Everything you want hidden at 940px or less, place within here -->
                     <div class="nav-collapse">

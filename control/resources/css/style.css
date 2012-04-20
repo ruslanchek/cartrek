@@ -160,6 +160,10 @@ h1 {
     display: none;
 }
 
+#refresh_data {
+    margin-left: 10px;
+}
+
 .select_car {
     margin: 0 0 0 1em;
 }
@@ -199,4 +203,8 @@ h1 {
 
 .map_notice p {
     font-size: 15px;
+}
+
+.info_window_content {
+    padding: 15px 0 0 0;
 }
