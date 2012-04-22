@@ -147,13 +147,12 @@ h1 {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    color: #777;
+    color: #444;
     background: #fff;
     margin: 0 0.2em;
     -webkit-box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
     box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
-
 }
 
 #where_is_my_car {
@@ -207,4 +206,29 @@ h1 {
 
 .info_window_content {
     padding: 15px 0 0 0;
+}
+
+.marker_label {
+    position: relative;
+    background: #000;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    text-shadow: 0 -1px 0 #333;
+    font-size: 11px;
+    display: block;
+    padding: 0 4px 2px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 4px;
+    -moz-border-radius-bottomright: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-radius: 0px 4px 4px 4px;
+    border-radius: 0px 4px 4px 4px;
+    -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.9);
+    -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.9);
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.9);
+}
+
+.marker_label .g_id {
+    margin: 4px 0 3px;
+    text-shadow: none;
 }

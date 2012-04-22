@@ -114,6 +114,45 @@ core.map = {
             };
             return dist.toFixed(2);
         };
+
+        //Label
+        this.label.prototype = new google.maps.OverlayView;
+
+        // Implement onAdd
+        this.label.prototype.onAdd = function() {
+            var pane = this.getPanes().overlayLayer;
+            pane.appendChild(this.div_);
+
+            // Ensures the label is redrawn if the text or position is changed.
+            var me = this;
+            this.listeners_ = [
+                google.maps.event.addListener(this, 'position_changed', function() { me.draw(); }),
+                google.maps.event.addListener(this, 'text_changed', function() { me.draw(); })
+            ];
+        };
+
+        // Implement onRemove
+        this.label.prototype.onRemove = function() {
+            this.div_.parentNode.removeChild(this.div_);
+
+            // Label is removed from the map, stop updating its position/text.
+            for (var i = 0, I = this.listeners_.length; i < I; ++i) {
+                google.maps.event.removeListener(this.listeners_[i]);
+            };
+        };
+
+        // Implement draw
+        this.label.prototype.draw = function() {
+            var projection = this.getProjection();
+            var position = projection.fromLatLngToDivPixel(this.get('position'));
+
+            var div = this.div_;
+            div.style.left = position.x + 'px';
+            div.style.top = position.y + 'px';
+            div.style.display = 'block';
+
+            this.span_.innerHTML = this.get('text');
+        };
     },
 
     createMap: function(options){
@@ -265,16 +304,37 @@ core.map = {
         };
     },
 
-    drawDevice: function(id){
-        var device = this.options.devices[this.getDeviceIndexById(id)];
+    drawDeviceLabel: function(id){
+        var device  = this.options.devices[this.getDeviceIndexById(id)],
+            marker  = device.current_position_marker;
 
-        var marker = this.createCurrentPositionMarker({
-            map         : this.map,
-            device      : device,
-            click       : function(marker){
-                core.map.setDeviceFocus(marker);
-            }
-        });
+        if(marker){
+            var label   = new this.label({
+                map: this.map
+            });
+
+            label.bindTo('position', marker, 'position');
+            label.bindTo('text', marker, 'position');
+            label.div_.innerHTML =  '<span class="marker_label" id="device_label_'+id+'">' +
+                                        '<a href="javascript:void(0)" class="close icon-minus"></a>' +
+                                        '<b>'+device.name+'</b><br>' +
+                                        '<nobr>'+device.make+' '+device.model+'</nobr><br>' +
+                                        '<span class="g_id">'+device.g_id+'</span>' +
+                                    '</span>';
+
+            device.current_position_label = label;
+        };
+    },
+
+    drawDevice: function(id){
+        var device = this.options.devices[this.getDeviceIndexById(id)],
+            marker = this.createCurrentPositionMarker({
+                map         : this.map,
+                device      : device,
+                click       : function(marker){
+                    core.map.setDeviceFocus(marker);
+                }
+            });
 
         device.current_position_marker = marker;
     },
@@ -282,13 +342,20 @@ core.map = {
     drawDevices: function(){
         for(var i = 0, l = this.options.devices.length; i < l; i++){
             this.drawDevice(this.options.devices[i].id);
+            this.drawDeviceLabel(this.options.devices[i].id);
         };
     },
 
     hideAllDevicesCurrentPositions: function(){
         for(var i = 0, l = this.options.devices.length; i < l; i++){
             if(this.options.devices[i].current_position_marker){
-                this.options.devices[i].current_position_marker.setMap(null);
+                if(this.options.devices[i].current_position_marker){
+                    this.options.devices[i].current_position_marker.setMap(null);
+                };
+
+                if(this.options.devices[i].current_position_label){
+                    this.options.devices[i].current_position_label.setMap(null);
+                };
             };
         };
 
@@ -413,6 +480,18 @@ core.map = {
         };
     },
 
+    label: function(opt_options){
+        this.setValues(opt_options);
+
+        // Label specific
+        var span = this.span_ = document.createElement('span');
+        span.className = 'marker_label';
+
+        var div = this.div_ = document.createElement('div');
+        div.appendChild(span);
+        div.style.cssText = 'position: absolute; display: none';
+    },
+
     createCurrentPositionMarker: function(options){
         if(options.device.point){
             var marker = new google.maps.Marker({
@@ -468,11 +547,12 @@ core.map = {
 
     showMarkerData: function(marker){
         var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
-            status, status_class;
+            status, status_class, additional;
 
         if(marker.point.id == device.current_position_marker.point.id){
             status = 'Текущее положение';
             status_class = 'label-info';
+            additional = '<a class="btn btn-info select_car_button" rel="'+marker.device_id+'" href="javascript:void(0)"><i class="icon-share-alt icon-white"></i> Выбрать машину</a>';
         }else{
             if(marker.point.velocity > 0){
                 status = 'В пути';
@@ -497,14 +577,14 @@ core.map = {
                             '<td>Скорость</td>' +
                             '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
                         '</tr>' +
-                    '</table>';
+                    '</table>' + additional;
 
         if(this.infowindow){
             this.infowindow.close();
         };
 
         this.infowindow = new google.maps.InfoWindow({
-            content: html
+            content: '<div class="info_window_content">'+html+'</div>'
         });
 
         this.infowindow.open(this.map, marker);
@@ -699,7 +779,7 @@ core.map = {
             this.fitToAllDevicesMarkersBounds();
 
             if(this.options.devices[this.getDeviceIndexById(car_id)].current_position_marker){
-            this.map.panTo(this.options.devices[this.getDeviceIndexById(car_id)].current_position_marker.getPosition());
+                this.map.panTo(this.options.devices[this.getDeviceIndexById(car_id)].current_position_marker.getPosition());
             };
         };
 
@@ -837,6 +917,11 @@ core.map = {
         $('#cars_menu li a').live('click', function(){
             core.map.selectCar($(this).attr('rel'));
         });
+
+        $('a.select_car_button').live('click', function(){
+            core.map.selectCar($(this).attr('rel'));
+        });
+
 
         /*$('#view_settings').live('click', function(){
             core.modal.show(core.map.getVeiwSettingsContent());
