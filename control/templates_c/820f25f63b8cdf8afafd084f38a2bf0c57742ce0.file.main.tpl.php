@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-07 13:35:36
+<?php /* Smarty version Smarty-3.1.7, created on 2012-04-22 14:15:02
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:11291423434f800a68d221c3-26876524%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '820f25f63b8cdf8afafd084f38a2bf0c57742ce0' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/main.tpl',
-      1 => 1333734584,
+      1 => 1335089434,
       2 => 'file',
     ),
   ),
@@ -15,13 +15,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.7',
+  'unifunc' => 'content_4f800a68e8e81',
   'variables' => 
   array (
     'core' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.7',
-  'unifunc' => 'content_4f800a68e8e81',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_4f800a68e8e81')) {function content_4f800a68e8e81($_smarty_tpl) {?><!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -41,7 +41,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                     </a>
 
                     <!-- Be sure to leave the brand out there if you want it shown -->
-                    <span class="brand">Car</span>
+                    <span class="brand">Автоконтроль</span>
 
                     <!-- Everything you want hidden at 940px or less, place within here -->
                     <div class="nav-collapse">

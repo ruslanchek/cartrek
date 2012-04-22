@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-17 23:30:29
+<?php /* Smarty version Smarty-3.1.7, created on 2012-04-22 14:15:02
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/modules/map.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:731321044f800a68eb8241-73154553%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '255ace221869e4ea41f60fa8bd28e3cd1b0f8a87' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/modules/map.tpl',
-      1 => 1334691027,
+      1 => 1335089434,
       2 => 'file',
     ),
   ),
@@ -38,7 +38,11 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         </div>
 
         <div class="pull-right">
-            <div id="where_is_my_car" class="btn btn-info"><i class="icon-flag icon-white"></i> Показать</div>
+            <button id="refresh_data" class="btn" title="Обновить данные"><i class="icon-refresh"></i></button>
+        </div>
+
+        <div class="pull-right">
+            <button id="where_is_my_car" class="btn btn-info" title="Показать машины/путь"><i class="icon-screenshot icon-white"></i></button>
         </div>
 
         <div class="clear"></div>

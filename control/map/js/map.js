@@ -193,12 +193,6 @@ core.map = {
         return options;
     },
 
-    refreshData: function(){
-        this.hideAllDevicesCurrentPositions();
-        this.hideAllDevicesInfo();
-        this.loadOptions(true);
-    },
-
     changeDate: function(date, event){
         this.hideAllDevicesCurrentPositions();
         this.hideAllDevicesInfo();
@@ -474,12 +468,11 @@ core.map = {
 
     showMarkerData: function(marker){
         var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
-            status, status_class, addition;
+            status, status_class;
 
         if(marker.point.id == device.current_position_marker.point.id){
             status = 'Текущее положение';
             status_class = 'label-info';
-            addition = '';
         }else{
             if(marker.point.velocity > 0){
                 status = 'В пути';
@@ -490,24 +483,21 @@ core.map = {
             };
         };
 
-        var html =  '<div class="info_window_content">' +
-                        '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
-                        '<table class="table table-bordered table-condensed">' +
-                            '<tr>' +
-                                '<td>Статус</td>' +
-                                '<td><span class="label '+status_class+'">'+status+'</span></td>' +
-                            '</tr>' +
-                            '<tr>' +
-                                '<td>Время</td>' +
-                                '<td><span class="label">'+this.humanizeTime(marker.point.time)+'</span></td>' +
-                            '</tr>' +
-                            '<tr>' +
-                                '<td>Скорость</td>' +
-                                '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
-                            '</tr>' +
-                        '</table>'+
-                        addition +
-                    '</div>';
+        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
+                    '<table class="table table-bordered table-condensed">' +
+                        '<tr>' +
+                            '<td>Статус</td>' +
+                            '<td><span class="label '+status_class+'">'+status+'</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Время</td>' +
+                            '<td><span class="label">'+this.humanizeTime(marker.point.time)+'</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Скорость</td>' +
+                            '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
+                        '</tr>' +
+                    '</table>';
 
         if(this.infowindow){
             this.infowindow.close();
@@ -846,10 +836,6 @@ core.map = {
 
         $('#cars_menu li a').live('click', function(){
             core.map.selectCar($(this).attr('rel'));
-        });
-
-        $('#refresh_data').live('click', function(){
-            core.map.refreshData();
         });
 
         /*$('#view_settings').live('click', function(){
