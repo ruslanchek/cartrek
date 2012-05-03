@@ -1,5 +1,7 @@
 'use strict';
 
+var google = google;
+
 core.map = {
     options: {
         current_devece_id: null,
@@ -547,12 +549,14 @@ core.map = {
 
     showMarkerData: function(marker){
         var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
-            status, status_class, additional;
+            status, status_class, additional = new String();
 
         if(marker.point.id == device.current_position_marker.point.id){
             status = 'Текущее положение';
             status_class = 'label-info';
-            additional = '<a class="btn btn-info select_car_button" rel="'+marker.device_id+'" href="javascript:void(0)"><i class="icon-share-alt icon-white"></i> Выбрать машину</a>';
+            if(this.options.current_devece_id != marker.device_id){
+                additional = '<a class="btn btn-info select_car_button" rel="'+marker.device_id+'" href="javascript:void(0)"><i class="icon-share-alt icon-white"></i> Выбрать машину</a>';
+            };
         }else{
             if(marker.point.velocity > 0){
                 status = 'В пути';

@@ -31,10 +31,10 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Авторизация <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="/auth"><i class="icon-share-alt"></i> Вход</a></li>
-                                    <li><a href="/auth/register"><i class="icon-file"></i> Регистрация</a></li>
+                                    <li><a href="/control/auth"><i class="icon-share-alt"></i> Вход</a></li>
+                                    <li><a href="/control/auth/register"><i class="icon-file"></i> Регистрация</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="/auth/remember_pass"><i class="icon-question-sign"></i> Напомнить пароль</a></li>
+                                    <li><a href="/control/auth/remember_pass"><i class="icon-question-sign"></i> Напомнить пароль</a></li>
                                 </ul>
                             </li>
                         </ul>
