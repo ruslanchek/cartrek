@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-22 14:15:02
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-04 00:53:19
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:11291423434f800a68d221c3-26876524%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '820f25f63b8cdf8afafd084f38a2bf0c57742ce0' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/main.tpl',
-      1 => 1335089434,
+      1 => 1336078226,
       2 => 'file',
     ),
   ),
@@ -57,10 +57,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Авторизация <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="/control/auth"><i class="icon-share-alt"></i> Вход</a></li>
-                                    <li><a href="/control/auth/register"><i class="icon-file"></i> Регистрация</a></li>
+                                    <li><a href="/control/register"><i class="icon-share-alt"></i> Вход</a></li>
+                                    <li><a href="/control/register/register"><i class="icon-file"></i> Регистрация</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="/control/auth/remember_pass"><i class="icon-question-sign"></i> Напомнить пароль</a></li>
+                                    <li><a href="/control/register/remember_pass"><i class="icon-question-sign"></i> Напомнить пароль</a></li>
                                 </ul>
                             </li>
                         </ul>
