@@ -23,7 +23,7 @@
         private static $objects = array();
 
         public function __construct(){
-            require_once($_SERVER['DOCUMENT_ROOT'].'/config.class.php');
+            require_once($_SERVER['DOCUMENT_ROOT'].'/Config.class.php');
             $this->config = new Config();
         }
 
