@@ -1,0 +1,1 @@
+<p>Ваш новый пароль: <code>{$core->mail_data.password}</code></p>

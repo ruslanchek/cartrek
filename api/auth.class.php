@@ -1,5 +1,5 @@
 <?php
-	class Login extends Core{
+	class Auth extends Core{
 		public
             $user_status;
 
@@ -8,7 +8,7 @@
             $addition_fields,
             $password_length;
 
-        function __construct($core, $af){
+        function __construct(){
             parent::__construct();
 
             $this->fields = array(
@@ -27,10 +27,7 @@
             );
 
             $this->password_length = 6;
-
-            $this->addition_fields = $af;
-
-            $this->core = $core;
+            $this->addition_fields = array();
             $this->session_time = 60*60*12;
             
             $this->checkLogin();
@@ -60,7 +57,7 @@
 
         //User authenticate
         public function forceLogin($data){
-            $hash = md5(Utilities::getUniqueCode(10));
+            $hash = md5($this->utils->getUniqueCode(10));
 
             $query = "
                 UPDATE
@@ -75,7 +72,7 @@
                     `id` = '".intval($data['id'])."'
             ";
 
-            $this->core->db->query($query);
+            $this->db->query($query);
 
             setcookie("id", $data['id'], time() + $this->session_time, "/");
             setcookie("hash", $hash, time() + $this->session_time, "/");
@@ -83,12 +80,12 @@
             $this->user_status['status'] = true;
             $this->user_status['message'] = 'Вы успешно авторизовались';
             $this->user_status['userdata'] = $data;
-            $this->getUserSharedAccauntStatus();
+            $this->getUserSharedAccountStatus();
         }
 
         //Set currently user activity
         private function setActivity(){
-			$this->core->db->query("
+			$this->db->query("
 			    UPDATE
 			        `public_users`
 			    SET
@@ -101,43 +98,44 @@
 
         //Check user status
         private function checkLogin(){
-            $query = "
-                SELECT
-                    ".$this->getFields()."
-                FROM
-                    `public_users`
-                WHERE
-                    `id` = '".intval($_COOKIE['id'])."'
-                LIMIT 1
-            ";
+            if(isset($_COOKIE['id'])){
+                $query = "
+                    SELECT
+                        ".$this->getFields()."
+                    FROM
+                        `public_users`
+                    WHERE
+                        `id` = '".intval($_COOKIE['id'])."'
+                    LIMIT 1
+                ";
 
-            $data = mysql_fetch_assoc($this->core->db->query($query));
-            $interval = Utilities::datetimeToSeconds(date('Y-m-d H:i:s')) - Utilities::datetimeToSeconds($data['last_activity']);
+                $data = $this->db->assocItem($query);
+                $interval = $this->utils->datetimeToSeconds(date('Y-m-d H:i:s')) - $this->utils->datetimeToSeconds($data['last_activity']);
 
-            if($interval > $this->session_time){
-                $this->exitUser();
-
-            }else{
-                if(($data['hash'] == $_COOKIE['hash'] && $data['id'] == $_COOKIE['id']) && !empty($data)){
-                    $this->user_status['status']    = true;
-                    $this->user_status['message']   = "Autherized";
-                    $this->user_status['userdata']  = $data;
-                    $this->getUserSharedAccauntStatus();
-
-                    $this->setActivity();
-
+                if($interval > $this->session_time){
+                    $this->exitUser();
                 }else{
-                    setcookie("id", "", time() - $this->session_time, "/");
-                    setcookie("hash", "", time() - $this->session_time, "/");
+                    if(($data['hash'] == $_COOKIE['hash'] && $data['id'] == $_COOKIE['id']) && !empty($data)){
+                        $this->user_status['status']    = true;
+                        $this->user_status['message']   = "Autherized";
+                        $this->user_status['userdata']  = $data;
+                        $this->getUserSharedAccountStatus();
 
-                    $this->user_status['status'] = false;
-                    $this->user_status['message'] = 'Autherization required';
+                        $this->setActivity();
+
+                    }else{
+                        setcookie("id", "", time() - $this->session_time, "/");
+                        setcookie("hash", "", time() - $this->session_time, "/");
+
+                        $this->user_status['status'] = false;
+                        $this->user_status['message'] = 'Autherization required';
+                    };
                 };
             };
         }
 
         //Check if user from a shared account
-        private function getUserSharedAccauntStatus(){
+        private function getUserSharedAccountStatus(){
             if(
                 $this->user_status['userdata']['vk_id'] > 0 ||
                 $this->user_status['userdata']['fb_id'] > 0
@@ -149,7 +147,10 @@
         }
 
         //Try to user autherize
-        public function auth($login, $password){
+        public function auth(){
+            $login = $_POST['login'];
+            $password = $_POST['password'];
+
             if(!$login && $password){
                 $this->user_status['status'] = false;
                 $this->user_status['message'] = "Вы не ввели логин";
@@ -161,9 +162,9 @@
             }elseif(!$password && !$login){
                 $this->user_status['status'] = false;
                 $this->user_status['message'] = "Вы не ввели логин и пароль";
-                
+
             }else{
-                if(Utilities::matchPattern($login, 'email')){
+                if($this->utils->matchPattern($login, 'email')){
                     $query = "
                         SELECT
                             ".$this->getFields()."
@@ -185,7 +186,7 @@
                     ";
                 };
 
-                $data = mysql_fetch_assoc($this->core->db->query($query));
+                $data = $this->db->assocItem($query);
 
                 if($data['password'] === md5(md5($password))){
                     $this->forceLogin($data);
@@ -193,12 +194,14 @@
                     $this->user_status['status'] = false;
                     $this->user_status['message'] = 'Вы ввели неправильный логин или пароль';
                 };
-            };           
+            };
+
+            return $this->user_status;
         }
 
         //Exit
 		public function exitUser(){
-            $this->core->db->query("
+            $this->db->query("
 			    UPDATE
 			        `public_users`
 			    SET
@@ -221,14 +224,14 @@
                     `public_users`
                 WHERE
                     `id` = ".intval($user_id)." &&
-                    `remember_code` = '".DB::quote($code)."'
+                    `remember_code` = '".$this->db->quote($code)."'
                 LIMIT 1
             ";
 
-            $data = $this->core->db->assocItem($query);
+            $data = $this->db->assocItem($query);
 
             if($data['id'] > 0){
-                $password = Utilities::getUniqueCode($this->password_length);
+                $password = $this->utils->getUniqueCode($this->password_length);
 
                 $query = "
                     UPDATE
@@ -240,14 +243,14 @@
                         `id` = ".intval($data['id'])."
                 ";
 
-                $this->core->db->query($query);
+                $this->db->query($query);
 
-                $this->core->sendMail(
+                $this->mail->send(
                     'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
                     'account_manager@'.$_SERVER['SERVER_NAME'],
                     $data['email'],
                     'Пароль восстановлен',
-                    'include/mailing/password_recover_password.tpl',
+                    'mailing/password_recover_password.tpl',
                     array(
                          'user_data' => $data,
                          'password' => $password
@@ -275,7 +278,7 @@
                 );
 
             }else{
-                if(Utilities::matchPattern($login, 'email')){
+                if($this->utils->matchPattern($login, 'email')){
                     $query = "
                         SELECT
                             ".$this->getFields().",
@@ -283,7 +286,7 @@
                         FROM
                             `public_users`
                         WHERE
-                            `email` = '".DB::quote($login)."'
+                            `email` = '".$this->db->quote($login)."'
                         LIMIT 1
                     ";
                 }else{
@@ -294,21 +297,21 @@
                         FROM
                             `public_users`
                         WHERE
-                            `login` = '".DB::quote($login)."'
+                            `login` = '".$this->db->quote($login)."'
                         LIMIT 1
                     ";
                 };
 
-                $data = $this->core->db->assocItem($query);
+                $data = $this->db->assocItem($query);
 
                 if($data['id'] > 0){
-                    $tl = Utilities::datetimeToSeconds($data['last_remember']);
-                    $tn = Utilities::datetimeToSeconds(date('Y-m-d H:i:s'));
+                    $tl = $this->utils->datetimeToSeconds($data['last_remember']);
+                    $tn = $this->utils->datetimeToSeconds(date('Y-m-d H:i:s'));
 
                     $ti = $tn - $tl;
 
                     if($ti > 300){
-                        $code = md5(Utilities::getUniqueCode($this->password_length));
+                        $code = md5($this->utils->getUniqueCode($this->password_length));
 
 
 
@@ -317,21 +320,21 @@
                                 `public_users`
                             SET
                                 `remember_code` = '".$code."',
-                                `last_remember` = '".DB::quote(date('Y-m-d H:i:s'))."'
+                                `last_remember` = '".$this->db->quote(date('Y-m-d H:i:s'))."'
                             WHERE
                                 `id` = ".intval($data['id'])."
                         ";
 
-                        $this->core->db->query($query);
+                        $this->db->query($query);
 
-                        $link = 'http://'.$_SERVER['HTTP_HOST'].'/auth/remember_pass/?action=password_recover&user_id='.$data['id'].'&code='.$code;
+                        $link = 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/remember_pass/?action=password_recover&user_id='.$data['id'].'&code='.$code;
 
-                        $this->core->sendMail(
-                            'Менеджер аккаунтов '.$this->core->config['site_name'],
-                            'account_manager@'.$this->core->config['site_name'],
+                        $this->mail->send(
+                            'Менеджер аккаунтов '.$this->config['site_name'],
+                            'account_manager@'.$this->config['site_name'],
                             $data['email'],
                             'Подтвердите восстановление пароля',
-                            'include/mailing/password_recover_code.tpl',
+                            'mailing/password_recover_code.tpl',
                             array(
                                  'user_data' => $data,
                                  'code' => $code,
@@ -350,7 +353,7 @@
                         );
                     };
                 }else{
-                    if(Utilities::matchPattern($login, 'email')){
+                    if($this->utils->matchPattern($login, 'email')){
                         $eol = "такой электронной почтой";
                     }else{
                         $eol = "таким логином";
@@ -369,12 +372,12 @@
         /* REGISTER */
         //Check user existance by email (true if present)
         public function checkAlreadyByEmail($email){
-            return $this->core->db->checkRowExistance('public_users', 'email', mb_strtolower($email, "UTF-8"));
+            return $this->db->checkRowExistance('public_users', 'email', mb_strtolower($email, "UTF-8"));
         }
 
         //Check user existance by login (true if present)
         public function checkAlreadyByLogin($login){
-            return $this->core->db->checkRowExistance('public_users', 'login', mb_strtolower($login, "UTF-8"));
+            return $this->db->checkRowExistance('public_users', 'login', mb_strtolower($login, "UTF-8"));
         }
 
         //Generate another login
@@ -405,26 +408,26 @@
                 LIMIT 1
             ";
 
-            $data = $this->core->db->assocItem($query);
+            $data = $this->db->assocItem($query);
 
             if($p_old && $p_new && $p_new_again){
                 if($data['password'] == md5(md5(trim($p_old)))){
                     if($p_new == $p_new_again){
-                        $this->core->db->query("
+                        $this->db->query("
                             UPDATE
                                 `public_users`
                             SET
-                                `password` = '".DB::quote(md5(md5(trim($p_new))))."'
+                                `password` = '".$this->db->quote(md5(md5(trim($p_new))))."'
                             WHERE
                                 `id` = ".intval($this->user_status['userdata']['id'])."
                         ");
 
-                        $this->core->sendMail(
+                        $this->mail->send(
                             'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
                             'account_manager@'.$_SERVER['SERVER_NAME'],
                             $this->user_status['userdata']['email'],
                             'Ваш пароль изменен',
-                            'include/mailing/password_changed.tpl',
+                            'mailing/password_changed.tpl',
                             array(
                                  'password' => $p_new
                             )
@@ -456,89 +459,72 @@
             return $result;
         }
 
-        public function registerNewUser($data, $securimage){
+        public function registerNewUser(){
             //Check for email is not empty
-            if(!isset($data['email']) || $data['email'] == ''){
+            if(!isset($_POST['email']) || $_POST['email'] == ''){
                 $result = array(
                     'status' => false,
                     'message' => 'Введите e-mail'
                 );
             }else{
                 //Check for email is match the pattern
-                if(!Utilities::matchPattern($data['email'], 'email')){
+                if(!$this->utils->matchPattern($_POST['email'], 'email')){
                     $result = array(
                         'status' => false,
                         'message' => 'E-mail указан неправильно'
                     );
                 }else{
                     //Check for email is unique
-                    if($this->checkAlreadyByEmail($data['email']) === true){
+                    if($this->checkAlreadyByEmail($_POST['email']) === true){
                         $result = array(
                             'status' => false,
                             'message' => 'Пользователь с таким e-mail-ом уже зарегистрирован'
                         );
                     }else{
-                        //Check for captcha code is not empty
-                        if(isset($data['captcha_code']) && $data['captcha_code'] != ''){
+                        //All data is ok, doing a register
+                        $login = $this->getLoginFromEmail($_POST['email']);
 
-                            //Check for captcha code is ok
-                            if($securimage->check($data['captcha_code']) === false){
-                                $result = array(
-                                    'status' => false,
-                                    'message' => 'Неправильный код с картинки'
-                                );
-                            }else{
-                                //All data is ok, doing a register
-                                $login = $this->getLoginFromEmail($data['email']);
-
-                                if($this->checkAlreadyByLogin($login)){
-                                    $login = $this->getAnotherLogin($login);
-                                };
-
-                                $password = Utilities::getUniqueCode($this->password_length);
-
-                                $this->core->db->query("
-                                    INSERT INTO `public_users` (
-                                        `password`,
-                                        `name`,
-                                        `email`,
-                                        `login`,
-                                        `reg_date`
-                                    ) VALUES (
-                                        '".DB::quote(md5(md5($password)))."',
-                                        '".DB::quote($login)."',
-                                        '".DB::quote($data['email'])."',
-                                        '".DB::quote($login)."',
-                                        NOW()
-                                    )
-                                ");
-
-                                $this->core->sendMail(
-                                    'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
-                                    'account_manager@'.$_SERVER['SERVER_NAME'],
-                                    $data['email'],
-                                    'Добро пожаловать на '.$_SERVER['SERVER_NAME'].'!',
-                                    'include/mailing/register_success.tpl',
-                                    array(
-                                         'login' => $login,
-                                         'password' => $password,
-                                         'domain' => $_SERVER['SERVER_NAME']
-                                    )
-                                );
-
-                                $this->auth($data['email'], $password);
-
-                                $result = array(
-                                    'status' => true,
-                                    'message' => 'Спасибо, вы успешно зарегистрировались, сейчас страница обновится и вы автоматически войдете на сайт '
-                                );
-                            };
-                        }else{
-                            $result = array(
-                                'status' => false,
-                                'message' => 'Введите код с картинки'
-                            );
+                        if($this->checkAlreadyByLogin($login)){
+                            $login = $this->getAnotherLogin($login);
                         };
+
+                        $password = $this->utils->getUniqueCode($this->password_length);
+
+                        $this->db->query("
+                            INSERT INTO `public_users` (
+                                `password`,
+                                `name`,
+                                `email`,
+                                `login`,
+                                `reg_date`
+                            ) VALUES (
+                                '".$this->db->quote(md5(md5($password)))."',
+                                '".$this->db->quote($login)."',
+                                '".$this->db->quote($_POST['email'])."',
+                                '".$this->db->quote($login)."',
+                                NOW()
+                            )
+                        ");
+
+                        $this->mail->send(
+                            'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
+                            'account_manager@'.$_SERVER['SERVER_NAME'],
+                            $_POST['email'],
+                            'Добро пожаловать на '.$_SERVER['SERVER_NAME'].'!',
+                            'mailing/register_success.tpl',
+                            array(
+                                 'login' => $login,
+                                 'password' => $password,
+                                 'domain' => $_SERVER['SERVER_NAME']
+                            )
+                        );
+
+                        $this->auth($_POST['email'], $password);
+
+                        $result = array(
+                            'status' => true,
+                            'message' => 'Спасибо, вы успешно зарегистрировались, сейчас страница обновится и вы автоматически войдете на сайт '
+                        );
                     };
                 };
             };
@@ -555,14 +541,14 @@
                     'name' => $_POST['name']
                 );
 
-                if(!Utilities::matchPattern($new_data['email'], 'email')){
+                if(!$this->utils->matchPattern($new_data['email'], 'email')){
                     return array(
                         'status' => false,
                         'message' => 'E-mail указан неправильно'
                     );
                 };
 
-                if($this->core->db->checkRowExistance('public_users', 'email', mb_strtolower($new_data['email'], "UTF-8"), array($user_id)) === true){
+                if($this->db->checkRowExistance('public_users', 'email', mb_strtolower($new_data['email'], "UTF-8"), array($user_id)) === true){
                     return array(
                         'status' => false,
                         'message' => 'E-mail <span>'.$new_data['email'].'</span> уже занят'
@@ -583,7 +569,7 @@
                     );
                 };
 
-                if($this->core->db->checkRowExistance('public_users', 'login', mb_strtolower($new_data['login'], "UTF-8"), array($user_id)) === true){
+                if($this->db->checkRowExistance('public_users', 'login', mb_strtolower($new_data['login'], "UTF-8"), array($user_id)) === true){
                     return array(
                         'status' => false,
                         'message' => 'Пользователь с логином <span>'.$new_data['login'].'</span> уже зарегистрирован'
@@ -594,13 +580,13 @@
                     UPDATE
                         `public_users`
                     SET
-                        `email` = '".DB::quote($new_data['email'])."',
-                        `name` = '".DB::quote($new_data['name'])."'
+                        `email` = '".$this->db->quote($new_data['email'])."',
+                        `name` = '".$this->db->quote($new_data['name'])."'
                     WHERE
                         `id` = ".intval($user_id)."
                 ";
 
-                $this->core->db->query($query);
+                $this->db->query($query);
 
                 $this->user_status['userdata']['email'] = $new_data['email'];
                 $this->user_status['userdata']['login'] = $new_data['login'];
@@ -671,18 +657,18 @@
             if($fields['uid'] > 0){
                 $id_row = $provider.'_id';
 
-                if($this->core->db->checkRowExistance('public_users', $id_row, $fields['uid'])){
+                if($this->db->checkRowExistance('public_users', $id_row, $fields['uid'])){
                     $query = "
                         SELECT
                             ".$this->getFields()."
                         FROM
                             `public_users`
                         WHERE
-                            `".DB::quote($id_row)."` = '".DB::quote($fields['uid'])."'
+                            `".$this->db->quote($id_row)."` = '".$this->db->quote($fields['uid'])."'
                         LIMIT 1
                     ";
 
-                    $this->forceLogin($this->core->db->assocItem($query));
+                    $this->forceLogin($this->db->assocItem($query));
 
                 }else{
                     if($fields['first_name'] != '' || $fields['last_name'] != ''){
@@ -701,27 +687,27 @@
                         $login = $provider.'_user_'.$fields['uid'];
                     };
 
-                    $login = Utilities::convertUrl($login);
+                    $login = $this->utils->convertUrl($login);
 
                     if($this->checkAlreadyByLogin($login)){
                         $login = $this->getAnotherLogin($login);
                     };
 
-                    $this->core->db->query("
+                    $this->db->query("
                         INSERT INTO `public_users` (
-                            `".DB::quote($id_row)."`,
+                            `".$this->db->quote($id_row)."`,
                             `name`,
                             `login`,
                             `reg_date`
                         ) VALUES (
-                            '".DB::quote($fields['uid'])."',
-                            '".DB::quote($name)."',
-                            '".DB::quote($login)."',
+                            '".$this->db->quote($fields['uid'])."',
+                            '".$this->db->quote($name)."',
+                            '".$this->db->quote($login)."',
                             NOW()
                         )
                     ");
 
-                    $new_user_id = mysql_insert_id();
+                    $new_user_id = $this->db->getMysqlInsertId();
 
                     $query = "
                         SELECT
@@ -733,7 +719,7 @@
                         LIMIT 1
                     ";
 
-                    $this->forceLogin($this->core->db->assocItem($query));
+                    $this->forceLogin($this->db->assocItem($query));
                 };
             };
         }

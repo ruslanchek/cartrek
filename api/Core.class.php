@@ -6,7 +6,6 @@
 
         public
             $config,
-            $ajax_action,
             $module,
             $main_menu = array(
                 array('name' => 'settings'  , 'title' => 'Настройка'),
@@ -16,7 +15,9 @@
         // Классы API
         private $classes = array(
             'utils'                 => 'Utilities',
-            'db'                    => 'Database'
+            'db'                    => 'Database',
+            'auth'                  => 'Auth',
+            'mail'                  => 'Mail'
         );
 
         // Созданные объекты
@@ -58,23 +59,22 @@
             //Если в запросе присутствует переменная ajax, ставим режим аякса
             if(isset($_GET['ajax'])){
                 $this->ajax_mode = true;
-                $this->ajax_action = $_GET['action'];
-            }else{
-                require_once($_SERVER['DOCUMENT_ROOT'].'/smarty/Smarty.class.php');
-
-                //Подключаем и запускаем Смарти
-                $this->smarty = new Smarty();
-
-                $this->smarty->setTemplateDir($_SERVER['DOCUMENT_ROOT'].'/control/templates');
-                $this->smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'].'/control/templates_c');
-                $this->smarty->setConfigDir($_SERVER['DOCUMENT_ROOT'].'/smarty/configs');
-                $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'].'/cache');
-
-                $this->smarty->force_compile    = false;
-                $this->smarty->debugging        = false;
-                $this->smarty->caching          = false;
-                $this->smarty->cache_lifetime   = 120;
             };
+
+            require_once($_SERVER['DOCUMENT_ROOT'].'/smarty/Smarty.class.php');
+
+            //Подключаем и запускаем Смарти
+            $this->smarty = new Smarty();
+
+            $this->smarty->setTemplateDir($_SERVER['DOCUMENT_ROOT'].'/control/templates');
+            $this->smarty->setCompileDir($_SERVER['DOCUMENT_ROOT'].'/control/templates_c');
+            $this->smarty->setConfigDir($_SERVER['DOCUMENT_ROOT'].'/smarty/configs');
+            $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'].'/cache');
+
+            $this->smarty->force_compile    = false;
+            $this->smarty->debugging        = false;
+            $this->smarty->caching          = false;
+            $this->smarty->cache_lifetime   = 120;
         }
 
         //Функция окончания работы приложения

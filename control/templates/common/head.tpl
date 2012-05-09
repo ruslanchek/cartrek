@@ -11,4 +11,4 @@
 <script src="/control/resources/bootsrtap/js/bootstrap.min.js"></script>
 <script src="/control/resources/plugins/datepicker/kube.datepicker.min.js"></script>
 <script src="/control/resources/js/core.js"></script>
-<script src="/control/{$core->module.name}/js/{$core->module.name}.js"></script>
+<script src="/control/{$core->module.dir}/js/{$core->module.name}.js"></script>

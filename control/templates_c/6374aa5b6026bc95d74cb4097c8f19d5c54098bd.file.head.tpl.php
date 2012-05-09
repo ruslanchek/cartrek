@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-07 13:35:36
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-10 00:12:50
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/common/head.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:4085301004f800a68e96fd2-77204142%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6374aa5b6026bc95d74cb4097c8f19d5c54098bd' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/common/head.tpl',
-      1 => 1333734584,
+      1 => 1336594301,
       2 => 'file',
     ),
   ),
@@ -15,13 +15,13 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.7',
+  'unifunc' => 'content_4f800a68eb3e2',
   'variables' => 
   array (
     'core' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.7',
-  'unifunc' => 'content_4f800a68eb3e2',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_4f800a68eb3e2')) {function content_4f800a68eb3e2($_smarty_tpl) {?><title><?php echo $_smarty_tpl->tpl_vars['core']->value->module['title'];?>
 </title>
@@ -37,6 +37,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <script src="/control/resources/bootsrtap/js/bootstrap.min.js"></script>
 <script src="/control/resources/plugins/datepicker/kube.datepicker.min.js"></script>
 <script src="/control/resources/js/core.js"></script>
-<script src="/control/<?php echo $_smarty_tpl->tpl_vars['core']->value->module['name'];?>
+<script src="/control/<?php echo $_smarty_tpl->tpl_vars['core']->value->module['dir'];?>
 /js/<?php echo $_smarty_tpl->tpl_vars['core']->value->module['name'];?>
 .js"></script><?php }} ?>
