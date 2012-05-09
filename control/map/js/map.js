@@ -246,6 +246,7 @@ core.map = {
     },
 
     createDatepicker: function(){
+        $('#datepicker').html('');
         $('#datepicker').datepicker({
             embed       : true,
             format      : 'dd-mm-yy',
@@ -910,6 +911,10 @@ core.map = {
             }else{
                 core.map.fitToAllDevicesMarkersBounds();
             };
+        });
+
+        $('#refresh_data').live('click', function(){
+            core.map.loadOptions();
         });
 
         $('#hide_current_car_info').live('click', function(){

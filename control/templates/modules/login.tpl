@@ -12,7 +12,7 @@
         <div class="control-group">
             <label class="control-label" for="password">Пароль</label>
             <div class="controls">
-                <input type="text" class="input-xlarge" id="password" name="password">
+                <input type="password" class="input-xlarge" id="password" name="password">
             </div>
         </div>
 
