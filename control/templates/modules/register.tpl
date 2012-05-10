@@ -3,8 +3,6 @@
 </div>
 
 {if !$core->auth->user_status.status}
-<div id="register_form_message"></div>
-
 <form id="register_form" class="form-horizontal" action="javascript:void(0)" method="POST">
     <fieldset>
         <div class="control-group cg_soc">
@@ -18,6 +16,8 @@
                 </div>
             </div>
         </div>
+
+        <div id="register_form_message"></div>
 
         <div class="control-group">
             <label class="control-label" for="email">Email</label>

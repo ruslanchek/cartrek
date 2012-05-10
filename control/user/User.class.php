@@ -3,10 +3,14 @@
         public function __construct(){
             parent::__construct();
 
+            if(!$this->auth->user_status['status']){
+                header('Location: /control/auth/login');
+            };
+
             $this->init(array(
                 'name'  => 'user',
                 'title' => 'Пользователь',
-                'dir'   => 'user'
+                'dir'   => '/control/user'
             ));
 
             if(isset($_GET['exit'])){

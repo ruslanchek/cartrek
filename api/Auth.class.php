@@ -717,7 +717,7 @@
                     ";
 
                     $this->forceLogin($this->db->assocItem($query));
-                    header('Location: /control/user');
+                    header('Location: /control');
                 };
             };
         }

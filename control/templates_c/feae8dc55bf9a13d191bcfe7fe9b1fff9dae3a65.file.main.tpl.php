@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-10 13:47:28
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-10 14:52:08
          compiled from "Z:/home/loc/gps/control/templates\main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:224234f71f561606444-69367567%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'feae8dc55bf9a13d191bcfe7fe9b1fff9dae3a65' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\main.tpl',
-      1 => 1336643248,
+      1 => 1336647127,
       2 => 'file',
     ),
   ),
@@ -39,17 +39,26 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                         <span class="icon-bar"></span>
                     </a>
 
-                    <span class="brand">Автоконтроль</span>
+                    <?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='main'){?>
+                        <span class="brand">Автоконтроль</span>
+                    <?php }else{ ?>
+                        <a class="brand" href="/control">Автоконтроль</a>
+                    <?php }?>
 
                     <div class="nav-collapse">
                         <ul class="nav">
-                            <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='map'){?> class="active"<?php }?>><a href="/control/map/">GPS-мониторинг</a></li>
-                            <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='system'){?> class="active"<?php }?>><a href="/control/system/">Бортовой компьютер</a></li>
-                            <li class="divider-vertical"></li>
-                            <li><a href="/control/help/">Помощь</a></li>
+                            <?php if ($_smarty_tpl->tpl_vars['core']->value->auth->user_status['status']){?>
+                                <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='map'){?> class="active"<?php }?>><a href="/control/map/">GPS-мониторинг</a></li>
+                                <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='system'){?> class="active"<?php }?>><a href="/control/system/">Бортовой компьютер</a></li>
+                                <li class="divider-vertical"></li>
+                                <li><a href="/control/help/"><i class="icon-question-sign icon-white"></i> Помощь</a></li>
+                            <?php }?>
                         </ul>
                         <ul class="nav pull-right">
-                            <li><a href="/control/help/"><i class="icon-exclamation-sign icon-white"></i> Уведомления</a></li>
+                            <?php if ($_smarty_tpl->tpl_vars['core']->value->auth->user_status['status']){?>
+                                <li><a href="/control/help/"><span class="badge badge-warning">4</span> Уведомления</a></li>
+                            <?php }?>
+
                             <li class="divider-vertical"></li>
                             <li class="dropdown">
                                 <?php if ($_smarty_tpl->tpl_vars['core']->value->auth->user_status['status']){?>
@@ -80,6 +89,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         <div class="container-fluid main_content">
             <?php echo $_smarty_tpl->getSubTemplate ("modules/".($_smarty_tpl->tpl_vars['core']->value->module['name']).".tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
+            <div class="clear"></div>
             <hr>
             <?php echo $_smarty_tpl->getSubTemplate ("common/footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 

@@ -7,6 +7,10 @@
         public function __construct(){
             parent::__construct();
 
+            if(!$this->auth->user_status['status']){
+                header('Location: /control/auth/login');
+            };
+
             $this->setCurrentDate();
 
             $this->acct = 'test01';
@@ -14,7 +18,7 @@
             $this->init(array(
                 'name'  => 'map',
                 'title' => 'Карта',
-                'dir'   => 'map'
+                'dir'   => '/control/map'
             ));
 
             if($this->ajax_mode){
@@ -63,7 +67,7 @@
         }
 
         //Get complete list of user's cars with last points
-        private function getUserDevices(){
+        protected function getUserDevices(){
             $query = "
                 SELECT
                     `id`,

@@ -6,7 +6,7 @@
             $this->init(array(
                 'name'  => 'register',
                 'title' => 'Регистрация',
-                'dir'   => 'auth/register'
+                'dir'   => '/control/auth/register'
             ));
 
             if($this->ajax_mode){

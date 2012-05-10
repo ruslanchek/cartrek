@@ -13,17 +13,26 @@
                         <span class="icon-bar"></span>
                     </a>
 
-                    <span class="brand">Автоконтроль</span>
+                    {if $core->module.name == 'main'}
+                        <span class="brand">Автоконтроль</span>
+                    {else}
+                        <a class="brand" href="/control">Автоконтроль</a>
+                    {/if}
 
                     <div class="nav-collapse">
                         <ul class="nav">
-                            <li{if $core->module.name == 'map'} class="active"{/if}><a href="/control/map/">GPS-мониторинг</a></li>
-                            <li{if $core->module.name == 'system'} class="active"{/if}><a href="/control/system/">Бортовой компьютер</a></li>
-                            <li class="divider-vertical"></li>
-                            <li><a href="/control/help/">Помощь</a></li>
+                            {if $core->auth->user_status.status}
+                                <li{if $core->module.name == 'map'} class="active"{/if}><a href="/control/map/">GPS-мониторинг</a></li>
+                                <li{if $core->module.name == 'system'} class="active"{/if}><a href="/control/system/">Бортовой компьютер</a></li>
+                                <li class="divider-vertical"></li>
+                                <li><a href="/control/help/"><i class="icon-question-sign icon-white"></i> Помощь</a></li>
+                            {/if}
                         </ul>
                         <ul class="nav pull-right">
-                            <li><a href="/control/help/"><i class="icon-exclamation-sign icon-white"></i> Уведомления</a></li>
+                            {if $core->auth->user_status.status}
+                                <li><a href="/control/help/"><span class="badge badge-warning">4</span> Уведомления</a></li>
+                            {/if}
+
                             <li class="divider-vertical"></li>
                             <li class="dropdown">
                                 {if $core->auth->user_status.status}
@@ -52,6 +61,7 @@
 
         <div class="container-fluid main_content">
             {include file="modules/`$core->module.name`.tpl"}
+            <div class="clear"></div>
             <hr>
             {include file="common/footer.tpl"}
         </div>
