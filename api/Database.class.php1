@@ -104,6 +104,8 @@
                 $value = "'".$this->quote($value)."'";
             };
 
+            $exclude = "";
+
             if($not && !empty($not)){
                 $exclude = " && `id` NOT IN (";
 
