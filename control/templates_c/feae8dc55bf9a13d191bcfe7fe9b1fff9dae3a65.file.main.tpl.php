@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-17 19:23:18
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-10 11:40:55
          compiled from "Z:/home/loc/gps/control/templates\main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:224234f71f561606444-69367567%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'feae8dc55bf9a13d191bcfe7fe9b1fff9dae3a65' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\main.tpl',
-      1 => 1334675286,
+      1 => 1336635654,
       2 => 'file',
     ),
   ),
@@ -33,17 +33,14 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
-                    <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
 
-                    <!-- Be sure to leave the brand out there if you want it shown -->
-                    <span class="brand">Car</span>
+                    <span class="brand">Автоконтроль</span>
 
-                    <!-- Everything you want hidden at 940px or less, place within here -->
                     <div class="nav-collapse">
                         <ul class="nav">
                             <li class="active"><a href="/control/map/">GPS-мониторинг</a></li>
@@ -57,10 +54,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Авторизация <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="/control/auth/register"><i class="icon-share-alt"></i> Вход</a></li>
-                                    <li><a href="/control/auth/register/register"><i class="icon-file"></i> Регистрация</a></li>
+                                    <li><a href="/control/auth/login"><i class="icon-share-alt"></i> Вход</a></li>
+                                    <li><a href="/control/auth/register"><i class="icon-file"></i> Регистрация</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="/control/auth/register/remember_pass"><i class="icon-question-sign"></i> Напомнить пароль</a></li>
+                                    <li><a href="/control/auth/remember_pass"><i class="icon-question-sign"></i> Напомнить пароль</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -72,9 +69,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         <div class="container-fluid main_content">
             <?php echo $_smarty_tpl->getSubTemplate ("modules/".($_smarty_tpl->tpl_vars['core']->value->module['name']).".tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
-
             <hr>
-
             <?php echo $_smarty_tpl->getSubTemplate ("common/footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
         </div>

@@ -2716,8 +2716,7 @@ input[type="submit"].btn.btn-mini {
 .navbar .brand {
   float: left;
   display: block;
-  padding: 8px 20px 12px;
-  margin-left: -20px;
+  padding: 8px 20px 12px 0;
   font-size: 20px;
   font-weight: 200;
   line-height: 1;
@@ -2815,7 +2814,6 @@ input[type="submit"].btn.btn-mini {
 }
 .navbar-fixed-top,
 .navbar-fixed-bottom {
-  position: fixed;
   right: 0;
   left: 0;
   z-index: 1030;
@@ -4096,8 +4094,7 @@ a.thumbnail:hover {
 }
 @media (max-width: 767px) {
   .navbar-fixed-top {
-    margin-left: -20px;
-    margin-right: -20px;
+
   }
   .container {
     width: auto;
@@ -4336,17 +4333,17 @@ a.thumbnail:hover {
   }
   .navbar-fixed-top {
     position: static;
-    margin-bottom: 18px;
+
   }
   .navbar-fixed-top .navbar-inner {
-    padding: 5px;
+
   }
   .navbar .container {
     width: auto;
     padding: 0;
   }
   .navbar .brand {
-    margin: 0 0 0 -5px;
+
   }
   .navbar .nav-collapse {
     clear: left;

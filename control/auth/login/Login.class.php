@@ -12,10 +12,15 @@
             if($this->ajax_mode){
                 switch($_GET['action']){
                     case 'login' : {
-                        print json_encode($this->auth->auth());
+                        print json_encode($this->auth->auth($_POST['login'], $_POST['password']));
                     }; break;
                 };
 
+                exit;
+            };
+
+            if(isset($_GET['oauth'])){
+                $this->auth->oAuth();
                 exit;
             };
         }

@@ -147,10 +147,7 @@
         }
 
         //Try to user autherize
-        public function auth(){
-            $login = $_POST['login'];
-            $password = $_POST['password'];
-
+        public function auth($login, $password){
             if(!$login && $password){
                 $this->user_status['status'] = false;
                 $this->user_status['message'] = "Вы не ввели логин";
@@ -739,7 +736,7 @@
                             'client_id'     => $oauth_client_id,
                             'scope'         => $oauth_scope,
                             'response_type' => 'code',
-                            'redirect_uri'  => urlencode('http://'.$_SERVER['HTTP_HOST'].'?oauth&provider=vk&step=receive_code')
+                            'redirect_uri'  => urlencode('http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=vk&step=receive_code')
                         ));
 
                     }; break;
@@ -784,7 +781,7 @@
             $oauth_client_id      = '102395263228289';
             $oauth_secure_key     = '3463ac6e11e51fef2a20a7260698d6dd';
             $oauth_scope          = '';
-            $redirect_uri         = urlencode('http://'.$_SERVER['HTTP_HOST'].'/?oauth&provider=fb');
+            $redirect_uri         = urlencode('http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=fb');
 
             if(!isset($_GET["code"])){
                 $this->doGetRequest('http://www.facebook.com/dialog/oauth', array(

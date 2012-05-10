@@ -80,7 +80,7 @@ h1 {
 }
 
 .main_content {
-    padding-top: 40px;
+
 }
 
 #registered_data {
@@ -231,4 +231,33 @@ h1 {
 .marker_label .g_id {
     margin: 4px 0 3px;
     text-shadow: none;
+}
+
+.cg_soc {
+    border-bottom: 1px solid #b4dbef;
+    background: url(../img/bg/blue_gradient.png) repeat-x bottom;
+}
+
+.cg_soc * {
+    color: #1b4e68;
+}
+
+.socials {
+    margin: 0 0 15px;
+}
+
+.socials a {
+    display: block;
+    width: 41px;
+    height: 41px;
+    float: left;
+    margin: 0 10px 0 0;
+}
+
+.socials a.vk {
+    background: url(../img/icons/vkontakte.png);
+}
+
+.socials a.fb {
+    background: url(../img/icons/facebook.png);
 }

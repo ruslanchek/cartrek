@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-04-17 19:23:18
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-10 11:17:40
          compiled from "Z:/home/loc/gps/control/templates\common\head.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:105654f72e3fd140033-76492709%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '1d2a1ddf4573ddc0213f4f0dbc97c2b42e8957ff' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\common\\head.tpl',
-      1 => 1334675286,
+      1 => 1336634243,
       2 => 'file',
     ),
   ),
@@ -37,6 +37,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <script src="/control/resources/bootsrtap/js/bootstrap.min.js"></script>
 <script src="/control/resources/plugins/datepicker/kube.datepicker.min.js"></script>
 <script src="/control/resources/js/core.js"></script>
-<script src="/control/<?php echo $_smarty_tpl->tpl_vars['core']->value->module['name'];?>
+<script src="/control/<?php echo $_smarty_tpl->tpl_vars['core']->value->module['dir'];?>
 /js/<?php echo $_smarty_tpl->tpl_vars['core']->value->module['name'];?>
 .js"></script><?php }} ?>
