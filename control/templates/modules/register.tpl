@@ -2,6 +2,7 @@
     <h1>Регистрация</h1>
 </div>
 
+{if !$core->auth->user_status.status}
 <div id="register_form_message"></div>
 
 <form id="register_form" class="form-horizontal" action="javascript:void(0)" method="POST">
@@ -34,3 +35,8 @@
 </form>
 
 <script>core.register.init();</script>
+{else}
+<div class="alert alert-info">
+    Вы уже авторизованы
+</div>
+{/if}

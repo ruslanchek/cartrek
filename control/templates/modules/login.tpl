@@ -2,6 +2,7 @@
     <h1>Вход</h1>
 </div>
 
+{if !$core->auth->user_status.status}
 <div id="login_form_message"></div>
 
 <form id="login_form" class="form-horizontal" action="javascript:void(0)" method="POST">
@@ -41,3 +42,8 @@
 </form>
 
 <script>core.login.init();</script>
+{else}
+<div class="alert alert-info">
+    Вы уже авторизованы
+</div>
+{/if}

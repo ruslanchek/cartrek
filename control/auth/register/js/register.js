@@ -23,6 +23,7 @@ core.register = {
 
                 if(data.status === true){
                     message_class = 'alert-success';
+                    setTimeout('document.location.href="/control/user"', 3000);
                 }else{
                     message_class = 'alert-error';
                 };

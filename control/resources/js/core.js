@@ -321,3 +321,15 @@ core.utilities = {
         };
     }
 };
+
+//FNS
+core.exitUser = function(){
+    if(confirm('Выйти?')){
+        $.get(
+            '/control/user?exit',
+            function(){
+                window.location.reload();
+            }
+        );
+    };
+};

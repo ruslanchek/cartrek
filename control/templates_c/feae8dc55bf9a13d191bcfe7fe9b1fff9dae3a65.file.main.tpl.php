@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-10 11:40:55
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-10 13:47:28
          compiled from "Z:/home/loc/gps/control/templates\main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:224234f71f561606444-69367567%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'feae8dc55bf9a13d191bcfe7fe9b1fff9dae3a65' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\main.tpl',
-      1 => 1336635654,
+      1 => 1336643248,
       2 => 'file',
     ),
   ),
@@ -43,22 +43,33 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 
                     <div class="nav-collapse">
                         <ul class="nav">
-                            <li class="active"><a href="/control/map/">GPS-мониторинг</a></li>
-                            <li><a href="/control/system/">Бортовой компьютер</a></li>
-                            <li><a href="/control/guestbook/">Настройка</a></li>
+                            <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='map'){?> class="active"<?php }?>><a href="/control/map/">GPS-мониторинг</a></li>
+                            <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='system'){?> class="active"<?php }?>><a href="/control/system/">Бортовой компьютер</a></li>
                             <li class="divider-vertical"></li>
-                            <li><a href="/control/help/"><i class="icon-question-sign icon-white"></i> Помощь</a></li>
+                            <li><a href="/control/help/">Помощь</a></li>
                         </ul>
                         <ul class="nav pull-right">
+                            <li><a href="/control/help/"><i class="icon-exclamation-sign icon-white"></i> Уведомления</a></li>
                             <li class="divider-vertical"></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Авторизация <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="/control/auth/login"><i class="icon-share-alt"></i> Вход</a></li>
-                                    <li><a href="/control/auth/register"><i class="icon-file"></i> Регистрация</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="/control/auth/remember_pass"><i class="icon-question-sign"></i> Напомнить пароль</a></li>
-                                </ul>
+                                <?php if ($_smarty_tpl->tpl_vars['core']->value->auth->user_status['status']){?>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> <?php echo $_smarty_tpl->tpl_vars['core']->value->auth->user_status['userdata']['login'];?>
+ <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/control/user"><i class="icon-wrench"></i> Настройка</a></li>
+                                        <li><a href="/control/user/change_password"><i class="icon-pencil"></i> Сменить пароль</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="javascript:void(0)" onclick="core.exitUser()"><i class="icon-share"></i> Выйти</a></li>
+                                    </ul>
+                                <?php }else{ ?>
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Авторизация <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="/control/auth/login"><i class="icon-share-alt"></i> Вход</a></li>
+                                        <li><a href="/control/auth/register"><i class="icon-file"></i> Регистрация</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/control/auth/remember_pass"><i class="icon-question-sign"></i> Напомнить пароль</a></li>
+                                    </ul>
+                                <?php }?>
                             </li>
                         </ul>
                     </div>
