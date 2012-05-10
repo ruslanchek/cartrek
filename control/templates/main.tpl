@@ -3,7 +3,7 @@
     <head>
         {include file="common/head.tpl"}
     </head>
-    <body>
+    <body class="{$core->module.bgclass}">
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
@@ -65,5 +65,5 @@
             <hr>
             {include file="common/footer.tpl"}
         </div>
-     </body>
+    </body>
 </html>

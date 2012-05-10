@@ -1,18 +1,17 @@
 'use strict';
 
-core.login = {
+core.remember_pass = {
     do: function(){
-        this.login_loading_process = $.ajax({
-            url: '/control/auth/login/?ajax&action=login',
+        this.remember_pass_loading_process = $.ajax({
+            url: '/control/auth/remember_pass/?ajax&action=remember_pass',
             type: 'post',
             data: {
-                login: $('#login').val(),
-                password: $('#password').val()
+                login: $('#login').val()
             },
             dataType: 'json',
             beforeSend: function(){
-                if(this.login_loading_process){
-                    this.login_loading_process.abort();
+                if(this.remember_pass_loading_process){
+                    this.remember_pass_loading_process.abort();
                 };
 
                 $('#submit').button('loading');
@@ -34,8 +33,8 @@ core.login = {
     },
 
     binds: function(){
-        $('#login_form').on('submit', function(){
-            core.login.do();
+        $('#remember_pass_form').on('submit', function(){
+            core.remember_pass.do();
         });
     },
 

@@ -227,7 +227,7 @@ core.map = {
         ]);
 
         options.action = function(){
-            core.map.execSettings(core.forms.redaDataFormSettingsTable('settings_table'));
+            core.map.execSettings(core.forms.readDataFormSettingsTable('settings_table'));
             core.modal.hide();
         };
 

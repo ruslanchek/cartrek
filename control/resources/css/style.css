@@ -234,9 +234,12 @@ h1 {
 }
 
 .cg_soc {
-    border-bottom: 1px solid #b4dbef;
+    border: 1px solid #b4dbef;
     background: #f9fdff url(../img/bg/blue_gradient.png) repeat-x bottom;
     padding: 20px 0 0 0;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
 }
 
 .cg_soc * {
@@ -261,4 +264,29 @@ h1 {
 
 .socials a.fb {
     background: url(../img/icons/facebook.png);
+}
+
+.hero_login {
+    text-shadow: 0px 1px 0px #ffffff;
+    width: 600px;
+    margin: 40px auto 30px;
+    -webkit-box-shadow:  0px 5px 15px 0px rgba(0, 0, 0, 0.5);
+    box-shadow:  0px 5px 15px 0px rgba(0, 0, 0, 0.5);
+}
+
+.hero_login h1 {
+    color: #444;
+    margin: 0 0 0.5em;
+}
+
+.city {
+    background: url(../img/bg/city.jpg) no-repeat top center;
+    background-size: cover;
+}
+
+.city hr {
+    opacity: 0.4;
+    height: 0px;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #fff;
 }

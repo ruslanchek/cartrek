@@ -1,8 +1,8 @@
 <div class="hero-unit hero_login">
-    <h1>Вход</h1>
+    <h1>Восстановление пароля</h1>
 
     {if !$core->auth->user_status.status}
-    <form id="login_form" class="form-horizontal" action="javascript:void(0)" method="POST">
+    <form id="remember_pass_form" class="form-horizontal" action="javascript:void(0)" method="POST">
         <fieldset>
             <div class="control-group cg_soc">
                 <label class="control-label">Авторизация через соцсети</label>
@@ -25,23 +25,15 @@
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label" for="password">Пароль</label>
-                <div class="controls">
-                    <input type="password" class="input-xlarge" id="password" name="password">
-                </div>
-            </div>
-
             <div class="form-actions">
-                <button id="submit" type="submit" class="btn btn-primary" data-loading-text="Входим..." autocomplete="off">Войти</button>
+                <button id="submit" type="submit" class="btn btn-primary" data-loading-text="Восстанавливаем пароль..." autocomplete="off">Восстановить пароль</button>
                 &nbsp;&nbsp;&nbsp;<a href="/control/auth/register">Зарегистрироваться</a>
-                &nbsp;&nbsp;&nbsp;<a href="/control/auth/remember_pass">Напомнить пароль</a>
+                &nbsp;&nbsp;&nbsp;<a href="/control/auth/login">Войти</a>
             </div>
         </fieldset>
     </form>
 
-    <script>core.login.init();</script>
-
+    <script>core.remember_pass.init();</script>
     {else}
     <div class="alert alert-info">
         Вы уже авторизованы

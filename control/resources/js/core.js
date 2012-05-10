@@ -5,7 +5,7 @@ var core = {
 };
 
 core.forms = {
-    redaDataFormSettingsTable: function(id){
+    readDataFormSettingsTable: function(id){
         var result = {};
 
         $('.settings_table#'+id).find('input').each(function(){

@@ -4,9 +4,10 @@
             parent::__construct();
 
             $this->init(array(
-                'name'  => 'login',
-                'title' => 'Регистрация',
-                'dir'   => '/control/auth/login'
+                'name'      => 'login',
+                'title'     => 'Вход',
+                'dir'       => '/control/auth/login',
+                'bgclass'   => 'city'
             ));
 
             if($this->ajax_mode){

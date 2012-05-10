@@ -327,8 +327,8 @@
                         $link = 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/remember_pass/?action=password_recover&user_id='.$data['id'].'&code='.$code;
 
                         $this->mail->send(
-                            'Менеджер аккаунтов '.$this->config['site_name'],
-                            'account_manager@'.$this->config['site_name'],
+                            'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
+                            'account_manager@'.$_SERVER['SERVER_NAME'],
                             $data['email'],
                             'Подтвердите восстановление пароля',
                             'mailing/password_recover_code.tpl',

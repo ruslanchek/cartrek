@@ -1,19 +1,19 @@
 <?php
-    Class Register extends Core {
+    Class RememberPass extends Core {
         public function __construct(){
             parent::__construct();
 
             $this->init(array(
-                'name'      => 'register',
-                'title'     => 'Регистрация',
-                'dir'       => '/control/auth/register',
+                'name'      => 'remember_pass',
+                'title'     => 'Вход',
+                'dir'       => '/control/auth/remember_pass',
                 'bgclass'   => 'city'
             ));
 
             if($this->ajax_mode){
                 switch($_GET['action']){
-                    case 'register' : {
-                        print json_encode($this->auth->registerNewUser());
+                    case 'remember_pass' : {
+                        print json_encode($this->auth->remember($_POST['login']));
                     }; break;
                 };
 

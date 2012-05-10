@@ -1,7 +1,7 @@
 'use strict';
 
 core.register = {
-    doRegister: function(){
+    do: function(){
         this.register_loading_process = $.ajax({
             url: '/control/auth/register/?ajax&action=register',
             type: 'post',
@@ -14,10 +14,10 @@ core.register = {
                     this.register_loading_process.abort();
                 };
 
-                $('#register_submit').button('loading');
+                $('#submit').button('loading');
             },
             success: function(data){
-                $('#register_submit').button('reset');
+                $('#submit').button('reset');
 
                 var message_class = '';
 
@@ -28,13 +28,15 @@ core.register = {
                     message_class = 'alert-error';
                 };
 
-                $('#register_form_message').html('<div class="alert '+message_class+'"><a class="close" data-dismiss="alert" href="javascript:void(0)">×</a>'+data.message+'</div>');
+                $('#form_message').html('<div class="alert '+message_class+'"><a class="close" data-dismiss="alert" href="javascript:void(0)">×</a>'+data.message+'</div>');
             }
         })
     },
 
     binds: function(){
-        $('#register_form').on('submit', function(){core.register.doRegister()});
+        $('#register_form').on('submit', function(){
+            core.register.do();
+        });
     },
 
     init: function(){
