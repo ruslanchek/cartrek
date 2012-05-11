@@ -10,14 +10,12 @@
                 'bgclass'   => 'city'
             ));
 
-            if($this->ajax_mode){
-                switch($_GET['action']){
+            if(isset($_POST['action'])){
+                switch($_POST['action']){
                     case 'remember_pass' : {
-                        print json_encode($this->auth->remember($_POST['login']));
+                        $this->module['form'] = $this->auth->remember($_POST['login']);
                     }; break;
                 };
-
-                exit;
             };
         }
 

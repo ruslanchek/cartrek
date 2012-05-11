@@ -6,7 +6,9 @@
 
         public
             $config,
-            $module,
+            $module = array(
+                'form' => false
+            ),
             $main_menu = array(
                 array('name' => 'settings'  , 'title' => 'Настройка'),
                 array('name' => 'map'       , 'title' => 'Карта')
@@ -54,7 +56,7 @@
 
         //Функция запуска приложения
         protected function init($module){
-            $this->module = $module;
+            $this->module = array_merge($this->module, $module);
 
             //Если в запросе присутствует переменная ajax, ставим режим аякса
             if(isset($_GET['ajax'])){

@@ -10,14 +10,12 @@
                 'bgclass'   => 'city'
             ));
 
-            if($this->ajax_mode){
-                switch($_GET['action']){
+            if(isset($_POST['action'])){
+                switch($_POST['action']){
                     case 'register' : {
-                        print json_encode($this->auth->registerNewUser());
+                        $this->module['form'] = $this->auth->registerNewUser();
                     }; break;
                 };
-
-                exit;
             };
         }
 

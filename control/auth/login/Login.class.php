@@ -3,27 +3,25 @@
         public function __construct(){
             parent::__construct();
 
-            $this->init(array(
-                'name'      => 'login',
-                'title'     => 'Вход',
-                'dir'       => '/control/auth/login',
-                'bgclass'   => 'city'
-            ));
-
-            if($this->ajax_mode){
-                switch($_GET['action']){
+            if(isset($_POST['action'])){
+                switch($_POST['action']){
                     case 'login' : {
-                        print json_encode($this->auth->auth($_POST['login'], $_POST['password']));
+                        $this->module['form'] = $this->auth->auth($_POST['login'], $_POST['password']);
                     }; break;
                 };
-
-                exit;
             };
 
             if(isset($_GET['oauth'])){
                 $this->auth->oAuth();
                 exit;
             };
+
+            $this->init(array(
+                'name'      => 'login',
+                'title'     => 'Вход',
+                'dir'       => '/control/auth/login',
+                'bgclass'   => 'city'
+            ));
         }
 
         public function __destruct(){

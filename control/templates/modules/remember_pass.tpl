@@ -2,7 +2,8 @@
     <h1>{$core->module.title}</h1>
 
     {if !$core->auth->user_status.status}
-    <form id="remember_pass_form" class="form-horizontal" action="javascript:void(0)" method="POST">
+    <form id="remember_pass_form" class="form-horizontal" action="" method="POST">
+        <input type="hidden" name="action" value="remember_pass">
         <fieldset>
             <div class="control-group cg_soc">
                 <label class="control-label">Авторизация через соцсети</label>
@@ -16,7 +17,12 @@
                 </div>
             </div>
 
-            <div id="form_message"></div>
+            {if $core->module.form.message}
+                <div class="alert {if $core->module.form.status}alert-success{else}alert-error{/if}">
+                    <a class="close" data-dismiss="alert" href="javascript:void(0)">×</a>
+                    {$core->module.form.message}
+                </div>
+            {/if}
 
             <div class="control-group">
                 <label class="control-label" for="login">Логин или e-mail</label>
@@ -33,7 +39,6 @@
         </fieldset>
     </form>
 
-    <script>core.remember_pass.init();</script>
     {else}
     <div class="alert alert-info">
         Вы уже авторизованы
