@@ -1,5 +1,5 @@
 <div class="hero-unit hero_login">
-    <h1>Вход</h1>
+    <h1>{$core->module.title}</h1>
 
     {if !$core->auth->user_status.status}
     <form id="login_form" class="form-horizontal" action="javascript:void(0)" method="POST">

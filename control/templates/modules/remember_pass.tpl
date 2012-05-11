@@ -1,5 +1,5 @@
 <div class="hero-unit hero_login">
-    <h1>Восстановление пароля</h1>
+    <h1>{$core->module.title}</h1>
 
     {if !$core->auth->user_status.status}
     <form id="remember_pass_form" class="form-horizontal" action="javascript:void(0)" method="POST">

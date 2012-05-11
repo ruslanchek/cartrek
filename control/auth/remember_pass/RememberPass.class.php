@@ -5,7 +5,7 @@
 
             $this->init(array(
                 'name'      => 'remember_pass',
-                'title'     => 'Вход',
+                'title'     => 'Восстановление пароля',
                 'dir'       => '/control/auth/remember_pass',
                 'bgclass'   => 'city'
             ));

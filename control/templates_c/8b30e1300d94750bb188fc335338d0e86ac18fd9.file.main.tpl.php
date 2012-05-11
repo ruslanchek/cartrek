@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-10 14:44:28
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-11 13:00:29
          compiled from "Z:/home/loc/gps/control/templates\modules\main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:321324f71f561680239-59287901%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '8b30e1300d94750bb188fc335338d0e86ac18fd9' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\modules\\main.tpl',
-      1 => 1336646667,
+      1 => 1336647340,
       2 => 'file',
     ),
   ),
@@ -29,29 +29,33 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 </h1>
 </div>
 
-<table class="table table-striped table-bordered table-condensed">
-    <tr>
-        <th width="59%">Название</th>
-        <th width="30%">Марка</th>
-        <th width="10%">Госномер</th>
-        <th width="1%">Идентификатор</th>
-    </tr>
-    <?php  $_smarty_tpl->tpl_vars['item'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['item']->_loop = false;
+<div class="row-fluid">
+    <div class="span9">
+        <table class="table table-striped table-bordered table-condensed">
+            <tr>
+                <th width="59%">Название</th>
+                <th width="30%">Марка</th>
+                <th width="10%">Госномер</th>
+                <th width="1%">Идентификатор</th>
+            </tr>
+            <?php  $_smarty_tpl->tpl_vars['item'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['item']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['core']->value->getUserDevices(); if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
 foreach ($_from as $_smarty_tpl->tpl_vars['item']->key => $_smarty_tpl->tpl_vars['item']->value){
 $_smarty_tpl->tpl_vars['item']->_loop = true;
 ?>
-    <tr>
-        <td><a href="#"><?php echo $_smarty_tpl->tpl_vars['item']->value['name'];?>
+            <tr>
+                <td><a href="#"><?php echo $_smarty_tpl->tpl_vars['item']->value['name'];?>
 </a></td>
-        <td><?php echo $_smarty_tpl->tpl_vars['item']->value['make'];?>
+                <td><?php echo $_smarty_tpl->tpl_vars['item']->value['make'];?>
  <?php echo $_smarty_tpl->tpl_vars['item']->value['model'];?>
 </td>
-        <td><span class="g_id"><?php echo $_smarty_tpl->tpl_vars['item']->value['g_id'];?>
+                <td><span class="g_id"><?php echo $_smarty_tpl->tpl_vars['item']->value['g_id'];?>
 </span></td>
-        <td><?php echo $_smarty_tpl->tpl_vars['item']->value['id'];?>
+                <td><?php echo $_smarty_tpl->tpl_vars['item']->value['id'];?>
 <?php echo $_smarty_tpl->tpl_vars['item']->value['secret'];?>
 </td>
-    </tr>
-    <?php } ?>
-</table><?php }} ?>
+            </tr>
+            <?php } ?>
+        </table>
+    </div>
+</div><?php }} ?>
