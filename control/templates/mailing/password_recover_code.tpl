@@ -1,6 +1,6 @@
 <p>
     Чтобы восстановить свой пароль, перейдите по ссылке:
-    <code><a href="{$core->mail_data.code_link}">{$core->mail_data.code_link}</a></code>
+    <code><a href="{$mail_vars.code_link}">{$mail_vars.code_link}</a></code>
 </p>
 
 <p>

@@ -24,15 +24,15 @@
             if(!$template){
                 $content_to_send = $data;
             }else{
-                $this->mail_data = $data;
-
+                $this->smarty->assign('mail_vars', $data);
                 $content = $this->smarty->fetch($template);
 
-                $this->mail_vars = array(
+                $mail_vars = array(
                     'content' => $content,
                     'subject' => $subject
                 );
 
+                $this->smarty->assign('mail_vars', $mail_vars);
                 $content_to_send = $this->smarty->fetch('mailing.tpl');
             };
 

@@ -24,6 +24,7 @@
                             {if $core->auth->user_status.status}
                                 <li{if $core->module.name == 'map'} class="active"{/if}><a href="/control/map/">GPS-мониторинг</a></li>
                                 <li{if $core->module.name == 'system'} class="active"{/if}><a href="/control/system/">Бортовой компьютер</a></li>
+                                <li{if $core->module.name == 'fleet'} class="active"{/if}><a href="/control/fleet/">Автопарк</a></li>
                                 <li class="divider-vertical"></li>
                                 <li><a href="/control/help/"><i class="icon-question-sign icon-white"></i> Помощь</a></li>
                             {/if}

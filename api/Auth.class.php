@@ -81,6 +81,7 @@
             $this->user_status['message'] = 'Вы успешно авторизовались';
             $this->user_status['userdata'] = $data;
             $this->getUserSharedAccountStatus();
+            header('Location: /control');
         }
 
         //Set currently user activity

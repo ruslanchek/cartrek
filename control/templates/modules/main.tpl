@@ -4,7 +4,7 @@
 
 <div class="row-fluid">
     <div class="span9">
-        <table class="table table-striped table-bordered table-condensed">
+        <table class="table table-striped table-bordered">
             <tr>
                 <th width="59%">Название</th>
                 <th width="30%">Марка</th>
@@ -20,5 +20,16 @@
             </tr>
             {/foreach}
         </table>
+    </div>
+
+    <div class="span3">
+        <div class="tabbable tabs-right">
+            <ul class="nav nav-tabs">
+
+            </ul>
+            <div class="tab-content">
+
+            </div>
+        </div>
     </div>
 </div>

@@ -571,7 +571,7 @@ core.map = {
         var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
                     '<table class="table table-bordered table-condensed">' +
                         '<tr>' +
-                            '<td>Статус</td>' +
+                            '<td>Отметка</td>' +
                             '<td><span class="label '+status_class+'">'+status+'</span></td>' +
                         '</tr>' +
                         '<tr>' +
