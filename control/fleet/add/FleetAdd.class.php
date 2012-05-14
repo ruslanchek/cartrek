@@ -8,8 +8,8 @@
             };
 
             $this->init(array(
-                'name'  => 'fleet',
-                'title' => 'Доавление автомобиля',
+                'name'  => 'fleet_add',
+                'title' => 'Добавление автомобиля',
                 'dir'   => '/control/fleet/add'
             ));
         }
