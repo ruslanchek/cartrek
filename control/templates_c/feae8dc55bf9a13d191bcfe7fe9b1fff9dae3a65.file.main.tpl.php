@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-11 13:00:52
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-11 17:34:35
          compiled from "Z:/home/loc/gps/control/templates\main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:224234f71f561606444-69367567%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'feae8dc55bf9a13d191bcfe7fe9b1fff9dae3a65' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\main.tpl',
-      1 => 1336726848,
+      1 => 1336735244,
       2 => 'file',
     ),
   ),
@@ -51,6 +51,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                             <?php if ($_smarty_tpl->tpl_vars['core']->value->auth->user_status['status']){?>
                                 <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='map'){?> class="active"<?php }?>><a href="/control/map/">GPS-мониторинг</a></li>
                                 <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='system'){?> class="active"<?php }?>><a href="/control/system/">Бортовой компьютер</a></li>
+                                <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='fleet'){?> class="active"<?php }?>><a href="/control/fleet/">Автопарк</a></li>
                                 <li class="divider-vertical"></li>
                                 <li><a href="/control/help/"><i class="icon-question-sign icon-white"></i> Помощь</a></li>
                             <?php }?>

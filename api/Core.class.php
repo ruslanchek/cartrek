@@ -19,7 +19,8 @@
             'utils'                 => 'Utilities',
             'db'                    => 'Database',
             'auth'                  => 'Auth',
-            'mail'                  => 'Mail'
+            'mail'                  => 'Mail',
+            'devices'               => 'Devices'
         );
 
         // Созданные объекты
