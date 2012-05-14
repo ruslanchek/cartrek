@@ -17,6 +17,14 @@
                     }; break;
                 };
             };
+
+            if(isset($_GET['action'])){
+                switch($_GET['action']){
+                    case 'password_recover' : {
+                        $this->module['form'] = $this->auth->rememberCode($_GET['user_id'], $_GET['code']);
+                    }; break;
+                };
+            };
         }
 
         public function __destruct(){

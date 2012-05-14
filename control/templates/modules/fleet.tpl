@@ -1,5 +1,15 @@
 <div class="page-header">
-    <h1>{$core->module.title}</h1>
+    <h1 class="pull-left">{$core->module.title}</h1>
+
+    <div class="header_tools pull-right">
+        <div class="pull-right">
+            <a href="/control/fleet/add" class="btn btn-success"><i class="icon-plus icon-white"></i> Добавить автомобиль</a>
+        </div>
+
+        <div class="clear"></div>
+    </div>
+
+    <div class="clear"></div>
 </div>
 
 <div class="row-fluid">

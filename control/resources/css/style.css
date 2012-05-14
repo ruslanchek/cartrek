@@ -1,5 +1,5 @@
 body {
-    background: url(../img/patterns/gears.png);
+
 }
 
 /* Notify */
@@ -279,4 +279,8 @@ h1 {
 .hero_login h1 {
     color: #444;
     margin: 0 0 0.5em;
+}
+
+#car_name_info .badge {
+    text-shadow: none;
 }

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-11 17:34:35
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-14 12:08:25
          compiled from "Z:/home/loc/gps/control/templates\main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:224234f71f561606444-69367567%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'feae8dc55bf9a13d191bcfe7fe9b1fff9dae3a65' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\main.tpl',
-      1 => 1336735244,
+      1 => 1336982855,
       2 => 'file',
     ),
   ),
@@ -29,8 +29,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         <?php echo $_smarty_tpl->getSubTemplate ("common/head.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
     </head>
-    <body class="<?php echo $_smarty_tpl->tpl_vars['core']->value->module['bgclass'];?>
-">
+    <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">

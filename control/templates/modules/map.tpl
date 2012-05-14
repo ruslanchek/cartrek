@@ -1,9 +1,7 @@
 <div class="page-header">
-    <div class="pull-left">
-        <h1>
-            GPS-мониторинг <small class="current_date"></small>
-        </h1>
-    </div>
+    <h1 class="pull-left">
+        GPS-мониторинг <small class="current_date"></small>
+    </h1>
 
     <div class="header_tools pull-right">
         <div class="btn-group select_car pull-right">

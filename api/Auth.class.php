@@ -508,7 +508,7 @@
                             'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
                             'account_manager@'.$_SERVER['SERVER_NAME'],
                             $_POST['email'],
-                            'Добро пожаловать на '.$_SERVER['SERVER_NAME'].'!',
+                            'Добро пожаловать на сервис мониторинга автотранспорта!',
                             'mailing/register_success.tpl',
                             array(
                                  'login' => $login,
@@ -771,7 +771,7 @@
                                 'bdate'             => date("Y-m-d H:i:s", strtotime($data->bdate))
                             ));
 
-                            header("Location: http://".$_SERVER['HTTP_HOST']);
+                            header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
                         };
 
                     }; break;
@@ -780,8 +780,8 @@
         }
 
         private function oauthFB(){
-            $oauth_client_id      = '102395263228289';
-            $oauth_secure_key     = '3463ac6e11e51fef2a20a7260698d6dd';
+            $oauth_client_id      = '387660687942312';
+            $oauth_secure_key     = '61d98f655bb2e79a4da0e8ff76af1306';
             $oauth_scope          = '';
             $redirect_uri         = urlencode('http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=fb');
 
@@ -818,7 +818,7 @@
                     'bdate'             => date("Y-m-d H:i:s", strtotime($data->birthday))
                 ));
 
-                header("Location: http://".$_SERVER['HTTP_HOST']);
+                header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
             };
         }
     };

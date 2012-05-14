@@ -36,7 +36,7 @@
                 $content_to_send = $this->smarty->fetch('mailing.tpl');
             };
 
-            return mail($to, $subject_h, $content_to_send, $headers);
+            mail($to, $subject_h, $content_to_send, $headers);
         }
     }
 ?>
