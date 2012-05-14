@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-11 02:03:42
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-11 22:32:28
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:11291423434f800a68d221c3-26876524%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '820f25f63b8cdf8afafd084f38a2bf0c57742ce0' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/main.tpl',
-      1 => 1336687405,
+      1 => 1336761049,
       2 => 'file',
     ),
   ),
@@ -29,8 +29,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
         <?php echo $_smarty_tpl->getSubTemplate ("common/head.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, null, null, array(), 0);?>
 
     </head>
-    <body class="<?php echo $_smarty_tpl->tpl_vars['core']->value->module['bgclass'];?>
-">
+    <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
@@ -51,6 +50,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                             <?php if ($_smarty_tpl->tpl_vars['core']->value->auth->user_status['status']){?>
                                 <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='map'){?> class="active"<?php }?>><a href="/control/map/">GPS-мониторинг</a></li>
                                 <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='system'){?> class="active"<?php }?>><a href="/control/system/">Бортовой компьютер</a></li>
+                                <li<?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='fleet'){?> class="active"<?php }?>><a href="/control/fleet/">Автопарк</a></li>
                                 <li class="divider-vertical"></li>
                                 <li><a href="/control/help/"><i class="icon-question-sign icon-white"></i> Помощь</a></li>
                             <?php }?>

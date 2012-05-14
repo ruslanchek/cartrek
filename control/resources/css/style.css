@@ -1,4 +1,6 @@
-
+body {
+    background: url(../img/patterns/gears.png);
+}
 
 /* Notify */
 .notify {
@@ -277,16 +279,4 @@ h1 {
 .hero_login h1 {
     color: #444;
     margin: 0 0 0.5em;
-}
-
-.city {
-    background: url(../img/bg/city.jpg) no-repeat top center;
-    background-size: cover;
-}
-
-.city hr {
-    opacity: 0.4;
-    height: 0px;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #fff;
 }

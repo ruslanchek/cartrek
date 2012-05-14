@@ -3,7 +3,7 @@
     <head>
         {include file="common/head.tpl"}
     </head>
-    <body class="{$core->module.bgclass}">
+    <body>
         <div class="navbar navbar-fixed-top">
             <div class="navbar-inner">
                 <div class="container-fluid">
