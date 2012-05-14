@@ -293,7 +293,7 @@
  *
  * http://docs.jquery.com/UI/Datepicker#theming
  */
-.ui-datepicker { width: 100%; padding: .2em .2em 0; display: none;
+.ui-datepicker { padding: .2em .2em 0; display: none;
     -webkit-border-radius: 2px;
 -moz-border-radius: 2px;
 border-radius: 2px; }
