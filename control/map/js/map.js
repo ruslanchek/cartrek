@@ -52,6 +52,22 @@ core.map = {
         return (value * 1.852).toFixed(1);
     },
 
+    convertDateNMEAtoCOMMON: function(value){
+        var d = value.substring(0, 2),
+            m = value.substring(2, 4),
+            y = value.substring(4, 6);
+
+        return d+'-'+m+'-'+y;
+    },
+
+    convertDateMYSQLtoCOMMON: function(value){
+        var d = value.substring(8, 10),
+            m = value.substring(5, 7),
+            y = value.substring(2, 4);
+
+        return d+'-'+m+'-'+y;
+    },
+
     humanizeDate: function(value, type){
         if(!type){
             type = 'NMEA';
@@ -234,12 +250,9 @@ core.map = {
         return options;
     },
 
-    changeDate: function(date, event){
+    changeDate: function(date){
         this.hideAllDevicesCurrentPositions();
         this.hideAllDevicesInfo();
-
-        $('.kube_datepicker_day_select').removeClass('kube_datepicker_day_select');
-        $(event.originalEvent.srcElement).parent().addClass('kube_datepicker_day_select');
         $('.current_date').html(this.humanizeDate(date, 'COMMON'));
 
         this.loadOptions(true);
@@ -248,6 +261,41 @@ core.map = {
     createDatepicker: function(){
         $('#datepicker').html('');
         $('#datepicker').datepicker({
+            dateFormat      : "dd-mm-yy",
+            dayNames        : ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
+            dayNamesMin     : ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+            monthNames      : ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+            monthNamesMin   : ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+            minDate         : this.convertDateMYSQLtoCOMMON(this.options.min_date),
+            firstDay        : 1,
+            setDate         : this.options.date,
+            maxDate         : "today",
+            onSelect        : function(dateText, inst){
+                if(core.map.date_loading_process){
+                    core.map.date_loading_process.abort();
+                };
+
+                core.map.date_loading_process = $.ajax({
+                    url: '/control/map/?ajax',
+                    data: {
+                        action: 'setCurrentDate',
+                        date: dateText
+                    },
+                    beforeSend: function(){
+                        core.loading.unsetLoading('global', false);
+                        core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+                    },
+                    success: function(){
+                        core.loading.unsetLoading('global', false);
+                        core.map.changeDate(dateText);
+                    }
+                });
+            },
+            nextText        : 'Следующий месяц',
+            prevText        : 'Предыдущий месяц'
+        });
+
+        /*$('#datepicker').datepicker({
             embed       : true,
             format      : 'dd-mm-yy',
             today       : true,
@@ -273,8 +321,10 @@ core.map = {
                     }
                 })
             }
-        });
+        });*/
     },
+
+
 
     resizeMap: function(bind){
         $('#map').css({

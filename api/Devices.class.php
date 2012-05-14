@@ -12,6 +12,20 @@
             $this->setCurrentDate();
         }
 
+        public function getMinDate(){
+            $query = "
+                SELECT
+                    MIN(`datetime`) AS `date`
+                FROM
+                    `tracks`
+                WHERE
+                    `acct` = '".$this->db->quote($this->acct)."'
+            ";
+
+            $result = $this->db->assocItem($query);
+            return $result['date'];
+        }
+
         public function setCurrentDate($date = false){
             if(!$date){
                 if(!isset($_SESSION['current_date'])){
@@ -83,12 +97,16 @@
 
         //Last registered device point
         public function getLatestDevicePoint($id, $date_related = true){
-            $date = substr($this->current_date, 0, 2).substr($this->current_date, 3, 2).substr($this->current_date, 8, 2);
+            $d = substr($this->current_date, 0, 2);
+            $m = substr($this->current_date, 3, 2);
+            $y = '20'.substr($this->current_date, 8, 2);
 
-            $date_related_where = '';
+            $date = $y.'-'.$m.'-'.$d;
 
             if(!$date_related){
-                $date_related_where = "&& `g_date` = '".$this->db->quote($date)."'";
+                $date_related_where = " && (`datetime` >= '".$this->db->quote($date)." 00:00:00' && `datetime` <= '".$this->db->quote($date)." 23:59:59')";
+            }else{
+                $date_related_where = "";
             };
 
             $query = "
@@ -119,7 +137,12 @@
         }
 
         public function getPoints($id){
-            $date = substr($this->current_date, 0, 2).substr($this->current_date, 3, 2).substr($this->current_date, 8, 2);
+            $d = substr($this->current_date, 0, 2);
+            $m = substr($this->current_date, 3, 2);
+            $y = '20'.substr($this->current_date, 8, 2);
+
+            $date = $y.'-'.$m.'-'.$d;
+            $date_related_where = " && (`datetime` >= '".$this->db->quote($date)." 00:00:00' && `datetime` <= '".$this->db->quote($date)." 23:59:59')";
 
             $query = "
                 SELECT
@@ -137,8 +160,8 @@
                     `tracks`
                 WHERE
                     `acct`      = '".$this->db->quote($this->acct)."' &&
-                    `dev`       = '".$this->db->quote($this->getUserDeviceCode($id))."' &&
-                    `g_date`    = '".$this->db->quote($date)."'
+                    `dev`       = '".$this->db->quote($this->getUserDeviceCode($id))."'
+                    ".$date_related_where."
                 ORDER BY
                     `datetime` ASC
             ";
