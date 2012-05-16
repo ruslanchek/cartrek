@@ -40,7 +40,7 @@
                 <div class="control-group">
                     <label class="control-label" for="make">Марка</label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="make" name="make" value="{if isset($smarty.session.add_car.fields.make)}{$smarty.session.add_car.fields.make}{/if}">
+                        <input type="text" class="input-xlarge" autocomplete="off" id="make" name="make" value="{if isset($smarty.session.add_car.fields.make)}{$smarty.session.add_car.fields.make}{/if}">
                     </div>
                 </div>
 
