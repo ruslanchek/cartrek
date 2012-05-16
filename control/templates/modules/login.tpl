@@ -39,7 +39,7 @@
             </div>
 
             <div class="form-actions">
-                <button id="submit" type="submit" class="btn btn-primary" data-loading-text="Входим..." autocomplete="off">Войти</button>
+                <button id="submit" type="submit" class="btn btn-primary" autocomplete="off">Войти</button>
                 &nbsp;&nbsp;&nbsp;<a href="/control/auth/register">Зарегистрироваться</a>
                 &nbsp;&nbsp;&nbsp;<a href="/control/auth/remember_pass">Напомнить пароль</a>
             </div>

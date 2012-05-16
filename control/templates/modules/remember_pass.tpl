@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="form-actions">
-                    <button id="submit" type="submit" class="btn btn-primary" data-loading-text="Восстанавливаем пароль..." autocomplete="off">Восстановить пароль</button>
+                    <button id="submit" type="submit" class="btn btn-primary" autocomplete="off">Восстановить пароль</button>
                     &nbsp;&nbsp;&nbsp;<a href="/control/auth/register">Зарегистрироваться</a>
                     &nbsp;&nbsp;&nbsp;<a href="/control/auth/login">Войти</a>
                 </div>
