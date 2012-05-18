@@ -284,3 +284,7 @@ h1 {
 #car_name_info .badge {
     text-shadow: none;
 }
+
+.info_tab_header {
+    background: #eee !important;
+}

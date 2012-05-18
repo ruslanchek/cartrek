@@ -460,6 +460,7 @@ core.map = {
 
             //Show statistics
             var html =  '<table class="table table-bordered table-condensed">' +
+                            '<tr><th class="info_tab_header" colspan="2">Сводка за день</th></tr>' +
                             '<tr>' +
                                 '<td>Максимальная скорость</td>' +
                                 '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
@@ -479,11 +480,41 @@ core.map = {
             $('#where_is_my_car').fadeIn(100);
 
             //this.fitToDevicePathBounds();
-
         }else{
             //Load points and recall this fn
             this.loadDevicePathData(device_id);
         };
+
+        var info_html =     '<table class="table table-bordered table-condensed">' +
+                                '<tr><th class="info_tab_header" colspan="2">Текущее состояние</th></tr>' +
+                                '<tr>' +
+                                    '<td>' +
+                                        '<strong>Последнее обновление</strong><br>' +
+                                        this.humanizeDate(device.last_registered_point.date, 'NMEA')+', в '+
+                                        this.humanizeTime(device.last_registered_point.time)+'' +
+                                    '</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<td>' +
+                                        '<strong>Курс</strong><br>' +
+                                        'Юго-запад (112&deg;)' +
+                                    '</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<td>' +
+                                        '<strong>Сигнал GSM</strong><br>' +
+                                        'Сильный' +
+                                    '</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<td>' +
+                                        '<strong>Сигнал GPS</strong><br>' +
+                                        'Отличный (10 спутников)' +
+                                    '</td>' +
+                                '</tr>' +
+                            '</table>';
+
+        $('#registered_info').html(info_html);
     },
 
     drawPath: function(points, device, map){

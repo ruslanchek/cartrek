@@ -9,9 +9,7 @@
                 <span id="car_name_info"></span>
                 <span class="caret"></span>
             </a>
-            <ul class="dropdown-menu" id="cars_menu">
-
-            </ul>
+            <ul class="dropdown-menu" id="cars_menu"></ul>
         </div>
 
         <div class="pull-right">
@@ -38,6 +36,7 @@
                 <div id="datepicker"></div>
             </div>
 
+            <div id="registered_info"></div>
             <div id="registered_data"></div>
         </div>
     </div>
