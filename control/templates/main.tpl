@@ -14,9 +14,9 @@
                     </a>
 
                     {if $core->module.name == 'main'}
-                        <span class="brand">Автоконтроль</span>
+                        <span class="brand">Cartrek</span>
                     {else}
-                        <a class="brand" href="/control">Автоконтроль</a>
+                        <a class="brand" href="/control">Cartrek</a>
                     {/if}
 
                     <div class="nav-collapse">

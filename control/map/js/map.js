@@ -104,13 +104,21 @@ core.map = {
 
                 return d+' '+month_names[parseInt(m) - 1]+', '+y;
             }; break;
+
+            case 'MYSQL' : {
+                d = value.substring(8, 10),
+                m = value.substring(5, 7),
+                y = value.substring(0, 4);
+
+                return d+' '+month_names[parseInt(m) - 1]+', '+y;
+            }; break;
         };
     },
 
     humanizeTime: function(value){
-        var h = value.substring(0, 2),
-            m = value.substring(2, 4),
-            s = value.substring(4, 6);
+        var h = value.substring(11, 13),
+            m = value.substring(14, 16),
+            s = value.substring(17, 19);
 
         return h + ':' + m + ':' + s;
     },
@@ -420,7 +428,8 @@ core.map = {
             this.hideDeviceInfo(this.options.devices[i].id);
         };
 
-        $('#registered_data').html('').fadeOut(100);
+        $('#registered_data').html('');
+        $('#registered_info').html('');
     },
 
     hideDeviceInfo: function(id){
@@ -488,29 +497,23 @@ core.map = {
         var info_html =     '<table class="table table-bordered table-condensed">' +
                                 '<tr><th class="info_tab_header" colspan="2">Текущее состояние</th></tr>' +
                                 '<tr>' +
-                                    '<td>' +
-                                        '<strong>Последнее обновление</strong><br>' +
-                                        this.humanizeDate(device.last_registered_point.date, 'NMEA')+', в '+
-                                        this.humanizeTime(device.last_registered_point.time)+'' +
+                                    '<td>Последнее обновление</td>' +
+                                    '<td><span class="label">' +
+                                        this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
+                                        this.humanizeTime(device.last_registered_point.date)+'</span>' +
                                     '</td>' +
                                 '</tr>' +
                                 '<tr>' +
-                                    '<td>' +
-                                        '<strong>Курс</strong><br>' +
-                                        'Юго-запад (112&deg;)' +
-                                    '</td>' +
+                                    '<td>Курс</td>' +
+                                    '<td><span class="label" title="112&deg;">Юго-запад</span></td>' +
                                 '</tr>' +
                                 '<tr>' +
-                                    '<td>' +
-                                        '<strong>Сигнал GSM</strong><br>' +
-                                        'Сильный' +
-                                    '</td>' +
+                                    '<td>Сигнал GSM</td>' +
+                                    '<td><div class="progress progress-success" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: 75%;"></div></div></td>' +
                                 '</tr>' +
                                 '<tr>' +
-                                    '<td>' +
-                                        '<strong>Сигнал GPS</strong><br>' +
-                                        'Отличный (10 спутников)' +
-                                    '</td>' +
+                                    '<td>Сигнал GPS</td>' +
+                                    '<td><div class="progress progress-warning" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: 25%;"></div></div></td>' +
                                 '</tr>' +
                             '</table>';
 
@@ -657,7 +660,7 @@ core.map = {
                         '</tr>' +
                         '<tr>' +
                             '<td>Время</td>' +
-                            '<td><span class="label">'+this.humanizeTime(marker.point.time)+'</span></td>' +
+                            '<td><span class="label">'+this.humanizeTime(marker.point.date)+'</span></td>' +
                         '</tr>' +
                         '<tr>' +
                             '<td>Скорость</td>' +
@@ -919,7 +922,7 @@ core.map = {
             };
 
             if(no_points){
-                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'COMMON')+'</b> не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>';
+                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'MYSQL')+'</b> не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>';
 
                 this.showMapNotice(html);
                 $('#where_is_my_car').fadeOut(100);
@@ -933,7 +936,7 @@ core.map = {
 
             if(!device.current_position_marker){
                 var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b>.</p>' +
-                                '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date)+'</b>.</p>';
+                                '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'</b>.</p>';
 
                 this.showMapNotice(message);
                 $('#where_is_my_car').fadeOut(100);

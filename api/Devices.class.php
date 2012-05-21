@@ -27,15 +27,23 @@
         }
 
         public function setCurrentDate($date = false){
+            $expire = 86400 - 3600*date("H") - date("i") - date("s");
+            $expire = time() +11;
+            $now = date('d').'-'.date('m').'-'.date('Y');
+
             if(!$date){
-                if(!isset($_SESSION['current_date'])){
-                    $_SESSION['current_date'] = date('d').'-'.date('m').'-'.date('Y');
+                if(!isset($_COOKIE['current_date'])){
+                    setcookie("current_date", $now, $expire, '/');
                 };
             }else{
-                $_SESSION['current_date'] = $date;
+                setcookie("current_date", $date, $expire, '/');
             };
 
-            $this->current_date = $_SESSION['current_date'];
+            if(!isset($_COOKIE['current_date'])){
+                $this->current_date = $now;
+            }else{
+                $this->current_date = $_COOKIE['current_date'];
+            };
         }
 
         //Get complete list of user's cars with last points
@@ -119,8 +127,7 @@
                     `g_lat_j`       AS `lat_j`,
                     `g_velocity`    AS `velocity`,
                     `g_bb`          AS `bb`,
-                    `g_date`        AS `date`,
-                    `g_time`        AS `time`
+                    `datetime`      AS `date`
                 FROM
                     `tracks`
                 WHERE
@@ -154,8 +161,7 @@
                     `g_lat_j`       AS `lat_j`,
                     `g_velocity`    AS `velocity`,
                     `g_bb`          AS `bb`,
-                    `g_date`        AS `date`,
-                    `g_time`        AS `time`
+                    `datetime`      AS `date`
                 FROM
                     `tracks`
                 WHERE
