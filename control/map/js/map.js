@@ -580,6 +580,8 @@ core.map = {
     },
 
     createCurrentPositionMarker: function(options){
+        console.log(options.device.point);
+
         if(options.device.point){
             var marker = new google.maps.Marker({
                 position    : new google.maps.LatLng(

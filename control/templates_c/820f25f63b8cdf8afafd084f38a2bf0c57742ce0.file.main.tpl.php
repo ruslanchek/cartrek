@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-11 22:32:28
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-23 01:07:21
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:11291423434f800a68d221c3-26876524%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '820f25f63b8cdf8afafd084f38a2bf0c57742ce0' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/main.tpl',
-      1 => 1336761049,
+      1 => 1337717737,
       2 => 'file',
     ),
   ),
@@ -40,9 +40,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                     </a>
 
                     <?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='main'){?>
-                        <span class="brand">Автоконтроль</span>
+                        <span class="brand">Cartrek</span>
                     <?php }else{ ?>
-                        <a class="brand" href="/control">Автоконтроль</a>
+                        <a class="brand" href="/control">Cartrek</a>
                     <?php }?>
 
                     <div class="nav-collapse">

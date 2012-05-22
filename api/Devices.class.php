@@ -15,11 +15,31 @@
         public function getMinDate(){
             $query = "
                 SELECT
+                    `id`
+                FROM
+                    `devices`
+                WHERE
+                    `user_id`   = 1 &&
+                    `active`    = 1
+            ";
+
+            $devices = $this->db->assocMulti($query);
+
+            $on = "";
+
+            foreach($devices as $device){
+                $on .= "'".$this->db->quote($device['id'])."', ";
+            };
+
+            $on = substr($on, 0, strlen($on) - 2);
+
+            $query = "
+                SELECT
                     MIN(`datetime`) AS `date`
                 FROM
                     `tracks`
                 WHERE
-                    `acct` = '".$this->db->quote($this->acct)."'
+                    `device_id` IN (".$on.")
             ";
 
             $result = $this->db->assocItem($query);
@@ -51,7 +71,7 @@
             $query = "
                 SELECT
                     `id`,
-                    `secret`,
+                    `imei`,
                     `name`,
                     `model`,
                     `make`,
@@ -70,7 +90,6 @@
             foreach($devices as $device){
                 $device['point']                    = $this->getLatestDevicePoint($device['id'], false);
                 $device['last_registered_point']    = $this->getLatestDevicePoint($device['id'], true);
-                unset($device['secret']);
                 $result[] = $device;
             };
 
@@ -82,7 +101,7 @@
             $query = "
                 SELECT
                     `devices`.`id`,
-                    `devices`.`secret`,
+                    `devices`.`imei`,
                     `devices`.`name`,
                     `devices`.`model`,
                     `devices`.`make`,
@@ -96,11 +115,6 @@
             ";
 
             return $this->db->assocItem($query);
-        }
-
-        public function getUserDeviceCode($id){
-            $device = $this->getUserDevice($id);
-            return $device['id'].':'.$device['secret'];
         }
 
         //Last registered device point
@@ -120,19 +134,15 @@
             $query = "
                 SELECT
                     `id`,
-                    `dev`,
-                    `g_lng`         AS `lng`,
-                    `g_lng_p`       AS `lng_p`,
-                    `g_lat`         AS `lat`,
-                    `g_lat_j`       AS `lat_j`,
-                    `g_velocity`    AS `velocity`,
-                    `g_bb`          AS `bb`,
-                    `datetime`      AS `date`
+                    `longitude_dms`         AS `lng`,
+                    `lattitude_dms`         AS `lat`,
+                    `speed`                 AS `velocity`,
+                    `heading`               AS `bb`,
+                    `datetime`              AS `date`
                 FROM
                     `tracks`
                 WHERE
-                    `acct`      = '".$this->db->quote($this->acct)."' &&
-                    `dev`       = '".$this->db->quote($this->getUserDeviceCode($id))."'
+                    `device_id` = '".$this->db->quote($id)."'
                     ".$date_related_where."
                 ORDER BY
                     `datetime` DESC
@@ -154,19 +164,15 @@
             $query = "
                 SELECT
                     `id`,
-                    `dev`,
-                    `g_lng`         AS `lng`,
-                    `g_lng_p`       AS `lng_p`,
-                    `g_lat`         AS `lat`,
-                    `g_lat_j`       AS `lat_j`,
-                    `g_velocity`    AS `velocity`,
-                    `g_bb`          AS `bb`,
-                    `datetime`      AS `date`
+                    `longitude_dms`         AS `lng`,
+                    `lattitude_dms`         AS `lat`,
+                    `speed`                 AS `velocity`,
+                    `heading`               AS `bb`,
+                    `datetime`              AS `date`
                 FROM
                     `tracks`
                 WHERE
-                    `acct`      = '".$this->db->quote($this->acct)."' &&
-                    `dev`       = '".$this->db->quote($this->getUserDeviceCode($id))."'
+                    `device_id` = '".$this->db->quote($id)."'
                     ".$date_related_where."
                 ORDER BY
                     `datetime` ASC
