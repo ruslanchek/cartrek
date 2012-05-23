@@ -17,7 +17,7 @@ core.map = {
                     'markers/waypoint_image.png',
                     new google.maps.Size(7,7),
                     new google.maps.Point(0,0),
-                    new google.maps.Point(3,3)
+                    new google.maps.Point(3.5,3.5)
                 ),
                 shadow: null,
                 shape: {
@@ -134,7 +134,7 @@ core.map = {
     },
 
     humanizeHeadingDegrees: function(degree){
-        if(degree >= 338 && degree <= 25){
+        if((degree >= 338 && degree <= 360) || (degree >= 0 && degree <= 25)){
             return 'север';
         };
 
@@ -777,6 +777,10 @@ core.map = {
                         '<tr>' +
                             '<td>Скорость</td>' +
                             '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Направление</td>' +
+                            '<td><span class="label" title="'+marker.point.bb+'&deg;">'+this.humanizeHeadingDegrees(marker.point.bb)+'</span></td>' +
                         '</tr>' +
                     '</table>' + additional;
 

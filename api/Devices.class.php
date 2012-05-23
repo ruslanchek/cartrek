@@ -48,7 +48,7 @@
 
         public function setCurrentDate($date = false){
             $expire = 86400 - 3600*date("H") - date("i") - date("s");
-            $expire = time() +11;
+            $expire = time() + $expire;
             $now = date('d').'-'.date('m').'-'.date('Y');
 
             if(!$date){
