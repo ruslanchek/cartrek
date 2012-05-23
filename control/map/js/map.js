@@ -4,6 +4,7 @@ var google = google;
 
 core.map = {
     options: {
+        interval: 10000,
         current_devece_id: null,
         default_position : {
             lat: 55,
@@ -40,6 +41,89 @@ core.map = {
         }
     },
 
+    createMarkerImageFromCanvas: function(){
+        var c = document.createElement("canvas");
+
+        var canvas = oCanvas.create({
+            canvas: c
+        });
+
+        var image = canvas.display.image({
+            x: 7,
+            y: 7,
+            origin: { x: "center", y: "center" },
+            image: "markers/waypoint_image.png"
+        });
+
+        canvas.addChild(image);
+
+        return c.toDataURL();
+    },
+
+    parseHDOP: function(hdop){
+        if(hdop){
+            hdop = parseFloat(hdop);
+
+            if(hdop <= 1 && hdop > 0){
+                return {percentage: 100, level_name: 'идеально', level_class: 'info'};
+            };
+
+            if(hdop > 1 && hdop <= 3){
+                return {percentage: 83.3, level_name: 'отлично', level_class: 'success'};
+            };
+
+            if(hdop > 3 && hdop <= 6){
+                return {percentage: 66.64, level_name: 'хорошо', level_class: 'success'};
+            };
+
+            if(hdop > 6 && hdop <= 8){
+                return {percentage: 49.98, level_name: 'средне', level_class: 'warning'};
+            };
+
+            if(hdop > 8 && hdop <= 20){
+                return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'warning'};
+            };
+
+            if(hdop > 20){
+                return {percentage: 16.66, level_name: 'плохо', level_class: 'danger'};
+            };
+        }else{
+            return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger'};
+        };
+    },
+
+    parseCSQ: function(csq){
+        if(csq){
+            csq = parseInt(csq);
+
+            if(csq >= 30){
+                return {percentage: 100, level_name: 'идеально', level_class: 'info'};
+            };
+
+            if(csq >= 24 && csq < 30){
+                return {percentage: 83.3, level_name: 'отлично', level_class: 'success'};
+            };
+
+            if(csq >= 19 && csq < 24){
+                return {percentage: 66.64, level_name: 'хорошо', level_class: 'success'};
+            };
+
+            if(csq >= 12 && csq < 19){
+                return {percentage: 49.98, level_name: 'средне', level_class: 'warning'};
+            };
+
+            if(csq >= 6 && csq < 12){
+                return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'danger'};
+            };
+
+            if(csq > 0 && csq < 6){
+                return {percentage: 16.66, level_name: 'плохо', level_class: 'danger'};
+            };
+        }else{
+            return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger'};
+        };
+    },
+
     convertNMEAtoWGS84: function(value){
         var nTemp = value / 100.0;
         nTemp = nTemp - (nTemp%1);
@@ -66,6 +150,40 @@ core.map = {
             y = value.substring(2, 4);
 
         return d+'-'+m+'-'+y;
+    },
+
+    humanizeHeadingDegrees: function(degree){
+        if(degree >= 338 && degree <= 25){
+            return 'север';
+        };
+
+        if(degree >= 26 && degree <= 67){
+            return 'северо-восток';
+        };
+
+        if(degree >= 68 && degree <= 112){
+            return 'восток';
+        };
+
+        if(degree >= 113 && degree <= 157){
+            return 'юго-восток';
+        };
+
+        if(degree >= 156 && degree <= 202){
+            return 'юг';
+        };
+
+        if(degree >= 203 && degree <= 247){
+            return 'юго-запад';
+        };
+
+        if(degree >= 248 && degree <= 292){
+            return 'запад';
+        };
+
+        if(degree >= 293 && degree <= 337){
+            return 'северо-запад';
+        };
     },
 
     humanizeDate: function(value, type){
@@ -267,14 +385,13 @@ core.map = {
     },
 
     createDatepicker: function(){
-        $('#datepicker').html('');
         $('#datepicker').datepicker({
             dateFormat      : "dd-mm-yy",
             dayNames        : ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
             dayNamesMin     : ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
             monthNames      : ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
             monthNamesMin   : ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
-            minDate         : this.convertDateMYSQLtoCOMMON(this.options.min_date),
+            minDate         : (this.options.min_date) ? this.convertDateMYSQLtoCOMMON(this.options.min_date) : "today",
             firstDay        : 1,
             setDate         : this.options.date,
             maxDate         : "today",
@@ -486,7 +603,7 @@ core.map = {
 
             $('#registered_data').html(html).fadeIn(150);
 
-            $('#where_is_my_car').fadeIn(100);
+            $('#where_is_my_car').show();
 
             //this.fitToDevicePathBounds();
         }else{
@@ -494,30 +611,42 @@ core.map = {
             this.loadDevicePathData(device_id);
         };
 
-        var info_html =     '<table class="table table-bordered table-condensed">' +
-                                '<tr><th class="info_tab_header" colspan="2">Текущее состояние</th></tr>' +
-                                '<tr>' +
-                                    '<td>Последнее обновление</td>' +
-                                    '<td><span class="label">' +
-                                        this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
-                                        this.humanizeTime(device.last_registered_point.date)+'</span>' +
-                                    '</td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<td>Курс</td>' +
-                                    '<td><span class="label" title="112&deg;">Юго-запад</span></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<td>Сигнал GSM</td>' +
-                                    '<td><div class="progress progress-success" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: 75%;"></div></div></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<td>Сигнал GPS</td>' +
-                                    '<td><div class="progress progress-warning" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: 25%;"></div></div></td>' +
-                                '</tr>' +
-                            '</table>';
+        if(device.last_registered_point){
+            var hdop = this.parseHDOP(device.hdop);
+            var csq = this.parseCSQ(device.csq);
 
-        $('#registered_info').html(info_html);
+            var info_html =     '<table class="table table-bordered table-condensed">' +
+                                    '<tr><th class="info_tab_header" colspan="2">Текущее состояние</th></tr>' +
+                                    '<tr>' +
+                                        '<td>Последнее обновление местоположения</td>' +
+                                        '<td><span class="label">' +
+                                            this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
+                                            this.humanizeTime(device.last_registered_point.date)+'</span>' +
+                                        '</td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<td>Последнее обновление статуса</td>' +
+                                        '<td><span class="label">' +
+                                            this.humanizeDate(device.last_update, 'MYSQL')+'<br>'+
+                                            this.humanizeTime(device.last_update)+'</span>' +
+                                        '</td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<td>Курс</td>' +
+                                        '<td><span class="label" title="'+device.last_registered_point.bb+'&deg;">'+this.humanizeHeadingDegrees(device.last_registered_point.bb)+'</span></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<td>Сигнал GSM</td>' +
+                                        '<td><div title="'+csq.level_name+'" class="progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<td>Сигнал GPS</td>' +
+                                        '<td><div title="'+hdop.level_name+'" class="progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div></td>' +
+                                    '</tr>' +
+                                '</table>';
+
+            $('#registered_info').html(info_html);
+        };
     },
 
     drawPath: function(points, device, map){
@@ -606,10 +735,8 @@ core.map = {
         var style, title;
 
         if(options.point.velocity <= 0){
-            style = this.options.marker_styles.waypoint_stop;
             title = options.device.name+' — остановка';
         }else{
-            style = this.options.marker_styles.waypoint;
             title = options.device.name+' — в пути ('+this.convertKnotsToKms(options.point.velocity)+' км/ч)';
         };
 
@@ -618,9 +745,7 @@ core.map = {
                 this.convertNMEAtoWGS84(options.point.lat),
                 this.convertNMEAtoWGS84(options.point.lng)
             ),
-            icon        : style.image,
-            shadow      : style.shadow,
-            shape       : style.shape,
+            icon        : this.createMarkerImageFromCanvas(options.point),
             point       : options.point,
             map         : options.map,
             title       : title,
@@ -854,7 +979,7 @@ core.map = {
         };
 
         if(!$('#where_is_my_car').is(':visible')){
-            $('#where_is_my_car').fadeIn(100);
+            $('#where_is_my_car').show();
         };
 
         this.options.current_devece_id = car_id;
@@ -878,7 +1003,7 @@ core.map = {
     },
 
     showMapNotice: function(message){
-        var html = '<div class="map_notice">'+message+'</div>';
+        var html = '<div class="map_notice">'+message+'<a id="hide_map_notice" href="javascript:void(0)" class="btn">Закрыть</a></div>';
 
         $('body').prepend(html);
 
@@ -896,10 +1021,16 @@ core.map = {
         $(window).on('resize', function(){
             setMapNoticeSize();
         });
+
+        $('#hide_map_notice').off('click').on('click', function(){
+            core.map.hideMapNotice();
+        });
     },
 
     hideMapNotice: function(){
-        $('.map_notice').remove();
+        $('.map_notice').fadeOut(150, function(){
+            $('.map_notice').remove()
+        });
     },
 
     setMapToDefaultPoint: function(){
@@ -924,28 +1055,32 @@ core.map = {
             };
 
             if(no_points){
-                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'MYSQL')+'</b> не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>';
+                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'MYSQL')+'</b> не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины</p>';
 
                 this.showMapNotice(html);
-                $('#where_is_my_car').fadeOut(100);
+                $('#where_is_my_car').hide();
 
                 this.setMapToDefaultPoint();
             }else{
-                $('#where_is_my_car').fadeIn(100);
+                $('#where_is_my_car').show();
             };
         }else{
             var device = this.options.devices[this.getDeviceIndexById($.cookie('car_id'))];
 
             if(!device.current_position_marker){
-                var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b>.</p>' +
-                                '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'</b>.</p>';
+                if(device.last_registered_point){
+                    var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b>.</p>' +
+                                    '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'</b></p>';
+                }else{
+                    var message =   '<p>Для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b> нет ни одной отметки</p>';
+                };
 
                 this.showMapNotice(message);
-                $('#where_is_my_car').fadeOut(100);
+                $('#where_is_my_car').hide();
 
                 this.setMapToDefaultPoint();
             }else{
-                $('#where_is_my_car').fadeIn(100);
+                $('#where_is_my_car').show();
             };
         };
     },
@@ -969,6 +1104,7 @@ core.map = {
 
         $('.current_date').html(this.humanizeDate(this.options.date, 'COMMON'));
         $('#cars_menu').html(cars_menu_html);
+        $('.select_car').show(250);
 
         this.map = this.createMap({
             map_container_id: 'map',
@@ -1017,10 +1153,30 @@ core.map = {
             core.map.selectCar($(this).attr('rel'));
         });
 
+        $('.calendar_place a.opener').live('click', function(){
+            $('.calendar_place').animate({top: 34}, 400, 'easeOutExpo');
+        });
 
         /*$('#view_settings').live('click', function(){
             core.modal.show(core.map.getVeiwSettingsContent());
         });*/
+    },
+
+    processSystemInterval: function(){
+        console.log('Interval');
+    },
+
+    startSystemInterval: function(){
+        this.interval = setInterval('core.map.processSystemInterval()', this.options.interval);
+    },
+
+    stopSystemInterval: function(){
+        clearInterval(this.interval);
+    },
+
+    restartSystemInterval: function(){
+        this.stopSystemInterval();
+        this.startSystemInterval();
     },
 
     init: function(){
@@ -1031,6 +1187,7 @@ core.map = {
         this.setMapsPrototypes();
         this.loadOptions();
         this.binds();
+        this.startSystemInterval();
     }
 };
 

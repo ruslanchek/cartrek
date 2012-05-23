@@ -1,3 +1,10 @@
+<div class="calendar_place">
+    <div class="datepicker">
+        <div id="datepicker"></div>
+    </div>
+    <a href="javascript:void(0)" class="opener">25 сентября, 2012 <b class="caret"></b></a>
+</div>
+
 <div class="page-header">
     <h1 class="pull-left">
         GPS-мониторинг <small class="current_date"></small>
@@ -32,10 +39,6 @@
     </div>
     <div class="span3">
         <div id="right_side">
-            <div class="datepicker">
-                <div id="datepicker"></div>
-            </div>
-
             <div id="registered_info"></div>
             <div id="registered_data"></div>
         </div>

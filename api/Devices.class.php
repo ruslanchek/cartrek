@@ -76,7 +76,11 @@
                     `model`,
                     `make`,
                     `g_id`,
-                    `color`
+                    `color`,
+                    `hdop`,
+                    `csq`,
+                    `journey`,
+                    `last_update`
                 FROM
                     `devices`
                 WHERE
@@ -100,12 +104,16 @@
         public function getUserDevice($id){
             $query = "
                 SELECT
-                    `devices`.`id`,
-                    `devices`.`imei`,
-                    `devices`.`name`,
-                    `devices`.`model`,
-                    `devices`.`make`,
-                    `devices`.`g_id`
+                    `id`,
+                    `imei`,
+                    `name`,
+                    `model`,
+                    `make`,
+                    `g_id`,
+                    `hdop`,
+                    `csq`,
+                    `journey`,
+                    `last_update`
                 FROM
                     `devices`
                 WHERE
