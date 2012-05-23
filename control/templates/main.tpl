@@ -32,6 +32,8 @@
                         <ul class="nav pull-right">
                             {if $core->auth->user_status.status}
                                 <li><a href="/control/help/"><span class="badge badge-warning">4</span> Уведомления</a></li>
+                                <li class="divider-vertical"></li>
+                                <li><a href="/control/help/" title="Хватит еще на 9 дней"><b>450</b> руб.</a></li>
                             {/if}
 
                             <li class="divider-vertical"></li>

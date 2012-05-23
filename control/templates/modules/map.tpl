@@ -1,13 +1,13 @@
-<div class="calendar_place">
+<div class="calendar_place closed">
     <div class="datepicker">
         <div id="datepicker"></div>
     </div>
-    <a href="javascript:void(0)" class="opener">25 сентября, 2012 <b class="caret"></b></a>
+    <a href="javascript:void(0)" class="opener"><span class="current_date"></span> <b class="caret"></b></a>
 </div>
 
 <div class="page-header">
     <h1 class="pull-left">
-        GPS-мониторинг <small class="current_date"></small>
+        GPS-мониторинг
     </h1>
 
     <div class="header_tools pull-right">

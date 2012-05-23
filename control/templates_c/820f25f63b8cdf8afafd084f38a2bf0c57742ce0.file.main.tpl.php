@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-23 01:07:21
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-23 23:56:06
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:11291423434f800a68d221c3-26876524%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '820f25f63b8cdf8afafd084f38a2bf0c57742ce0' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/main.tpl',
-      1 => 1337717737,
+      1 => 1337802965,
       2 => 'file',
     ),
   ),
@@ -40,9 +40,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                     </a>
 
                     <?php if ($_smarty_tpl->tpl_vars['core']->value->module['name']=='main'){?>
-                        <span class="brand">Cartrek</span>
+                        <span class="brand logo" title="Картек"></span>
                     <?php }else{ ?>
-                        <a class="brand" href="/control">Cartrek</a>
+                        <a class="brand logo" href="/control" title="Картек"></a>
                     <?php }?>
 
                     <div class="nav-collapse">
@@ -58,6 +58,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                         <ul class="nav pull-right">
                             <?php if ($_smarty_tpl->tpl_vars['core']->value->auth->user_status['status']){?>
                                 <li><a href="/control/help/"><span class="badge badge-warning">4</span> Уведомления</a></li>
+                                <li class="divider-vertical"></li>
+                                <li><a href="/control/help/" title="Хватит еще на 9 дней"><b>450</b> руб.</a></li>
                             <?php }?>
 
                             <li class="divider-vertical"></li>

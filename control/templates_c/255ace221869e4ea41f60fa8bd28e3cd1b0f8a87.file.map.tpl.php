@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-21 23:04:15
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-24 00:48:40
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/modules/map.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:731321044f800a68eb8241-73154553%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '255ace221869e4ea41f60fa8bd28e3cd1b0f8a87' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/modules/map.tpl',
-      1 => 1337500331,
+      1 => 1337806118,
       2 => 'file',
     ),
   ),
@@ -19,9 +19,16 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_4f800a68ebdc8',
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_4f800a68ebdc8')) {function content_4f800a68ebdc8($_smarty_tpl) {?><div class="page-header">
+<?php if ($_valid && !is_callable('content_4f800a68ebdc8')) {function content_4f800a68ebdc8($_smarty_tpl) {?><div class="calendar_place closed">
+    <div class="datepicker">
+        <div id="datepicker"></div>
+    </div>
+    <a href="javascript:void(0)" class="opener"><span class="current_date"></span> <b class="caret"></b></a>
+</div>
+
+<div class="page-header">
     <h1 class="pull-left">
-        GPS-мониторинг <small class="current_date"></small>
+        GPS-мониторинг
     </h1>
 
     <div class="header_tools pull-right">
@@ -53,10 +60,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     </div>
     <div class="span3">
         <div id="right_side">
-            <div class="datepicker">
-                <div id="datepicker"></div>
-            </div>
-
             <div id="registered_info"></div>
             <div id="registered_data"></div>
         </div>

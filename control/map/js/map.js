@@ -41,25 +41,6 @@ core.map = {
         }
     },
 
-    createMarkerImageFromCanvas: function(){
-        var c = document.createElement("canvas");
-
-        var canvas = oCanvas.create({
-            canvas: c
-        });
-
-        var image = canvas.display.image({
-            x: 7,
-            y: 7,
-            origin: { x: "center", y: "center" },
-            image: "markers/waypoint_image.png"
-        });
-
-        canvas.addChild(image);
-
-        return c.toDataURL();
-    },
-
     parseHDOP: function(hdop){
         if(hdop){
             hdop = parseFloat(hdop);
@@ -745,7 +726,7 @@ core.map = {
                 this.convertNMEAtoWGS84(options.point.lat),
                 this.convertNMEAtoWGS84(options.point.lng)
             ),
-            icon        : this.createMarkerImageFromCanvas(options.point),
+            icon        : this.getMarkerImage(options.point),
             point       : options.point,
             map         : options.map,
             title       : title,
@@ -1103,8 +1084,10 @@ core.map = {
         };
 
         $('.current_date').html(this.humanizeDate(this.options.date, 'COMMON'));
+        setTimeout("$('.calendar_place').animate({top: -210}, 400, 'easeOutExpo').addClass('closed');", 600);
+
         $('#cars_menu').html(cars_menu_html);
-        $('.select_car').show(250);
+        setTimeout("$('.select_car').show(250);", 500);
 
         this.map = this.createMap({
             map_container_id: 'map',
@@ -1154,7 +1137,11 @@ core.map = {
         });
 
         $('.calendar_place a.opener').live('click', function(){
-            $('.calendar_place').animate({top: 34}, 400, 'easeOutExpo');
+            if($('.calendar_place').hasClass('closed')){
+                $('.calendar_place').animate({top: 34, opacity: 0.96}, 400, 'easeOutExpo').removeClass('closed').addClass('opened');
+            }else{
+                $('.calendar_place').animate({top: -210, opacity: 0.75}, 400, 'easeOutExpo').removeClass('opened').addClass('closed');
+            };
         });
 
         /*$('#view_settings').live('click', function(){
