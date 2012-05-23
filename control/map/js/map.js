@@ -717,8 +717,10 @@ core.map = {
 
         if(options.point.velocity <= 0){
             title = options.device.name+' — остановка';
+            style = this.options.marker_styles.waypoint_stop;
         }else{
             title = options.device.name+' — в пути ('+this.convertKnotsToKms(options.point.velocity)+' км/ч)';
+            style = this.options.marker_styles.waypoint;
         };
 
         var marker = new google.maps.Marker({
@@ -726,7 +728,9 @@ core.map = {
                 this.convertNMEAtoWGS84(options.point.lat),
                 this.convertNMEAtoWGS84(options.point.lng)
             ),
-            icon        : this.getMarkerImage(options.point),
+            icon        : style.image,
+            shape       : style.shape,
+            shadow      : style.shadow,
             point       : options.point,
             map         : options.map,
             title       : title,
