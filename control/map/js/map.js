@@ -135,35 +135,35 @@ core.map = {
 
     humanizeHeadingDegrees: function(degree){
         if((degree >= 338 && degree <= 360) || (degree >= 0 && degree <= 25)){
-            return 'север';
+            return {name:'север', code: 'n'};
         };
 
         if(degree >= 26 && degree <= 67){
-            return 'северо-восток';
+            return {name:'северо-восток', code: 'ne'};
         };
 
         if(degree >= 68 && degree <= 112){
-            return 'восток';
+            return {name:'восток', code: 'e'};
         };
 
         if(degree >= 113 && degree <= 157){
-            return 'юго-восток';
+            return {name:'юго-восток', code: 'se'};
         };
 
         if(degree >= 156 && degree <= 202){
-            return 'юг';
+            return {name:'юг', code: 's'};
         };
 
         if(degree >= 203 && degree <= 247){
-            return 'юго-запад';
+            return {name:'юго-запад', code: 'sw'};
         };
 
         if(degree >= 248 && degree <= 292){
-            return 'запад';
+            return {name:'запад', code: 'w'};
         };
 
         if(degree >= 293 && degree <= 337){
-            return 'северо-запад';
+            return {name:'северо-запад', code: 'nw'};
         };
     },
 
@@ -519,6 +519,7 @@ core.map = {
         };
 
         $('#registered_data').html('').fadeOut(100);
+        $('#registered_info').html('').fadeOut(100);
     },
 
     hideAllDevicesInfo: function(){
@@ -570,24 +571,24 @@ core.map = {
 
                 if(device.max_speed_marker){
                     max_speed_block =   '<tr>' +
-                                            '<th>Максимальная скорость</th>' +
+                                            '<th>Макс. скорость</th>' +
                                             '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
                                         '</tr>';
                 };
 
                 //Show statistics
                 var html =  '<b>Сводка за день <a href="javascript:void(0)" class="caret"></a></b>' +
-                            '<table class="">' +
+                            '<div class="side_block_content"><table class="">' +
                                 max_speed_block +
                                 '<tr>' +
                                     '<th>Средняя скорость</th>' +
-                                    '<td><span id="average_speed" class="">'+device.path.statistics.average_speed+' км/ч</span></td>' +
+                                    '<td><span id="average_speed">'+device.path.statistics.average_speed+' км/ч</span></td>' +
                                 '</tr>' +
                                 '<tr>' +
                                     '<th>Пройдено пути</th>' +
-                                    '<td><span id="distance_driven" class="">'+device.path.statistics.distance+' км</span></td>' +
+                                    '<td><span id="distance_driven">'+device.path.statistics.distance+' км</span></td>' +
                                 '</tr>' +
-                            '</table>';
+                            '</table></div>';
 
                 $('#registered_data').html(html).fadeIn(150);
             };
@@ -601,11 +602,20 @@ core.map = {
         };
 
         if(device.last_registered_point){
-            var hdop = this.parseHDOP(device.hdop);
-            var csq = this.parseCSQ(device.csq);
+            var hdop    = this.parseHDOP(device.hdop);
+            var csq     = this.parseCSQ(device.csq);
+            var heading = this.humanizeHeadingDegrees(device.last_registered_point.bb);
+            var title   = 'Последнее обновление местоположения: '+this.humanizeDate(device.last_registered_point.date, 'MYSQL')+
+                          ', в '+
+                          this.humanizeTime(device.last_registered_point.date) +
+                          ', последнее обновление статуса: '+
+                          this.humanizeDate(device.last_update, 'MYSQL') +
+                          ', в '+
+                          this.humanizeTime(device.last_update);
 
-            var info_html =     '<b>Текущее состояние <a href="javascript:void(0)" class="caret"></a></b>' +
-                                '<table class="">' +
+
+            var info_html =     '<b title="'+title+'">Текущее состояние <a href="javascript:void(0)" class="caret"></a></b>' +
+                                '<div class="side_block_content"><table class="">' +
                                     /*'<tr>' +
                                         '<td width="70%">Последнее обновление местоположения</td>' +
                                         '<td width="30%"><span class="label">' +
@@ -622,7 +632,15 @@ core.map = {
                                     '</tr>' +*/
                                     '<tr>' +
                                         '<th>Курс</th>' +
-                                        '<td><span title="'+device.last_registered_point.bb+'&deg;">'+this.humanizeHeadingDegrees(device.last_registered_point.bb)+'</span></td>' +
+                                        '<td><span><i class="heading_icon hi_'+heading.code+'" title="'+device.last_registered_point.bb+'&deg;"></i><span>'+heading.name+'</span></span></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<th>Скорость</th>' +
+                                        '<td><span>'+this.convertKnotsToKms(device.last_registered_point.velocity)+' км/ч</span></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<th>Высота</th>' +
+                                        '<td><span>'+device.last_registered_point.altitude+' м</span></td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GSM</td>' +
@@ -632,9 +650,10 @@ core.map = {
                                         '<th>Сигнал GPS</td>' +
                                         '<td><div title="'+hdop.level_name+'" class="progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div></td>' +
                                     '</tr>' +
-                                '</table>';
+                                '</table></div>';
 
             $('#registered_info').html(info_html);
+            $('#registered_info').fadeIn(150);
         };
     },
 
@@ -783,12 +802,16 @@ core.map = {
                             '<td><span class="label">'+this.humanizeTime(marker.point.date)+'</span></td>' +
                         '</tr>' +
                         '<tr>' +
+                            '<td>Направление</td>' +
+                            '<td><span class="label" title="'+marker.point.bb+'&deg;">'+this.humanizeHeadingDegrees(marker.point.bb).name+'</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
                             '<td>Скорость</td>' +
                             '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
                         '</tr>' +
                         '<tr>' +
-                            '<td>Направление</td>' +
-                            '<td><span class="label" title="'+marker.point.bb+'&deg;">'+this.humanizeHeadingDegrees(marker.point.bb)+'</span></td>' +
+                            '<td>Высота</td>' +
+                            '<td><span class="label">'+marker.point.altitude+' м</span></td>' +
                         '</tr>' +
                     '</table>' + additional;
 
@@ -824,10 +847,18 @@ core.map = {
                     max_speed = parseFloat(markers[i].point.velocity);
                 };
             };
+
             result.value = this.convertKnotsToKms(max_speed);
 
             return result;
         };
+    },
+
+    convertGMTDateTimes: function(date){
+        var gmtDate = new Date(date);
+        var date = new Date(gmtDate.getFullYear(), gmtDate.getMonth(), gmtDate.getDate(), gmtDate.getHours(), gmtDate.getMinutes(), gmtDate.getSeconds() + parseInt(this.options.gmtOffset), 0);
+
+        return date.getFullYear()+'-'+core.utilities.leadingZero(date.getMonth(), 2)+'-'+core.utilities.leadingZero(date.getDate(), 2)+' '+core.utilities.leadingZero(date.getHours(), 2)+':'+core.utilities.leadingZero(date.getMinutes(), 2)+':'+core.utilities.leadingZero(date.getSeconds(), 2);
     },
 
     createDevicePathData: function(device_id, points){

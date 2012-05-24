@@ -319,6 +319,12 @@ core.utilities = {
         }else{
             return str;
         };
+    },
+
+    leadingZero: function(value, length){
+        var s = value+"";
+        while (s.length < length) s = "0" + s;
+        return s;
     }
 };
 

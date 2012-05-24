@@ -9,6 +9,7 @@
 
             $this->db_vars = $this->config->db_vars;
             $this->mySqlConnect();
+            $this->query("SET `time_zone` = '".$this->quote(date('P'))."'");
         }
 
         //Connect to the DB

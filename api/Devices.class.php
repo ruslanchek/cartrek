@@ -35,7 +35,7 @@
 
             $query = "
                 SELECT
-                    MIN(`datetime`) AS `date`
+                    MIN(CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."')) AS `date`
                 FROM
                     `tracks`
                 WHERE
@@ -47,7 +47,7 @@
         }
 
         public function setCurrentDate($date = false){
-            $expire = 86400 - 3600*date("H") - date("i") - date("s");
+            $expire = 86400 - 3600 * date("H") - date("i") - date("s");
             $expire = time() + $expire;
             $now = date('d').'-'.date('m').'-'.date('Y');
 
@@ -80,7 +80,7 @@
                     `hdop`,
                     `csq`,
                     `journey`,
-                    `last_update`
+                    CONVERT_TZ(`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`
                 FROM
                     `devices`
                 WHERE
@@ -113,7 +113,7 @@
                     `hdop`,
                     `csq`,
                     `journey`,
-                    `last_update`
+                    CONVERT_TZ(`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`
                 FROM
                     `devices`
                 WHERE
@@ -127,14 +127,15 @@
 
         //Last registered device point
         public function getLatestDevicePoint($id, $date_related = true){
-            $d = substr($this->current_date, 0, 2);
-            $m = substr($this->current_date, 3, 2);
-            $y = '20'.substr($this->current_date, 8, 2);
+            $d = intval(substr($this->current_date, 0, 2));
+            $m = intval(substr($this->current_date, 3, 2));
+            $y = intval('20'.substr($this->current_date, 8, 2));
 
-            $date = $y.'-'.$m.'-'.$d;
+            $date_start = gmdate("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
+            $date_end   = gmdate("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
 
             if(!$date_related){
-                $date_related_where = " && (`datetime` >= '".$this->db->quote($date)." 00:00:00' && `datetime` <= '".$this->db->quote($date)." 23:59:59')";
+                $date_related_where = " && (`datetime` >= '".$this->db->quote($date_start)."' && `datetime` <= '".$this->db->quote($date_end)."')";
             }else{
                 $date_related_where = "";
             };
@@ -146,7 +147,8 @@
                     `lattitude_dms`         AS `lat`,
                     `speed`                 AS `velocity`,
                     `heading`               AS `bb`,
-                    `datetime`              AS `date`
+                    `altitude`              AS `altitude`,
+                    CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `date`
                 FROM
                     `tracks`
                 WHERE
@@ -162,12 +164,14 @@
         }
 
         public function getPoints($id){
-            $d = substr($this->current_date, 0, 2);
-            $m = substr($this->current_date, 3, 2);
-            $y = '20'.substr($this->current_date, 8, 2);
+            $d = intval(substr($this->current_date, 0, 2));
+            $m = intval(substr($this->current_date, 3, 2));
+            $y = intval('20'.substr($this->current_date, 8, 2));
 
-            $date = $y.'-'.$m.'-'.$d;
-            $date_related_where = " && (`datetime` >= '".$this->db->quote($date)." 00:00:00' && `datetime` <= '".$this->db->quote($date)." 23:59:59')";
+            $date_start = gmdate("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
+            $date_end   = gmdate("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
+
+            $date_related_where = " && (`datetime` >= '".$this->db->quote($date_start)."' && `datetime` <= '".$this->db->quote($date_end)."')";
 
             $query = "
                 SELECT
@@ -176,7 +180,8 @@
                     `lattitude_dms`         AS `lat`,
                     `speed`                 AS `velocity`,
                     `heading`               AS `bb`,
-                    `datetime`              AS `date`
+                    `altitude`              AS `altitude`,
+                    CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `date`
                 FROM
                     `tracks`
                 WHERE

@@ -40,6 +40,7 @@
             $options = new stdClass();
 
             $options->date      = $this->devices->current_date;
+            $options->gmtOffset = date('Z');
             $options->min_date  = $this->devices->getMinDate();
             $options->devices   = $this->devices->getUserDevices();
 

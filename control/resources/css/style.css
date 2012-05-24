@@ -94,10 +94,6 @@ h1 {
 
 }
 
-#registered_data {
-
-}
-
 .table .label {
     display: block;
     text-align: center;
@@ -340,14 +336,14 @@ h1 {
     opacity: 0.96;
 }
 
-.calendar_place.opened .caret {
+.opened .caret {
     border-top: 4px solid transparent;
     border-bottom: 4px solid #fff;
     margin-top: 7px;
     margin-left: 2px;
 }
 
-.calendar_place.closed .caret {
+.closed .caret {
     border-top: 4px solid #fff;
     border-bottom: 4px solid transparent;
     margin-top: 11px;
@@ -381,7 +377,6 @@ h1 {
     position: absolute;
 
     height: 130px;
-    opacity: 0.9;
 
     *display: inline;
     /* IE7 inline-block hack */
@@ -417,13 +412,13 @@ h1 {
     *margin-left: .3em;
 }
 
+.map_container .side_block.closed .side_block_content {
+    display: none;
+}
+
 .map_container .side_block b {
     display: block;
     cursor: pointer;
-}
-
-.map_container .side_block:hover {
-    opacity: 1;
 }
 
 .map_container .side_block .caret {
@@ -431,12 +426,27 @@ h1 {
     margin-top: 7px;
 }
 
+.map_container .caret {
+    border-bottom-color: transparent;
+    border-top-color: #000;
+}
+
+.map_container .closed .caret {
+    border-bottom-color: #000;
+    border-top-color: transparent;
+    margin-top: 3px;
+}
+
 .map_container .side_block table th {
-    width: 140px;
+    width: 115px;
 }
 
 .map_container .side_block table td {
-    width: 80px;
+    width: 105px;
+}
+
+.map_container .side_block .progress {
+    height: 7px !important;
 }
 
 .map_container .side_block table td,
@@ -447,17 +457,62 @@ h1 {
     line-height: 1.2em;
 }
 
+.side_block_content {
+    padding-top: 5px;
+}
+
 .map_container #right_side table {
     width: 100%;
-    margin-top: 10px;
 }
 
 #registered_info {
     bottom: 5px;
     right: 4px;
+    display: none;
 }
 
 #registered_data {
     bottom: 5px;
     right: 250px;
+    display: none;
+}
+
+.heading_icon {
+    background: url(../img/icons/arrows.png) no-repeat;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin: 0 4px -5px -3px;
+}
+
+.hi_n {
+    background-position: 0 0;
+}
+
+.hi_ne {
+    background-position: -16px 0;
+}
+
+.hi_e {
+    background-position: -32px 0;
+}
+
+.hi_se {
+    background-position: -48px 0;
+}
+
+.hi_s {
+    background-position: -64px 0;
+}
+
+.hi_sw {
+    background-position: -80px 0;
+}
+
+.hi_w {
+    background-position: -96px 0;
+}
+
+.hi_nw {
+    background-position: -112px 0;
 }
