@@ -75,33 +75,37 @@ core.map = {
 
     parseCSQ: function(csq){
         if(csq){
-            csq = parseInt(csq);
+            var dbm = -113 + csq * 2;
 
-            if(csq >= 30){
-                return {percentage: 100, level_name: 'идеально', level_class: 'info'};
+            if(dbm >= -35){
+                return {percentage: 100, level_name: 'идеально', level_class: 'info', dbm: dbm};
             };
 
-            if(csq >= 24 && csq < 30){
-                return {percentage: 83.3, level_name: 'отлично', level_class: 'success'};
+            if(dbm >= -50.6 && dbm < -35){
+                return {percentage: 83.3, level_name: 'отлично', level_class: 'success', dbm: dbm};
             };
 
-            if(csq >= 19 && csq < 24){
-                return {percentage: 66.64, level_name: 'хорошо', level_class: 'success'};
+            if(dbm >= -66.2 && dbm < -50.6){
+                return {percentage: 66.64, level_name: 'хорошо', level_class: 'success', dbm: dbm};
             };
 
-            if(csq >= 12 && csq < 19){
-                return {percentage: 49.98, level_name: 'средне', level_class: 'warning'};
+            if(dbm >= -81.8 && dbm < -66.2){
+                return {percentage: 49.98, level_name: 'средне', level_class: 'warning', dbm: dbm};
             };
 
-            if(csq >= 6 && csq < 12){
-                return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'danger'};
+            if(dbm >= -97.4 && dbm < -81.8){
+                return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
             };
 
-            if(csq > 0 && csq < 6){
-                return {percentage: 16.66, level_name: 'плохо', level_class: 'danger'};
+            if(dbm < -113 && dbm < -97.4){
+                return {percentage: 16.66, level_name: 'плохо', level_class: 'danger', dbm: dbm};
+            };
+
+            if(dbm <= -113){
+                return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: dbm};
             };
         }else{
-            return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger'};
+            return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: dbm};
         };
     },
 
@@ -644,7 +648,7 @@ core.map = {
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GSM</td>' +
-                                        '<td><div title="'+csq.level_name+'" class="progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
+                                        '<td><div title="'+csq.level_name+' ('+csq.dbm+' dBm)" class="progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GPS</td>' +
@@ -717,8 +721,6 @@ core.map = {
     },
 
     createCurrentPositionMarker: function(options){
-        console.log(options.device.point);
-
         if(options.device.point){
             var marker = new google.maps.Marker({
                 position    : new google.maps.LatLng(
@@ -1083,7 +1085,8 @@ core.map = {
             };
 
             if(no_points){
-                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'MYSQL')+'</b> не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины</p>';
+                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'COMMON')+'</b> ' +
+                            'не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины</p>';
 
                 this.showMapNotice(html);
                 $('#where_is_my_car').hide();
@@ -1105,6 +1108,7 @@ core.map = {
 
                 this.showMapNotice(message);
                 $('#where_is_my_car').hide();
+                $('#registered_info').hide();
 
                 this.setMapToDefaultPoint();
             }else{
@@ -1210,7 +1214,7 @@ core.map = {
     },
 
     processSystemInterval: function(){
-        console.log('Interval');
+
     },
 
     startSystemInterval: function(){
