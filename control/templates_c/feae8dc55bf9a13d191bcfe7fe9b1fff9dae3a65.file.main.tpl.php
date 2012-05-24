@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-23 18:54:14
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-24 12:52:28
          compiled from "Z:/home/loc/gps/control/templates\main.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:224234f71f561606444-69367567%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'feae8dc55bf9a13d191bcfe7fe9b1fff9dae3a65' => 
     array (
       0 => 'Z:/home/loc/gps/control/templates\\main.tpl',
-      1 => 1337784852,
+      1 => 1337849544,
       2 => 'file',
     ),
   ),
@@ -58,6 +58,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
                         <ul class="nav pull-right">
                             <?php if ($_smarty_tpl->tpl_vars['core']->value->auth->user_status['status']){?>
                                 <li><a href="/control/help/"><span class="badge badge-warning">4</span> Уведомления</a></li>
+                                <li class="divider-vertical"></li>
+                                <li><a href="/control/help/" title="Хватит еще на 9 дней"><b>450</b> руб.</a></li>
                             <?php }?>
 
                             <li class="divider-vertical"></li>

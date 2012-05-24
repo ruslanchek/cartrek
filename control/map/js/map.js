@@ -565,24 +565,32 @@ core.map = {
                 };
             };
 
-            //Show statistics
-            var html =  '<table class="table table-bordered table-condensed">' +
-                            '<tr><th class="info_tab_header" colspan="2">Сводка за день</th></tr>' +
-                            '<tr>' +
-                                '<td>Максимальная скорость</td>' +
-                                '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
-                            '</tr>' +
-                            '<tr>' +
-                                '<td>Средняя скорость</td>' +
-                                '<td><span id="average_speed" class="label">'+device.path.statistics.average_speed+' км/ч</span></td>' +
-                            '</tr>' +
-                            '<tr>' +
-                                '<td>Пройдено пути</td>' +
-                                '<td><span id="distance_driven" class="label">'+device.path.statistics.distance+' км</span></td>' +
-                            '</tr>' +
-                        '</table>';
+            if(device.path.statistics){
+                var max_speed_block = '';
 
-            $('#registered_data').html(html).fadeIn(150);
+                if(device.max_speed_marker){
+                    max_speed_block =   '<tr>' +
+                                            '<th>Максимальная скорость</th>' +
+                                            '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
+                                        '</tr>';
+                };
+
+                //Show statistics
+                var html =  '<b>Сводка за день <a href="javascript:void(0)" class="caret"></a></b>' +
+                            '<table class="">' +
+                                max_speed_block +
+                                '<tr>' +
+                                    '<th>Средняя скорость</th>' +
+                                    '<td><span id="average_speed" class="">'+device.path.statistics.average_speed+' км/ч</span></td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<th>Пройдено пути</th>' +
+                                    '<td><span id="distance_driven" class="">'+device.path.statistics.distance+' км</span></td>' +
+                                '</tr>' +
+                            '</table>';
+
+                $('#registered_data').html(html).fadeIn(150);
+            };
 
             $('#where_is_my_car').show();
 
@@ -596,32 +604,32 @@ core.map = {
             var hdop = this.parseHDOP(device.hdop);
             var csq = this.parseCSQ(device.csq);
 
-            var info_html =     '<table class="table table-bordered table-condensed">' +
-                                    '<tr><th class="info_tab_header" colspan="2">Текущее состояние</th></tr>' +
-                                    '<tr>' +
-                                        '<td>Последнее обновление местоположения</td>' +
-                                        '<td><span class="label">' +
+            var info_html =     '<b>Текущее состояние <a href="javascript:void(0)" class="caret"></a></b>' +
+                                '<table class="">' +
+                                    /*'<tr>' +
+                                        '<td width="70%">Последнее обновление местоположения</td>' +
+                                        '<td width="30%"><span class="label">' +
                                             this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
                                             this.humanizeTime(device.last_registered_point.date)+'</span>' +
                                         '</td>' +
                                     '</tr>' +
                                     '<tr>' +
-                                        '<td>Последнее обновление статуса</td>' +
-                                        '<td><span class="label">' +
+                                        '<td width="70%">Последнее обновление статуса</td>' +
+                                        '<td width="30%"><span class="label">' +
                                             this.humanizeDate(device.last_update, 'MYSQL')+'<br>'+
                                             this.humanizeTime(device.last_update)+'</span>' +
                                         '</td>' +
+                                    '</tr>' +*/
+                                    '<tr>' +
+                                        '<th>Курс</th>' +
+                                        '<td><span title="'+device.last_registered_point.bb+'&deg;">'+this.humanizeHeadingDegrees(device.last_registered_point.bb)+'</span></td>' +
                                     '</tr>' +
                                     '<tr>' +
-                                        '<td>Курс</td>' +
-                                        '<td><span class="label" title="'+device.last_registered_point.bb+'&deg;">'+this.humanizeHeadingDegrees(device.last_registered_point.bb)+'</span></td>' +
-                                    '</tr>' +
-                                    '<tr>' +
-                                        '<td>Сигнал GSM</td>' +
+                                        '<th>Сигнал GSM</td>' +
                                         '<td><div title="'+csq.level_name+'" class="progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
                                     '</tr>' +
                                     '<tr>' +
-                                        '<td>Сигнал GPS</td>' +
+                                        '<th>Сигнал GPS</td>' +
                                         '<td><div title="'+hdop.level_name+'" class="progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div></td>' +
                                     '</tr>' +
                                 '</table>';
@@ -1149,6 +1157,19 @@ core.map = {
                 $('.calendar_place').animate({top: 34, opacity: 0.96}, 400, 'easeOutExpo').removeClass('closed').addClass('opened');
             }else{
                 $('.calendar_place').animate({top: -210, opacity: 0.75}, 400, 'easeOutExpo').removeClass('opened').addClass('closed');
+            };
+        });
+
+        $('.map_container .side_block>b').live('click', function(){
+            var p = $(this).parent();
+            if(p.hasClass('closed')){
+                p.find('table').show();
+                p.animate({height: 130}, 200, 'easeOutExpo');
+                p.removeClass('closed');
+            }else{
+                p.find('table').hide();
+                p.animate({height: 19}, 200, 'easeOutExpo');
+                p.addClass('closed');
             };
         });
 

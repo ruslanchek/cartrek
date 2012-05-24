@@ -33,16 +33,11 @@
     <div class="clear"></div>
 </div>
 
-<div class="row-fluid">
-    <div class="span9">
-        <div id="map"></div>
-    </div>
-    <div class="span3">
-        <div id="right_side">
-            <div id="registered_info"></div>
-            <div id="registered_data"></div>
-        </div>
-    </div>
+<div class="row-fluid map_container">
+    <div id="map"></div>
+
+    <div id="registered_info" class="side_block"></div>
+    <div id="registered_data" class="side_block"></div>
 </div>
 
 <script>core.map.init();</script>
