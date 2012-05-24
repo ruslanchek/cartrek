@@ -592,6 +592,10 @@ core.map = {
                                     '<th>Пройдено пути</th>' +
                                     '<td><span id="distance_driven">'+device.path.statistics.distance+' км</span></td>' +
                                 '</tr>' +
+                                '<tr>' +
+                                    '<th>Остановки</th>' +
+                                    '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
+                                '</tr>' +
                             '</table></div>';
 
                 $('#registered_data').html(html).fadeIn(150);
@@ -691,7 +695,8 @@ core.map = {
 
     drawWaypointMarkers: function(points, device, map){
         if(points && points.length > 0){
-            var waypoint_markers = new Array();
+            var waypoint_markers = new Array(),
+                stops = 0;
 
             for(var i = 1, l = points.length; i < l; i++){
                 waypoint_markers.push(this.createWaypointMarker({
@@ -702,9 +707,16 @@ core.map = {
                         core.map.showMarkerData(marker);
                     }
                 }));
+
+                if(points[i].velocity <= 0){
+                    stops++;
+                };
             };
 
-            return waypoint_markers;
+            return {
+                waypoint_markers: waypoint_markers,
+                stops: stops
+            };
         };
     },
 
@@ -866,17 +878,18 @@ core.map = {
     createDevicePathData: function(device_id, points){
         var polyline = this.drawPath(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
             waypoint_markers = this.drawWaypointMarkers(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
-            max_speed = this.getMaxSpeed(waypoint_markers);
+            max_speed = this.getMaxSpeed(waypoint_markers.waypoint_markers);
 
         this.options.devices[this.getDeviceIndexById(device_id)].max_speed_marker = max_speed.marker;
         this.options.devices[this.getDeviceIndexById(device_id)].path = {
             points          : points,
             polyline        : polyline,
-            waypoint_markers: waypoint_markers,
+            waypoint_markers: waypoint_markers.waypoint_markers,
             statistics      : {
                 distance        : polyline.inKm(),
                 average_speed   : this.getAverageSpeed(points),
-                max_speed       : max_speed.value
+                max_speed       : max_speed.value,
+                stops           : waypoint_markers.stops
             }
         };
 
