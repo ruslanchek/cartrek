@@ -606,10 +606,10 @@ core.map = {
         };
 
         if(device.last_registered_point){
-            var hdop    = this.parseHDOP(device.hdop);
-            var csq     = this.parseCSQ(device.csq);
-            var heading = this.humanizeHeadingDegrees(device.last_registered_point.bb);
-            var title   = 'Последнее обновление местоположения: '+this.humanizeDate(device.last_registered_point.date, 'MYSQL')+
+            var hdop    = this.parseHDOP(device.hdop),
+                csq     = this.parseCSQ(device.csq),
+                heading = this.humanizeHeadingDegrees(device.last_registered_point.bb),
+                title   = 'Последнее обновление местоположения: '+this.humanizeDate(device.last_registered_point.date, 'MYSQL')+
                           ', в '+
                           this.humanizeTime(device.last_registered_point.date) +
                           ', последнее обновление статуса: '+
