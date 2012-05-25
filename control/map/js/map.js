@@ -735,6 +735,12 @@ core.map = {
                     this.convertNMEAtoWGS84(options.device.point.lat),
                     this.convertNMEAtoWGS84(options.device.point.lng)
                 ),
+                icon        : new google.maps.MarkerImage(
+                    '/control/resources/img/icons/arrows.png',
+                    new google.maps.Size(16, 16),
+                    new google.maps.Point(0, 0),
+                    new google.maps.Point(8, 8)
+                ),
                 point       : options.device.point,
                 map         : options.map,
                 title       : options.device.name+' — текущее положение ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
