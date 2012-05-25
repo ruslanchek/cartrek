@@ -75,30 +75,26 @@ core.map = {
 
     parseCSQ: function(csq){
         if(csq){
-            var dbm = -113 + csq * 2;
+            var dbm = (-113) + (csq * 2);
 
-            if(dbm >= -35){
+            if(dbm >= -77){
                 return {percentage: 100, level_name: 'идеально', level_class: 'info', dbm: dbm};
             };
 
-            if(dbm >= -50.6 && dbm < -35){
-                return {percentage: 83.3, level_name: 'отлично', level_class: 'success', dbm: dbm};
+            if(dbm >= -86 && dbm < -78){
+                return {percentage: 80, level_name: 'отлично', level_class: 'success', dbm: dbm};
             };
 
-            if(dbm >= -66.2 && dbm < -50.6){
-                return {percentage: 66.64, level_name: 'хорошо', level_class: 'success', dbm: dbm};
+            if(dbm >= -92 && dbm < -87){
+                return {percentage: 60, level_name: 'хорошо', level_class: 'success', dbm: dbm};
             };
 
-            if(dbm >= -81.8 && dbm < -66.2){
-                return {percentage: 49.98, level_name: 'средне', level_class: 'warning', dbm: dbm};
+            if(dbm >= -101 && dbm < -93){
+                return {percentage: 40, level_name: 'средне', level_class: 'warning', dbm: dbm};
             };
 
-            if(dbm >= -97.4 && dbm < -81.8){
-                return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
-            };
-
-            if(dbm < -113 && dbm < -97.4){
-                return {percentage: 16.66, level_name: 'плохо', level_class: 'danger', dbm: dbm};
+            if(dbm <= -102 && dbm > -113){
+                return {percentage: 20, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
             };
 
             if(dbm <= -113){
