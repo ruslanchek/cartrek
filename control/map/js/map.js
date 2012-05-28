@@ -42,9 +42,9 @@ core.map = {
     },
 
     parseHDOP: function(hdop){
-        if(hdop){
-            hdop = parseFloat(hdop);
+        hdop = parseFloat(hdop);
 
+        if(hdop > 0){
             if(hdop <= 1 && hdop > 0){
                 return {percentage: 100, level_name: 'идеально', level_class: 'info'};
             };
@@ -592,6 +592,10 @@ core.map = {
                                     '<th>Остановки</th>' +
                                     '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
                                 '</tr>' +
+                                '<tr>' +
+                                    '<th>График</th>' +
+                                    '<td><a href="javascript:void(0)" class="label label-info" onclick="core.map.showCharts()">Показать</a></td>' +
+                                '</tr>' +
                             '</table></div>';
 
                 $('#registered_data').html(html).fadeIn(150);
@@ -616,7 +620,6 @@ core.map = {
                           this.humanizeDate(device.last_update, 'MYSQL') +
                           ', в '+
                           this.humanizeTime(device.last_update);
-
 
             var info_html =     '<b title="'+title+'">Текущее состояние <a href="javascript:void(0)" class="caret"></a></b>' +
                                 '<div class="side_block_content"><table class="">' +
@@ -648,11 +651,11 @@ core.map = {
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GSM</td>' +
-                                        '<td><div title="'+csq.level_name+' ('+csq.dbm+' dBm)" class="progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
+                                        '<td><div title="'+csq.level_name+' ('+csq.dbm+' dBm)" class="indicator progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GPS</td>' +
-                                        '<td><div title="'+hdop.level_name+'" class="progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div></td>' +
+                                        '<td><div title="'+hdop.level_name+'" class="indicator progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div></td>' +
                                     '</tr>' +
                                 '</table></div>';
 
@@ -807,7 +810,9 @@ core.map = {
             };
         };
 
-        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
+        var csq = this.parseCSQ(marker.point.csq),
+            hdop = this.parseHDOP(marker.point.hdop),
+            html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
                     '<table class="table table-bordered table-condensed">' +
                         '<tr>' +
                             '<td>Отметка</td>' +
@@ -828,6 +833,14 @@ core.map = {
                         '<tr>' +
                             '<td>Высота</td>' +
                             '<td><span class="label">'+marker.point.altitude+' м</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Сигнал GSM</td>' +
+                            '<td><div title="'+csq.level_name+' ('+csq.dbm+' dBm)" class="indiacator progress progress-'+csq.level_class+'"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Сигнал GPS</td>' +
+                            '<td><div title="'+hdop.level_name+'" class="indiacator progress progress-'+hdop.level_class+'"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div></td>' +
                         '</tr>' +
                     '</table>' + additional;
 
@@ -1243,6 +1256,61 @@ core.map = {
     restartSystemInterval: function(){
         this.stopSystemInterval();
         this.startSystemInterval();
+    },
+
+    getChartData: function(device_id, info_type){
+        var device = this.options.devices[this.getDeviceIndexById(device_id)];
+
+        var points = [];
+
+        for(var i = 0, l = device.path.points.length; i < l; i += 1){
+            var d = new Date(device.path.points[i].date);
+            console.log(d)
+            console.log(d.getTime());
+
+            points.push([d.getTime(), this.convertKnotsToKms(device.path.points[i].velocity)]);
+        };
+
+        return [{
+            label: "Скорость",
+            data: points,
+            xaxis: {
+                mode: "time",
+                timeformat: "%h:%M:%S"
+            }
+        }];
+    },
+
+    showCharts: function(){
+        var content =   '<div class="tabbable tabs-right">' +
+                            '<ul class="nav nav-tabs">' +
+                            '</ul>' +
+                            '<div class="tab-content">' +
+                                '<div id="chart1"></div>' +
+                                '<div id="chart2"></div>' +
+                                '<div id="chart3"></div>' +
+                                '<div id="chart4"></div>' +
+                            '</div>' +
+                        '</div>';
+
+        core.modal.show({
+            header: 'График',
+            content: content,
+            width: 700,
+            action: function(){
+                //alert('zzz')
+            }
+        });
+
+        $('#chart1').css({
+            height: 350,
+            width: '100%'
+        });
+
+        var plot = $.plot(
+            $("#chart1"),
+            this.getChartData(this.options.current_devece_id)
+        );
     },
 
     init: function(){

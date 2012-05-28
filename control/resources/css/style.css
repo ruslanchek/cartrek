@@ -313,7 +313,7 @@ h1 {
     line-height: 25px;
     color: #fff;
     left: 50%;
-    margin-left: -100px;
+    margin-left: -120px;
     height: 270px;
     z-index: 2;
     background-color: #2c2c2c;
@@ -515,4 +515,9 @@ h1 {
 
 .hi_nw {
     background-position: -112px 0;
+}
+
+.indiacator {
+    height: 16px;
+    margin-bottom: 0;
 }

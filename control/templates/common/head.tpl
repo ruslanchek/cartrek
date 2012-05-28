@@ -6,8 +6,10 @@
 <link rel="stylesheet" href="/control/resources/plugins/jquery_ui/ui-lightness/jquery-ui-1.8.20.custom.css" />
 
 <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
-<script src="/control/resources/js/ocanvas.js"></script>
 <script src="/control/resources/js/jquery-1.7.2.min.js"></script>
+<script src="/control/resources/js/ocanvas.js"></script>
+<script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
+<script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>
 <script src="/control/resources/js/jquery.cookie.js"></script>
 <script src="/control/resources/bootsrtap/js/bootstrap.min.js"></script>
 <script src="/control/resources/plugins/jquery_ui/jquery-ui-1.8.20.custom.min.js"></script>

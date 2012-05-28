@@ -148,6 +148,8 @@
                     `speed`                 AS `velocity`,
                     `heading`               AS `bb`,
                     `altitude`              AS `altitude`,
+                    `csq`,
+                    `hdop`,
                     CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `date`
                 FROM
                     `tracks`
@@ -181,6 +183,8 @@
                     `speed`                 AS `velocity`,
                     `heading`               AS `bb`,
                     `altitude`              AS `altitude`,
+                    `csq`,
+                    `hdop`,
                     CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `date`
                 FROM
                     `tracks`

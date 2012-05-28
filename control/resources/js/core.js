@@ -75,8 +75,8 @@ core.modal = {
                                 '</div>' +
                                 '<div class="modal-body"></div>' +
                                 '<div class="modal-footer">' +
-                                    '<a href="javascript:void(0)" class="btn close_modal">Закрыть</a>' +
-                                    '<a href="javascript:void(0)" class="btn btn-primary save_modal" autocomplete="off">Сохранить</a>' +
+                                    '<a href="javascript:void(0)" class="btn btn-primary save_modal pull-left" autocomplete="off">Сохранить</a>' +
+                                    '<a href="javascript:void(0)" class="btn close_modal pull-left">Закрыть</a>' +
                                 '</div>' +
                             '</div>');
 
@@ -92,12 +92,26 @@ core.modal = {
             })
             .data('loading-text', 'Сохранение...');
 
-
         $('body').prepend($modal_html);
-
         $modal_html.fadeIn(100);
-
         this.modal = $modal_html;
+
+        if(options.width){
+            var w, m;
+
+            if(typeof options.width == 'number'){
+                w = options.width;
+                m = -options.width/2;
+            }else{
+                w = options.width;
+                m = -options.width.substring(0, options.width.length - 1) / 2+'%';
+            };
+
+            $('.modal').css({
+                width: w,
+                marginLeft: m
+            });
+        };
     }
 };
 
