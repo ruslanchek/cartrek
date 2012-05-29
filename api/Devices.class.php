@@ -1,15 +1,32 @@
 <?php
     Class Devices extends Core {
         public
-            $current_date;
-
-        private
-            $acct;
+            $current_date,
+            $devices_present = false;
 
         public function __construct(){
             parent::__construct();
-            $this->acct = 'test01';
+
+            $this->checkForDevices();
             $this->setCurrentDate();
+        }
+
+        public function checkForDevices(){
+            $query = "
+                SELECT
+                    COUNT(*) AS `count`
+                FROM
+                    `devices`
+                WHERE
+                    `user_id`   = ".intval($this->auth->user_status['userdata']['id'])." &&
+                    `active`    = 1
+            ";
+
+            $result = $this->db->assocItem($query);
+
+            if($result['count'] >= 1){
+                $this->devices_present = true;
+            };
         }
 
         public function getMinDate(){
@@ -19,7 +36,7 @@
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = 1 &&
+                    `user_id`   = ".intval($this->auth->user_status['userdata']['id'])." &&
                     `active`    = 1
             ";
 
@@ -84,7 +101,7 @@
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = 1 &&
+                    `user_id`   = ".intval($this->auth->user_status['userdata']['id'])." &&
                     `active`    = 1
             ";
 
@@ -117,7 +134,7 @@
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = 1 &&
+                    `user_id`   = ".intval($this->auth->user_status['userdata']['id'])." &&
                     `active`    = 1 &&
                     `id`        = ".intval($id)."
             ";

@@ -22,9 +22,9 @@
             <fieldset>
             {if $core->module.form.step == 1}
                 <div class="control-group">
-                    <label class="control-label" for="secret">Идентификатор</label>
+                    <label class="control-label" for="code">Серийный номер</label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="secret" name="secret" value="{if isset($smarty.session.add_car.fields.secret)}{$smarty.session.add_car.fields.secret}{/if}">
+                        <input type="text" class="input-xlarge" id="code" name="code" value="{if isset($smarty.session.add_car.fields.code)}{$smarty.session.add_car.fields.code}{/if}">
                     </div>
                 </div>
             {/if}
@@ -69,13 +69,14 @@
             </fieldset>
 
             <div class="form-actions">
+                {if isset($core->module.form.back_btn) && $core->module.form.back_btn}<button type="submit" name="back" class="btn" autocomplete="off">Назад</button>{/if}
                 <button id="submit" type="submit" class="btn btn-primary" autocomplete="off">{$core->module.form.submit_text}</button>
             </div>
         </form>
     </div>
     <div class="span3">
-        <p>{$core->module.form.tip}</p>
+        <div class="alert alert-info">{$core->module.form.tip}</div>
 
-        {$core->module.form|print_r}
+        {*$core->module.form|print_r*}
     </div>
 </div>

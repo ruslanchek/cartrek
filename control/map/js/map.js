@@ -434,7 +434,7 @@ core.map = {
 
     resizeMap: function(bind){
         $('#map').css({
-            height: $(window).height() - $('#map').offset().top - 40
+            height: $(window).height() - $('#map').offset().top - 20
         });
 
         if(bind){

@@ -3,11 +3,10 @@
         public function __construct(){
             parent::__construct();
 
+            //If user not logged in
             if(!$this->auth->user_status['status']){
                 header('Location: /control/auth/login');
             };
-
-            $this->devices->setCurrentDate();
 
             $this->init(array(
                 'name'  => 'map',
@@ -15,25 +14,31 @@
                 'dir'   => '/control/map'
             ));
 
-            if($this->ajax_mode){
-                switch($_GET['action']){
-                    case 'getOptions' : {
-                        print json_encode($this->getOptions());
-                    }; break;
+            //If user have any actve devices
+            if($this->devices->devices_present){
+                if($this->ajax_mode){
+                    switch($_GET['action']){
+                        case 'getOptions' : {
+                            print json_encode($this->getOptions());
+                        }; break;
 
-                    case 'getPoints' : {
-                        print json_encode($this->devices->getPoints($_GET['device_id']));
-                    }; break;
+                        case 'getPoints' : {
+                            print json_encode($this->devices->getPoints($_GET['device_id']));
+                        }; break;
 
-                    case 'setCurrentDate' : {
-                        $this->devices->setCurrentDate($_GET['date']);
-                    }; break;
+                        case 'setCurrentDate' : {
+                            $this->devices->setCurrentDate($_GET['date']);
+                        }; break;
+                    };
+
+                    exit;
                 };
 
-                exit;
+                $this->smarty->assign('options', json_encode($this->getOptions()));
+                $this->template = 'map.tpl';
+            }else{
+                $this->template = 'main.tpl';
             };
-
-            $this->smarty->assign('options', json_encode($this->getOptions()));
         }
 
         public function getOptions(){

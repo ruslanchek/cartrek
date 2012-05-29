@@ -54,3 +54,14 @@
         </div>
     {/if}
 </div>
+
+<style>
+    body {
+        background: url(/control/resources/img/patterns/gears.png);
+        color: #fff;
+    }
+
+    hr {
+        opacity: 0.2;
+    }
+</style>

@@ -19,7 +19,7 @@
 
             $this->init(array(
                 'name'  => 'fleet_add',
-                'title' => 'Добавление автомобиля',
+                'title' => 'Добавление устройства',
                 'dir'   => '/control/fleet/add',
                 'form'  => $form
             ));
@@ -34,15 +34,16 @@
                 switch($_POST['step']){
                     case 1 : {
                         $form['submit_text']    = 'Далее';
-                        $form['tip']            = '<p>Подсказка</p>';
+                        $form['tip']            = '<h3>Подсказка</h3><p>Серийный номер написан на карточке, вложенной в коробку с комплектом трекера. Если вы не получали такой карточки, обратитесь к диллеру.</p>';
 
-                        if($_POST['secret']){
-                            $_SESSION['add_car']['fields']['secret'] = $_POST['secret'];
-                            $form['step'] = 2;
+                        if(isset($_POST['code']) && $_POST['code']){
+                            $_SESSION['add_car']['fields']['code'] = $_POST['code'];
+                            $form['step']           = 2;
+                            $form['back_btn']       = true;
                         }else{
-                            $form['status'] = false;
-                            $form['message'] = 'Введите идентификатор';
-                            $form['step'] = 1;
+                            $form['status']     = false;
+                            $form['message']    = 'Введите идентификатор';
+                            $form['step']       = 1;
 
                             return $form;
                         };
@@ -51,12 +52,19 @@
                     case 2 : {
                         $form['step']           = 3;
                         $form['submit_text']    = 'Далее';
-                        $form['tip']            = '<p>Подсказка</p>';
+                        $form['back_btn']       = true;
+                        $form['tip']            = '<h3>Подсказка</h3><p>Называйте устройства по возможности именами владельцев, это облегчит идентефикацию в дальнейшем.</p>';
+
+                        if(isset($_POST['back'])){
+                            $form['step'] = 1;
+                            $form['back_btn'] = false;
+                            return $form;
+                        };
 
                         if(!$_POST['name']){
-                            $form['status'] = false;
-                            $form['message'] = 'Введите название';
-                            $form['step'] = 2;
+                            $form['status']     = false;
+                            $form['message']    = 'Введите название';
+                            $form['step']       = 2;
 
                             return $form;
                         }else{
@@ -64,9 +72,9 @@
                         };
 
                         if(!$_POST['make']){
-                            $form['status'] = false;
-                            $form['message'] = 'Введите марку автомобиля';
-                            $form['step'] = 2;
+                            $form['status']     = false;
+                            $form['message']    = 'Введите марку автомобиля';
+                            $form['step']       = 2;
 
                             return $form;
                         }else{
@@ -74,9 +82,9 @@
                         };
 
                         if(!$_POST['model']){
-                            $form['status'] = false;
-                            $form['message'] = 'Введите модель автомобиля';
-                            $form['step'] = 2;
+                            $form['status']     = false;
+                            $form['message']    = 'Введите модель автомобиля';
+                            $form['step']       = 2;
 
                             return $form;
                         }else{
@@ -84,9 +92,9 @@
                         };
 
                         if(!$_POST['g_id']){
-                            $form['status'] = false;
-                            $form['message'] = 'Введите госномер';
-                            $form['step'] = 2;
+                            $form['status']     = false;
+                            $form['message']    = 'Введите госномер';
+                            $form['step']       = 2;
 
                             return $form;
                         }else{
