@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-23 23:35:30
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-29 23:43:21
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/common/head.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:4085301004f800a68e96fd2-77204142%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6374aa5b6026bc95d74cb4097c8f19d5c54098bd' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/common/head.tpl',
-      1 => 1337801704,
+      1 => 1338319496,
       2 => 'file',
     ),
   ),
@@ -32,8 +32,10 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <link rel="stylesheet" href="/control/resources/plugins/jquery_ui/ui-lightness/jquery-ui-1.8.20.custom.css" />
 
 <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
-<script src="/control/resources/js/ocanvas.js"></script>
 <script src="/control/resources/js/jquery-1.7.2.min.js"></script>
+<script src="/control/resources/js/ocanvas.js"></script>
+<script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
+<script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>
 <script src="/control/resources/js/jquery.cookie.js"></script>
 <script src="/control/resources/bootsrtap/js/bootstrap.min.js"></script>
 <script src="/control/resources/plugins/jquery_ui/jquery-ui-1.8.20.custom.min.js"></script>

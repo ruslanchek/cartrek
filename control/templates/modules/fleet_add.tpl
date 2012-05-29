@@ -3,80 +3,131 @@
 </div>
 
 <div class="row-fluid">
-    <div class="span9">
-        <form id="add_car_form" class="form-horizontal" action="" method="POST">
-            <input type="hidden" name="action" value="add_car">
-            <input type="hidden" name="step" value="{$core->module.form.step}">
+    {if $core->module.form.step == 1}
+        <div class="span9">
+            <form id="add_car_form" class="form-horizontal" action="" method="POST">
+                <input type="hidden" name="action" value="add_car">
+                <input type="hidden" name="step" value="1">
 
-            <div class="progress progress-striped{if $core->module.form.step == 'finish'} progress-success{/if} ">
-                <div class="bar" style="width: {(100/4*$core->module.form.step)}%;">Шаг {$core->module.form.step} из 4</div>
+                <div class="progress progress-striped">
+                    <div class="bar" style="width: 33%;">Шаг 1 из 3</div>
+                </div>
+
+                {if isset($core->module.form.message)}
+                    <div class="alert {if $core->module.form.status}alert-success{else}alert-error{/if}">
+                        <a class="close" data-dismiss="alert" href="javascript:void(0)">×</a>
+                        {$core->module.form.message}
+                    </div>
+                {/if}
+
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="code">Серийный номер</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="code" name="code" value="{if isset($smarty.session.add_car.code)}{$smarty.session.add_car.code}{else}{$smarty.post.add_car.code}{/if}">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button id="submit" type="submit" class="btn btn-primary" autocomplete="off">Далее</button>
+                </div>
+            </form>
+        </div>
+        <div class="span3">
+            <div class="alert alert-info">
+                <h3>Подсказка</h3>
+                <p>
+                    Серийный номер написан на карточке, вложенной в коробку с комплектом трекера.
+                    Если вы не получали такой карточки, обратитесь к диллеру.
+                </p>
+            </div>
+        </div>
+    {/if}
+
+
+    {if $core->module.form.step == 2}
+        <div class="span9">
+            <form id="add_car_form" class="form-horizontal" action="" method="POST">
+                <input type="hidden" name="action" value="add_car">
+                <input type="hidden" name="step" value="2">
+
+                <div class="progress progress-striped">
+                    <div class="bar" style="width: 66%;">Шаг 2 из 3</div>
+                </div>
+
+                {if isset($core->module.form.message)}
+                    <div class="alert {if $core->module.form.status}alert-success{else}alert-error{/if}">
+                        <a class="close" data-dismiss="alert" href="javascript:void(0)">×</a>
+                        {$core->module.form.message}
+                    </div>
+                {/if}
+
+                <fieldset>
+                    <div class="control-group">
+                        <label class="control-label" for="name">Название</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="name" name="name" value="{if isset($smarty.session.add_car.name)}{$smarty.session.add_car.name}{else}{$smarty.post.add_car.name}{/if}">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="make">Марка</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" autocomplete="off" id="make" name="make" value="{if isset($smarty.session.add_car.make)}{$smarty.session.add_car.make}{else}{$smarty.post.add_car.make}{/if}">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="model">Модель</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="model" name="model" value="{if isset($smarty.session.add_car.model)}{$smarty.session.add_car.model}{else}{$smarty.post.add_car.model}{/if}">
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="g_id">Госномер</label>
+                        <div class="controls">
+                            <input type="text" class="input-xlarge" id="g_id" name="g_id" value="{if isset($smarty.session.add_car.g_id)}{$smarty.session.add_car.g_id}{else}{$smarty.post.add_car.g_id}{/if}">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button type="submit" name="back" class="btn" autocomplete="off">Назад</button>
+                    <button id="submit" type="submit" class="btn btn-primary" autocomplete="off">Далее</button>
+                </div>
+            </form>
+        </div>
+        <div class="span3">
+            <div class="alert alert-info">
+                <h3>Подсказка</h3>
+                <p>
+                    Называйте устройства по возможности именами владельцев, это облегчит идентефикацию в дальнейшем.
+                </p>
+            </div>
+        </div>
+    {/if}
+
+
+    {if $core->module.form.step == 3}
+        <div class="span9">
+            <div class="progress progress-striped progress-success">
+                <div class="bar" style="width: 100%;">Шаг 3 из 3</div>
             </div>
 
             {if isset($core->module.form.message)}
                 <div class="alert {if $core->module.form.status}alert-success{else}alert-error{/if}">
-                    <a class="close" data-dismiss="alert" href="javascript:void(0)">×</a>
                     {$core->module.form.message}
                 </div>
             {/if}
 
-            <fieldset>
-            {if $core->module.form.step == 1}
-                <div class="control-group">
-                    <label class="control-label" for="code">Серийный номер</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="code" name="code" value="{if isset($smarty.session.add_car.fields.code)}{$smarty.session.add_car.fields.code}{/if}">
-                    </div>
-                </div>
-            {/if}
 
-            {if $core->module.form.step == 2}
-                <div class="control-group">
-                    <label class="control-label" for="name">Название</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="name" name="name" value="{if isset($smarty.session.add_car.fields.name)}{$smarty.session.add_car.fields.name}{/if}">
-                    </div>
-                </div>
+        </div>
+        <div class="span3">
+            <div class="alert alert-info">
 
-                <div class="control-group">
-                    <label class="control-label" for="make">Марка</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" autocomplete="off" id="make" name="make" value="{if isset($smarty.session.add_car.fields.make)}{$smarty.session.add_car.fields.make}{/if}">
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="model">Модель</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="model" name="model" value="{if isset($smarty.session.add_car.fields.model)}{$smarty.session.add_car.fields.model}{/if}">
-                    </div>
-                </div>
-
-                <div class="control-group">
-                    <label class="control-label" for="g_id">Госномер</label>
-                    <div class="controls">
-                        <input type="text" class="input-xlarge" id="g_id" name="g_id" value="{if isset($smarty.session.add_car.fields.g_id)}{$smarty.session.add_car.fields.g_id}{/if}">
-                    </div>
-                </div>
-            {/if}
-
-            {if $core->module.form.step == 3}
-                ыыы
-            {/if}
-
-            {if $core->module.form.step == 4}
-                ыыы1
-            {/if}
-            </fieldset>
-
-            <div class="form-actions">
-                {if isset($core->module.form.back_btn) && $core->module.form.back_btn}<button type="submit" name="back" class="btn" autocomplete="off">Назад</button>{/if}
-                <button id="submit" type="submit" class="btn btn-primary" autocomplete="off">{$core->module.form.submit_text}</button>
             </div>
-        </form>
-    </div>
-    <div class="span3">
-        <div class="alert alert-info">{$core->module.form.tip}</div>
-
-        {*$core->module.form|print_r*}
-    </div>
+        </div>
+    {/if}
 </div>
