@@ -1,5 +1,5 @@
 <?php
-    Class Main extends Core {
+    Class Billing extends Core {
         public function __construct(){
             parent::__construct();
 
@@ -8,9 +8,9 @@
             };
 
             $this->init(array(
-                'name'  => 'main',
-                'title' => 'Пользователь',
-                'dir'   => '/control'
+                'name'  => 'billing',
+                'title' => 'Баланс',
+                'dir'   => '/control/billing'
             ));
         }
 

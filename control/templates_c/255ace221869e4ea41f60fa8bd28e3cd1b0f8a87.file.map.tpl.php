@@ -1,6 +1,6 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-29 23:58:20
+<?php /* Smarty version Smarty-3.1.7, created on 2012-05-31 00:20:23
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/modules/map.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:731321044f800a68eb8241-73154553%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:2831870014fc681072117f1-42090688%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
@@ -11,19 +11,19 @@ $_valid = $_smarty_tpl->decodeProperties(array (
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '731321044f800a68eb8241-73154553',
+  'nocache_hash' => '2831870014fc681072117f1-42090688',
   'function' => 
   array (
   ),
-  'version' => 'Smarty-3.1.7',
-  'unifunc' => 'content_4f800a68ebdc8',
   'variables' => 
   array (
     'core' => 0,
   ),
   'has_nocache_code' => false,
+  'version' => 'Smarty-3.1.7',
+  'unifunc' => 'content_4fc68107299fb',
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_4f800a68ebdc8')) {function content_4f800a68ebdc8($_smarty_tpl) {?><?php if ($_smarty_tpl->tpl_vars['core']->value->devices->devices_present){?>
+<?php if ($_valid && !is_callable('content_4fc68107299fb')) {function content_4fc68107299fb($_smarty_tpl) {?><?php if ($_smarty_tpl->tpl_vars['core']->value->devices->devices_present){?>
     <div class="calendar_place closed">
         <div class="datepicker">
             <div id="datepicker"></div>

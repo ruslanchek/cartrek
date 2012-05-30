@@ -3,7 +3,7 @@
         public function __construct(){
             parent::__construct();
 
-            if(!$this->auth->user_status['status']){
+            if(!$this->auth->user['status']){
                 header('Location: /control/auth/login');
             };
 
@@ -50,7 +50,7 @@
                 UPDATE
                     `devices`
                 SET
-                    `user_id`   = ".intval($this->auth->user_status['userdata']['id']).",
+                    `user_id`   = ".intval($this->auth->user['data']['id']).",
                     `active`    = 1,
                     `name`      = '".$this->db->quote($_POST['name'])."',
                     `make`      = '".$this->db->quote($_POST['make'])."',

@@ -1,7 +1,7 @@
 <?php
 	class Auth extends Core{
 		public
-            $user_status;
+            $user;
 
         private
             $session_time,
@@ -23,7 +23,8 @@
                 'last_activity',
                 'online',
                 'vk_id',
-                'fb_id'
+                'fb_id',
+                'balance'
             );
 
             $this->password_length = 6;
@@ -33,8 +34,8 @@
             $this->checkLogin();
 
             unset(
-                $this->user_status['userdata']['password'],
-                $this->user_status['userdata']['hash']
+                $this->user['data']['password'],
+                $this->user['data']['hash']
             );
         }
 
@@ -43,11 +44,11 @@
             $result = '';
 
             foreach($this->fields as $items){
-                $result .= '`'.$items.'`,';
+                $result .= '`public_users`.`'.$items.'`,';
             };
 
             foreach($this->addition_fields as $items){
-                $result .= '`'.$items.'`,';
+                $result .= '`public_users`.`'.$items.'`,';
             };
 
             $result = substr($result, 0, strlen($result)-1);
@@ -77,9 +78,9 @@
             setcookie("id", $data['id'], time() + $this->session_time, "/");
             setcookie("hash", $hash, time() + $this->session_time, "/");
 
-            $this->user_status['status'] = true;
-            $this->user_status['message'] = 'Вы успешно авторизовались';
-            $this->user_status['userdata'] = $data;
+            $this->user['status'] = true;
+            $this->user['message'] = 'Вы успешно авторизовались';
+            $this->user['data'] = $data;
             $this->getUserSharedAccountStatus();
             header('Location: /control');
         }
@@ -93,7 +94,7 @@
 			        `last_activity` = NOW(),
 			        `online` = '1'
 			    WHERE
-			        `id` = '".$this->user_status['userdata']['id']."'
+			        `id` = '".$this->user['data']['id']."'
 			");
 		}
 
@@ -102,11 +103,14 @@
             if(isset($_COOKIE['id'])){
                 $query = "
                     SELECT
-                        ".$this->getFields()."
+                        ".$this->getFields().",
+                        COUNT(`events`.`id`) AS `new_events_count`
                     FROM
                         `public_users`
+                    LEFT JOIN
+                        `events` ON (`events`.`user_id` = `public_users`.`id` && `events`.`active` = 1)
                     WHERE
-                        `id` = '".intval($_COOKIE['id'])."'
+                        `public_users`.`id` = '".intval($_COOKIE['id'])."'
                     LIMIT 1
                 ";
 
@@ -117,9 +121,9 @@
                     $this->exitUser();
                 }else{
                     if(($data['hash'] == $_COOKIE['hash'] && $data['id'] == $_COOKIE['id']) && !empty($data)){
-                        $this->user_status['status']    = true;
-                        $this->user_status['message']   = "Autherized";
-                        $this->user_status['userdata']  = $data;
+                        $this->user['status']    = true;
+                        $this->user['message']   = "Autherized";
+                        $this->user['data']  = $data;
                         $this->getUserSharedAccountStatus();
 
                         $this->setActivity();
@@ -128,8 +132,8 @@
                         setcookie("id", "", time() - $this->session_time, "/");
                         setcookie("hash", "", time() - $this->session_time, "/");
 
-                        $this->user_status['status'] = false;
-                        $this->user_status['message'] = 'Autherization required';
+                        $this->user['status'] = false;
+                        $this->user['message'] = 'Autherization required';
                     };
                 };
             };
@@ -138,28 +142,28 @@
         //Check if user from a shared account
         private function getUserSharedAccountStatus(){
             if(
-                $this->user_status['userdata']['vk_id'] > 0 ||
-                $this->user_status['userdata']['fb_id'] > 0
+                $this->user['data']['vk_id'] > 0 ||
+                $this->user['data']['fb_id'] > 0
             ){
-                $this->user_status['shared_account'] = true;
+                $this->user['shared_account'] = true;
             }else{
-                $this->user_status['shared_account'] = false;
+                $this->user['shared_account'] = false;
             };
         }
 
         //Try to user autherize
         public function auth($login, $password){
             if(!$login && $password){
-                $this->user_status['status'] = false;
-                $this->user_status['message'] = "Вы не ввели логин";
+                $this->user['status'] = false;
+                $this->user['message'] = "Вы не ввели логин";
 
             }elseif(!$password && $login){
-                $this->user_status['status'] = false;
-                $this->user_status['message'] = "Вы не ввели пароль";
+                $this->user['status'] = false;
+                $this->user['message'] = "Вы не ввели пароль";
 
             }elseif(!$password && !$login){
-                $this->user_status['status'] = false;
-                $this->user_status['message'] = "Вы не ввели логин и пароль";
+                $this->user['status'] = false;
+                $this->user['message'] = "Вы не ввели логин и пароль";
 
             }else{
                 if($this->utils->matchPattern($login, 'email')){
@@ -189,12 +193,12 @@
                 if($data['password'] === md5(md5($password))){
                     $this->forceLogin($data);
                 }else{
-                    $this->user_status['status'] = false;
-                    $this->user_status['message'] = 'Вы ввели неправильный логин или пароль';
+                    $this->user['status'] = false;
+                    $this->user['message'] = 'Вы ввели неправильный логин или пароль';
                 };
             };
 
-            return $this->user_status;
+            return $this->user;
         }
 
         //Exit
@@ -206,7 +210,7 @@
 			        `hash` = '',
 			        `online` = ''
 			    WHERE
-			        `id` = ".intval($this->user_status['userdata']['id'])."
+			        `id` = ".intval($this->user['data']['id'])."
 			");
             
 			setcookie("id", "", time() - $this->session_time, "/");
@@ -402,7 +406,7 @@
                 FROM
                     `public_users`
                 WHERE
-                    `id` = ".intval($this->user_status['userdata']['id'])."
+                    `id` = ".intval($this->user['data']['id'])."
                 LIMIT 1
             ";
 
@@ -417,13 +421,13 @@
                             SET
                                 `password` = '".$this->db->quote(md5(md5(trim($p_new))))."'
                             WHERE
-                                `id` = ".intval($this->user_status['userdata']['id'])."
+                                `id` = ".intval($this->user['data']['id'])."
                         ");
 
                         $this->mail->send(
                             'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
                             'account_manager@'.$_SERVER['SERVER_NAME'],
-                            $this->user_status['userdata']['email'],
+                            $this->user['data']['email'],
                             'Ваш пароль изменен',
                             'mailing/password_changed.tpl',
                             array(
@@ -531,7 +535,7 @@
         }
 
         /* Change user data */
-        public function changeUserData($user_id){
+        public function changedata($user_id){
             if(intval($user_id) > 0){
                 $new_data = array(
                     'email' => $_POST['email'],
@@ -586,9 +590,9 @@
 
                 $this->db->query($query);
 
-                $this->user_status['userdata']['email'] = $new_data['email'];
-                $this->user_status['userdata']['login'] = $new_data['login'];
-                $this->user_status['userdata']['name'] = $new_data['name'];
+                $this->user['data']['email'] = $new_data['email'];
+                $this->user['data']['login'] = $new_data['login'];
+                $this->user['data']['name'] = $new_data['name'];
 
                 return array(
                    'status' => true,
@@ -709,11 +713,14 @@
 
                     $query = "
                         SELECT
-                            ".$this->getFields()."
+                            ".$this->getFields().",
+                            COUNT(`events`.`id`) AS `new_events_count`
                         FROM
                             `public_users`
+                        LEFT JOIN
+                            `events` ON (`events`.`user_id` = `public_users`.`id` && `events`.`active` = 1)
                         WHERE
-                            `id` = ".intval($new_user_id)."
+                            `public_users`.`id` = ".intval($new_user_id)."
                         LIMIT 1
                     ";
 

@@ -18,7 +18,7 @@
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = ".intval($this->auth->user_status['userdata']['id'])." &&
+                    `user_id`   = ".intval($this->auth->user['data']['id'])." &&
                     `active`    = 1
             ";
 
@@ -36,7 +36,7 @@
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = ".intval($this->auth->user_status['userdata']['id'])." &&
+                    `user_id`   = ".intval($this->auth->user['data']['id'])." &&
                     `active`    = 1
             ";
 
@@ -108,7 +108,7 @@
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = ".intval($this->auth->user_status['userdata']['id']).$addition;
+                    `user_id`   = ".intval($this->auth->user['data']['id']).$addition;
 
             $devices    = $this->db->assocMulti($query);
             $result     = array();
@@ -139,7 +139,7 @@
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = ".intval($this->auth->user_status['userdata']['id'])." &&
+                    `user_id`   = ".intval($this->auth->user['data']['id'])." &&
                     `active`    = 1 &&
                     `id`        = ".intval($id)."
             ";

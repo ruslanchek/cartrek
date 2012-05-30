@@ -4,7 +4,7 @@
             parent::__construct();
 
             //If user not logged in
-            if(!$this->auth->user_status['status']){
+            if(!$this->auth->user['status']){
                 header('Location: /control/auth/login');
             };
 

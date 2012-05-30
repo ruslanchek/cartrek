@@ -24,7 +24,7 @@
             'auth'                  => 'Auth',
             'mail'                  => 'Mail',
             'devices'               => 'Devices',
-            'events'                => 'Events'
+            'eventsApi'             => 'EventsApi'
         );
 
         // Созданные объекты

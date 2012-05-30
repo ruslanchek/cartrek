@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h1>Добро пожаловать, {$core->auth->user_status.userdata.name}</h1>
+    <h1>Добро пожаловать, {$core->auth->user.data.name}</h1>
 </div>
 
 <div class="row-fluid">

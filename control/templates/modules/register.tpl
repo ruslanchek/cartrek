@@ -1,7 +1,7 @@
 <div class="hero-unit hero_login">
     <h1>{$core->module.title}</h1>
 
-    {if !$core->auth->user_status.status}
+    {if !$core->auth->user.status}
     <form id="register_form" class="form-horizontal" action="" method="POST">
         <input type="hidden" name="action" value="register">
         <fieldset>

@@ -1,7 +1,7 @@
 <div class="hero-unit hero_login">
     <h1>{$core->module.title}</h1>
 
-    {if !$core->auth->user_status.status && !isset($smarty.get.action)}
+    {if !$core->auth->user.status && !isset($smarty.get.action)}
         <form id="remember_pass_form" class="form-horizontal" action="" method="POST">
             <input type="hidden" name="action" value="remember_pass">
             <fieldset>
