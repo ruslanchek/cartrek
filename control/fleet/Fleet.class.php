@@ -12,6 +12,10 @@
                 'title' => 'Автопарк',
                 'dir'   => '/control/fleet'
             ));
+
+            /*if($this->uri_chain[2]){
+
+            };*/
         }
 
         public function __destruct(){

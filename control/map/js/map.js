@@ -4,7 +4,6 @@ var google = google;
 
 core.map = {
     options: {
-        interval: 10000,
         current_devece_id: null,
         default_position : {
             lat: 55,
@@ -39,187 +38,6 @@ core.map = {
                 }
             }
         }
-    },
-
-    parseHDOP: function(hdop){
-        hdop = parseFloat(hdop);
-
-        if(hdop > 0){
-            if(hdop <= 1 && hdop > 0){
-                return {percentage: 100, level_name: 'идеально', level_class: 'info'};
-            };
-
-            if(hdop > 1 && hdop <= 3){
-                return {percentage: 83.3, level_name: 'отлично', level_class: 'success'};
-            };
-
-            if(hdop > 3 && hdop <= 6){
-                return {percentage: 66.64, level_name: 'хорошо', level_class: 'success'};
-            };
-
-            if(hdop > 6 && hdop <= 8){
-                return {percentage: 49.98, level_name: 'средне', level_class: 'warning'};
-            };
-
-            if(hdop > 8 && hdop <= 20){
-                return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'warning'};
-            };
-
-            if(hdop > 20){
-                return {percentage: 16.66, level_name: 'плохо', level_class: 'danger'};
-            };
-        }else{
-            return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger'};
-        };
-    },
-
-    parseCSQ: function(csq){
-        if(csq){
-            var dbm = (-113) + (csq * 2);
-
-            if(dbm >= -77){
-                return {percentage: 100, level_name: 'идеально', level_class: 'info', dbm: dbm};
-            };
-
-            if(dbm >= -86 && dbm < -78){
-                return {percentage: 80, level_name: 'отлично', level_class: 'success', dbm: dbm};
-            };
-
-            if(dbm >= -92 && dbm < -87){
-                return {percentage: 60, level_name: 'хорошо', level_class: 'success', dbm: dbm};
-            };
-
-            if(dbm >= -101 && dbm < -93){
-                return {percentage: 40, level_name: 'средне', level_class: 'warning', dbm: dbm};
-            };
-
-            if(dbm <= -102 && dbm > -113){
-                return {percentage: 20, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
-            };
-
-            if(dbm <= -113){
-                return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: dbm};
-            };
-        }else{
-            return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: dbm};
-        };
-    },
-
-    convertNMEAtoWGS84: function(value){
-        var nTemp = value / 100.0;
-        nTemp = nTemp - (nTemp%1);
-        var flMin = value - 100.0 * nTemp;
-        var result = nTemp + flMin / 60.0;
-        return result.toFixed(6);
-    },
-
-    convertKnotsToKms: function(value){
-        return (value * 1.852).toFixed(1);
-    },
-
-    convertDateNMEAtoCOMMON: function(value){
-        var d = value.substring(0, 2),
-            m = value.substring(2, 4),
-            y = value.substring(4, 6);
-
-        return d+'-'+m+'-'+y;
-    },
-
-    convertDateMYSQLtoCOMMON: function(value){
-        var d = value.substring(8, 10),
-            m = value.substring(5, 7),
-            y = value.substring(2, 4);
-
-        return d+'-'+m+'-'+y;
-    },
-
-    humanizeHeadingDegrees: function(degree){
-        if((degree >= 338 && degree <= 360) || (degree >= 0 && degree <= 25)){
-            return {name:'север', code: 'n'};
-        };
-
-        if(degree >= 26 && degree <= 67){
-            return {name:'северо-восток', code: 'ne'};
-        };
-
-        if(degree >= 68 && degree <= 112){
-            return {name:'восток', code: 'e'};
-        };
-
-        if(degree >= 113 && degree <= 157){
-            return {name:'юго-восток', code: 'se'};
-        };
-
-        if(degree >= 156 && degree <= 202){
-            return {name:'юг', code: 's'};
-        };
-
-        if(degree >= 203 && degree <= 247){
-            return {name:'юго-запад', code: 'sw'};
-        };
-
-        if(degree >= 248 && degree <= 292){
-            return {name:'запад', code: 'w'};
-        };
-
-        if(degree >= 293 && degree <= 337){
-            return {name:'северо-запад', code: 'nw'};
-        };
-    },
-
-    humanizeDate: function(value, type){
-        if(!type){
-            type = 'NMEA';
-        };
-
-        var d, m, y, m_humanized, month_names = [
-            'января',
-            'февраля',
-            'марта',
-            'апреля',
-            'мая',
-            'июня',
-            'июля',
-            'августа',
-            'сентября',
-            'октября',
-            'ноября',
-            'декабря'
-        ];
-
-        switch(type){
-            case 'NMEA' : {
-                d = value.substring(0, 2),
-                m = value.substring(2, 4),
-                y = value.substring(4, 6);
-
-                return d+' '+month_names[parseInt(m) - 1]+', 20'+y;
-            }; break;
-
-            case 'COMMON' : {
-                d = value.substring(0, 2),
-                m = value.substring(3, 5),
-                y = value.substring(6, 11);
-
-                return d+' '+month_names[parseInt(m) - 1]+', '+y;
-            }; break;
-
-            case 'MYSQL' : {
-                d = value.substring(8, 10),
-                m = value.substring(5, 7),
-                y = value.substring(0, 4);
-
-                return d+' '+month_names[parseInt(m) - 1]+', '+y;
-            }; break;
-        };
-    },
-
-    humanizeTime: function(value){
-        var h = value.substring(11, 13),
-            m = value.substring(14, 16),
-            s = value.substring(17, 19);
-
-        return h + ':' + m + ':' + s;
     },
 
     setMapsPrototypes: function(){
@@ -360,7 +178,7 @@ core.map = {
     changeDate: function(date){
         this.hideAllDevicesCurrentPositions();
         this.hideAllDevicesInfo();
-        $('.current_date').html(this.humanizeDate(date, 'COMMON'));
+        $('.current_date').html(core.utilities.humanizeDate(date, 'COMMON'));
 
         this.loadOptions(true);
     },
@@ -372,7 +190,7 @@ core.map = {
             dayNamesMin     : ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
             monthNames      : ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
             monthNamesMin   : ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
-            minDate         : (this.options.min_date) ? this.convertDateMYSQLtoCOMMON(this.options.min_date) : "today",
+            minDate         : (this.options.min_date) ? core.utilities.convertDateMYSQLtoCOMMON(this.options.min_date) : "today",
             firstDay        : 1,
             setDate         : this.options.date,
             maxDate         : "today",
@@ -610,40 +428,39 @@ core.map = {
         };
 
         if(device.last_registered_point){
-            var hdop    = this.parseHDOP(device.hdop),
-                csq     = this.parseCSQ(device.csq),
-                heading = this.humanizeHeadingDegrees(device.last_registered_point.bb),
-                title   = 'Последнее обновление местоположения: '+this.humanizeDate(device.last_registered_point.date, 'MYSQL')+
+            var heading = core.utilities.humanizeHeadingDegrees(device.last_registered_point.bb),
+                title   = 'Последнее обновление местоположения: '+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+
                           ', в '+
-                          this.humanizeTime(device.last_registered_point.date) +
+                          core.utilities.humanizeTime(device.last_registered_point.date) +
                           ', последнее обновление статуса: '+
-                          this.humanizeDate(device.last_update, 'MYSQL') +
+                          core.utilities.humanizeDate(device.last_update, 'MYSQL') +
                           ', в '+
-                          this.humanizeTime(device.last_update);
+                          core.utilities.humanizeTime(device.last_update);
 
-            var info_html =     '<b title="'+title+'">Текущее состояние <a href="javascript:void(0)" class="caret"></a></b>' +
+            var info_html =     '<b title="'+title+'">Cостояние устройства <a href="javascript:void(0)" class="caret"></a></b>' +
                                 '<div class="side_block_content"><table class="">' +
                                     /*'<tr>' +
                                         '<td width="70%">Последнее обновление местоположения</td>' +
                                         '<td width="30%"><span class="label">' +
-                                            this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
-                                            this.humanizeTime(device.last_registered_point.date)+'</span>' +
+                                            core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
+                                            core.utilities.humanizeTime(device.last_registered_point.date)+'</span>' +
                                         '</td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<td width="70%">Последнее обновление статуса</td>' +
                                         '<td width="30%"><span class="label">' +
-                                            this.humanizeDate(device.last_update, 'MYSQL')+'<br>'+
-                                            this.humanizeTime(device.last_update)+'</span>' +
+                                            core.utilities.humanizeDate(device.last_update, 'MYSQL')+'<br>'+
+                                            core.utilities.humanizeTime(device.last_update)+'</span>' +
                                         '</td>' +
                                     '</tr>' +*/
+
                                     '<tr>' +
                                         '<th>Курс</th>' +
                                         '<td><span><i class="heading_icon hi_'+heading.code+'" title="'+device.last_registered_point.bb+'&deg;"></i><span>'+heading.name+'</span></span></td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Скорость</th>' +
-                                        '<td><span>'+this.convertKnotsToKms(device.last_registered_point.velocity)+' км/ч</span></td>' +
+                                        '<td><span>'+core.utilities.convertKnotsToKms(device.last_registered_point.velocity)+' км/ч</span></td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Высота</th>' +
@@ -651,11 +468,11 @@ core.map = {
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GSM</td>' +
-                                        '<td><div title="'+csq.level_name+' ('+csq.dbm+' dBm)" class="indicator progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
+                                        '<td>'+core.utilities.getCSQIndicator(device.last_registered_point.csq)+'</td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GPS</td>' +
-                                        '<td><div title="'+hdop.level_name+'" class="indicator progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div></td>' +
+                                        '<td>'+core.utilities.getHDOPIndicator(device.last_registered_point.hdop)+'</td>' +
                                     '</tr>' +
                                 '</table></div>';
 
@@ -671,8 +488,8 @@ core.map = {
             for(var i = 1, l = points.length; i < l; i++){
                 polyline_shape.push(
                     new google.maps.LatLng(
-                        this.convertNMEAtoWGS84(points[i].lat),
-                        this.convertNMEAtoWGS84(points[i].lng)
+                        core.utilities.convertNMEAtoWGS84(points[i].lat),
+                        core.utilities.convertNMEAtoWGS84(points[i].lng)
                     )
                 );
             };
@@ -735,8 +552,8 @@ core.map = {
         if(options.device.point){
             var marker = new google.maps.Marker({
                 position    : new google.maps.LatLng(
-                    this.convertNMEAtoWGS84(options.device.point.lat),
-                    this.convertNMEAtoWGS84(options.device.point.lng)
+                    core.utilities.convertNMEAtoWGS84(options.device.point.lat),
+                    core.utilities.convertNMEAtoWGS84(options.device.point.lng)
                 ),
                 icon        : new google.maps.MarkerImage(
                     '/control/resources/img/icons/arrows.png',
@@ -765,14 +582,14 @@ core.map = {
             title = options.device.name+' — остановка';
             style = this.options.marker_styles.waypoint_stop;
         }else{
-            title = options.device.name+' — в пути ('+this.convertKnotsToKms(options.point.velocity)+' км/ч)';
+            title = options.device.name+' — в пути ('+core.utilities.convertKnotsToKms(options.point.velocity)+' км/ч)';
             style = this.options.marker_styles.waypoint;
         };
 
         var marker = new google.maps.Marker({
             position    : new google.maps.LatLng(
-                this.convertNMEAtoWGS84(options.point.lat),
-                this.convertNMEAtoWGS84(options.point.lng)
+                core.utilities.convertNMEAtoWGS84(options.point.lat),
+                core.utilities.convertNMEAtoWGS84(options.point.lng)
             ),
             icon        : style.image,
             shape       : style.shape,
@@ -810,9 +627,7 @@ core.map = {
             };
         };
 
-        var csq = this.parseCSQ(marker.point.csq),
-            hdop = this.parseHDOP(marker.point.hdop),
-            html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
+        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
                     '<table class="table table-bordered table-condensed">' +
                         '<tr>' +
                             '<td>Отметка</td>' +
@@ -820,15 +635,15 @@ core.map = {
                         '</tr>' +
                         '<tr>' +
                             '<td>Время</td>' +
-                            '<td><span class="label">'+this.humanizeTime(marker.point.date)+'</span></td>' +
+                            '<td><span class="label">'+core.utilities.humanizeTime(marker.point.date)+'</span></td>' +
                         '</tr>' +
                         '<tr>' +
                             '<td>Направление</td>' +
-                            '<td><span class="label" title="'+marker.point.bb+'&deg;">'+this.humanizeHeadingDegrees(marker.point.bb).name+'</span></td>' +
+                            '<td><span class="label" title="'+marker.point.bb+'&deg;">'+core.utilities.humanizeHeadingDegrees(marker.point.bb).name+'</span></td>' +
                         '</tr>' +
                         '<tr>' +
                             '<td>Скорость</td>' +
-                            '<td><span class="label">'+this.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
+                            '<td><span class="label">'+core.utilities.convertKnotsToKms(marker.point.velocity)+' км/ч</span></td>' +
                         '</tr>' +
                         '<tr>' +
                             '<td>Высота</td>' +
@@ -836,11 +651,11 @@ core.map = {
                         '</tr>' +
                         '<tr>' +
                             '<td>Сигнал GSM</td>' +
-                            '<td><div title="'+csq.level_name+' ('+csq.dbm+' dBm)" class="indiacator progress progress-'+csq.level_class+'"><div class="bar" style="width: '+csq.percentage+'%;"></div></div></td>' +
+                            '<td>'+core.utilities.getCSQIndicator(marker.point.csq)+'</td>' +
                         '</tr>' +
                         '<tr>' +
                             '<td>Сигнал GPS</td>' +
-                            '<td><div title="'+hdop.level_name+'" class="indiacator progress progress-'+hdop.level_class+'"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div></td>' +
+                            '<td>'+core.utilities.getHDOPIndicator(marker.point.hdop)+'</td>' +
                         '</tr>' +
                     '</table>' + additional;
 
@@ -862,7 +677,7 @@ core.map = {
             average_speed += parseFloat(points[i].velocity);
         };
 
-        return this.convertKnotsToKms(average_speed/points.length);
+        return core.utilities.convertKnotsToKms(average_speed/points.length);
     },
 
     getMaxSpeed: function(markers){
@@ -877,7 +692,7 @@ core.map = {
                 };
             };
 
-            result.value = this.convertKnotsToKms(max_speed);
+            result.value = core.utilities.convertKnotsToKms(max_speed);
 
             return result;
         };
@@ -1113,7 +928,7 @@ core.map = {
             };
 
             if(no_points){
-                var html =  '<p>На&nbsp;<b>'+this.humanizeDate(this.options.date, 'COMMON')+'</b> ' +
+                var html =  '<p>На&nbsp;<b>'+core.utilities.humanizeDate(this.options.date, 'COMMON')+'</b> ' +
                             'не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины</p>';
 
                 this.showMapNotice(html);
@@ -1129,7 +944,7 @@ core.map = {
             if(!device.current_position_marker){
                 if(device.last_registered_point){
                     var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b>.</p>' +
-                                    '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.humanizeDate(device.last_registered_point.date, 'MYSQL')+'</b></p>';
+                                    '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+'</b></p>';
                 }else{
                     var message =   '<p>Для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b> нет ни одной отметки</p>';
                 };
@@ -1162,7 +977,7 @@ core.map = {
                                 '</li>';
         };
 
-        $('.current_date').html(this.humanizeDate(this.options.date, 'COMMON'));
+        $('.current_date').html(core.utilities.humanizeDate(this.options.date, 'COMMON'));
         setTimeout("$('.calendar_place').animate({top: -210}, 400, 'easeOutExpo').addClass('closed');", 600);
 
         $('#cars_menu').html(cars_menu_html);
@@ -1241,23 +1056,6 @@ core.map = {
         });*/
     },
 
-    processSystemInterval: function(){
-
-    },
-
-    startSystemInterval: function(){
-        this.interval = setInterval('core.map.processSystemInterval()', this.options.interval);
-    },
-
-    stopSystemInterval: function(){
-        clearInterval(this.interval);
-    },
-
-    restartSystemInterval: function(){
-        this.stopSystemInterval();
-        this.startSystemInterval();
-    },
-
     getChartData: function(device_id, info_type){
         var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
@@ -1268,7 +1066,7 @@ core.map = {
             console.log(d)
             console.log(d.getTime());
 
-            points.push([d.getTime(), this.convertKnotsToKms(device.path.points[i].velocity)]);
+            points.push([d.getTime(), core.utilities.convertKnotsToKms(device.path.points[i].velocity)]);
         };
 
         return [{
@@ -1321,7 +1119,6 @@ core.map = {
         this.setMapsPrototypes();
         this.loadOptions();
         this.binds();
-        this.startSystemInterval();
     }
 };
 

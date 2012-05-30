@@ -14,7 +14,8 @@
             $main_menu = array(
                 array('name' => 'settings'  , 'title' => 'Настройка'),
                 array('name' => 'map'       , 'title' => 'Карта')
-            );
+            ),
+            $uri;
 
         // Классы API
         private $classes = array(
@@ -31,6 +32,7 @@
         public function __construct(){
             require_once($_SERVER['DOCUMENT_ROOT'].'/Config.class.php');
             $this->config = new Config();
+            $this->setUriData();
         }
 
         public function __get($name){
@@ -96,6 +98,13 @@
                 $this->smarty->assign('core', $this);
                 $this->smarty->display($this->template);
             };
+        }
+
+        function setUriData(){
+            $this->uri = mb_strtolower($_SERVER['REQUEST_URI'], "UTF-8");
+            $this->uri = parse_url(preg_replace('/\/+/', "/", $this->uri, PHP_URL_PATH));
+            $this->uri = preg_replace('/\/+/', "/", $this->uri['path'].'/');
+            $this->uri_chain = explode('/', trim($this->uri, '/'));
         }
     }
 ?>

@@ -84,7 +84,13 @@
         }
 
         //Get complete list of user's cars with last points
-        public function getUserDevices(){
+        public function getUserDevices($include_unactive = false){
+            if($include_unactive){
+                $addition = "";
+            }else{
+                $addition = " && `active` = 1";
+            };
+
             $query = "
                 SELECT
                     `id`,
@@ -97,13 +103,12 @@
                     `hdop`,
                     `csq`,
                     `journey`,
+                    `active`,
                     CONVERT_TZ(`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = ".intval($this->auth->user_status['userdata']['id'])." &&
-                    `active`    = 1
-            ";
+                    `user_id`   = ".intval($this->auth->user_status['userdata']['id']).$addition;
 
             $devices    = $this->db->assocMulti($query);
             $result     = array();
@@ -215,8 +220,8 @@
             return $this->db->assocMulti($query);
         }
 
-        public function getSatusFromPoint($point){
-            if($point['velocity'] > 0){
+        public function getDeviceSatus($device){
+            if($device['last_registered_point']['velocity'] > 0){
                 return '<a href="javascript:void(0)" class="label label-success">В пути</a>';
             }else{
                 return '<a href="javascript:void(0)" class="label label-info">Остановка</a>';

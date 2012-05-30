@@ -529,7 +529,24 @@ h1 {
     background-position: -112px 0;
 }
 
-.indiacator {
-    height: 16px;
+.indicator {
+    height: 7px !important;
     margin-bottom: 0;
+}
+
+.indicator .bar {
+    height: 7px !important;
+    margin-bottom: 0;
+}
+
+.info_window_content .indicator, .info_window_content .indicator .bar {
+    height: 16px !important;
+}
+
+.fleet_table .hdop_indicator {
+    margin: 5px 0 0;
+}
+
+.unactive_row * {
+    opacity: 0.8;
 }

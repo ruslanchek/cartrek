@@ -339,10 +339,242 @@ core.utilities = {
         var s = value+"";
         while (s.length < length) s = "0" + s;
         return s;
+    },
+
+    parseHDOP: function(hdop){
+        hdop = parseFloat(hdop);
+
+        if(hdop > 0){
+            if(hdop <= 1 && hdop > 0){
+                return {percentage: 100, level_name: 'идеально', level_class: 'info'};
+            };
+
+            if(hdop > 1 && hdop <= 3){
+                return {percentage: 83.3, level_name: 'отлично', level_class: 'success'};
+            };
+
+            if(hdop > 3 && hdop <= 6){
+                return {percentage: 66.64, level_name: 'хорошо', level_class: 'success'};
+            };
+
+            if(hdop > 6 && hdop <= 8){
+                return {percentage: 49.98, level_name: 'средне', level_class: 'warning'};
+            };
+
+            if(hdop > 8 && hdop <= 20){
+                return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'warning'};
+            };
+
+            if(hdop > 20){
+                return {percentage: 16.66, level_name: 'плохо', level_class: 'danger'};
+            };
+        }else{
+            return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger'};
+        };
+    },
+
+    parseCSQ: function(csq){
+        if(csq){
+            var dbm = (-113) + (csq * 2);
+
+            if(dbm >= -77){
+                return {percentage: 100, level_name: 'идеально', level_class: 'info', dbm: dbm};
+            };
+
+            if(dbm >= -86 && dbm < -78){
+                return {percentage: 80, level_name: 'отлично', level_class: 'success', dbm: dbm};
+            };
+
+            if(dbm >= -92 && dbm < -87){
+                return {percentage: 60, level_name: 'хорошо', level_class: 'success', dbm: dbm};
+            };
+
+            if(dbm >= -101 && dbm < -93){
+                return {percentage: 40, level_name: 'средне', level_class: 'warning', dbm: dbm};
+            };
+
+            if(dbm <= -102 && dbm > -113){
+                return {percentage: 20, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
+            };
+
+            if(dbm <= -113){
+                return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: dbm};
+            };
+        }else{
+            return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: dbm};
+        };
+    },
+
+    convertNMEAtoWGS84: function(value){
+        var nTemp = value / 100.0;
+        nTemp = nTemp - (nTemp%1);
+        var flMin = value - 100.0 * nTemp;
+        var result = nTemp + flMin / 60.0;
+        return result.toFixed(6);
+    },
+
+    convertKnotsToKms: function(value){
+        return (value * 1.852).toFixed(1);
+    },
+
+    convertDateNMEAtoCOMMON: function(value){
+        var d = value.substring(0, 2),
+            m = value.substring(2, 4),
+            y = value.substring(4, 6);
+
+        return d+'-'+m+'-'+y;
+    },
+
+    convertDateMYSQLtoCOMMON: function(value){
+        var d = value.substring(8, 10),
+            m = value.substring(5, 7),
+            y = value.substring(2, 4);
+
+        return d+'-'+m+'-'+y;
+    },
+
+    humanizeHeadingDegrees: function(degree){
+        if((degree >= 338 && degree <= 360) || (degree >= 0 && degree <= 25)){
+            return {name:'север', code: 'n'};
+        };
+
+        if(degree >= 26 && degree <= 67){
+            return {name:'северо-восток', code: 'ne'};
+        };
+
+        if(degree >= 68 && degree <= 112){
+            return {name:'восток', code: 'e'};
+        };
+
+        if(degree >= 113 && degree <= 157){
+            return {name:'юго-восток', code: 'se'};
+        };
+
+        if(degree >= 156 && degree <= 202){
+            return {name:'юг', code: 's'};
+        };
+
+        if(degree >= 203 && degree <= 247){
+            return {name:'юго-запад', code: 'sw'};
+        };
+
+        if(degree >= 248 && degree <= 292){
+            return {name:'запад', code: 'w'};
+        };
+
+        if(degree >= 293 && degree <= 337){
+            return {name:'северо-запад', code: 'nw'};
+        };
+    },
+
+    humanizeDate: function(value, type){
+        if(!type){
+            type = 'NMEA';
+        };
+
+        var d, m, y, m_humanized, month_names = [
+            'января',
+            'февраля',
+            'марта',
+            'апреля',
+            'мая',
+            'июня',
+            'июля',
+            'августа',
+            'сентября',
+            'октября',
+            'ноября',
+            'декабря'
+        ];
+
+        switch(type){
+            case 'NMEA' : {
+                d = value.substring(0, 2),
+                m = value.substring(2, 4),
+                y = value.substring(4, 6);
+
+                return d+' '+month_names[parseInt(m) - 1]+', 20'+y;
+            }; break;
+
+            case 'COMMON' : {
+                d = value.substring(0, 2),
+                m = value.substring(3, 5),
+                y = value.substring(6, 11);
+
+                return d+' '+month_names[parseInt(m) - 1]+', '+y;
+            }; break;
+
+            case 'MYSQL' : {
+                d = value.substring(8, 10),
+                m = value.substring(5, 7),
+                y = value.substring(0, 4);
+
+                return d+' '+month_names[parseInt(m) - 1]+', '+y;
+            }; break;
+        };
+    },
+
+    humanizeTime: function(value){
+        var h = value.substring(11, 13),
+            m = value.substring(14, 16),
+            s = value.substring(17, 19);
+
+        return h + ':' + m + ':' + s;
+    },
+
+    getCSQIndicator: function(csq){
+        var csq = this.parseCSQ(csq);
+        return '<div title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)" class="indicator csq_indicator progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div>';
+    },
+
+    getHDOPIndicator: function(hdop){
+        var hdop = this.parseHDOP(hdop);
+        return '<div title="GPS: '+hdop.level_name+'" class="indicator hdop_indicator progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div>';
+    },
+
+    //Google maps utils
+    getAddressByLatLng: function(lat, lng, fn){
+        var geocoder = new google.maps.Geocoder();
+
+        geocoder.geocode({
+            latLng: new google.maps.LatLng(
+                core.utilities.convertNMEAtoWGS84(lat),
+                core.utilities.convertNMEAtoWGS84(lng)
+            )
+        }, function(results, status){
+            if(status == google.maps.GeocoderStatus.OK){
+                fn(results);
+            }else{
+                fn(false);
+            };
+        });
     }
 };
 
-//FNS
+core.timer = {
+    interval: null,
+    delay: 1000,
+
+    processSystemInterval: function(){
+        console.log('GLOBAL SYSTEM INTERVAL: TICK...');
+    },
+
+    startSystemInterval: function(){
+        this.interval = setInterval('core.timer.processSystemInterval()', this.delay);
+    },
+
+    stopSystemInterval: function(){
+        clearInterval(this.interval);
+    },
+
+    restartSystemInterval: function(){
+        this.stopSystemInterval();
+        this.startSystemInterval();
+    }
+};
+
+
+//Common functions
 core.exitUser = function(){
     if(confirm('Выйти?')){
         $.get(
@@ -353,3 +585,7 @@ core.exitUser = function(){
         );
     };
 };
+
+$(function(){
+    core.timer.startSystemInterval();
+});
