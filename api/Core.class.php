@@ -23,7 +23,8 @@
             'db'                    => 'Database',
             'auth'                  => 'Auth',
             'mail'                  => 'Mail',
-            'devices'               => 'Devices'
+            'devices'               => 'Devices',
+            'events'                => 'Events'
         );
 
         // Созданные объекты

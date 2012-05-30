@@ -1,6 +1,9 @@
 <title>{$core->module.title}</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<link rel="icon" type="image/ico" href="/favicon.ico" />
+
 <link rel="stylesheet" href="/control/resources/bootsrtap/css/bootstrap.css" type="text/css" media="all" />
 <link rel="stylesheet" href="/control/resources/css/style.css" type="text/css" media="all" />
 <link rel="stylesheet" href="/control/resources/plugins/jquery_ui/ui-lightness/jquery-ui-1.8.20.custom.css" />

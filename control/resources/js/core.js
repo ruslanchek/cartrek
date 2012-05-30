@@ -556,7 +556,7 @@ core.timer = {
     delay: 1000,
 
     processSystemInterval: function(){
-        console.log('GLOBAL SYSTEM INTERVAL: TICK...');
+        //console.log('GLOBAL SYSTEM INTERVAL: TICK...');
     },
 
     startSystemInterval: function(){
@@ -573,7 +573,6 @@ core.timer = {
     }
 };
 
-
 //Common functions
 core.exitUser = function(){
     if(confirm('Выйти?')){
@@ -586,6 +585,7 @@ core.exitUser = function(){
     };
 };
 
+//Object starter
 $(function(){
     core.timer.startSystemInterval();
 });
