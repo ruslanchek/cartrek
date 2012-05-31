@@ -42,13 +42,13 @@
 
             $devices = $this->db->assocMulti($query);
 
-            $on = "";
+            $in = "";
 
             foreach($devices as $device){
-                $on .= "'".$this->db->quote($device['id'])."', ";
+                $in .= "'".$this->db->quote($device['id'])."', ";
             };
 
-            $on = substr($on, 0, strlen($on) - 2);
+            $in = substr($in, 0, strlen($in) - 2);
 
             $query = "
                 SELECT
@@ -56,7 +56,7 @@
                 FROM
                     `tracks`
                 WHERE
-                    `device_id` IN (".$on.")
+                    `device_id` IN (".$in.")
             ";
 
             $result = $this->db->assocItem($query);

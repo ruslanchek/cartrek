@@ -18,6 +18,10 @@
                     case 'getItems' : {
                         print json_encode($this->eventsApi->getEvents($_GET['step']));
                     }; break;
+
+                    case 'delItem' : {
+                        $this->eventsApi->hideItem($_GET['id']);
+                    }; break;
                 };
 
                 exit;

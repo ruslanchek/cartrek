@@ -585,7 +585,19 @@ core.exitUser = function(){
     };
 };
 
+core.eventsBreathe = function(){
+    function breathe(){
+        $('#global_events_counter').delay(2000).fadeTo(1000, 0.3);
+        $('#global_events_counter').fadeTo(600, 1.0, function(){
+            core.eventsBreathe();
+        });
+    };
+};
+
+
+
 //Object starter
 $(function(){
     core.timer.startSystemInterval();
+    core.eventsBreathe();
 });
