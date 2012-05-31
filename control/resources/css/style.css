@@ -583,3 +583,29 @@ h1 {
 .event_item .icon-eye-open:hover {
     opacity: 0.5;
 }
+
+
+/* Dispatcher */
+.dispatcher_devices .item {
+    min-width: 300px;
+}
+
+.dispatcher_devices .item h5 {
+    margin: 0 0 0.8em -13px;
+    background: #eee;
+    padding: 8px 13px 6px;
+    font-size: 13px;
+    width: 100%;
+}
+
+.dispatcher_devices .item table td,
+.dispatcher_devices .item table th {
+    padding: 0 5px 8px 0;
+    vertical-align: top;
+    border: none;
+    background: none !important;
+}
+
+.dispatcher_devices .hdop_indicator {
+    margin: 5px 0 0;
+}
