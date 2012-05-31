@@ -35,7 +35,8 @@
             return $result['count'];
         }
 
-        public function getEvents($step = 0, $per_step = 10){
+        public function getEvents($step = 0, $per_step = 10, $offset = 0){
+            $offset = intval($offset);
             $current_party_from = $step * $per_step;
             $current_party_to = ($step * $per_step) + $per_step;
 
@@ -54,9 +55,10 @@
                     `user_id` = ".intval($this->auth->user['data']['id'])." &&
                     `archive` = 0
                 ORDER BY
+                    `id` DESC,
                     `datetime` DESC
                 LIMIT
-                    ".intval($current_party_from).", ".intval($per_step);
+                    ".intval($current_party_from - $offset).", ".intval($per_step);
 
             $items = $this->db->assocMulti($query);
             $total = $this->getAllEventsCount();
@@ -137,6 +139,8 @@
                     `user_id`     = ".intval($this->auth->user['data']['id']);
 
             $this->db->query($query);
+
+            print $this->getNewEventsCount();
         }
     };
 ?>

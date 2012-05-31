@@ -16,7 +16,7 @@
             if($this->ajax_mode){
                 switch($_GET['action']){
                     case 'getItems' : {
-                        print json_encode($this->eventsApi->getEvents($_GET['step']));
+                        print json_encode($this->eventsApi->getEvents($_GET['step'], 10, $_GET['offset']));
                     }; break;
 
                     case 'delItem' : {

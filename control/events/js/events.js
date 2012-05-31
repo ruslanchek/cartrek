@@ -1,5 +1,6 @@
 core.events = {
     step: 0,
+    offset: 0,
 
     drawItems: function(data){
         var html = '',
@@ -63,8 +64,9 @@ core.events = {
             type: 'get',
             dataType: 'json',
             data: {
-                action: 'getItems',
-                step: core.events.step
+                action  : 'getItems',
+                step    : core.events.step,
+                offset  : core.events.offset
             },
             beforeSend: function(){
                 $('#load_more').hide();
@@ -98,6 +100,8 @@ core.events = {
                 o.html();
                 core.loading.unsetLoading('event', false);
                 o.parent().slideUp(120);
+
+                core.events.offset++;
 
                 if(count > 0){
                     $('#global_events_counter').html(count)
