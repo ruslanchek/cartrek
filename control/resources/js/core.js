@@ -554,8 +554,8 @@ core.utilities = {
 core.effects = {
     breathe: function(obj){
         if(obj.is(':visible')){
-            obj.delay(2000).fadeTo(1000, 0.3);
-            obj.fadeTo(600, 1.0, function(){
+            obj.delay(1000).fadeTo(2500, 0.3);
+            obj.fadeTo(1200, 1.0, function(){
                 core.effects.breathe(obj);
             });
         };
