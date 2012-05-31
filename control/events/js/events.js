@@ -1,6 +1,7 @@
 core.events = {
     step: 0,
     offset: 0,
+    more_items: false,
 
     drawItems: function(data){
         var html = '',
@@ -51,6 +52,8 @@ core.events = {
             $('#global_events_counter').hide();
         };
 
+        this.more_items = data.more_items;
+
         if(data.more_items){
             $('#load_more').show();
         };
@@ -99,7 +102,6 @@ core.events = {
             success: function(count){
                 o.html();
                 core.loading.unsetLoading('event', false);
-                o.parent().slideUp(120);
 
                 core.events.offset++;
 
@@ -108,6 +110,12 @@ core.events = {
                 }else{
                     $('#global_events_counter').hide();
                 };
+
+                o.parent().slideUp(120, function(){
+                    if(!core.events.more_items && $('.event_item:visible').length <= 0){
+                        $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
+                    };
+                });
             }
         });
     },

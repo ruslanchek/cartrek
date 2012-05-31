@@ -551,12 +551,23 @@ core.utilities = {
     }
 };
 
+core.effects = {
+    breathe: function(obj){
+        if(obj.is(':visible')){
+            obj.delay(2000).fadeTo(1000, 0.3);
+            obj.fadeTo(600, 1.0, function(){
+                core.effects.breathe(obj);
+            });
+        };
+    }
+};
+
 core.timer = {
     interval: null,
     delay: 1000,
 
     processSystemInterval: function(){
-        //console.log('GLOBAL SYSTEM INTERVAL: TICK...');
+        console.log('GLOBAL SYSTEM INTERVAL: TICK...');
     },
 
     startSystemInterval: function(){
@@ -585,19 +596,8 @@ core.exitUser = function(){
     };
 };
 
-core.eventsBreathe = function(){
-    function breathe(){
-        $('#global_events_counter').delay(2000).fadeTo(1000, 0.3);
-        $('#global_events_counter').fadeTo(600, 1.0, function(){
-            core.eventsBreathe();
-        });
-    };
-};
-
-
-
 //Object starter
 $(function(){
     core.timer.startSystemInterval();
-    core.eventsBreathe();
+    core.effects.breathe($('#global_events_counter'));
 });
