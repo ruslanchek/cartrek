@@ -6,7 +6,7 @@
         <style>
             body {
                 background: url(/control/resources/img/bg/logo.png) no-repeat center 10px;
-                padding: 170px 0 0 0;
+                padding: 168px 0 0 0;
             }
 
             hr {
