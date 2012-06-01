@@ -13,12 +13,17 @@ core.map = {
         marker_styles: {
             waypoint: {
                 image: new google.maps.MarkerImage(
-                    'markers/waypoint_image.png',
+                    'img/markers/waypoint.png',
                     new google.maps.Size(7,7),
                     new google.maps.Point(0,0),
                     new google.maps.Point(3.5,3.5)
                 ),
-                shadow: null,
+                shadow: new google.maps.MarkerImage(
+                    'img/markers/waypoint_shadow_flat.png',
+                    new google.maps.Size(15,15),
+                    new google.maps.Point(0,0),
+                    new google.maps.Point(0,0)
+                ),
                 shape: {
                     coord: [5,0,6,1,6,2,6,3,6,4,6,5,5,6,1,6,0,5,0,4,0,3,0,2,0,1,1,0,5,0],
                     type: 'poly'
@@ -26,12 +31,11 @@ core.map = {
             },
             waypoint_stop: {
                 image: new google.maps.MarkerImage(
-                    'markers/waypoint_image_stop.png',
+                    'img/markers/waypoint_stop.png',
                     new google.maps.Size(7,7),
                     new google.maps.Point(0,0),
                     new google.maps.Point(3,3)
                 ),
-                shadow: null,
                 shape: {
                     coord: [5,0,6,1,6,2,6,3,6,4,6,5,5,6,1,6,0,5,0,4,0,3,0,2,0,1,1,0,5,0],
                     type: 'poly'
@@ -41,18 +45,20 @@ core.map = {
     },
 
     getHeadingIcon: function(heading){
+        var degrees_zone = Math.round(parseInt(heading)/15) * 15;
+
         var image = new google.maps.MarkerImage(
-            '/control/map/img/headings/0.png',
+            'img/markers/heading/'+degrees_zone+'.png',
             new google.maps.Size(16,16),
             new google.maps.Point(0,0),
             new google.maps.Point(8,16)
         );
 
         var shadow = new google.maps.MarkerImage(
-            '/control/map/img/headings/shadow.png',
-            new google.maps.Size(28,16),
+            'img/markers/heading/flat_shadow.png',
+            new google.maps.Size(30,30),
             new google.maps.Point(0,0),
-            new google.maps.Point(8,16)
+            new google.maps.Point(15,20)
         );
 
         var shape = {
@@ -117,8 +123,8 @@ core.map = {
             var position = projection.fromLatLngToDivPixel(this.get('position'));
 
             var div = this.div_;
-            div.style.left = position.x + 'px';
-            div.style.top = position.y + 'px';
+            div.style.left = position.x + 4 + 'px';
+            div.style.top = position.y - 4 + 'px';
             div.style.display = 'block';
 
             this.span_.innerHTML = this.get('text');
@@ -319,8 +325,8 @@ core.map = {
 
             label.bindTo('position', marker, 'position');
             label.bindTo('text', marker, 'position');
-            label.div_.innerHTML =  '<span class="marker_label" id="device_label_'+id+'">' +
-                                        '<a href="javascript:void(0)" class="close icon-minus"></a>' +
+            label.div_.innerHTML =  '<i class="marker_tip"></i>' +
+                                    '<span class="marker_label" id="device_label_'+id+'">' +
                                         '<b>'+device.name+'</b><br>' +
                                         '<nobr>'+device.make+' '+device.model+'</nobr><br>' +
                                         '<span class="g_id">'+device.g_id+'</span>' +
@@ -568,8 +574,6 @@ core.map = {
 
         // Label specific
         var span = this.span_ = document.createElement('span');
-        span.className = 'marker_label';
-
         var div = this.div_ = document.createElement('div');
         div.appendChild(span);
         div.style.cssText = 'position: absolute; display: none';

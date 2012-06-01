@@ -243,16 +243,27 @@ h1 {
     text-shadow: 0 -1px 0 #333;
     font-size: 11px;
     display: block;
-    padding: 0 4px 2px;
+    padding: 0 4px 5px;
+    margin: 10px 0 0 10px;
     -moz-border-radius-topleft: 0px;
     -moz-border-radius-topright: 4px;
     -moz-border-radius-bottomright: 4px;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-radius: 0px 4px 4px 4px;
     border-radius: 0px 4px 4px 4px;
-    -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.9);
-    -moz-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.9);
-    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.9);
+    -webkit-box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.6);
+}
+
+.marker_tip {
+    position: absolute;
+    display: block;
+    background: url(../img/icons/label_tip.gif);
+    height: 10px;
+    width: 10px;
+    top: 0px;
+    left: 0px;
 }
 
 .marker_label .g_id {
