@@ -4,9 +4,9 @@
         {include file="common/head.tpl"}
 
         <style>
-            body {
-                background: url(/control/resources/img/bg/logo.png) no-repeat center 10px;
-                padding: 168px 0 0 0;
+            .main_content {
+                background: url(/control/resources/img/bg/logo.png) no-repeat center 20px;
+                padding-top: 180px;
             }
 
             hr {
