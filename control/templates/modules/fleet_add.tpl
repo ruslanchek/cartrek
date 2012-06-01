@@ -24,7 +24,7 @@
                     <div class="control-group">
                         <label class="control-label" for="code">Серийный номер</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="code" name="code" value="{if isset($smarty.session.add_car.code)}{$smarty.session.add_car.code}{else}{$smarty.post.add_car.code}{/if}">
+                            <input type="text" class="input-xlarge" id="code" name="code" value="{if isset($smarty.session.add_car.code)}{$smarty.session.add_car.code|escape}{else}{isset($smarty.post.add_car.code)|escape}{/if}">
                         </div>
                     </div>
                 </fieldset>
@@ -59,7 +59,7 @@
                 {if isset($core->module.form.message)}
                     <div class="alert {if $core->module.form.status}alert-success{else}alert-error{/if}">
                         <a class="close" data-dismiss="alert" href="javascript:void(0)">×</a>
-                        {$core->module.form.message}
+                        {$core->module.form.message|escape}
                     </div>
                 {/if}
 
@@ -67,28 +67,28 @@
                     <div class="control-group">
                         <label class="control-label" for="name">Название</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="name" name="name" value="{if isset($smarty.session.add_car.name)}{$smarty.session.add_car.name}{else}{$smarty.post.add_car.name}{/if}">
+                            <input type="text" class="input-xlarge" id="name" name="name" value="{if isset($smarty.session.add_car.name)}{$smarty.session.add_car.name|escape}{else}{$smarty.post.add_car.name|escape}{/if}">
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label" for="make">Марка</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" autocomplete="off" id="make" name="make" value="{if isset($smarty.session.add_car.make)}{$smarty.session.add_car.make}{else}{$smarty.post.add_car.make}{/if}">
+                            <input type="text" class="input-xlarge" autocomplete="off" id="make" name="make" value="{if isset($smarty.session.add_car.make)}{$smarty.session.add_car.make|escape}{else}{$smarty.post.add_car.make|escape}{/if}">
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label" for="model">Модель</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="model" name="model" value="{if isset($smarty.session.add_car.model)}{$smarty.session.add_car.model}{else}{$smarty.post.add_car.model}{/if}">
+                            <input type="text" class="input-xlarge" id="model" name="model" value="{if isset($smarty.session.add_car.model)}{$smarty.session.add_car.model|escape}{else}{$smarty.post.add_car.model|escape}{/if}">
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label" for="g_id">Госномер</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="g_id" name="g_id" value="{if isset($smarty.session.add_car.g_id)}{$smarty.session.add_car.g_id}{else}{$smarty.post.add_car.g_id}{/if}">
+                            <input type="text" class="input-xlarge" id="g_id" name="g_id" value="{if isset($smarty.session.add_car.g_id)}{$smarty.session.add_car.g_id|escape}{else}{$smarty.post.add_car.g_id|escape}{/if}">
                         </div>
                     </div>
                 </fieldset>

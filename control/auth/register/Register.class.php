@@ -3,6 +3,8 @@
         public function __construct(){
             parent::__construct();
 
+            $this->template = 'auth.tpl';
+
             $this->init(array(
                 'name'      => 'register',
                 'title'     => 'Регистрация',

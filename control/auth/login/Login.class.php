@@ -3,6 +3,8 @@
         public function __construct(){
             parent::__construct();
 
+            $this->template = 'auth.tpl';
+
             if(isset($_POST['action'])){
                 switch($_POST['action']){
                     case 'login' : {
