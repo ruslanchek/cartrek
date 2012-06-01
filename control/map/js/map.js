@@ -40,13 +40,31 @@ core.map = {
         }
     },
 
-    getHeadingIcon: function(point){
-        return new google.maps.MarkerImage(
-            '/control/resources/img/icons/arrows.png',
-            new google.maps.Size(16, 16),
-            new google.maps.Point(0, 0),
-            new google.maps.Point(8, 8)
+    getHeadingIcon: function(heading){
+        var image = new google.maps.MarkerImage(
+            '/control/map/img/headings/0.png',
+            new google.maps.Size(16,16),
+            new google.maps.Point(0,0),
+            new google.maps.Point(8,16)
         );
+
+        var shadow = new google.maps.MarkerImage(
+            '/control/map/img/headings/shadow.png',
+            new google.maps.Size(28,16),
+            new google.maps.Point(0,0),
+            new google.maps.Point(8,16)
+        );
+
+        var shape = {
+            coord: [11,0,13,1,14,2,14,3,15,4,15,5,15,6,15,7,15,8,15,9,15,10,15,11,14,12,14,13,13,14,11,15,4,15,2,14,1,13,1,12,0,11,0,10,0,9,0,8,0,7,0,6,0,5,0,4,1,3,1,2,2,1,4,0,11,0],
+            type: 'poly'
+        };
+
+        return {
+            image: image,
+            shadow: shadow,
+            shape: shape
+        };
     },
 
     setMapsPrototypes: function(){
@@ -559,15 +577,19 @@ core.map = {
 
     createCurrentPositionMarker: function(options){
         if(options.device.point){
+            var icon = this.getHeadingIcon(options.device.point.bb);
             var marker = new google.maps.Marker({
                 position    : new google.maps.LatLng(
                     core.utilities.convertNMEAtoWGS84(options.device.point.lat),
                     core.utilities.convertNMEAtoWGS84(options.device.point.lng)
                 ),
-                icon        : this.getHeadingIcon(options.device.point),
+                zIndex      : 10000,
+                icon        : icon.image,
+                shadow      : icon.shadow,
+                shape       : icon.shape,
                 point       : options.device.point,
                 map         : options.map,
-                title       : options.device.name+' — текущее положение ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
+                title       : options.device.name+' — ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
                 device_id   : options.device.id
             });
 
