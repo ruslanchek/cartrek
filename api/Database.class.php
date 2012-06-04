@@ -81,7 +81,9 @@
         //Return an associative array of a one row
         public function assocItem($query){
             $sql = $this->query($query);
-            return $sql->fetch_assoc();
+            $result = $sql->fetch_assoc();
+            $sql->free();
+            return $result;
         }
 
         //Return an associative array of a multiple rows
