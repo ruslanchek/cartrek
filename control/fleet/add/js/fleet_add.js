@@ -127,8 +127,8 @@ core.fleet_add = {
         'ИЖ',
         'КамАЗ',
         'ЛУАЗ',
-        'Москвич (АЗЛК)',
         'МАЗ',
+        'Москвич (АЗЛК)',
         'СеАЗ',
         'СМЗ',
         'ТагАЗ',
@@ -139,6 +139,16 @@ core.fleet_add = {
     init: function(){
         $('#make').typeahead({
             source: this.makes
+        });
+
+        $('#g_id').live('keyup', function(){
+            var g_id = core.utilities.parseGId($(this).val());
+
+            $('#g_id_preview').html('');
+
+            $('#g_id_preview').html(
+                g_id.type_name
+            );
         });
     }
 };

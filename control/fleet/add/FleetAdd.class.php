@@ -11,7 +11,7 @@
             $form['step'] = 1;
 
             if(isset($_POST['action']) && $_POST['action'] == 'add_car'){
-                $form = $this->addCar();
+                $form = $this->addDevice();
             };
 
             $this->init(array(
@@ -33,8 +33,8 @@
                 FROM
                     `devices`
                 WHERE
-                    `user_id`   = 0 &&
-                    `active`    = 0 &&
+                    `user_id`   != 1 &&
+                    `active`    != 1 &&
                     `code`      = '".$this->db->quote($code)."'
             ";
 
@@ -63,7 +63,7 @@
             $this->db->query($query);
         }
 
-        public function addCar(){
+        public function addDevice(){
             switch($_POST['step']){
                 case '1' : {
                     if(isset($_POST['code']) && $_POST['code']){
