@@ -142,13 +142,11 @@ core.fleet_add = {
         });
 
         $('#g_id').live('keyup', function(){
-            var g_id = core.utilities.parseGId($(this).val());
+            var data = core.utilities.parseGId($(this).val());
+            var html = core.utilities.drawGId(data, 'big');
 
             $('#g_id_preview').html('');
-
-            $('#g_id_preview').html(
-                g_id.type_name
-            );
+            $('#g_id_preview').html(html);
         });
     }
 };

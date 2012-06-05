@@ -619,16 +619,48 @@ core.utilities = {
             if(result){
                 var arr = str.match(number[n]['expr']);
                 return {
+                    status      : true,
                     id          : arr[1],
                     region      : arr[2],
                     type_code   : number[n]['type_code'],
                     type_name   : number[n]['type'],
-                    country     : 'ru'
+                    country     : 'ru',
+                    original    : str
                 };
             };
         };
 
-        return false;
+        return {
+            status: false,
+            original: str
+        };
+    },
+
+    drawGId: function(data, size){
+        var size_class = '', html = '';
+
+        if(size == 'big'){
+            size_class = 'big';
+        }else{
+            size_class = 'small';
+        };
+
+        if(data.status){
+            var region = '';
+
+            if(data.region){
+                region = '<span class="region">'+data.region+'</span>';
+            };
+
+            html =  '<span class="g_id '+data.type_code+' '+size_class+'" title="'+data.type_name+'">' +
+                        '<span class="id">'+data.id+'</span>' +
+                        region +
+                    '</span>';
+        }else{
+            html =  '<span class="g_id '+size_class+'"><span class="id">' + data.original + '</span></span>';
+        };
+
+        return html;
     }
 };
 
@@ -648,7 +680,7 @@ core.timer = {
     delay: 1000,
 
     processSystemInterval: function(){
-        console.log('GLOBAL SYSTEM INTERVAL: TICK...');
+        //console.log('GLOBAL SYSTEM INTERVAL: TICK...');
     },
 
     startSystemInterval: function(){
