@@ -323,13 +323,15 @@ core.map = {
                 map: this.map
             });
 
+            var g_id = core.utilities.drawGId(device.g_id, 'small');
+
             label.bindTo('position', marker, 'position');
             label.bindTo('text', marker, 'position');
             label.div_.innerHTML =  '<i class="marker_tip"></i>' +
                                     '<span class="marker_label" id="device_label_'+id+'">' +
                                         '<b>'+device.name+'</b><br>' +
                                         '<nobr>'+device.make+' '+device.model+'</nobr><br>' +
-                                        '<span class="g_id">'+device.g_id+'</span>' +
+                                        g_id +
                                     '</span>';
 
             device.current_position_label = label;
@@ -398,7 +400,7 @@ core.map = {
         var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
         if(device){
-            $('#car_name_info').html('<b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span>');
+            $('#car_name_info').html('<b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' '+core.utilities.drawGId(device.g_id, 'small'));
         }else{
             $('#car_name_info').html('<b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span>');
         };
@@ -657,7 +659,7 @@ core.map = {
             };
         };
 
-        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' <span class="g_id">'+device.g_id+'</span></p>' +
+        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+ ' ' +core.utilities.drawGId(device.g_id, 'small')+ '</p>' +
                     '<table class="table table-bordered table-condensed">' +
                         '<tr>' +
                             '<td>Отметка</td>' +
@@ -1002,7 +1004,7 @@ core.map = {
                                     '<a href="javascript:void(0)" rel="'+this.options.devices[i].id+'">' +
                                         '<b>'+this.options.devices[i].name+'</b> &mdash; '+
                                         this.options.devices[i].make+' '+this.options.devices[i].model+' ' +
-                                        '<span class="g_id">'+this.options.devices[i].g_id+'</span>' +
+                                        core.utilities.drawGId(this.options.devices[i].g_id, 'small') +
                                     '</a>' +
                                 '</li>';
         };

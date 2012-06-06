@@ -550,68 +550,74 @@ core.utilities = {
         });
     },
 
+    getGidParams: function(){
+        var number = new Array();
+
+        number[0] = new Array();
+        number[0]['expr'] = /^([авекмнорстух][0-9]{3}[авекмнорстух]{2})([0-9]{2,3})$/i;
+        number[0]['type'] = "Регистрационные знаки транспортных средств";
+        number[0]['type_code'] = "standart";
+
+        number[1] = new Array();
+        number[1]['expr'] = /^([авекмнорстух]{2}[0-9]{3})([0-9]{2,3})$/i;
+        number[1]['type'] = "Регистрационные знаки транспортных средств, используемых для коммерческой перевозки пассажиров";
+        number[1]['type_code'] = "commercial";
+
+        number[2] = new Array();
+        number[2]['expr'] = /^([авекмнорстух]{1}[0-9]{4})([0-9]{2,3})$/i;
+        number[2]['type'] = "Регистрационные знаки транспортных средств МВД России";
+        number[2]['type_code'] = "police";
+
+        number[3] = new Array();
+        number[3]['expr'] = /^([0-9]{4}[авекмнорстух]{2})([0-9]{2,3})$/i;
+        number[3]['type'] = "Регистрационные знаки транспортных средств, числящихся за воинскими формированиями федеральных органов исполнительной власти России";
+        number[3]['type_code'] = "military";
+
+        number[4] = new Array();
+        number[4]['expr'] = /^([0-9]{3}cd[0-9])([0-9]{2,3})$/i;
+        number[4]['type'] = "Регистрационные знаки транспортных средств дипломатических представительств и торговых представительств иностранных компаний. CD -  автомобиль с данным регистрационным знаком зарегистрирован на посла или иное лицо в ранге главы дипломатического представительства.";
+        number[4]['type_code'] = "diplomacy";
+
+        number[5] = new Array();
+        number[5]['expr'] = /^([0-9]{3}cc[0-9]{1})([0-9]{2,3})$/i;
+        number[5]['type'] = "Регистрационные знаки транспортных средств дипломатических представительств и торговых представительств иностранных компаний. CC — автомобиль с данным регистрационным знаком зарегистрирован на консула или иное лицо в ранге главы консульского представительства.";
+        number[5]['type_code'] = "diplomacy";
+
+        number[6] = new Array();
+        number[6]['expr'] = /^([0-9]{3}t[0-9]{3})([0-9]{2,3})$/i;
+        number[6]['type'] = "Регистрационные знаки транспортных средств дипломатических представительств и торговых представительств иностранных компаний. T — регистрационный знак выдан на автомобиль сотрудника дипломатического представительства, консульского учреждения, международной организации, не обладающего дипломатическим статусом (административно-технический персонал).";
+        number[6]['type_code'] = "diplomacy";
+
+        number[7] = new Array();
+        number[7]['expr'] = /^([0-9]{3}d[0-9]{3})([0-9]{2,3})$/i;
+        number[7]['type'] = "Регистрационные знаки транспортных средств дипломатических представительств и торговых представительств иностранных компаний. D — регистрационный знак выдан на автомобиль, принадлежащий дипломатическому представительству, консульскому учреждению, международной организации или сотруднику такого представительства (учреждения, организации), обладающего дипломатическим статусом.";
+        number[7]['type_code'] = "diplomacy";
+
+        number[8] = new Array();
+        number[8]['expr'] = /^(т[авекмнорстух]{2}[0-9]{3})([0-9]{2,3})$/i;
+        number[8]['type'] = "Тип № 19 Номерной знак транспортных средств,окончательно выезжающих за пределы Российской Федерации.";
+        number[8]['type_code'] = "export";
+
+        number[9] = new Array();
+        number[9]['expr'] = /^([авекмнорстух]{2}[0-9]{4})([0-9]{2,3})$/i;
+        number[9]['type'] = "Регистрационные знаки, устанавливаемые на прицепы.";
+        number[9]['type_code'] = "trailer";
+
+        number[10] = new Array();
+        number[10]['expr'] = /^([авекмнорстух]{2}[0-9]{3}[авекмнорстух])([0-9]{2,3})$/i;
+        number[10]['type'] = "Транзитные номерные знаки.";
+        number[10]['type_code'] = "tranzit";
+
+        number[11] = new Array();
+        number[11]['expr'] = /^([авекмнорстух][0-9]{3}[авекмнорстух]{2})$/i;
+        number[11]['type'] = "Федеральные номерные знаки.";
+        number[11]['type_code'] = "federal";
+
+        return number;
+    },
+
     parseGId: function(str){
-    	var number = new Array();
-
-    	number[0] = new Array();
-    	number[0]['expr'] = /^([авекмнорстух][0-9]{3}[авекмнорстух]{2})([0-9]{2,3})$/i;
-     	number[0]['type'] = "Регистрационные знаки транспортных средств";
-     	number[0]['type_code'] = "standart";
-
-    	number[1] = new Array();
-    	number[1]['expr'] = /^([авекмнорстух]{2}[0-9]{3})([0-9]{2,3})$/i;
-    	number[1]['type'] = "Регистрационные знаки транспортных средств, используемых для коммерческой перевозки пассажиров";
-    	number[1]['type_code'] = "commercial";
-
-    	number[2] = new Array();
-    	number[2]['expr'] = /^([авекмнорстух]{1}[0-9]{4})([0-9]{2,3})$/i;
-    	number[2]['type'] = "Регистрационные знаки транспортных средств МВД России";
-    	number[2]['type_code'] = "police";
-
-    	number[3] = new Array();
-    	number[3]['expr'] = /^([0-9]{4}[авекмнорстух]{2})([0-9]{2,3})$/i;
-    	number[3]['type'] = "Регистрационные знаки транспортных средств, числящихся за воинскими формированиями федеральных органов исполнительной власти России";
-    	number[3]['type_code'] = "military";
-
-    	number[4] = new Array();
-    	number[4]['expr'] = /^([0-9]{3}cd[0-9])([0-9]{2,3})$/i;
-    	number[4]['type'] = "Регистрационные знаки транспортных средств дипломатических представительств и торговых представительств иностранных компаний. CD -  автомобиль с данным регистрационным знаком зарегистрирован на посла или иное лицо в ранге главы дипломатического представительства.";
-    	number[4]['type_code'] = "diplomacy_cd";
-
-    	number[5] = new Array();
-    	number[5]['expr'] = /^([0-9]{3}cc[0-9]{1})([0-9]{2,3})$/i;
-    	number[5]['type'] = "Регистрационные знаки транспортных средств дипломатических представительств и торговых представительств иностранных компаний. CC — автомобиль с данным регистрационным знаком зарегистрирован на консула или иное лицо в ранге главы консульского представительства.";
-    	number[5]['type_code'] = "diplomacy_cc";
-
-    	number[6] = new Array();
-    	number[6]['expr'] = /^([0-9]{3}t[0-9]{3})([0-9]{2,3})$/i;
-    	number[6]['type'] = "Регистрационные знаки транспортных средств дипломатических представительств и торговых представительств иностранных компаний. T — регистрационный знак выдан на автомобиль сотрудника дипломатического представительства, консульского учреждения, международной организации, не обладающего дипломатическим статусом (административно-технический персонал).";
-    	number[6]['type_code'] = "diplomacy_t";
-
-    	number[7] = new Array();
-    	number[7]['expr'] = /^([0-9]{3}d[0-9]{3})([0-9]{2,3})$/i;
-    	number[7]['type'] = "Регистрационные знаки транспортных средств дипломатических представительств и торговых представительств иностранных компаний. D — регистрационный знак выдан на автомобиль, принадлежащий дипломатическому представительству, консульскому учреждению, международной организации или сотруднику такого представительства (учреждения, организации), обладающего дипломатическим статусом.";
-    	number[7]['type_code'] = "diplomacy_d";
-
-    	number[8] = new Array();
-    	number[8]['expr'] = /^(т[авекмнорстух]{2}[0-9]{3})([0-9]{2,3})$/i;
-    	number[8]['type'] = "Тип № 19 Номерной знак транспортных средств,окончательно выезжающих за пределы Российской Федерации.";
-    	number[8]['type_code'] = "export";
-
-    	number[9] = new Array();
-    	number[9]['expr'] = /^([авекмнорстух]{2}[0-9]{4})([0-9]{2,3})$/i;
-    	number[9]['type'] = "Регистрационные знаки, устанавливаемые на прицепы.";
-    	number[9]['type_code'] = "trailer";
-
-    	number[10] = new Array();
-    	number[10]['expr'] = /^([авекмнорстух]{2}[0-9]{3}[авекмнорстух])([0-9]{2,3})$/i;
-    	number[10]['type'] = "Транзитные номерные знаки.";
-    	number[10]['type_code'] = "tranzit";
-
-    	number[11] = new Array();
-    	number[11]['expr'] = /^([авекмнорстух][0-9]{3}[авекмнорстух]{2})$/i;
-    	number[11]['type'] = "Федеральные номерные знаки.";
-    	number[11]['type_code'] = "federal";
+        var number = this.getGidParams();
 
         for(var n in number){
             var result = number[n]['expr'].test(str);
@@ -636,7 +642,12 @@ core.utilities = {
         };
     },
 
-    drawGId: function(data, size){
+    drawGId: function(val, size){
+        val = val.toLowerCase();
+        val = this.filterGidStr(val);
+
+        var data = this.parseGId(val);
+
         var size_class = '', html = '';
 
         if(size == 'big'){
@@ -649,18 +660,31 @@ core.utilities = {
             var region = '';
 
             if(data.region){
-                region = '<span class="region">'+data.region+'</span>';
+                region = data.region;
             };
 
-            html =  '<span class="g_id '+data.type_code+' '+size_class+'" title="'+data.type_name+'">' +
+            html =  '<span class="g_id '+data.type_code+' '+size_class+'" title="'+data.type_name+'"><i class="shade"></i>' +
                         '<span class="id">'+data.id+'</span>' +
-                        region +
+                        '<span class="region"><b>' + region + '</b><i><label></label><em>RUS</em></i></span>' +
                     '</span>';
         }else{
-            html =  '<span class="g_id '+size_class+'"><span class="id">' + data.original + '</span></span>';
+            html =  '<span class="g_id '+size_class+' default"><i class="shade"></i><span class="id">' + data.original + '</span></span>';
         };
 
         return html;
+    },
+
+    filterGidStr: function(str){
+        var r = /[^0-9авекмнорстухcdt]/;
+
+        return str.replace(r, '');
+    },
+
+    transformToGID: function(o, size){
+        o.each(function(){
+            $(this).after(core.utilities.drawGId($(this).text(), size));
+            $(this).remove();
+        });
     }
 };
 
@@ -675,20 +699,32 @@ core.effects = {
     }
 };
 
-core.timer = {
+core.ticker = {
     interval: null,
     delay: 1000,
+    interval_methods: [],
 
     processSystemInterval: function(){
         //console.log('GLOBAL SYSTEM INTERVAL: TICK...');
+        this.callIntervalMethods();
     },
 
     startSystemInterval: function(){
-        this.interval = setInterval('core.timer.processSystemInterval()', this.delay);
+        this.interval = setInterval('core.ticker.processSystemInterval()', this.delay);
     },
 
     stopSystemInterval: function(){
         clearInterval(this.interval);
+    },
+
+    callIntervalMethods: function(){
+        for(var i = 0, l = this.interval_methods.length; i < l; i++){
+            this.interval_methods[i]();
+        };
+    },
+
+    addIntervalMethod: function(fn){
+        this.interval_methods.push(fn);
     },
 
     restartSystemInterval: function(){
@@ -711,6 +747,6 @@ core.exitUser = function(){
 
 //Object starter
 $(function(){
-    core.timer.startSystemInterval();
+    //core.ticker.startSystemInterval();
     core.effects.breathe($('#global_events_counter'));
 });

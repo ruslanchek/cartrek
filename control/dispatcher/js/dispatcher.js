@@ -47,5 +47,7 @@ core.dispatcher = {
         this.getAddresses();
         this.getParams();
         this.getMetrics();
+
+        core.utilities.transformToGID($('.g_id'), 'small');
     }
 };

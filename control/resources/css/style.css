@@ -162,37 +162,350 @@ h1 {
     font-size: 12px;
 }
 
+
+/* GID */
 .g_id {
-    border: 1px solid #ccc;
-    padding: 0;
-    text-align: center;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    color: #444;
-    background: #fff;
-    margin: 0 0.2em;
-    -webkit-box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
-    -moz-box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
-    line-height: normal;
+    position: relative;
+    display: block;
+    padding: 2px;
+    width: 7.3em;
 }
 
-.g_id.standart {
-    background: #fff;
+.g_id .shade {
+    background: url(../img/bg/g_id_shade.png) 0 0;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 
-.g_id.commercial {
-    background: yellow;
+.g_id span {
+    display: block;
+}
+
+.g_id .id {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    text-align: center;
+    border-left: 1px solid transparent;
+    border-right: none;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    -webkit-border-radius: 2px 0px 0px 2px;
+    border-radius: 2px 0px 0px 2px;
+}
+
+.g_id .region {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    text-align: center;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    -webkit-border-radius: 0px 2px 2px 0px;
+    border-radius: 0px 2px 2px 0px;
+}
+
+.g_id .region i label {
+    background: url(../img/bg/rf.png) no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    display: block;
+}
+
+.g_id .id {
+    width: 5em;
+    height: 1.5em;
+    line-height: 1.6em;
+}
+
+.g_id .region {
+    width: 2em;
+    height: 1.5em;
+    padding-left: 0.3em;
+    text-align: center;
+}
+
+.g_id .region b {
+    position: absolute;
+    font-weight: normal;
+    font-size: 0.85em;
+    height: 0.85em;
+    line-height: 0.85em;
+    top: 0.2em;
+    width: inherit;
+    display: block;
+    text-align: center;
+}
+
+.g_id .region em {
+    font-style: normal;
+    font-size: 1em;
+}
+
+.g_id .region i {
+    position: absolute;
+    font-size: 0.4em;
+    height: 0.4em;
+    line-height: 0.4em;
+    top: 2.75em;
+    font-style: normal;
+    width: inherit;
+    display: block;
 }
 
 .g_id.big {
-    padding: 0;
     font-size: 1.5em;
+    line-height: 1.5em;
+    height: 1.5em;
 }
 
-.g_id .id, .g_id .region {
-    padding: 0.4em;
+.g_id.small {
+    font-size: 0.9em;
+    line-height: 1.5em;
+    height: 1.5em;
+}
+
+.g_id.small .region em {
+    font-size: 1.1em;
+}
+
+
+
+/* GID Styles - default */
+.g_id.default {
+    background: #fff;
+    color: #111;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.g_id.default span.id {
+    border: 1px solid #666;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    width: 99%;
+}
+
+
+/* GID Styles - standart */
+.g_id.standart {
+    background: #fff;
+    color: #111;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.g_id.standart span {
+    border-color: #666;
+}
+
+.g_id.standart .region {
+    text-align: left;
+}
+
+.g_id.standart .region i {
+    padding-left: 2em;
+}
+
+.g_id.small.standart .region i label {
+    width: 0.6em;
+    height: 0.5em;
+    top: -0.3em;
+    left: 0em;
+}
+
+.g_id.big.standart .region i label {
+    width: 0.85em;
+    height: 0.65em;
+    top: -0.3em;
+    left: 0em;
+}
+
+.g_id.standart .region b {
+    margin-left: -0.3em;
+}
+
+
+/* GID Styles - tranzit */
+.g_id.tranzit {
+    background: #fff;
+    color: #111;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.g_id.tranzit span {
+    border-color: #666;
+}
+
+.g_id.tranzit .region {
+    text-align: left;
+}
+
+.g_id.tranzit .region i {
+    padding-left: 2em;
+}
+
+.g_id.small.tranzit .region i label {
+    width: 0.6em;
+    height: 0.5em;
+    top: -0.3em;
+    left: 0em;
+}
+
+.g_id.big.tranzit .region i label {
+    width: 0.85em;
+    height: 0.65em;
+    top: -0.3em;
+    left: 0em;
+}
+
+.g_id.tranzit .region b {
+    margin-left: -0.3em;
+}
+
+
+/* GID Styles - commercial */
+.g_id.commercial {
+    background: #ffed24;
+    color: #111;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.g_id.commercial span {
+    border-color: #666;
+}
+
+.g_id.commercial .region {
+    text-align: center;
+    padding-left: 0.175em;
+    padding-right: 0.175em;
+}
+
+.g_id.small.commercial .region i label {
+    display: none;
+}
+
+
+/* GID Styles - police */
+.g_id.police {
+    color: #fff;
+    background: #064db9;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.g_id.police span {
+    border-color: #fff;
+}
+
+.g_id.police .region {
+    text-align: center;
+    padding-left: 0.175em;
+    padding-right: 0.175em;
+}
+
+.g_id.small.police .region i label {
+    display: none;
+}
+
+
+/* GID Styles - military */
+.g_id.military {
+    color: #fff;
+    background: #1f1a17;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.g_id.military span {
+    border-color: #fff;
+}
+
+.g_id.military .region {
+    text-align: center;
+    padding-left: 0.175em;
+    padding-right: 0.175em;
+}
+
+.g_id.small.military .region i label {
+    display: none;
+}
+
+
+/* GID Styles - diplomacy */
+.g_id.diplomacy {
+    color: #fff;
+    background: #df0000;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.g_id.diplomacy span {
+    border-color: #fff;
+}
+
+.g_id.diplomacy .region {
+    text-align: center;
+    padding-left: 0.175em;
+    padding-right: 0.175em;
+}
+
+.g_id.small.diplomacy .region i label {
+    display: none;
+}
+
+
+
+/* GID Styles - federal */
+.g_id.federal {
+    background: #fff;
+    color: #111;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.g_id.federal span {
+    border-color: #666;
+}
+
+.g_id.federal .region {
+    text-align: left;
+}
+
+.g_id.federal .region i {
+
+}
+
+.g_id.federal .region b,
+.g_id.federal .region em {
+    display: none;
+}
+
+.g_id.federal .region i {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+.g_id.federal .region i label {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+
+#g_id_preview {
+    position: absolute;
+    top: -7px;
+    left: 26px;
 }
 
 #where_is_my_car {
@@ -260,7 +573,7 @@ h1 {
     text-shadow: 0 -1px 0 #333;
     font-size: 11px;
     display: block;
-    padding: 0 4px 5px;
+    padding: 0 4px 2px;
     margin: 10px 0 0 10px;
     -moz-border-radius-topleft: 0px;
     -moz-border-radius-topright: 4px;
@@ -271,6 +584,11 @@ h1 {
     -webkit-box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.6);
     -moz-box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.6);
     box-shadow: 0 5px 10px 0px rgba(0, 0, 0, 0.6);
+}
+
+.marker_label .g_id {
+    font-size: 12px;
+    margin: 0;
 }
 
 .marker_tip {

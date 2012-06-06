@@ -142,8 +142,8 @@ core.fleet_add = {
         });
 
         $('#g_id').live('keyup', function(){
-            var data = core.utilities.parseGId($(this).val());
-            var html = core.utilities.drawGId(data, 'big');
+            $(this).val(core.utilities.filterGidStr($(this).val()));
+            var html = core.utilities.drawGId($(this).val(), 'big');
 
             $('#g_id_preview').html('');
             $('#g_id_preview').html(html);
