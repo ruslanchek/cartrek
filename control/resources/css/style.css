@@ -314,21 +314,21 @@ h1 {
 }
 
 .g_id.standart .region i {
-    padding-left: 2em;
+    padding-left: 0;
 }
 
 .g_id.small.standart .region i label {
     width: 0.6em;
     height: 0.5em;
     top: -0.3em;
-    left: 0em;
+    right: 0.3em;
 }
 
 .g_id.big.standart .region i label {
-    width: 0.85em;
+    width: 0.9em;
     height: 0.65em;
     top: -0.3em;
-    left: 0em;
+    right: 0.5em;
 }
 
 .g_id.standart .region b {
@@ -352,21 +352,21 @@ h1 {
 }
 
 .g_id.tranzit .region i {
-    padding-left: 2em;
+    padding-left: 0;
 }
 
 .g_id.small.tranzit .region i label {
     width: 0.6em;
     height: 0.5em;
     top: -0.3em;
-    left: 0em;
+    right: 0.3em;
 }
 
 .g_id.big.tranzit .region i label {
-    width: 0.85em;
+    width: 0.9em;
     height: 0.65em;
     top: -0.3em;
-    left: 0em;
+    right: 0.5em;
 }
 
 .g_id.tranzit .region b {
