@@ -361,11 +361,11 @@ core.utilities = {
                 return {percentage: 49.98, level_name: 'средне', level_class: 'warning'};
             };
 
-            if(hdop > 8 && hdop <= 20){
+            if(hdop > 8 && hdop < 20){
                 return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'warning'};
             };
 
-            if(hdop > 20){
+            if(hdop >= 20){
                 return {percentage: 16.66, level_name: 'плохо', level_class: 'danger'};
             };
         }else{
