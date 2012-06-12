@@ -522,6 +522,10 @@ core.utilities = {
         return h + ':' + m + ':' + s;
     },
 
+    convertInputToVolts: function(val){
+        return ((val * 4.6 * 11)/4096).toFixed(2);
+    },
+
     getCSQIndicator: function(csq){
         var csq = this.parseCSQ(csq);
         return '<div title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)" class="indicator csq_indicator progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div>';

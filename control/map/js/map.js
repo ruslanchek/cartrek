@@ -693,6 +693,10 @@ core.map = {
                             '<td>Координаты</td>' +
                             '<td>'+marker.point.lat+' - '+core.utilities.convertNMEAtoWGS84(marker.point.lat)+', '+marker.point.lng+' - '+core.utilities.convertNMEAtoWGS84(marker.point.lng)+'</td>' +
                         '</tr>' +
+                        '<tr>' +
+                            '<td>Аккумулятор</td>' +
+                            '<td>'+core.utilities.convertInputToVolts(device.battery)+' В</td>' +
+                        '</tr>' +
                     '</table>' + additional;
 
         if(this.infowindow){
