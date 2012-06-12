@@ -382,19 +382,19 @@ core.utilities = {
             };
 
             if(dbm >= -86 && dbm < -78){
-                return {percentage: 80, level_name: 'отлично', level_class: 'success', dbm: dbm};
+                return {percentage: 87, level_name: 'отлично', level_class: 'success', dbm: dbm};
             };
 
             if(dbm >= -92 && dbm < -87){
-                return {percentage: 60, level_name: 'хорошо', level_class: 'success', dbm: dbm};
+                return {percentage: 75, level_name: 'хорошо', level_class: 'success', dbm: dbm};
             };
 
             if(dbm >= -101 && dbm < -93){
-                return {percentage: 40, level_name: 'средне', level_class: 'warning', dbm: dbm};
+                return {percentage: 50, level_name: 'средне', level_class: 'warning', dbm: dbm};
             };
 
             if(dbm <= -102 && dbm > -113){
-                return {percentage: 20, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
+                return {percentage: 25, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
             };
 
             if(dbm <= -113){
