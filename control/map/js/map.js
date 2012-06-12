@@ -689,6 +689,10 @@ core.map = {
                             '<td>Сигнал GPS</td>' +
                             '<td>'+core.utilities.getHDOPIndicator(marker.point.hdop)+'</td>' +
                         '</tr>' +
+                        '<tr>' +
+                            '<td>Координаты</td>' +
+                            '<td>'+marker.point.lat+' - '+core.utilities.convertNMEAtoWGS84(marker.point.lat)+', '+marker.point.lng+' - '+core.utilities.convertNMEAtoWGS84(marker.point.lng)+'</td>' +
+                        '</tr>' +
                     '</table>' + additional;
 
         if(this.infowindow){
