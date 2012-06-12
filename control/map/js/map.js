@@ -1099,9 +1099,6 @@ core.map = {
 
         for(var i = 0, l = device.path.points.length; i < l; i += 1){
             var d = new Date(device.path.points[i].date);
-            console.log(d)
-            console.log(d.getTime());
-
             points.push([d.getTime(), core.utilities.convertKnotsToKms(device.path.points[i].velocity)]);
         };
 

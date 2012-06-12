@@ -406,16 +406,10 @@ core.utilities = {
     },
 
     convertNMEAtoWGS84: function(value){
-        console.log('nmea value', value);
         var nTemp = value / 100.0;
-        console.log('nmea nTemp', nTemp);
         nTemp = nTemp - (nTemp%1);
-        console.log('nmea nTemp', nTemp);
         var flMin = value - 100.0 * nTemp;
-        console.log('nmea flMin', flMin);
         var result = nTemp + flMin / 60.0;
-        console.log('nmea result', result);
-        console.log('---');
         return result.toFixed(6);
     },
 

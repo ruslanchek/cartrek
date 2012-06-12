@@ -104,6 +104,7 @@
                     `csq`,
                     `journey`,
                     `active`,
+                    `battery`,
                     CONVERT_TZ(`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`
                 FROM
                     `devices`
@@ -132,9 +133,12 @@
                     `model`,
                     `make`,
                     `g_id`,
+                    `color`,
                     `hdop`,
                     `csq`,
                     `journey`,
+                    `active`,
+                    `battery`,
                     CONVERT_TZ(`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`
                 FROM
                     `devices`
