@@ -125,7 +125,7 @@
                 )
             ";
 
-            $this->query($query);
+            $this->db->query($query);
         }
 
         public function hideItem($id){
