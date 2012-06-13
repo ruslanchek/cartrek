@@ -375,6 +375,8 @@ core.utilities = {
 
     parseCSQ: function(csq){
         if(csq){
+            csq = parseInt(csq);
+
             var dbm = (-113) + (csq * 2);
 
             if(dbm >= -77){
@@ -528,11 +530,13 @@ core.utilities = {
 
     getCSQIndicator: function(csq){
         var csq = this.parseCSQ(csq);
+
         return '<div title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)" class="indicator csq_indicator progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div>';
     },
 
     getHDOPIndicator: function(hdop){
         var hdop = this.parseHDOP(hdop);
+
         return '<div title="GPS: '+hdop.level_name+'" class="indicator hdop_indicator progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div>';
     },
 

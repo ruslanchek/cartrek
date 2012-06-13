@@ -503,11 +503,11 @@ core.map = {
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GSM</td>' +
-                                        '<td>'+core.utilities.getCSQIndicator(device.last_registered_point.csq)+'</td>' +
+                                        '<td>'+core.utilities.getCSQIndicator(device.csq)+'</td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GPS</td>' +
-                                        '<td>'+core.utilities.getHDOPIndicator(device.last_registered_point.hdop)+'</td>' +
+                                        '<td>'+core.utilities.getHDOPIndicator(device.hdop)+'</td>' +
                                     '</tr>' +
                                 '</table></div>';
 
@@ -641,7 +641,7 @@ core.map = {
 
     showMarkerData: function(marker){
         var device = this.options.devices[this.getDeviceIndexById(marker.device_id)],
-            status, status_class, additional = new String();
+            status, status_class, additional = new String(), gps, gsm;
 
         if(marker.point.id == device.current_position_marker.point.id){
             status = 'Текущее положение';
@@ -649,6 +649,9 @@ core.map = {
             if(this.options.current_devece_id != marker.device_id){
                 additional = '<a class="btn btn-info select_car_button" rel="'+marker.device_id+'" href="javascript:void(0)"><i class="icon-share-alt icon-white"></i> Выбрать машину</a>';
             };
+
+            gps = core.utilities.getHDOPIndicator(device.hdop);
+            gsm = core.utilities.getCSQIndicator(device.csq);
         }else{
             if(marker.point.velocity > 0){
                 status = 'В пути';
@@ -657,6 +660,9 @@ core.map = {
                 status = 'Остановка';
                 status_class = 'label-important';
             };
+
+            gps = core.utilities.getHDOPIndicator(marker.point.hdop);
+            gsm = core.utilities.getCSQIndicator(marker.point.csq);
         };
 
         var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+ ' ' +core.utilities.drawGId(device.g_id, 'small')+ '</p>' +
@@ -683,11 +689,11 @@ core.map = {
                         '</tr>' +
                         '<tr>' +
                             '<td>Сигнал GSM</td>' +
-                            '<td>'+core.utilities.getCSQIndicator(marker.point.csq)+'</td>' +
+                            '<td>'+gsm+'</td>' +
                         '</tr>' +
                         '<tr>' +
                             '<td>Сигнал GPS</td>' +
-                            '<td>'+core.utilities.getHDOPIndicator(marker.point.hdop)+'</td>' +
+                            '<td>'+gps+'</td>' +
                         '</tr>' +
                         '<tr>' +
                             '<td>Координаты</td>' +
