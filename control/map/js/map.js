@@ -503,11 +503,11 @@ core.map = {
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GSM</td>' +
-                                        '<td>'+core.utilities.getCSQIndicator(device.last_registered_point.csq)+'</td>' +
+                                        '<td>'+core.utilities.getCSQIndicator(device.csq)+'</td>' +
                                     '</tr>' +
                                     '<tr>' +
                                         '<th>Сигнал GPS</td>' +
-                                        '<td>'+core.utilities.getHDOPIndicator(device.last_registered_point.hdop)+'</td>' +
+                                        '<td>'+core.utilities.getHDOPIndicator(device.hdop)+'</td>' +
                                     '</tr>' +
                                 '</table></div>';
 
