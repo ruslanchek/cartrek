@@ -520,7 +520,7 @@ core.map = {
         if(points && points.length > 0){
             var polyline_shape = new Array();
 
-            for(var i = 1, l = points.length; i < l; i++){
+            for(var i = 0, l = points.length; i < l; i++){
                 polyline_shape.push(
                     new google.maps.LatLng(
                         core.utilities.convertNMEAtoWGS84(points[i].lat),
@@ -549,7 +549,7 @@ core.map = {
             var waypoint_markers = new Array(),
                 stops = 0;
 
-            for(var i = 1, l = points.length; i < l; i++){
+            for(var i = 0, l = points.length-1; i < l; i++){
                 waypoint_markers.push(this.createWaypointMarker({
                     map         : map,
                     device      : device,
@@ -697,11 +697,7 @@ core.map = {
                         '</tr>' +
                         '<tr>' +
                             '<td>Координаты</td>' +
-                            '<td>'+marker.point.lat+' - '+core.utilities.convertNMEAtoWGS84(marker.point.lat)+', '+marker.point.lng+' - '+core.utilities.convertNMEAtoWGS84(marker.point.lng)+'</td>' +
-                        '</tr>' +
-                        '<tr>' +
-                            '<td>Аккумулятор</td>' +
-                            '<td>'+core.utilities.convertInputToVolts(device.battery)+' В</td>' +
+                            '<td>'+core.utilities.convertNMEAtoWGS84(marker.point.lat)+', '+core.utilities.convertNMEAtoWGS84(marker.point.lng)+'</td>' +
                         '</tr>' +
                     '</table>' + additional;
 
