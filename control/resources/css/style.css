@@ -533,7 +533,8 @@ h1 {
     position: absolute;
     right: 10px;
     top: 50%;
-    margin-top: -12px;
+    margin-top: -11px;
+    display: inline-block;
 }
 
 .header_tools {
@@ -661,8 +662,19 @@ h1 {
     font-size: 3em;
 }
 
+#car_name_info {
+    padding-right: 7.5em;
+}
+
 #car_name_info .badge {
     text-shadow: none;
+}
+
+#car_name_info .g_id {
+    display: inline-block;
+    margin: 0;
+    position: absolute;
+    top: 3px;
 }
 
 .info_tab_header {

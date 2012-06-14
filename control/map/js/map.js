@@ -51,14 +51,14 @@ core.map = {
             'img/markers/heading/'+degrees_zone+'.png',
             new google.maps.Size(16,16),
             new google.maps.Point(0,0),
-            new google.maps.Point(8,16)
+            new google.maps.Point(8,8)
         );
 
         var shadow = new google.maps.MarkerImage(
             'img/markers/heading/flat_shadow.png',
             new google.maps.Size(30,30),
             new google.maps.Point(0,0),
-            new google.maps.Point(15,20)
+            new google.maps.Point(15,12)
         );
 
         var shape = {
@@ -446,9 +446,13 @@ core.map = {
                                     '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
                                 '</tr>' +
                                 '<tr>' +
+                                    '<th>Остановки</th>' +
+                                    '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
+                                '</tr>' +
+                                /*'<tr>' +
                                     '<th>График</th>' +
                                     '<td><a href="javascript:void(0)" class="label label-info" onclick="core.map.showCharts()">Показать</a></td>' +
-                                '</tr>' +
+                                '</tr>' +*/
                             '</table></div>';
 
                 $('#registered_data').html(html).fadeIn(150);
