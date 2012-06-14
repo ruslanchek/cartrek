@@ -566,6 +566,11 @@ h1 {
     padding: 2px 0 0 0;
 }
 
+.info_window_content .g_id {
+    display: inline-block;
+    margin: 0 0 -5px 4px;
+}
+
 .marker_label {
     position: relative;
     background: #000;
@@ -838,7 +843,7 @@ h1 {
 }
 
 .side_block_content {
-    padding-top: 5px;
+    padding-top: 10px;
 }
 
 .map_container #right_side table {
@@ -862,7 +867,7 @@ h1 {
     width: 16px;
     height: 16px;
     display: inline-block;
-    margin: 0 4px -5px -3px;
+    margin: 0 4px -6px -3px;
 }
 
 .hi_n {

@@ -448,8 +448,16 @@ core.map = {
                                     '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
                                 '</tr>' +
                                 '<tr>' +
-                                    '<th>Остановки</th>' +
-                                    '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
+                                    '<th title="Последнее обновление местоположения">Обн. местополож.</th>' +
+                                    '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+', в '+core.utilities.humanizeTime(device.last_registered_point.date)+'">'+
+                                        '<span id="position_time_gone" data-time_from="'+device.last_registered_point.date+'">'+core.utilities.dateRange(device.last_registered_point.date, new Date())+' назад</span>'+
+                                    '</span></td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<th title="Последнее обновление статуса устройства">Обн. статуса</th>' +
+                                    '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_update, 'MYSQL') +', в '+core.utilities.humanizeTime(device.last_update)+'">'+
+                                        '<span id="status_time_gone" data-time_from="'+device.last_update+'">'+core.utilities.dateRange(device.last_update, new Date())+' назад</span>'+
+                                    '</span></td>' +
                                 '</tr>' +
                                 /*'<tr>' +
                                     '<th>График</th>' +
@@ -458,6 +466,16 @@ core.map = {
                             '</table></div>';
 
                 $('#registered_data').html(html).fadeIn(150);
+
+                core.ticker.addIntervalMethod(function(){
+                    $('#position_time_gone').text(
+                        core.utilities.dateRange($('#position_time_gone').data('time_from'), new Date())+' назад'
+                    );
+
+                    $('#status_time_gone').text(
+                        core.utilities.dateRange($('#status_time_gone').data('time_from'), new Date())+' назад'
+                    );
+                });
             };
 
             $('#where_is_my_car').show();
@@ -470,15 +488,7 @@ core.map = {
 
         if(device.last_registered_point){
             var heading = core.utilities.humanizeHeadingDegrees(device.last_registered_point.bb),
-                title   = 'Последнее обновление местоположения: '+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+
-                          ', в '+
-                          core.utilities.humanizeTime(device.last_registered_point.date) +
-                          ', последнее обновление статуса: '+
-                          core.utilities.humanizeDate(device.last_update, 'MYSQL') +
-                          ', в '+
-                          core.utilities.humanizeTime(device.last_update);
-
-            var info_html =     '<b title="'+title+'">Cостояние устройства <a href="javascript:void(0)" class="caret"></a></b>' +
+                info_html =     '<b>Cостояние устройства <a href="javascript:void(0)" class="caret"></a></b>' +
                                 '<div class="side_block_content"><table class="">' +
                                     /*'<tr>' +
                                         '<td width="70%">Последнее обновление местоположения</td>' +
@@ -524,7 +534,8 @@ core.map = {
 
     drawPath: function(points, device, map){
         if(points && points.length > 0){
-            var polyline_shape = new Array();
+            var polyline_shape = new Array(),
+                stops = 0;
 
             for(var i = 0, l = points.length; i < l; i++){
                 polyline_shape.push(
@@ -533,6 +544,10 @@ core.map = {
                         core.utilities.convertNMEAtoWGS84(points[i].lng)
                     )
                 );
+
+                if(points[i].velocity <= 0){
+                    stops++;
+                };
             };
 
             var polyline = new google.maps.Polyline({
@@ -546,14 +561,13 @@ core.map = {
 
             polyline.setMap(map);
 
-            return polyline;
+            return {polyline: polyline, stops: stops};
         };
     },
 
     drawWaypointMarkers: function(points, device, map){
         if(points && points.length > 0){
-            var waypoint_markers = new Array(),
-                stops = 0;
+            var waypoint_markers = new Array();
 
             for(var i = 0, l = points.length-1; i < l; i++){
                 waypoint_markers.push(this.createWaypointMarker({
@@ -564,16 +578,9 @@ core.map = {
                         core.map.showMarkerData(marker);
                     }
                 }));
-
-                if(points[i].velocity <= 0){
-                    stops++;
-                };
             };
 
-            return {
-                waypoint_markers: waypoint_markers,
-                stops: stops
-            };
+            return waypoint_markers;
         };
     },
 
@@ -756,18 +763,18 @@ core.map = {
     createDevicePathData: function(device_id, points){
         var polyline = this.drawPath(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
             waypoint_markers = this.drawWaypointMarkers(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
-            max_speed = this.getMaxSpeed(waypoint_markers.waypoint_markers);
+            max_speed = this.getMaxSpeed(waypoint_markers);
 
         this.options.devices[this.getDeviceIndexById(device_id)].max_speed_marker = max_speed.marker;
         this.options.devices[this.getDeviceIndexById(device_id)].path = {
             points          : points,
-            polyline        : polyline,
-            waypoint_markers: waypoint_markers.waypoint_markers,
+            polyline        : polyline.polyline,
+            waypoint_markers: waypoint_markers,
             statistics      : {
-                distance        : polyline.inKm(),
+                distance        : polyline.polyline.inKm(),
                 average_speed   : this.getAverageSpeed(points),
                 max_speed       : max_speed.value,
-                stops           : waypoint_markers.stops
+                stops           : polyline.stops
             }
         };
 
@@ -1080,22 +1087,49 @@ core.map = {
 
         $('.calendar_place a.opener').live('click', function(){
             if($('.calendar_place').hasClass('closed')){
-                $('.calendar_place').animate({top: 34, opacity: 0.96}, 400, 'easeOutExpo').removeClass('closed').addClass('opened');
+                $('.calendar_place').stop().animate({top: 34, opacity: 0.96}, 400, 'easeOutExpo').removeClass('closed').addClass('opened');
             }else{
-                $('.calendar_place').animate({top: -210, opacity: 0.75}, 400, 'easeOutExpo').removeClass('opened').addClass('closed');
+                $('.calendar_place').stop().animate({top: -210, opacity: 0.75}, 400, 'easeOutExpo').removeClass('opened').addClass('closed');
             };
+        });
+
+        $('.calendar_place').live('mouseleave', function(){
+            core.map.options.calendar_timeout = setTimeout(
+                function(){
+                    $('.calendar_place').stop().animate({top: -210, opacity: 0.75}, 400, 'easeOutExpo').removeClass('opened').addClass('closed')
+                },
+                1000
+            );
+        });
+
+        $('.calendar_place').live('mouseenter', function(){
+            clearTimeout(core.map.options.calendar_timeout);
         });
 
         $('.map_container .side_block>b').live('click', function(){
             var p = $(this).parent();
             if(p.hasClass('closed')){
                 p.find('table').show();
-                p.animate({height: 130}, 200, 'easeOutExpo');
+                p.animate({height: 130}, 300, 'easeOutExpo');
                 p.removeClass('closed');
+
+                $.cookie(p.attr('id'), '1', core.map.options.cookie_options);
             }else{
                 p.find('table').hide();
-                p.animate({height: 19}, 200, 'easeOutExpo');
+                p.animate({height: 19}, 300, 'easeOutExpo');
                 p.addClass('closed');
+
+                $.cookie(p.attr('id'), '0', core.map.options.cookie_options);
+            };
+        });
+
+        $('.map_container .side_block').each(function(){
+            if($.cookie($(this).attr('id')) === '1'){
+                $(this).removeClass('closed');
+                $(this).css({height: 130});
+            }else{
+                $(this).addClass('closed');
+                $(this).css({height: 19});
             };
         });
 

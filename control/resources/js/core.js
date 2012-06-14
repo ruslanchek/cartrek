@@ -695,6 +695,45 @@ core.utilities = {
             $(this).after(core.utilities.drawGId($(this).text(), size));
             $(this).remove();
         });
+    },
+
+    dateObjToMYSQL: function(date){
+        return date.getFullYear()+'-'+core.utilities.leadingZero(date.getMonth(), 2)+'-'+core.utilities.leadingZero(date.getDate(), 2)+' '+core.utilities.leadingZero(date.getHours(), 2)+':'+core.utilities.leadingZero(date.getMinutes(), 2)+':'+core.utilities.leadingZero(date.getSeconds(), 2);
+    },
+
+    dateRange: function(date_from, date_to){
+        console.log('date_from', date_from)
+        console.log('date_to', date_to)
+
+        var startDate = new Date(date_from);
+        var currDate = new Date(date_to);
+        var duration = new Date(currDate - startDate);
+
+        console.log('startDate', startDate)
+        console.log('currDate', currDate)
+
+        var d = {
+            days: Math.floor(duration.getHours() / 24),
+            hours: duration.getHours(),
+            minutes: duration.getMinutes(),
+            seconds: duration.getSeconds()
+        };
+
+        if(d.days > 0){
+            return d.days + ' ' + this.plural(d.days, 'день', 'дня', 'дней');
+        };
+
+        if(d.hours < 24 && d.hours > 0){
+            return d.hours + ' ' + this.plural(d.hours, 'час', 'часа', 'часов');
+        };
+
+        if(d.minutes < 60 && d.minutes > 0 && d.hours == 0 && d.days == 0){
+            return d.minutes + ' ' + this.plural(d.minutes, 'минуту', 'минуты', 'минут');
+        };
+
+        if(d.seconds < 60 && d.minutes == 0 && d.hours == 0 && d.days == 0){
+            return d.seconds + ' ' + this.plural(d.seconds, 'секунду', 'секунды', 'секунд');
+        };
     }
 };
 
@@ -711,7 +750,7 @@ core.effects = {
 
 core.ticker = {
     interval: null,
-    delay: 1000,
+    delay: 10000,
     interval_methods: [],
 
     processSystemInterval: function(){
@@ -757,6 +796,6 @@ core.exitUser = function(){
 
 //Object starter
 $(function(){
-    //core.ticker.startSystemInterval();
+    core.ticker.startSystemInterval();
     core.effects.breathe($('#global_events_counter'));
 });
