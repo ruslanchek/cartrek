@@ -563,7 +563,7 @@ h1 {
 }
 
 .info_window_content {
-    padding: 15px 0 0 0;
+    padding: 2px 0 0 0;
 }
 
 .marker_label {
@@ -575,7 +575,7 @@ h1 {
     font-size: 11px;
     display: block;
     padding: 0 4px 2px;
-    margin: 10px 0 0 10px;
+    margin: 18px 0 0 10px;
     -moz-border-radius-topleft: 0px;
     -moz-border-radius-topright: 4px;
     -moz-border-radius-bottomright: 4px;
@@ -598,8 +598,9 @@ h1 {
     background: url(../img/icons/label_tip.gif);
     height: 10px;
     width: 10px;
-    top: 0px;
+    top: 8px;
     left: 0px;
+    opacity: 0.75;
 }
 
 .marker_label .g_id {
@@ -660,10 +661,6 @@ h1 {
     color: #444;
     margin: 0 0 0.5em;
     font-size: 3em;
-}
-
-#car_name_info {
-    padding-right: 7.5em;
 }
 
 #car_name_info .badge {

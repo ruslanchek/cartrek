@@ -401,8 +401,10 @@ core.map = {
 
         if(device){
             $('#car_name_info').html('<b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' '+core.utilities.drawGId(device.g_id, 'small'));
+            $('#car_name_info').css({paddingRight: $('#car_name_info .g_id').width() + 8});
         }else{
             $('#car_name_info').html('<b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span>');
+            $('#car_name_info').css({paddingRight: 0});
         };
     },
 
