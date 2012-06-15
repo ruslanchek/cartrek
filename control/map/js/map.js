@@ -73,6 +73,30 @@ core.map = {
         };
     },
 
+    getWaypointIcon: function(heading){
+        var degrees_zone = Math.round(parseInt(heading)/15) * 15;
+
+        var image = new google.maps.MarkerImage(
+            'img/markers/waypoint/'+degrees_zone+'.png',
+            new google.maps.Size(11,11),
+            new google.maps.Point(0,0),
+            new google.maps.Point(5.5,5.5)
+        );
+
+        var shadow = {};
+
+        var shape = {
+            coord: [7,2,7,3,8,4,8,5,9,6,9,7,9,8,9,9,1,9,1,8,1,7,1,6,2,5,2,4,3,3,3,2,7,2],
+            type: 'poly'
+        };
+
+        return {
+            image: image,
+            shadow: shadow,
+            shape: shape
+        };
+    },
+
     setMapsPrototypes: function(){
         google.maps.LatLng.prototype.kmTo = function(a){
             var e = Math, ra = e.PI/180;
@@ -644,7 +668,7 @@ core.map = {
             type  = 'stop';
         }else{
             title = options.device.name+' — в пути ('+core.utilities.convertKnotsToKms(options.point.velocity)+' км/ч)';
-            style = this.options.marker_styles.waypoint;
+            style = this.getWaypointIcon(options.point.bb);
             type  = 'move';
         };
 
