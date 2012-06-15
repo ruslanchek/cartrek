@@ -450,13 +450,13 @@ core.map = {
                                 '<tr>' +
                                     '<th title="Последнее обновление местоположения">Обн. местополож.</th>' +
                                     '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+', в '+core.utilities.humanizeTime(device.last_registered_point.date)+'">'+
-                                        '<span id="position_time_gone" data-time_from="'+device.last_registered_point.date+'">'+core.utilities.dateRange(device.last_registered_point.date, new Date())+' назад</span>'+
+                                        '<span id="position_time_gone" data-time_from="'+device.last_registered_point.date+'">'+core.utilities.dateRange(this.convertGMTDateTimes(device.last_registered_point.date), new Date())+' назад</span>'+
                                     '</span></td>' +
                                 '</tr>' +
                                 '<tr>' +
                                     '<th title="Последнее обновление статуса устройства">Обн. статуса</th>' +
                                     '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_update, 'MYSQL') +', в '+core.utilities.humanizeTime(device.last_update)+'">'+
-                                        '<span id="status_time_gone" data-time_from="'+device.last_update+'">'+core.utilities.dateRange(device.last_update, new Date())+' назад</span>'+
+                                        '<span id="status_time_gone" data-time_from="'+device.last_update+'">'+core.utilities.dateRange(this.convertGMTDateTimes(device.last_update), new Date())+' назад</span>'+
                                     '</span></td>' +
                                 '</tr>' +
                                 /*'<tr>' +
@@ -469,11 +469,11 @@ core.map = {
 
                 core.ticker.addIntervalMethod(function(){
                     $('#position_time_gone').text(
-                        core.utilities.dateRange($('#position_time_gone').data('time_from'), new Date())+' назад'
+                        core.utilities.dateRange(core.utilities.convertGMTDateTimes($('#position_time_gone').data('time_from')), new Date())+' назад'
                     );
 
                     $('#status_time_gone').text(
-                        core.utilities.dateRange($('#status_time_gone').data('time_from'), new Date())+' назад'
+                        core.utilities.dateRange(core.utilities.convertGMTDateTimes($('#status_time_gone').data('time_from')), new Date())+' назад'
                     );
                 });
             };
