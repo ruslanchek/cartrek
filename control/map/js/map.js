@@ -84,10 +84,12 @@ core.map = {
         };
 
         google.maps.Polyline.prototype.inKm = function(n){
-            var a = this.getPath(n), len = a.getLength(), dist = 0;
-            for (var i=0; i < len-1; i++) {
-               dist += a.getAt(i).kmTo(a.getAt(i+1));
+            var a = this.getPath(n), dist = 0;
+
+            for (var i = 0, l = a.getLength(); i < l-1; i++){
+                dist += a.getAt(i).kmTo(a.getAt(i+1));
             };
+
             return dist.toFixed(2);
         };
 
@@ -153,12 +155,25 @@ core.map = {
 
     },
 
-    showWaypointMarkers: function(){
+    showWaypointMarkers: function(type){
+        var markers = this.options.devices[this.getDeviceIndexById(this.options.current_devece_id)].path.waypoint_markers;
 
+        for(var i = 0, l = markers.length; i < l; i++){
+            if(type == markers[i].type || !type){
+                console.log(markers[i])
+                markers[i].setMap(this.map);
+            };
+        };
     },
 
-    hideWaypointMarkers: function(){
+    hideWaypointMarkers: function(type){
+        var markers = this.options.devices[this.getDeviceIndexById(this.options.current_devece_id)].path.waypoint_markers;
 
+        for(var i = 0, l = markers.length; i < l; i++){
+            if(type == markers[i].type || !type){
+                markers[i].setMap(null);
+            };
+        };
     },
 
     execSettings: function(settings){
@@ -621,14 +636,16 @@ core.map = {
     },
 
     createWaypointMarker: function(options){
-        var style, title;
+        var style, title, type;
 
         if(options.point.velocity <= 0){
             title = options.device.name+' — остановка';
             style = this.options.marker_styles.waypoint_stop;
+            type  = 'stop';
         }else{
             title = options.device.name+' — в пути ('+core.utilities.convertKnotsToKms(options.point.velocity)+' км/ч)';
             style = this.options.marker_styles.waypoint;
+            type  = 'move';
         };
 
         var marker = new google.maps.Marker({
@@ -642,6 +659,7 @@ core.map = {
             point       : options.point,
             map         : options.map,
             title       : title,
+            type        : type,
             device_id   : options.device.id
         });
 
@@ -1125,8 +1143,6 @@ core.map = {
                 $(this).css({height: 19});
             };
         });
-
-        getURL('javascript:document.getElementById("'+banner_obj_id+'").__ex.__hide()');
 
         /*$('#view_settings').live('click', function(){
             core.modal.show(core.map.getVeiwSettingsContent());
