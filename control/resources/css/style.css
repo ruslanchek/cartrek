@@ -761,7 +761,7 @@ h1 {
     display: inline-block;
     position: absolute;
 
-    height: 130px;
+    height: 140px;
 
     *display: inline;
     /* IE7 inline-block hack */
@@ -843,7 +843,7 @@ h1 {
 }
 
 .side_block_content {
-    padding-top: 10px;
+    padding-top: 5px;
 }
 
 .map_container #right_side table {

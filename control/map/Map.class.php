@@ -44,11 +44,11 @@
         public function getOptions(){
             $options = new stdClass();
 
-            $options->date      = $this->devices->current_date;
-            $options->now       = gmdate("Y-m-d H-i-s", time() + date("Z"));
-            $options->gmtOffset = date('Z');
-            $options->min_date  = $this->devices->getMinDate();
-            $options->devices   = $this->devices->getUserDevices();
+            $options->date          = $this->devices->current_date;
+            $options->now           = gmdate("Y-m-d H-i-s", time() + date("Z"));
+            $options->gmt_offset    = date('Z');
+            $options->min_date      = $this->devices->getMinDate();
+            $options->devices       = $this->devices->getUserDevices();
 
             return $options;
         }

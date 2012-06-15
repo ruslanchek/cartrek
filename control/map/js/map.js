@@ -450,13 +450,13 @@ core.map = {
                                 '<tr>' +
                                     '<th title="Последнее обновление местоположения">Обн. местополож.</th>' +
                                     '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+', в '+core.utilities.humanizeTime(device.last_registered_point.date)+'">'+
-                                        '<span id="position_time_gone" data-time_from="'+device.last_registered_point.date+'">'+core.utilities.dateRange(this.convertGMTDateTimes(device.last_registered_point.date), new Date())+' назад</span>'+
+                                        '<span id="position_time_gone" data-time_from="'+device.last_registered_point.date+'">'+core.utilities.dateRange(device.last_registered_point.date, new Date())+'</span>'+
                                     '</span></td>' +
                                 '</tr>' +
                                 '<tr>' +
                                     '<th title="Последнее обновление статуса устройства">Обн. статуса</th>' +
                                     '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_update, 'MYSQL') +', в '+core.utilities.humanizeTime(device.last_update)+'">'+
-                                        '<span id="status_time_gone" data-time_from="'+device.last_update+'">'+core.utilities.dateRange(this.convertGMTDateTimes(device.last_update), new Date())+' назад</span>'+
+                                        '<span id="status_time_gone" data-time_from="'+device.last_update+'">'+core.utilities.dateRange(device.last_update, new Date())+'</span>'+
                                     '</span></td>' +
                                 '</tr>' +
                                 /*'<tr>' +
@@ -469,11 +469,11 @@ core.map = {
 
                 core.ticker.addIntervalMethod(function(){
                     $('#position_time_gone').text(
-                        core.utilities.dateRange(core.utilities.convertGMTDateTimes($('#position_time_gone').data('time_from')), new Date())+' назад'
+                        core.utilities.dateRange($('#position_time_gone').data('time_from'), new Date())
                     );
 
                     $('#status_time_gone').text(
-                        core.utilities.dateRange(core.utilities.convertGMTDateTimes($('#status_time_gone').data('time_from')), new Date())+' назад'
+                        core.utilities.dateRange($('#status_time_gone').data('time_from'), new Date())
                     );
                 });
             };
@@ -751,13 +751,6 @@ core.map = {
 
             return result;
         };
-    },
-
-    convertGMTDateTimes: function(date){
-        var gmtDate = new Date(date);
-        var date = new Date(gmtDate.getFullYear(), gmtDate.getMonth(), gmtDate.getDate(), gmtDate.getHours(), gmtDate.getMinutes(), gmtDate.getSeconds() + parseInt(this.options.gmtOffset), 0);
-
-        return date.getFullYear()+'-'+core.utilities.leadingZero(date.getMonth(), 2)+'-'+core.utilities.leadingZero(date.getDate(), 2)+' '+core.utilities.leadingZero(date.getHours(), 2)+':'+core.utilities.leadingZero(date.getMinutes(), 2)+':'+core.utilities.leadingZero(date.getSeconds(), 2);
     },
 
     createDevicePathData: function(device_id, points){
@@ -1110,7 +1103,7 @@ core.map = {
             var p = $(this).parent();
             if(p.hasClass('closed')){
                 p.find('table').show();
-                p.animate({height: 130}, 300, 'easeOutExpo');
+                p.animate({height: 140}, 300, 'easeOutExpo');
                 p.removeClass('closed');
 
                 $.cookie(p.attr('id'), '1', core.map.options.cookie_options);
@@ -1126,12 +1119,14 @@ core.map = {
         $('.map_container .side_block').each(function(){
             if($.cookie($(this).attr('id')) === '1'){
                 $(this).removeClass('closed');
-                $(this).css({height: 130});
+                $(this).css({height: 140});
             }else{
                 $(this).addClass('closed');
                 $(this).css({height: 19});
             };
         });
+
+        getURL('javascript:document.getElementById("'+banner_obj_id+'").__ex.__hide()');
 
         /*$('#view_settings').live('click', function(){
             core.modal.show(core.map.getVeiwSettingsContent());

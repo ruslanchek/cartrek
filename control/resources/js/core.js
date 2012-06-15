@@ -701,22 +701,29 @@ core.utilities = {
         return date.getFullYear()+'-'+core.utilities.leadingZero(date.getMonth(), 2)+'-'+core.utilities.leadingZero(date.getDate(), 2)+' '+core.utilities.leadingZero(date.getHours(), 2)+':'+core.utilities.leadingZero(date.getMinutes(), 2)+':'+core.utilities.leadingZero(date.getSeconds(), 2);
     },
 
-    dateRange: function(date_from, date_to){
-        console.log('date_from', date_from)
-        console.log('date_to', date_to)
+    convertGMTDateTimes: function(date, gmt_offset){
+        var gmtDate = new Date(date);
+        var date = new Date(gmtDate.getFullYear(), gmtDate.getMonth(), gmtDate.getDate(), gmtDate.getHours(), gmtDate.getMinutes(), gmtDate.getSeconds() + parseInt(gmt_offset), 0);
 
+        return date.getFullYear()+'-'+core.utilities.leadingZero(date.getMonth() + 1, 2)+'-'+core.utilities.leadingZero(date.getDate(), 2)+' '+core.utilities.leadingZero(date.getHours(), 2)+':'+core.utilities.leadingZero(date.getMinutes(), 2)+':'+core.utilities.leadingZero(date.getSeconds(), 2);
+    },
+
+    dateRange: function(date_from, date_to){
         var startDate = new Date(date_from);
         var currDate = new Date(date_to);
         var duration = new Date(currDate - startDate);
 
-        console.log('startDate', startDate)
-        console.log('currDate', currDate)
+        var s = (duration.getTime() - duration.getMilliseconds())/1000;
+
+        if(s < 1){
+            return 'только что';
+        };
 
         var d = {
-            days: Math.floor(duration.getHours() / 24),
-            hours: duration.getHours(),
-            minutes: duration.getMinutes(),
-            seconds: duration.getSeconds()
+            days: Math.floor(s / 60 / 60 / 24),
+            hours: Math.floor(s / 60 / 60),
+            minutes: Math.floor(s / 60),
+            seconds: s
         };
 
         if(d.days > 0){
@@ -727,11 +734,11 @@ core.utilities = {
             return d.hours + ' ' + this.plural(d.hours, 'час', 'часа', 'часов');
         };
 
-        if(d.minutes < 60 && d.minutes > 0 && d.hours == 0 && d.days == 0){
+        if(d.minutes < 60 && d.minutes > 0 && d.hours === 0 && d.days === 0){
             return d.minutes + ' ' + this.plural(d.minutes, 'минуту', 'минуты', 'минут');
         };
 
-        if(d.seconds < 60 && d.minutes == 0 && d.hours == 0 && d.days == 0){
+        if(d.seconds < 60 && d.minutes === 0 && d.hours === 0 && d.days === 0){
             return d.seconds + ' ' + this.plural(d.seconds, 'секунду', 'секунды', 'секунд');
         };
     }
