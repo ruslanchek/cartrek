@@ -113,7 +113,13 @@
                     <div class="clear"></div>
                 </p>
                 
-                <script>{literal}$(function(){$('#demo_g_id').html(core.utilities.drawGId('а000аа77', 'small'))}){/literal}</script>
+                <script>
+                    {literal}
+                        $(function(){
+                            $('#demo_g_id').html(core.utilities.drawGId('а000аа77', 'small'));
+                        });
+                    {/literal}
+                </script>
             </div>
         </div>
     {/if}
