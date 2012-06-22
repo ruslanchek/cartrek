@@ -991,9 +991,7 @@ core.map = {
     },
 
     hideMapNotice: function(){
-        $('.map_notice').fadeOut(150, function(){
-            $('.map_notice').remove()
-        });
+        $('.map_notice').remove();
     },
 
     setMapToDefaultPoint: function(){
