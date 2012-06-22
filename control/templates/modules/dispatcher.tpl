@@ -14,22 +14,24 @@
 <div class="dispatcher_devices">
 {foreach $core->devices->getUserDevices() as $item}
     <div class="item">
-        <h2>
-            <span class="pull-left">
-                {$item.name} &mdash; {$item.make} {$item.model} <span class="g_id">{$item.g_id}</span>
-            </span>
+        <div class="item_head">
+            <div class="span4 info_span">
+                <h2>{$item.name} &mdash; {$item.make} {$item.model}</h2>
+            </div>
 
-            <span class="pull-right">
-                <div class="velocity" data-velocity="{$item.last_registered_point.velocity}"></div>
-                <div class="heading" data-heading="{$item.last_registered_point.bb}"></div>
-                <div class="parameters" data-csq="{$item.last_registered_point.csq}" data-hdop="{$item.last_registered_point.hdop}"></div>
-                {$core->devices->getDeviceSatus($item)}
-            </span>
+            <div class="span8">
+                <p class="address_item" data-id="{$item.id}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}">&nbsp;</p>
+            </div>
 
             <div class="clear"></div>
-        </h2>
+        </div>
 
-        <p class="address_item" data-id="{$item.id}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}">&nbsp;</p>
+        <div class="info_span velocity" data-velocity="{$item.last_registered_point.velocity}"></div>
+        <div class="info_span heading" data-heading="{$item.last_registered_point.bb}"></div>
+        <div class="info_span parameters" data-csq="{$item.last_registered_point.csq}" data-hdop="{$item.last_registered_point.hdop}"></div>
+        <div class="info_span">{$core->devices->getDeviceSatus($item)}</div>
+
+        <div class="clear"></div>
     </div>
 {/foreach}
 </div>

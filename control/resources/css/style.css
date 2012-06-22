@@ -969,8 +969,15 @@ h1 {
     margin: 0 0 1em;
 }
 
+.dispatcher_devices .item .item_head {
+    background: #eee;
+    line-height: 36px;
+}
+
 .dispatcher_devices .item h2 {
     font-size: 14px;
-    padding: 0 10px;
-    background: #eee;
+}
+
+.dispatcher_devices .item .address_item {
+    margin-top: 9px;
 }
