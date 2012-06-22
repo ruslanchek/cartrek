@@ -705,7 +705,12 @@ core.utilities = {
         var gmtDate = new Date(date);
         var date = new Date(gmtDate.getFullYear(), gmtDate.getMonth(), gmtDate.getDate(), gmtDate.getHours(), gmtDate.getMinutes(), gmtDate.getSeconds() + parseInt(gmt_offset), 0);
 
-        return date.getFullYear()+'-'+core.utilities.leadingZero(date.getMonth() + 1, 2)+'-'+core.utilities.leadingZero(date.getDate(), 2)+' '+core.utilities.leadingZero(date.getHours(), 2)+':'+core.utilities.leadingZero(date.getMinutes(), 2)+':'+core.utilities.leadingZero(date.getSeconds(), 2);
+        return  date.getFullYear()+'-'+
+                core.utilities.leadingZero(date.getMonth() + 1, 2)  +'-'+
+                core.utilities.leadingZero(date.getDate(), 2)       +' '+
+                core.utilities.leadingZero(date.getHours(), 2)      +':'+
+                core.utilities.leadingZero(date.getMinutes(), 2)    +':'+
+                core.utilities.leadingZero(date.getSeconds(), 2);
     },
 
     dateRange: function(date_from, date_to){
