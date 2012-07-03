@@ -124,7 +124,6 @@
         </div>
     {/if}
 
-
     {if $core->module.form.step == 3}
         <div class="span9">
             <div class="progress progress-striped progress-success">

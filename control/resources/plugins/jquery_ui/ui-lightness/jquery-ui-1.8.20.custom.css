@@ -298,7 +298,8 @@
 -moz-border-radius: 2px;
 border-radius: 2px; }
 .ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; }
-.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; }
+.ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 2px; width: 1.8em; height: 1.8em; cursor: pointer; }
+.ui-datepicker-next.ui-state-disabled { cursor: default; }
 .ui-datepicker .ui-datepicker-prev-hover, .ui-datepicker .ui-datepicker-next-hover {
     -webkit-border-radius: 10px;
 -moz-border-radius: 10px;

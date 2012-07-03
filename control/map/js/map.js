@@ -1066,7 +1066,13 @@ core.map = {
         };
 
         $('.current_date').html(core.utilities.humanizeDate(this.options.date, 'COMMON'));
-        setTimeout("$('.calendar_place').animate({top: -210}, 400, 'easeOutExpo').addClass('closed');", 600);
+
+        setTimeout(function(){
+            $('.calendar_place').animate({
+                height: $('.calendar_place .ui-datepicker-calendar').height() + 63,
+                top: -$('.calendar_place .ui-datepicker-calendar').height()
+            }, 400, 'easeOutExpo').addClass('closed');
+        }, 600);
 
         $('#cars_menu').html(cars_menu_html);
         setTimeout("$('.select_car').show(250);", 500);
@@ -1120,16 +1126,28 @@ core.map = {
 
         $('.calendar_place a.opener').live('click', function(){
             if($('.calendar_place').hasClass('closed')){
-                $('.calendar_place').stop().animate({top: 34, opacity: 0.96}, 400, 'easeOutExpo').removeClass('closed').addClass('opened');
+                $('.calendar_place').stop().animate({
+                    top: 34,
+                    height: $('.calendar_place .ui-datepicker-calendar').height() + 63,
+                    opacity: 0.96
+                }, 400, 'easeOutExpo').removeClass('closed').addClass('opened');
             }else{
-                $('.calendar_place').stop().animate({top: -210, opacity: 0.75}, 400, 'easeOutExpo').removeClass('opened').addClass('closed');
+                $('.calendar_place').stop().animate({
+                    top: -$('.calendar_place .ui-datepicker-calendar').height(),
+                    height: $('.calendar_place .ui-datepicker-calendar').height() + 63,
+                    opacity: 0.75
+                }, 400, 'easeOutExpo').removeClass('opened').addClass('closed');
             };
         });
 
         $('.calendar_place').live('mouseleave', function(){
             core.map.options.calendar_timeout = setTimeout(
                 function(){
-                    $('.calendar_place').stop().animate({top: -210, opacity: 0.75}, 400, 'easeOutExpo').removeClass('opened').addClass('closed')
+                    $('.calendar_place').stop().animate({
+                        top: -$('.calendar_place .ui-datepicker-calendar').height(),
+                        height: $('.calendar_place .ui-datepicker-calendar').height() + 63,
+                        opacity: 0.75
+                    }, 400, 'easeOutExpo').removeClass('opened').addClass('closed')
                 },
                 1000
             );
