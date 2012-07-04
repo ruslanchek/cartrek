@@ -226,9 +226,9 @@
 
         public function getDeviceSatus($device){
             if($device['last_registered_point']['velocity'] > 0){
-                return '<a href="javascript:void(0)" class="label label-success">В пути</a>';
+                return '<span class="label label-success">В пути</span>';
             }else{
-                return '<a href="javascript:void(0)" class="label label-info">Остановка</a>';
+                return '<span class="label label">Остановка</span>';
             };
         }
     };

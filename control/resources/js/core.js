@@ -794,6 +794,14 @@ core.ticker = {
     }
 };
 
+core.events = {
+    checkNewEvents: function(){
+        console.log('EVENTS', 'Checking for new events...');
+    }
+
+    //TODO: Сделать чекер ивентов и вообще отображение новых ивентов в рилтайме
+};
+
 //Common functions
 core.exitUser = function(){
     if(confirm('Выйти?')){
@@ -809,5 +817,8 @@ core.exitUser = function(){
 //Object starter
 $(function(){
     core.ticker.startSystemInterval();
+    core.ticker.addIntervalMethod(function(){
+        core.events.checkNewEvents();
+    });
     core.effects.breathe($('#global_events_counter'));
 });

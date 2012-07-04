@@ -27,7 +27,7 @@
                 <div class="control-group">
                     <label class="control-label" for="login">Логин или e-mail</label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="login" name="login">
+                        <input type="text" class="input-xlarge" id="login" name="login" value="{if isset($smarty.post.login)}{$smarty.post.login}{/if}">
                     </div>
                 </div>
 

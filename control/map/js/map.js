@@ -19,7 +19,7 @@ core.map = {
                     new google.maps.Point(3.5,3.5)
                 ),
                 shadow: new google.maps.MarkerImage(
-                    'img/markers/waypoint_shadow_flat.png',
+                    '/control/map/img/markers/waypoint_shadow_flat.png',
                     new google.maps.Size(15,15),
                     new google.maps.Point(0,0),
                     new google.maps.Point(0,0)
@@ -31,7 +31,7 @@ core.map = {
             },
             waypoint_stop: {
                 image: new google.maps.MarkerImage(
-                    'img/markers/waypoint_stop.png',
+                    '/control/map/img/markers/waypoint_stop.png',
                     new google.maps.Size(7,7),
                     new google.maps.Point(0,0),
                     new google.maps.Point(3,3)
@@ -48,14 +48,14 @@ core.map = {
         var degrees_zone = Math.round(parseInt(heading)/15) * 15;
 
         var image = new google.maps.MarkerImage(
-            'img/markers/heading/'+degrees_zone+'.png',
+            '/control/map/img/markers/heading/'+degrees_zone+'.png',
             new google.maps.Size(16,16),
             new google.maps.Point(0,0),
             new google.maps.Point(8,8)
         );
 
         var shadow = new google.maps.MarkerImage(
-            'img/markers/heading/flat_shadow.png',
+            '/control/map/img/markers/heading/flat_shadow.png',
             new google.maps.Size(30,30),
             new google.maps.Point(0,0),
             new google.maps.Point(15,12)
@@ -160,13 +160,13 @@ core.map = {
     createMap: function(options){
         var latlng = new google.maps.LatLng(options.lat, options.lng);
 
-        var myOptions = {
+        var map_options = {
             zoom      : options.zoom,
             center    : latlng,
             mapTypeId : google.maps.MapTypeId.ROADMAP
         };
 
-        var map = new google.maps.Map(document.getElementById(options.map_container_id), myOptions);
+        var map = new google.maps.Map(document.getElementById(options.map_container_id), map_options);
 
         return map;
     },
@@ -439,7 +439,7 @@ core.map = {
         var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
         if(device){
-            $('#car_name_info').html('<b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+' '+core.utilities.drawGId(device.g_id, 'small'));
+            $('#car_name_info').html('<b>'+device.name+'</b> '+device.make+' '+device.model+' '+core.utilities.drawGId(device.g_id, 'small'));
             $('#car_name_info').css({paddingRight: $('#car_name_info .g_id').width() + 8});
         }else{
             $('#car_name_info').html('<b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span>');
@@ -720,7 +720,7 @@ core.map = {
             gsm = core.utilities.getCSQIndicator(marker.point.csq);
         };
 
-        var html =  '<p><b>'+device.name+'</b> &mdash; '+device.make+' '+device.model+ ' ' +core.utilities.drawGId(device.g_id, 'small')+ '</p>' +
+        var html =  '<p><b>'+device.name+'</b> '+device.make+' '+device.model+ ' ' +core.utilities.drawGId(device.g_id, 'small')+ '</p>' +
                     '<table class="table table-bordered table-condensed">' +
                         '<tr>' +
                             '<td>Отметка</td>' +
@@ -1058,7 +1058,7 @@ core.map = {
         for(var i = 0, l = this.options.devices.length; i < l; i++){
             cars_menu_html +=   '<li>' +
                                     '<a href="javascript:void(0)" rel="'+this.options.devices[i].id+'">' +
-                                        '<b>'+this.options.devices[i].name+'</b> &mdash; '+
+                                        '<b>'+this.options.devices[i].name+'</b> '+
                                         this.options.devices[i].make+' '+this.options.devices[i].model+' ' +
                                         core.utilities.drawGId(this.options.devices[i].g_id, 'small') +
                                     '</a>' +

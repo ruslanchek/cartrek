@@ -27,7 +27,7 @@
             <div class="control-group">
                 <label class="control-label" for="email">Email</label>
                 <div class="controls">
-                    <input type="text" class="input-xlarge" id="email" name="email">
+                    <input type="text" class="input-xlarge" id="email" name="email" value="{if isset($smarty.post.email)}{$smarty.post.email}{/if}">
                 </div>
             </div>
 

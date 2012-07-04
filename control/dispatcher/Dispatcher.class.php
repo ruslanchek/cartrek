@@ -13,6 +13,16 @@
                 'dir'   => '/control/dispatcher'
             ));
 
+            if($this->ajax_mode){
+                switch($_GET['action']){
+                    case 'getDivicesPositions' : {
+                        print json_encode($this->devices->getUserDevices()); //TODO: можно оптимизировать!
+                    }; break;
+                };
+
+                exit;
+            };
+
             /*if($this->uri_chain[2]){
 
             };*/
