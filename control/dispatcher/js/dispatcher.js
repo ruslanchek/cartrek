@@ -189,7 +189,7 @@ core.dispatcher = {
         this.getParams();
         this.getMetrics();
         this.createMaps();
-        core.ticker.delay = 6000;
+        core.ticker.delay = 10000;
 
         core.utilities.transformToGID($('.g_id'), 'small');
     }

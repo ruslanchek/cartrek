@@ -13,13 +13,12 @@
 
 <div class="dispatcher_devices">
     {foreach $core->devices->getUserDevices() as $item}
-        <div class="item" id="item_{$item.id}">
+        <div class="item span4" id="item_{$item.id}">
+
             <div class="item_head">
                 <h2><span class="car_name">{$item.name} <span class="thin">{$item.make} {$item.model}</span></span> <span class="g_id">{$item.g_id}</span></h2>
                 <div class="address_item" data-id="{$item.id}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}">&nbsp;</div>
             </div>
-
-            <div class="map" id="map_{$item.id}" data-device_id="{$item.id}" data-heading="{$item.last_registered_point.bb}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}"></div>
 
             <div class="params_inline">
                 <div class="params_inline_item velocity" style="width: 25%" data-velocity="{$item.last_registered_point.velocity}"></div>
@@ -28,26 +27,58 @@
                 <div class="clear"></div>
             </div>
 
+            <div class="map" id="map_{$item.id}" data-device_id="{$item.id}" data-heading="{$item.last_registered_point.bb}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}"></div>
+
             <table class="addition_params">
                 <tbody>
                     <tr>
                         <th>Статус</th>
-                        <td>
-                            {$core->devices->getDeviceSatus($item)}
-                        </td>
+                        <th>Зажигание</th>
+                        <th>Бензин</th>
                     </tr>
                     <tr>
-                        <th>Бензин</th>
                         <td>
-                            <div class="progress progress-warning">
-                                <div class="bar " style="width: 41%"></div>
+                            {if $item.last_registered_point.velocity > 0}Движится{else}Остановка{/if}
+                        </td>
+                        <td>
+                            Включено
+                        </td>
+                        <td>
+                            <div class="progress progress-warning" title="41%">
+                                <div class="bar" style="width: 41%"></div>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <th>Аккумулятор</th>
+                        <th>tC, снаружи</th>
+                        <th>tC, салон</th>
+                    </tr>
+                    <tr >
                         <td>
                             11,8 в
+                        </td>
+                        <td>
+                            25&deg;
+                        </td>
+                        <td>
+                            27&deg;
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Пассажиры</th>
+                        <th>Груз</th>
+                        <th></th>
+                    </tr>
+                    <tr >
+                        <td>
+                            4
+                        </td>
+                        <td>
+                            265 кг
+                        </td>
+                        <td>
+
                         </td>
                     </tr>
                 </tbody>

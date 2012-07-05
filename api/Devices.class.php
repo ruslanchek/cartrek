@@ -223,13 +223,5 @@
 
             return $this->db->assocMulti($query);
         }
-
-        public function getDeviceSatus($device){
-            if($device['last_registered_point']['velocity'] > 0){
-                return '<span class="label label-success">В пути</span>';
-            }else{
-                return '<span class="label label">Остановка</span>';
-            };
-        }
     };
 ?>
