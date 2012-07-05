@@ -15,7 +15,8 @@
 <table class="table table-striped table-bordered fleet_table">
     <thead>
         <tr>
-            <th width="94%">Название</th>
+            <th width="74%">Название</th>
+            <th width="20%">Группа</th>
             <th width="5%">Госномер</th>
             <th width="1%">Режим</th>
         </tr>
@@ -24,6 +25,7 @@
         {foreach $core->devices->getUserDevices(true) as $item}
         <tr{if !$item.active} class="unactive_row"{/if}>
             <td><a href="/control/fleet/{$item.id}"><strong>{$item.name}</strong> {$item.make} {$item.model}</a></td>
+            <td><a href="#">Личные</a></td>
             <td><span class="g_id">{$item.g_id}</span></td>
             <td>
                 {if $item.active}

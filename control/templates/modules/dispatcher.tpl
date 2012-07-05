@@ -2,10 +2,17 @@
     <h1 class="pull-left">{$core->module.title}</h1>
 
     <div class="header_tools pull-right">
-        <div class="pull-right">
-        </div>
+        <ul class="nav nav-pills">
+            <li class="active"><a href="#">Все</a></li>
+            <li><a href="#">Легковые</a></li>
+            <li><a href="#">Грузовые</a></li>
+            <li><a href="#">Курьерские</a></li>
+            <li><a href="#">Прокатные</a></li>
+            <li><a href="#">Служебные</a></li>
+            <li><a href="#">Личные</a></li>
+            <div class="clear"></div>
+        </ul>
 
-        <div class="clear"></div>
     </div>
 
     <div class="clear"></div>
@@ -17,7 +24,7 @@
 
             <div class="item_head">
                 <h2><span class="car_name">{$item.name} <span class="thin">{$item.make} {$item.model}</span></span> <span class="g_id">{$item.g_id}</span></h2>
-                <div class="address_item" data-id="{$item.id}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}">&nbsp;</div>
+                <!--div class="address_item" data-id="{$item.id}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}">&nbsp;</div-->
             </div>
 
             <div class="params_inline">
@@ -88,7 +95,6 @@
     {/foreach}
     <div class="clear"></div>
 </div>
-
 
 {*
 

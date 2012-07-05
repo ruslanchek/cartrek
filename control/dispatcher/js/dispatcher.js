@@ -2,7 +2,7 @@ core.dispatcher = {
     maps: [],
 
     getAddresses: function(){
-        $('.address_item').each(function(){
+        /*$('.address_item').each(function(){
             var o = $(this);
             core.utilities.getAddressByLatLng(
                 $(this).data('lat'),
@@ -19,7 +19,7 @@ core.dispatcher = {
                     o.html(result);
                 }
             );
-        });
+        });*/
     },
 
     getParams: function(){
@@ -184,13 +184,21 @@ core.dispatcher = {
         });
     },
 
+    createSortable: function(){
+        $('.dispatcher_devices').sortable({
+            items: '.item',
+            handle: '.item_head',
+            cursor: 'move'
+        });
+    },
+
     init: function(){
         this.getAddresses();
         this.getParams();
         this.getMetrics();
         this.createMaps();
+        this.createSortable();
         core.ticker.delay = 10000;
-
         core.utilities.transformToGID($('.g_id'), 'small');
     }
 };

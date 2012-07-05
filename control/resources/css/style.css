@@ -997,6 +997,7 @@ h1 {
     -webkit-border-radius: 4px 4px 0px 0px;
     border-radius: 4px 4px 0px 0px;
     border-bottom: 1px solid #ccc;
+    cursor: move;
 }
 
 .dispatcher_devices .item .item_head .g_id {
