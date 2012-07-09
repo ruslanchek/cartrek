@@ -27,7 +27,7 @@
                     {if $core->auth->user.status}
                         <li{if $core->module.name == 'events'} class="active"{/if}><a href="/control/events">{if $core->auth->user.data.new_events_count > 0}<span id="global_events_counter" class="badge badge-warning">{$core->auth->user.data.new_events_count}</span>{/if} Уведомления</a></li>
                         <li class="divider-vertical"></li>
-                        <li{if $core->module.name == 'billing'} class="active"{/if}><a href="/control/billing" title="Хватит еще на 9 дней">{$core->auth->user.data.balance|price} руб.</a></li>
+                        <li{if $core->module.name == 'billing'} class="active"{/if}><a href="/control/billing">{$core->auth->user.data.balance|price} руб.</a></li>
                     {/if}
 
                     <li class="divider-vertical"></li>
