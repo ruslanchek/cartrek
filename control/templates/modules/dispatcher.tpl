@@ -12,7 +12,6 @@
             <li><a href="#">Личные</a></li>
             <div class="clear"></div>
         </ul>
-
     </div>
 
     <div class="clear"></div>
@@ -28,9 +27,9 @@
             </div>
 
             <div class="params_inline">
-                <div class="params_inline_item velocity" style="width: 25%" data-velocity="{$item.last_registered_point.velocity}"></div>
-                <div class="params_inline_item heading" style="width: 35%" data-heading="{$item.last_registered_point.bb}"></div>
-                <div class="params_inline_item parameters" style="width: 34%; float: right !important; margin-right: 0" data-csq="{$item.last_registered_point.csq}" data-hdop="{$item.last_registered_point.hdop}"></div>
+                <div class="params_inline_item velocity"    style="width: 25%" data-velocity="{$item.last_registered_point.velocity}"></div>
+                <div class="params_inline_item heading"     style="width: 35%" data-heading="{$item.last_registered_point.bb}"></div>
+                <div class="params_inline_item parameters"  style="width: 34%; float: right !important; margin-right: 0" data-csq="{$item.last_registered_point.csq}" data-hdop="{$item.last_registered_point.hdop}"></div>
                 <div class="clear"></div>
             </div>
 
@@ -44,13 +43,17 @@
                         <th>Бензин</th>
                     </tr>
                     <tr>
-                        <td>
-                            {if $item.last_registered_point.velocity > 0}<span class="positive">Движется</span>{else}<span class="negative">Остановка</span>{/if}
+                        <td class="device_trip_status">
+                            {if $item.last_registered_point.velocity > 0}
+                                <span class="positive">Движется</span>
+                            {else}
+                                <span class="negative">Остановка</span>
+                            {/if}
                         </td>
-                        <td>
+                        <td class="device_ignition_status">
                             <span class="positive">Включено</span>
                         </td>
-                        <td>
+                        <td class="device_fuel_status">
                             <div class="progress progress-warning" title="41%">
                                 <div class="bar" style="width: 41%"></div>
                             </div>
@@ -62,13 +65,13 @@
                         <th>tC, салон</th>
                     </tr>
                     <tr >
-                        <td>
-                            11,8 в
+                        <td class="device_battery_status">
+                            {$item.battery|voltage} в
                         </td>
-                        <td>
+                        <td class="device_outside_temp_status">
                             25&deg;
                         </td>
-                        <td>
+                        <td class="device_inside_temp_status">
                             27&deg;
                         </td>
                     </tr>
@@ -78,10 +81,10 @@
                         <th></th>
                     </tr>
                     <tr >
-                        <td>
+                        <td class="device_passengers_status">
                             4
                         </td>
-                        <td>
+                        <td class="device_load_status">
                             265 кг
                         </td>
                         <td>

@@ -111,6 +111,28 @@ core.dispatcher = {
         return marker;
     },
 
+    renewItemAdditionalParams: function(data){
+        var item = $('.dispatcher_devices #item_'+data.id),
+            trip_status = '';
+
+        //Trip status
+        if(data.last_registered_point.velocity > 0){
+            trip_status = '<span class="positive">Движется</span>';
+        }else{
+            trip_status = '<span class="negative">Остановка</span>';
+        };
+
+        item.find('.device_trip_status').html(trip_status);
+
+        //Params
+        item.find('.velocity').data('velocity', data.last_registered_point.velocity);
+        item.find('.heading').data('heading', data.last_registered_point.bb);
+        item.find('.parameters').data('csq', data.csq).data('hdop', data.hdop);
+
+        this.getParams();
+        this.getMetrics();
+    },
+
     renewData: function(){
         this.get_renew_info = $.ajax({
             url : '/control/dispatcher/?ajax',
@@ -146,10 +168,13 @@ core.dispatcher = {
                                 address_block.data('lng', lng);
 
                                 map.marker.setPosition(new_position);
+                                map.marker.setIcon(core.dispatcher.getHeadingIcon(data[i].last_registered_point.bb).image);
                                 map.map.panTo(new_position);
 
                                 core.dispatcher.getAddresses();
                             };
+
+                            core.dispatcher.renewItemAdditionalParams(data[i]);
                         };
                     };
                 };
@@ -198,7 +223,7 @@ core.dispatcher = {
         this.getMetrics();
         this.createMaps();
         this.createSortable();
-        core.ticker.delay = 10000;
+        core.ticker.delay = 2000;
         core.utilities.transformToGID($('.g_id'), 'small');
     }
 };
