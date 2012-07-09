@@ -1084,3 +1084,10 @@ h1 {
     height: 7px;
 }
 
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
+}
