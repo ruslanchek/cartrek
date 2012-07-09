@@ -369,7 +369,7 @@ core.map = {
             label.div_.innerHTML =  '<i class="marker_tip"></i>' +
                                     '<span class="marker_label" id="device_label_'+id+'">' +
                                         '<b>'+device.name+'</b><br>' +
-                                        '<nobr>'+device.make+' '+device.model+'</nobr><br>' +
+                                        '<nobr>'+device.make+' '+((device.model != null) ? device.model : '')+'</nobr><br>' +
                                         g_id +
                                     '</span>';
 
@@ -439,7 +439,7 @@ core.map = {
         var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
         if(device){
-            $('#car_name_info').html('<b>'+device.name+'</b> '+device.make+' '+device.model+' '+core.utilities.drawGId(device.g_id, 'small'));
+            $('#car_name_info').html('<b>'+device.name+'</b> '+device.make+' '+((device.model != null) ? device.model : '')+' '+core.utilities.drawGId(device.g_id, 'small'));
             $('#car_name_info').css({paddingRight: $('#car_name_info .g_id').width() + 8});
         }else{
             $('#car_name_info').html('<b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span>');
@@ -647,7 +647,7 @@ core.map = {
                 shape       : icon.shape,
                 point       : options.device.point,
                 map         : options.map,
-                title       : options.device.name+' — ('+options.device.make+' '+options.device.model+', '+options.device.g_id+')',
+                title       : options.device.name+' — ('+options.device.make+' '+((options.device.model != null) ? options.device.model : '')+' '+options.device.g_id+')',
                 device_id   : options.device.id
             });
 
@@ -720,7 +720,7 @@ core.map = {
             gsm = core.utilities.getCSQIndicator(marker.point.csq);
         };
 
-        var html =  '<p><b>'+device.name+'</b> '+device.make+' '+device.model+ ' ' +core.utilities.drawGId(device.g_id, 'small')+ '</p>' +
+        var html =  '<p><b>'+device.name+'</b> '+device.make+' '+ ((device.model != null) ? device.model : '') + ' ' +core.utilities.drawGId(device.g_id, 'small')+ '</p>' +
                     '<table class="table table-bordered table-condensed">' +
                         '<tr>' +
                             '<td>Отметка</td>' +
@@ -1059,7 +1059,7 @@ core.map = {
             cars_menu_html +=   '<li>' +
                                     '<a href="javascript:void(0)" rel="'+this.options.devices[i].id+'">' +
                                         '<b>'+this.options.devices[i].name+'</b> '+
-                                        this.options.devices[i].make+' '+this.options.devices[i].model+' ' +
+                                        this.options.devices[i].make+' '+((this.options.devices[i].model != null) ? this.options.devices[i].model : '') +' ' +
                                         core.utilities.drawGId(this.options.devices[i].g_id, 'small') +
                                     '</a>' +
                                 '</li>';
