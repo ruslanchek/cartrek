@@ -1054,10 +1054,19 @@ h1 {
     border-bottom: 1px solid #ccc;
 }
 
+.dispatcher_devices .ui-sortable-placeholder {
+    visibility: visible !important;
+    border-style: dashed;
+    border-color: #ccc;
+    background: #fff;
+    box-shadow: none;
+}
+
 .dispatcher_devices .addition_params {
     margin: 0 !important;
     width: 100%;
     border-top: 1px solid #fff;
+
 }
 
 .dispatcher_devices .item .addition_params th {

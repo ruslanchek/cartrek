@@ -45,7 +45,7 @@
                     </tr>
                     <tr>
                         <td>
-                            {if $item.last_registered_point.velocity > 0}<span class="positive">Движится</span>{else}<span class="negative">Остановка</span>{/if}
+                            {if $item.last_registered_point.velocity > 0}<span class="positive">Движется</span>{else}<span class="negative">Остановка</span>{/if}
                         </td>
                         <td>
                             <span class="positive">Включено</span>
