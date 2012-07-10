@@ -1,5 +1,5 @@
 <div class="page-header">
-    <h1>Настройка кабинета</h1>
+    <h1>{$core->module.title}</h1>
 </div>
 
 <ul class="nav nav-tabs" id="fleets">
