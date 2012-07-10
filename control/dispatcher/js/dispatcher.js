@@ -213,7 +213,8 @@ core.dispatcher = {
         $('.dispatcher_devices').sortable({
             items: '.item',
             handle: '.item_head',
-            cursor: 'move'
+            cursor: 'move',
+            opacity: 0.6
         });
     },
 

@@ -1,21 +1,16 @@
 <div class="page-header">
-    <h1 class="pull-left">{$core->module.title}</h1>
-
-    <div class="header_tools pull-right">
-        <ul class="nav nav-pills">
-            <li class="active"><a href="#">Все</a></li>
-            <li><a href="#">Легковые</a></li>
-            <li><a href="#">Грузовые</a></li>
-            <li><a href="#">Курьерские</a></li>
-            <li><a href="#">Прокатные</a></li>
-            <li><a href="#">Служебные</a></li>
-            <li><a href="#">Личные</a></li>
-            <div class="clear"></div>
-        </ul>
-    </div>
-
-    <div class="clear"></div>
+    <h1>{$core->module.title}</h1>
 </div>
+
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#">Все</a></li>
+    <li><a href="#">Легковые</a></li>
+    <li><a href="#">Грузовые</a></li>
+    <li><a href="#">Курьерские</a></li>
+    <li><a href="#">Прокатные</a></li>
+    <li><a href="#">Служебные</a></li>
+    <li><a href="#">Личные</a></li>
+</ul>
 
 <div class="dispatcher_devices">
     {foreach $core->devices->getUserDevices() as $item}

@@ -16,7 +16,7 @@
             <div class="nav-collapse">
                 <ul class="nav">
                     {if $core->auth->user.status}
-                        <li{if $core->module.name == 'map'} class="active"{/if}><a href="/control/map">GPS-мониторинг</a></li>
+                        <li{if $core->module.name == 'map'} class="active"{/if}><a href="/control/map">Карта</a></li>
                         <li{if $core->module.name == 'dispatcher'} class="active"{/if}><a href="/control/dispatcher">Диспетчер</a></li>
                         <li{if $core->module.name == 'fleet'} class="active"{/if}><a href="/control/fleet">Автопарк</a></li>
                         <li class="divider-vertical"></li>

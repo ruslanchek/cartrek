@@ -223,5 +223,19 @@
 
             return $this->db->assocMulti($query);
         }
+
+        public function getFleetsList(){
+            $query = "
+                SELECT
+                    `id`,
+                    `name`
+                FROM
+                    `fleets`
+                WHERE
+                    `user_id`   = ".intval($this->auth->user['data']['id'])."
+            ";
+
+            return $this->db->assocMulti($query);
+        }
     };
 ?>
