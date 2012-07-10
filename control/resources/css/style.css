@@ -520,16 +520,21 @@ h1 {
     display: none;
 }
 
-.select_car {
-    display: none;
+#fleets_menu {
+    margin-left: 5px;
 }
 
 #refresh_data {
-    margin-left: 10px;
+    margin-left: 5px;
 }
 
 .select_car {
-    margin: 0 0 0 1em;
+    margin: 0 0 0 5px;
+    display: none;
+}
+
+.select_fleet {
+    margin-left: 5px;
 }
 
 .select_car ul li a {
@@ -1071,7 +1076,7 @@ h1 {
 }
 
 .dispatcher_devices .item .addition_params th {
-    padding: 7px 12px 5px;
+    padding: 7px 12px 0;
     width: 33%;
     border: none;
     text-align: left;
@@ -1080,7 +1085,7 @@ h1 {
 }
 
 .dispatcher_devices .item .addition_params td {
-    padding: 0 12px 8px;
+    padding: 0 12px 5px;
     width: 35%;
     border: none;
     text-align: left;

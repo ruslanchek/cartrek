@@ -88,28 +88,36 @@
             if($include_unactive){
                 $addition = "";
             }else{
-                $addition = " && `active` = 1";
+                $addition = " && `devices`.`active` = 1";
+            };
+
+            if(isset($_GET['fleet']) && $_GET['fleet'] >= 1){
+                $addition .= " && `devices`.`fleet_id` = ".intval($_GET['fleet']);
             };
 
             $query = "
                 SELECT
-                    `id`,
-                    `imei`,
-                    `name`,
-                    `model`,
-                    `make`,
-                    `g_id`,
-                    `color`,
-                    `hdop`,
-                    `csq`,
-                    `journey`,
-                    `active`,
-                    `battery`,
-                    CONVERT_TZ(`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`
+                    `devices`.`id`,
+                    `devices`.`imei`,
+                    `devices`.`name`,
+                    `devices`.`model`,
+                    `devices`.`make`,
+                    `devices`.`g_id`,
+                    `devices`.`color`,
+                    `devices`.`hdop`,
+                    `devices`.`csq`,
+                    `devices`.`journey`,
+                    `devices`.`active`,
+                    `devices`.`fleet_id`,
+                    `devices`.`battery`,
+                    CONVERT_TZ(`devices`.`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`,
+                    `fleets`.`name` AS `fleet_name`
                 FROM
-                    `devices`
+                    `devices`,
+                    `fleets`
                 WHERE
-                    `user_id`   = ".intval($this->auth->user['data']['id']).$addition;
+                    `devices`.`fleet_id` = `fleets`.`id` &&
+                    `devices`.`user_id` = ".intval($this->auth->user['data']['id']).$addition;
 
             $devices    = $this->db->assocMulti($query);
             $result     = array();

@@ -8,12 +8,29 @@
 
     <div class="page-header">
         <h1 class="pull-left">
-            GPS-мониторинг
+            Карта
         </h1>
 
         <div class="header_tools pull-right">
+            {assign var="fleets_list" value=$core->devices->getFleetsList()}
+
+            {if $fleets_list}
+            <div class="btn-group select_fleet pull-right">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                    <span id="fleet_name_info"></span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="fleets_menu">
+                    <li {if !isset($smarty.get.fleet)}class="active"{/if}><a href="javascript:void(0)" fleet_id="all">Все группы</a></li>
+                    {foreach $fleets_list as $fleet}
+                    <li {if $smarty.get.fleet == $fleet.id}class="active"{/if}><a href="javascript:void(0)" fleet_id="{$fleet.id}">{$fleet.name}</a></li>
+                    {/foreach}
+                </ul>
+            </div>
+            {/if}
+
             <div class="btn-group select_car pull-right">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
                     <span id="car_name_info"></span>
                     <span class="caret"></span>
                 </a>

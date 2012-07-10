@@ -36,7 +36,7 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {$core->auth->user.data.login} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
                                 <li><a href="/control/user"><i class="icon-wrench"></i> Настройка</a></li>
-                                <li><a href="/control/user/change_password"><i class="icon-pencil"></i> Сменить пароль</a></li>
+                                <li><a href="/control/user/password_change"><i class="icon-pencil"></i> Сменить пароль</a></li>
                                 <li class="divider"></li>
                                 <li><a href="javascript:void(0)" onclick="core.exitUser()"><i class="icon-share"></i> Выйти</a></li>
                             </ul>

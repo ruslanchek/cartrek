@@ -2,14 +2,11 @@
     <h1>{$core->module.title}</h1>
 </div>
 
-<ul class="nav nav-tabs">
-    <li class="active"><a href="#">Все</a></li>
-    <li><a href="#">Легковые</a></li>
-    <li><a href="#">Грузовые</a></li>
-    <li><a href="#">Курьерские</a></li>
-    <li><a href="#">Прокатные</a></li>
-    <li><a href="#">Служебные</a></li>
-    <li><a href="#">Личные</a></li>
+<ul class="nav nav-tabs" id="fleets">
+    <li {if !isset($smarty.get.fleet)}class="active"{/if}><a href="/control/dispatcher/">Все</a></li>
+    {foreach $core->devices->getFleetsList() as $fleet}
+    <li {if $smarty.get.fleet == $fleet.id}class="active"{/if}><a href="/control/dispatcher/?fleet={$fleet.id}">{$fleet.name}</a></li>
+    {/foreach}
 </ul>
 
 <div class="dispatcher_devices">

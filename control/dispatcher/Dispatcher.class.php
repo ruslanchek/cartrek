@@ -1,5 +1,7 @@
 <?php
     Class Dispatcher extends Core {
+        public $fleet_id = 0;
+
         public function __construct(){
             parent::__construct();
 
@@ -22,10 +24,6 @@
 
                 exit;
             };
-
-            /*if($this->uri_chain[2]){
-
-            };*/
         }
 
         public function __destruct(){

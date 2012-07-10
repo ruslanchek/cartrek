@@ -856,7 +856,8 @@ core.map = {
         this.options_loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
-                action  : 'getOptions'
+                action  : 'getOptions',
+                fleet   : this.options.fleet_id
             },
             dataType : 'json',
             type : 'get',
@@ -929,6 +930,10 @@ core.map = {
 
         if(this.infowindow){
             this.infowindow.close();
+        };
+
+        if(car_id != 'all' && !this.options.devices[this.getDeviceIndexById(car_id)]){
+            car_id = 'all';
         };
 
         if(car_id){
@@ -1184,6 +1189,10 @@ core.map = {
             };
         });
 
+        $('#fleets_menu li a').live('click', function(){
+            core.map.selectFleet($(this));
+        });
+
         /*$('#view_settings').live('click', function(){
             core.modal.show(core.map.getVeiwSettingsContent());
         });*/
@@ -1241,11 +1250,32 @@ core.map = {
         );
     },
 
+    setSelectedFleet: function(){
+        if(this.options.fleet_id == 'all' || !this.options.fleet_id){
+            $('#fleet_name_info').html('Все группы');
+        }else{
+            $('#fleet_name_info').html($('ul#fleets_menu li a[fleet_id="'+$.cookie('fleet_id')+'"]').html());
+        };
+    },
+
+    selectFleet: function(o){
+        $('#fleet_name_info').html(o.html());
+        $.cookie('fleet_id', o.attr('fleet_id'), this.options.cookie_options);
+        document.location.reload();
+    },
+
     init: function(){
+        if(!$.cookie('fleet_id')){
+            $.cookie('fleet_id', 'all', this.options.cookie_options);
+        };
+
         if(!$.cookie('car_id')){
             $.cookie('car_id', 'all', this.options.cookie_options);
         };
 
+        this.options.fleet_id = $.cookie('fleet_id');
+
+        this.setSelectedFleet();
         this.setMapsPrototypes();
         this.loadOptions();
         this.binds();

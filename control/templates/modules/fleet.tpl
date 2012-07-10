@@ -25,7 +25,7 @@
         {foreach $core->devices->getUserDevices(true) as $item}
         <tr{if !$item.active} class="unactive_row"{/if}>
             <td><a href="/control/fleet/{$item.id}"><strong>{$item.name}</strong> {$item.make} {$item.model}</a></td>
-            <td><a href="#">Личные</a></td>
+            <td>{$item.fleet_name}</td>
             <td><span class="g_id">{$item.g_id}</span></td>
             <td>
                 {if $item.active}
