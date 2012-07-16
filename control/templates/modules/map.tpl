@@ -62,7 +62,7 @@
 {else}
     <div class="page-header">
         <h1>
-            GPS-мониторинг
+            Карта
         </h1>
     </div>
 

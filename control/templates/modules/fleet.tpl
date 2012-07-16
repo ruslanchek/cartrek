@@ -12,6 +12,7 @@
     <div class="clear"></div>
 </div>
 
+{if $core->devices->devices_present}
 <table class="table table-striped table-bordered fleet_table">
     <thead>
         <tr>
@@ -40,3 +41,9 @@
 </table>
 
 <script>core.fleet.init();</script>
+{else}
+<div class="alert alert-block">
+    <h4 class="alert-heading">Внимание!</h4>
+    У вас нет активных устройств для отслеживания, необходимо <a href="/control/fleet/add">добавить</a> или активировать устройство.
+</div>
+{/if}

@@ -2,6 +2,7 @@
     <h1>{$core->module.title}</h1>
 </div>
 
+{if $core->devices->devices_present}
 <ul class="nav nav-tabs" id="fleets">
     <li {if !isset($smarty.get.fleet)}class="active"{/if}><a href="/control/dispatcher/">Все</a></li>
     {foreach $core->devices->getFleetsList() as $fleet}
@@ -130,5 +131,10 @@
 
 *}
 
-
 <script>core.dispatcher.init();</script>
+{else}
+    <div class="alert alert-block">
+        <h4 class="alert-heading">Внимание!</h4>
+        У вас нет активных устройств для отслеживания, необходимо <a href="/control/fleet/add">добавить</a> или активировать устройство в разделе <a href="/control/fleet">автопарк</a>.
+    </div>
+{/if}
