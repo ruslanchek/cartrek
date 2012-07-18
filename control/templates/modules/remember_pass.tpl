@@ -1,6 +1,12 @@
 <div class="hero-unit hero_login">
     <h1>{$core->module.title}</h1>
 
+    <ul class="nav nav-tabs">
+        <li><a href="/control/auth/login">Войти</a></li>
+        <li><a href="/control/auth/register">Зарегистрироваться</a></li>
+        <li class="active"><a href="/control/auth/remember_pass">Напомнить пароль</a></li>
+    </ul>
+
     {if !$core->auth->user.status && !isset($smarty.get.action)}
         <form id="remember_pass_form" class="form-horizontal" action="" method="POST">
             <input type="hidden" name="action" value="remember_pass">
@@ -33,20 +39,16 @@
 
                 <div class="form-actions">
                     <button id="submit" type="submit" class="btn btn-primary" autocomplete="off">Восстановить пароль</button>
-                    &nbsp;&nbsp;&nbsp;<a href="/control/auth/register">Зарегистрироваться</a>
-                    &nbsp;&nbsp;&nbsp;<a href="/control/auth/login">Войти</a>
                 </div>
             </fieldset>
         </form>
-    {elseif $smarty.get.action == 'password_recover'}
+    {elseif isset($smarty.get.action) && $smarty.get.action == 'password_recover'}
         {if $core->module.form.message}
             <div class="alert {if $core->module.form.status}alert-success{else}alert-error{/if}">
                 <a class="close" data-dismiss="alert" href="javascript:void(0)">×</a>
                 {$core->module.form.message}
             </div>
             <a href="/control/auth/login">Войти</a>
-            &nbsp;&nbsp;&nbsp;<a href="/control/auth/register">Зарегистрироваться</a>
-            &nbsp;&nbsp;&nbsp;<a href="/control/auth/remember_pass">Восстановить пароль</a>
         {/if}
     {else}
         <div class="alert alert-info">

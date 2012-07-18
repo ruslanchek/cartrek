@@ -661,12 +661,16 @@ h1 {
 
 .hero_login {
     text-shadow: 0px 1px 0px #ffffff;
-    background: rgba(220, 220, 220, 0.4);
+    background: rgba(220, 220, 220, 0.2);
     width: 440px;
     padding: 30px 40px 15px;
     margin: 50px auto 30px;
-    -webkit-box-shadow:  0px 2px 7px 0px rgba(0, 0, 0, 0.4);
-    box-shadow:  0px 2px 7px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow:  0px 2px 6px 0px rgba(0, 0, 0, 0.4);
+    box-shadow:  0px 2px 6px 0px rgba(0, 0, 0, 0.4);
+}
+
+.hero_login .nav-tabs .active a {
+    background: #dddddd;
 }
 
 .hero_login .form-actions {
@@ -1105,4 +1109,45 @@ h1 {
 
 .negative {
     color: red;
+}
+
+/* Auth */
+.auth_body {
+    background: url(../img/patterns/rounds.png);
+}
+
+.auth_body body {
+    background: url(../img/bg/cartrek.png) no-repeat center 10px;
+}
+
+.auth_body .main_content {
+   padding-top: 120px;
+}
+
+.auth_body .navbar-inner {
+    background: rgba(220, 220, 220, 0.8);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.30);
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.30);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.30);
+    color: #444 !important;
+
+}
+
+.auth_body .navbar-inner * {
+    text-shadow: 0 1px 0 #fff !important;
+}
+
+.auth_body .navbar-inner a:link,
+.auth_body .navbar-inner a:visited {
+    color: #444 !important;
+}
+
+.auth_body .navbar-inner a:hover,
+.auth_body .navbar-inner a:active {
+    color: #777 !important;
+}
+
+
+.auth_body .logo {
+    background-image: url(../img/logos/logo_w.png);
 }

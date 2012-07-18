@@ -1,6 +1,12 @@
 <div class="hero-unit hero_login">
     <h1>{$core->module.title}</h1>
 
+    <ul class="nav nav-tabs">
+        <li><a href="/control/auth/login">Войти</a></li>
+        <li class="active"><a href="/control/auth/register">Зарегистрироваться</a></li>
+        <li><a href="/control/auth/remember_pass">Напомнить пароль</a></li>
+    </ul>
+
     {if !$core->auth->user.status}
     <form id="register_form" class="form-horizontal" action="" method="POST">
         <input type="hidden" name="action" value="register">
@@ -33,8 +39,6 @@
 
             <div class="form-actions">
                 <button id="submit" type="submit" class="btn btn-primary" autocomplete="off">Зарегистрироваться</button>
-                &nbsp;&nbsp;&nbsp;<a href="/control/auth/login">Войти</a>
-                &nbsp;&nbsp;&nbsp;<a href="/control/auth/remember_pass">Напомнить пароль</a>
             </div>
         </fieldset>
     </form>
