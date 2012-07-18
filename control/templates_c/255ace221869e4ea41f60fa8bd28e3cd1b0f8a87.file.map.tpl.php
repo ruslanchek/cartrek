@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.7, created on 2012-05-31 00:20:23
+<?php /* Smarty version Smarty-3.1.7, created on 2012-07-19 00:32:58
          compiled from "/Users/ruslan/Documents/sites/gps/control/templates/modules/map.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:2831870014fc681072117f1-42090688%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '255ace221869e4ea41f60fa8bd28e3cd1b0f8a87' => 
     array (
       0 => '/Users/ruslan/Documents/sites/gps/control/templates/modules/map.tpl',
-      1 => 1338319496,
+      1 => 1342643576,
       2 => 'file',
     ),
   ),
@@ -15,13 +15,15 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'function' => 
   array (
   ),
+  'version' => 'Smarty-3.1.7',
+  'unifunc' => 'content_4fc68107299fb',
   'variables' => 
   array (
     'core' => 0,
+    'fleets_list' => 0,
+    'fleet' => 0,
   ),
   'has_nocache_code' => false,
-  'version' => 'Smarty-3.1.7',
-  'unifunc' => 'content_4fc68107299fb',
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_4fc68107299fb')) {function content_4fc68107299fb($_smarty_tpl) {?><?php if ($_smarty_tpl->tpl_vars['core']->value->devices->devices_present){?>
     <div class="calendar_place closed">
@@ -33,12 +35,35 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 
     <div class="page-header">
         <h1 class="pull-left">
-            GPS-мониторинг
+            Карта
         </h1>
 
         <div class="header_tools pull-right">
+            <?php $_smarty_tpl->tpl_vars["fleets_list"] = new Smarty_variable($_smarty_tpl->tpl_vars['core']->value->devices->getFleetsList(), null, 0);?>
+
+            <?php if ($_smarty_tpl->tpl_vars['fleets_list']->value){?>
+            <div class="btn-group select_fleet pull-right">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                    <span id="fleet_name_info"></span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" id="fleets_menu">
+                    <li <?php if (!isset($_GET['fleet'])){?>class="active"<?php }?>><a href="javascript:void(0)" fleet_id="all">Все группы</a></li>
+                    <?php  $_smarty_tpl->tpl_vars['fleet'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['fleet']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['fleets_list']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+foreach ($_from as $_smarty_tpl->tpl_vars['fleet']->key => $_smarty_tpl->tpl_vars['fleet']->value){
+$_smarty_tpl->tpl_vars['fleet']->_loop = true;
+?>
+                    <li <?php if (isset($_GET['fleet'])&&$_GET['fleet']==$_smarty_tpl->tpl_vars['fleet']->value['id']){?>class="active"<?php }?>><a href="javascript:void(0)" fleet_id="<?php echo $_smarty_tpl->tpl_vars['fleet']->value['id'];?>
+"><?php echo $_smarty_tpl->tpl_vars['fleet']->value['name'];?>
+</a></li>
+                    <?php } ?>
+                </ul>
+            </div>
+            <?php }?>
+
             <div class="btn-group select_car pull-right">
-                <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
                     <span id="car_name_info"></span>
                     <span class="caret"></span>
                 </a>
@@ -70,7 +95,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 <?php }else{ ?>
     <div class="page-header">
         <h1>
-            GPS-мониторинг
+            Карта
         </h1>
     </div>
 

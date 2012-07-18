@@ -1278,7 +1278,7 @@ core.map = {
         if(this.options.current_device_id != 'all' && this.options.devices[this.getDeviceIndexById(this.options.current_device_id)]){
             var cd = this.options.devices[this.getDeviceIndexById(this.options.current_device_id)];
 
-            if(cd.current_position_marker.point.id != point.id){
+            if(point && cd.current_position_marker.point.id != point.id){
                 var latLng = new google.maps.LatLng(
                     core.utilities.convertNMEAtoWGS84(point.lat),
                     core.utilities.convertNMEAtoWGS84(point.lng)
