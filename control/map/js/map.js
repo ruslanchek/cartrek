@@ -1299,7 +1299,7 @@ core.map = {
     },
 
     renewData: function(){
-        /*this.date_loading_process = $.ajax({
+        this.date_loading_process = $.ajax({
             url: '/control/map/?ajax',
             dataType: 'json',
             type: 'get',
@@ -1312,7 +1312,7 @@ core.map = {
             success: function(){
 
             }
-        });*/
+        });
 
         core.t_lat += 0.05;
         core.t_lng += 0.05;
