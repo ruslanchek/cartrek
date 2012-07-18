@@ -224,6 +224,7 @@ core.dispatcher = {
         this.getMetrics();
         this.createMaps();
         this.createSortable();
+
         core.ticker.delay = 2000;
         core.utilities.transformToGID($('.g_id'), 'small');
     }

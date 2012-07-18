@@ -4,7 +4,8 @@ var google = google;
 
 core.map = {
     options: {
-        current_devece_id: null,
+        current_device_id: null,
+        devices: [],
         default_position : {
             lat: 55,
             lng: 38,
@@ -19,7 +20,7 @@ core.map = {
                     new google.maps.Point(3.5,3.5)
                 ),
                 shadow: new google.maps.MarkerImage(
-                    '/control/map/img/markers/waypoint_shadow_flat.png',
+                    'img/markers/waypoint_shadow_flat.png',
                     new google.maps.Size(15,15),
                     new google.maps.Point(0,0),
                     new google.maps.Point(0,0)
@@ -180,7 +181,7 @@ core.map = {
     },
 
     showWaypointMarkers: function(type){
-        var markers = this.options.devices[this.getDeviceIndexById(this.options.current_devece_id)].path.waypoint_markers;
+        var markers = this.options.devices[this.getDeviceIndexById(this.options.current_device_id)].path.waypoint_markers;
 
         for(var i = 0, l = markers.length; i < l; i++){
             if(type == markers[i].type || !type){
@@ -191,7 +192,7 @@ core.map = {
     },
 
     hideWaypointMarkers: function(type){
-        var markers = this.options.devices[this.getDeviceIndexById(this.options.current_devece_id)].path.waypoint_markers;
+        var markers = this.options.devices[this.getDeviceIndexById(this.options.current_device_id)].path.waypoint_markers;
 
         for(var i = 0, l = markers.length; i < l; i++){
             if(type == markers[i].type || !type){
@@ -606,20 +607,42 @@ core.map = {
 
     drawWaypointMarkers: function(points, device, map){
         if(points && points.length > 0){
-            var waypoint_markers = new Array();
+            var waypoint_markers = new Array(),
+                max_speed = 0,
+                max_speed_point = null,
+                max_speed_marker = null;
+
 
             for(var i = 0, l = points.length-1; i < l; i++){
-                waypoint_markers.push(this.createWaypointMarker({
-                    map         : map,
-                    device      : device,
-                    point       : points[i],
-                    click       : function(marker){
-                        core.map.showMarkerData(marker);
-                    }
-                }));
+                if((max_speed_point === null && max_speed == 0) || (points[i].velocity*1 > max_speed)){
+                    max_speed_point = points[i];
+                    max_speed = points[i].velocity*1;
+                };
             };
 
-            return waypoint_markers;
+            for(var i = 0, l = points.length-1; i < l; i++){
+                if(points[i].velocity == 0 || points[i].id == max_speed_point.id){
+                    var marker = this.createWaypointMarker({
+                        map         : map,
+                        device      : device,
+                        point       : points[i],
+                        click       : function(marker){
+                            core.map.showMarkerData(marker);
+                        }
+                    });
+
+                    waypoint_markers.push(marker);
+
+                    if(points[i].id == max_speed_point.id){
+                        max_speed_marker = marker;
+                    };
+                };
+            };
+
+            return {
+                waypoint_markers: waypoint_markers,
+                max_speed_marker: max_speed_marker
+            };
         };
     },
 
@@ -668,7 +691,8 @@ core.map = {
             type  = 'stop';
         }else{
             title = options.device.name+' — в пути ('+core.utilities.convertKnotsToKms(options.point.velocity)+' км/ч)';
-            style = this.getWaypointIcon(options.point.bb);
+            //style = this.getWaypointIcon(options.point.bb);
+            style = this.options.marker_styles.waypoint;
             type  = 'move';
         };
 
@@ -701,7 +725,7 @@ core.map = {
         if(marker.point.id == device.current_position_marker.point.id){
             status = 'Текущее положение';
             status_class = 'label-info';
-            if(this.options.current_devece_id != marker.device_id){
+            if(this.options.current_device_id != marker.device_id){
                 additional = '<a class="btn btn-info select_car_button" rel="'+marker.device_id+'" href="javascript:void(0)"><i class="icon-share-alt icon-white"></i> Выбрать машину</a>';
             };
 
@@ -777,38 +801,24 @@ core.map = {
         return core.utilities.convertKnotsToKms(average_speed/points.length);
     },
 
-    getMaxSpeed: function(markers){
-        if(markers){
-            var max_speed = 0,
-                result = {};
-
-            for(var i = 0, l = markers.length; i < l; i++){
-                if(markers[i].point.velocity > max_speed){
-                    result.marker = markers[i];
-                    max_speed = parseFloat(markers[i].point.velocity);
-                };
-            };
-
-            result.value = core.utilities.convertKnotsToKms(max_speed);
-
-            return result;
-        };
-    },
-
     createDevicePathData: function(device_id, points){
         var polyline = this.drawPath(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
-            waypoint_markers = this.drawWaypointMarkers(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
-            max_speed = this.getMaxSpeed(waypoint_markers);
+            waypoint_markers_result = this.drawWaypointMarkers(points, core.map.options.devices[core.map.getDeviceIndexById(device_id)], this.map),
+            max_speed = null;
 
-        this.options.devices[this.getDeviceIndexById(device_id)].max_speed_marker = max_speed.marker;
+        if(waypoint_markers_result.max_speed_marker){
+            max_speed = core.utilities.convertKnotsToKms(waypoint_markers_result.max_speed_marker.point.velocity);
+        };
+
+        this.options.devices[this.getDeviceIndexById(device_id)].max_speed_marker = waypoint_markers_result.max_speed_marker;
         this.options.devices[this.getDeviceIndexById(device_id)].path = {
             points          : points,
             polyline        : polyline.polyline,
-            waypoint_markers: waypoint_markers,
+            waypoint_markers: waypoint_markers_result.waypoint_markers,
             statistics      : {
                 distance        : polyline.polyline.inKm(),
                 average_speed   : this.getAverageSpeed(points),
-                max_speed       : max_speed.value,
+                max_speed       : max_speed,
                 stops           : polyline.stops
             }
         };
@@ -932,10 +942,6 @@ core.map = {
             this.infowindow.close();
         };
 
-        if(car_id != 'all' && !this.options.devices[this.getDeviceIndexById(car_id)]){
-            car_id = 'all';
-        };
-
         if(car_id){
             $.cookie('car_id', car_id, this.options.cookie_options);
         }else{
@@ -946,11 +952,15 @@ core.map = {
             };
         };
 
+        if(car_id != 'all' && !this.options.devices[this.getDeviceIndexById(car_id)]){
+            car_id = 'all';
+        };
+
         if(!$('#where_is_my_car').is(':visible')){
             $('#where_is_my_car').show();
         };
 
-        this.options.current_devece_id = car_id;
+        this.options.current_device_id = car_id;
 
         if(car_id == 'all'){
             this.setCurrentDeviceName();
@@ -967,7 +977,7 @@ core.map = {
             };
         };
 
-        this.checkPeriodPoints();
+        this.checkPeriodPoints(car_id);
     },
 
     showMapNotice: function(message){
@@ -1008,12 +1018,12 @@ core.map = {
         this.map.setZoom(this.options.default_position.zoom);
     },
 
-    checkPeriodPoints: function(){
+    checkPeriodPoints: function(car_id){
         this.hideMapNotice();
 
         var no_points = true;
 
-        if($.cookie('car_id') == 'all'){
+        if(car_id == 'all'){
             for(var i = 0, l = this.options.devices.length; i < l; i++){
                 if(this.options.devices[i].current_position_marker){
                     no_points = false;
@@ -1032,7 +1042,7 @@ core.map = {
                 $('#where_is_my_car').show();
             };
         }else{
-            var device = this.options.devices[this.getDeviceIndexById($.cookie('car_id'))];
+            var device = this.options.devices[this.getDeviceIndexById(car_id)];
 
             if(!device.current_position_marker){
                 if(device.last_registered_point){
@@ -1097,15 +1107,15 @@ core.map = {
 
     binds: function(){
         $('#max_speed').live('click', function(){
-            if(core.map.options.current_devece_id){
-                core.map.focusToMarker(core.map.options.devices[core.map.getDeviceIndexById(core.map.options.current_devece_id)].max_speed_marker);
+            if(core.map.options.current_device_id){
+                core.map.focusToMarker(core.map.options.devices[core.map.getDeviceIndexById(core.map.options.current_device_id)].max_speed_marker);
             };
         });
 
         $('#where_is_my_car').live('click', function(){
-            if(core.map.options.current_devece_id && core.map.options.current_devece_id != 'all'){
-                //core.map.focusToMarker(core.map.options.devices[core.map.getDeviceIndexById(core.map.options.current_devece_id)].current_position_marker);
-                core.map.fitToDevicePathBounds(core.map.options.current_devece_id);
+            if(core.map.options.current_device_id && core.map.options.current_device_id != 'all'){
+                //core.map.focusToMarker(core.map.options.devices[core.map.getDeviceIndexById(core.map.options.current_device_id)].current_position_marker);
+                core.map.fitToDevicePathBounds(core.map.options.current_device_id);
             }else{
                 core.map.fitToAllDevicesMarkersBounds();
             };
@@ -1116,8 +1126,8 @@ core.map = {
         });
 
         $('#hide_current_car_info').live('click', function(){
-            if(core.map.options.current_devece_id > 0){
-                core.map.hideDeviceInfo(core.map.options.current_devece_id);
+            if(core.map.options.current_device_id > 0){
+                core.map.hideDeviceInfo(core.map.options.current_device_id);
             };
         });
 
@@ -1246,7 +1256,7 @@ core.map = {
 
         var plot = $.plot(
             $("#chart1"),
-            this.getChartData(this.options.current_devece_id)
+            this.getChartData(this.options.current_device_id)
         );
     },
 
@@ -1264,7 +1274,74 @@ core.map = {
         document.location.reload();
     },
 
+    addPointToCurrentPath: function(point){
+        if(this.options.current_device_id != 'all' && this.options.devices[this.getDeviceIndexById(this.options.current_device_id)]){
+            var cd = this.options.devices[this.getDeviceIndexById(this.options.current_device_id)];
+
+            if(cd.current_position_marker.point.id != point.id){
+                var latLng = new google.maps.LatLng(
+                    core.utilities.convertNMEAtoWGS84(point.lat),
+                    core.utilities.convertNMEAtoWGS84(point.lng)
+                );
+
+                cd.current_position_marker.setPosition(latLng);
+                cd.current_position_marker.map.panTo(latLng); //TODO: Убрать потом!
+                cd.current_position_marker.setIcon(this.getHeadingIcon(point.bb).image);
+
+                if(cd.path.polyline){
+                    var path = cd.path.polyline.getPath();
+                    path.push(latLng);
+                };
+
+                cd.current_position_marker.point = point;
+            };
+        };
+    },
+
+    renewData: function(){
+        /*this.date_loading_process = $.ajax({
+            url: '/control/map/?ajax',
+            dataType: 'json',
+            type: 'get',
+            data: {
+                action: 'getRenewedData'
+            },
+            beforeSend: function(){
+
+            },
+            success: function(){
+
+            }
+        });*/
+
+        core.t_lat += 0.05;
+        core.t_lng += 0.05;
+        core.t_id += 1;
+
+        this.addPointToCurrentPath({
+            altitude: "178",
+            bb: "30",
+            csq: "27",
+            date: "2012-06-15 21:50:24",
+            hdop: "2.2",
+            id: core.t_id,
+            lat: core.t_lat,
+            lng: core.t_lng,
+            velocity: "14.63"
+        });
+    },
+
     init: function(){
+        core.t_lat = 5535.8612;
+        core.t_lng = 5535.8612;
+        core.t_id = 1000;
+
+        core.ticker.delay = 2000;
+
+        core.ticker.addIntervalMethod(function(){
+            core.map.renewData();
+        });
+
         if(!$.cookie('fleet_id')){
             $.cookie('fleet_id', 'all', this.options.cookie_options);
         };
