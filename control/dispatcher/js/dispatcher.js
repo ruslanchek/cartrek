@@ -122,7 +122,17 @@ core.dispatcher = {
             trip_status = '<span class="negative">Остановка</span>';
         };
 
+        console.log(data.last_registered_point)
+
+        if(data.last_registered_point.battery > 0){
+            trip_status = '<span class="positive">'+data.last_registered_point.battery+'</span>';
+        }else{
+            trip_status = '<span class="negative">'+data.last_registered_point.battery+'</span>';
+        };
+
         item.find('.device_trip_status').html(trip_status);
+
+        item.find('.device_battery_status').html();
 
         //Params
         item.find('.velocity').data('velocity', data.last_registered_point.velocity);
@@ -132,6 +142,8 @@ core.dispatcher = {
         this.getParams();
         this.getMetrics();
     },
+
+    //TODO БЛЯТЬ, СУКА, ПИДО ЕБАНЫЙ!, ТУТ НАХУЙ ВСЕ В ОШИБКАХ!!! Еблан собачий!!! :-((((((((((((((((((((((((((((((
 
     renewData: function(){
         this.get_renew_info = $.ajax({
