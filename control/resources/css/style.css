@@ -1113,7 +1113,7 @@ h1 {
 
 /* Auth */
 .auth_body {
-    background: url(../img/patterns/rounds.png);
+    background: url(../img/patterns/rounds.png) 50% 50%;
 }
 
 .auth_body body {
