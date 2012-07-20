@@ -48,6 +48,10 @@ core.dispatcher = {
     getHeadingIcon: function(heading){
         var degrees_zone = Math.round(parseInt(heading)/15) * 15;
 
+        if(isNaN(degrees_zone)){
+            degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
+        };
+
         var image = new google.maps.MarkerImage(
             '/control/map/img/markers/heading/'+degrees_zone+'.png',
             new google.maps.Size(16,16),
@@ -113,30 +117,32 @@ core.dispatcher = {
 
     renewItemAdditionalParams: function(data){
         var item = $('.dispatcher_devices #item_'+data.id),
-            trip_status = '';
+            trip_status = '',
+            battery_status = '';
 
         //Trip status
-        if(data.last_registered_point.velocity > 0){
+        if(data.last_registered_point && data.last_registered_point.velocity > 0){
             trip_status = '<span class="positive">Движется</span>';
         }else{
             trip_status = '<span class="negative">Остановка</span>';
         };
 
-        console.log(data.last_registered_point)
-
-        if(data.last_registered_point.battery > 0){
-            trip_status = '<span class="positive">'+data.last_registered_point.battery+'</span>';
-        }else{
-            trip_status = '<span class="negative">'+data.last_registered_point.battery+'</span>';
-        };
-
         item.find('.device_trip_status').html(trip_status);
 
-        item.find('.device_battery_status').html();
+        if(data.battery > 0){
+            battery_status = '<span>'+core.utilities.convertInputToVolts(data.battery)+' в</span>';
+        }else{
+            battery_status = '<span class="negative">'+core.utilities.convertInputToVolts(data.battery)+' в</span>';
+        };
+
+        item.find('.device_battery_status').html(battery_status);
 
         //Params
-        item.find('.velocity').data('velocity', data.last_registered_point.velocity);
-        item.find('.heading').data('heading', data.last_registered_point.bb);
+        if(data.last_registered_point){
+            item.find('.velocity').data('velocity', data.last_registered_point.velocity);
+            item.find('.heading').data('heading', data.last_registered_point.bb);
+        };
+
         item.find('.parameters').data('csq', data.csq).data('hdop', data.hdop);
 
         this.getParams();
@@ -162,28 +168,31 @@ core.dispatcher = {
                 for(var i = 0, l = data.length; i < l; i++){
                     for(var i1 = 0, l1 = core.dispatcher.maps.length; i1 < l1; i1++){
                         if(data[i].id == core.dispatcher.maps[i1].map.id){
-                            var map = core.dispatcher.maps[i1],
-                                lat = data[i].last_registered_point.lat,
-                                lng = data[i].last_registered_point.lng,
-                                address_block = $('.dispatcher_devices #item_'+map.map.id+' .address_item');
 
-                            if(
-                                lat != address_block.data('lat') &&
-                                lng != address_block.data('lng')
-                            ){
-                                var new_position = new google.maps.LatLng(
-                                    core.utilities.convertNMEAtoWGS84(lat),
-                                    core.utilities.convertNMEAtoWGS84(lng)
-                                );
+                            if(data[i].last_registered_point){
+                                var map = core.dispatcher.maps[i1],
+                                    lat = data[i].last_registered_point.lat,
+                                    lng = data[i].last_registered_point.lng,
+                                    address_block = $('.dispatcher_devices #item_'+map.map.id+' .address_item');
 
-                                address_block.data('lat', lat);
-                                address_block.data('lng', lng);
+                                if(
+                                    lat != address_block.data('lat') &&
+                                    lng != address_block.data('lng')
+                                ){
+                                    var new_position = new google.maps.LatLng(
+                                        core.utilities.convertNMEAtoWGS84(lat),
+                                        core.utilities.convertNMEAtoWGS84(lng)
+                                    );
 
-                                map.marker.setPosition(new_position);
-                                map.marker.setIcon(core.dispatcher.getHeadingIcon(data[i].last_registered_point.bb).image);
-                                map.map.panTo(new_position);
+                                    address_block.data('lat', lat);
+                                    address_block.data('lng', lng);
 
-                                core.dispatcher.getAddresses();
+                                    map.marker.setPosition(new_position);
+                                    map.marker.setIcon(core.dispatcher.getHeadingIcon(data[i].last_registered_point.bb).image);
+                                    map.map.panTo(new_position);
+
+                                    core.dispatcher.getAddresses();
+                                };
                             };
 
                             core.dispatcher.renewItemAdditionalParams(data[i]);

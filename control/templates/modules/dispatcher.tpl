@@ -59,7 +59,7 @@
                     </tr>
                     <tr >
                         <td class="device_battery_status">
-                            {$item.battery|voltage} в
+                            <span {if $item.battery <= 0}class="negative"{/if}>{$item.battery|voltage} в</span>
                         </td>
                         <td class="device_outside_temp_status">
                             25&deg;
