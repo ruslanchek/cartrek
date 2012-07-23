@@ -19,12 +19,7 @@ core.map = {
                     new google.maps.Point(0,0),
                     new google.maps.Point(3.5,3.5)
                 ),
-                shadow: new google.maps.MarkerImage(
-                    'img/markers/waypoint_shadow_flat.png',
-                    new google.maps.Size(15,15),
-                    new google.maps.Point(0,0),
-                    new google.maps.Point(0,0)
-                ),
+                shadow: null,
                 shape: {
                     coord: [5,0,6,1,6,2,6,3,6,4,6,5,5,6,1,6,0,5,0,4,0,3,0,2,0,1,1,0,5,0],
                     type: 'poly'
@@ -1298,8 +1293,39 @@ core.map = {
         };
     },
 
-    renewData: function(){
-        this.date_loading_process = $.ajax({
+    renewCurrentDeviceData: function(data){
+        var device = this.options.devices[this.getDeviceIndexById(this.options.current_device_id)];
+
+        for(var i = 0, l = data.length; i < l; i++){
+            if(data[i].id == device.id){
+                var d = data[i];
+            };
+        };
+
+        if(d){
+            device.point = d.point;
+        };
+
+        this.addPointToCurrentPath(device.point);
+    },
+
+    renewAllDevicesData: function(data){
+        for(var i = 0, l = this.options.devices.length; i < l; i++){
+            if((data[i].point && this.options.devices[i].point) && data[i].point.id != this.options.devices[i].point.id){
+                this.options.devices[i].current_position_marker.setPosition(
+                    new google.maps.LatLng(
+                        core.utilities.convertNMEAtoWGS84(data[i].point.lat),
+                        core.utilities.convertNMEAtoWGS84(data[i].point.lng)
+                    )
+                );
+
+                this.options.devices[i].point = data[i].point;
+            };
+        };
+    },
+
+    renewDataReq: function(){
+        this.renew_data_req = $.ajax({
             url: '/control/map/?ajax',
             dataType: 'json',
             type: 'get',
@@ -1307,39 +1333,25 @@ core.map = {
                 action: 'getRenewedData'
             },
             beforeSend: function(){
-
+                if(this.renew_data_req){
+                    this.renew_data_req.abort();
+                };
             },
-            success: function(){
-
+            success: function(data){
+                if(core.map.options.current_device_id == 'all'){
+                    core.map.renewAllDevicesData(data);
+                }else{
+                    core.map.renewCurrentDeviceData(data);
+                };
             }
-        });
-
-        core.t_lat += 0.05;
-        core.t_lng += 0.05;
-        core.t_id += 1;
-
-        this.addPointToCurrentPath({
-            altitude: "178",
-            bb: "30",
-            csq: "27",
-            date: "2012-06-15 21:50:24",
-            hdop: "2.2",
-            id: core.t_id,
-            lat: core.t_lat,
-            lng: core.t_lng,
-            velocity: "14.63"
         });
     },
 
     init: function(){
-        core.t_lat = 5535.8612;
-        core.t_lng = 5535.8612;
-        core.t_id = 1000;
-
         core.ticker.delay = 2000;
 
         core.ticker.addIntervalMethod(function(){
-            core.map.renewData();
+            core.map.renewDataReq();
         });
 
         if(!$.cookie('fleet_id')){

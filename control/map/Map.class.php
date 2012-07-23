@@ -29,6 +29,10 @@
                         case 'setCurrentDate' : {
                             $this->devices->setCurrentDate($_GET['date']);
                         }; break;
+
+                        case 'getRenewedData' : {
+                            print json_encode($this->devices->getUserDevices()); //TODO: можно оптимизировать!
+                        }; break;
                     };
 
                     exit;
