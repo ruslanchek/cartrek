@@ -493,27 +493,27 @@ core.utilities = {
 
         switch(type){
             case 'NMEA' : {
-                d = value.substring(0, 2),
+                d = parseInt(value.substring(0, 2)),
                 m = value.substring(2, 4),
                 y = value.substring(4, 6);
 
-                return d+' '+month_names[parseInt(m) - 1]+', 20'+y;
+                return d+' '+month_names[parseInt(m - 1)]+', 20'+y;
             }; break;
 
             case 'COMMON' : {
-                d = value.substring(0, 2),
+                d = parseInt(value.substring(0, 2)),
                 m = value.substring(3, 5),
                 y = value.substring(6, 11);
 
-                return d+' '+month_names[parseInt(m) - 1]+', '+y;
+                return d+' '+month_names[parseInt(m - 1)]+', '+y;
             }; break;
 
             case 'MYSQL' : {
-                d = value.substring(8, 10),
+                d = parseInt(value.substring(8, 10)),
                 m = value.substring(5, 7),
                 y = value.substring(0, 4);
 
-                return d+' '+month_names[parseInt(m) - 1]+', '+y;
+                return d+' '+month_names[parseInt(m - 1)]+', '+y;
             }; break;
         };
     },
