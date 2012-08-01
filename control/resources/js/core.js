@@ -476,7 +476,7 @@ core.utilities = {
             type = 'NMEA';
         };
 
-        var d, m, y, m_humanized, month_names = [
+        var d, m, y, month_names = [
             'января',
             'февраля',
             'марта',
