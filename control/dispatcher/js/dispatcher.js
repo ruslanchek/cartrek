@@ -82,11 +82,12 @@ core.dispatcher = {
         var latlng = new google.maps.LatLng(core.utilities.convertNMEAtoWGS84(options.lat), core.utilities.convertNMEAtoWGS84(options.lng));
 
         var map_options = {
-            zoom      : 10,
-            center    : latlng,
-            mapTypeId : google.maps.MapTypeId.ROADMAP,
-            streetViewControlOptions: false,
-            id        : options.id
+            zoom        : 10,
+            center      : latlng,
+            scrollwheel : false,
+            mapTypeId   : google.maps.MapTypeId.ROADMAP,
+            id          : options.id,
+            streetViewControl: false
         };
 
         var map = new google.maps.Map(document.getElementById('map_'+options.id), map_options);
