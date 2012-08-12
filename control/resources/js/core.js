@@ -1,3 +1,5 @@
+'use strict';
+
 var core = {
     options: {
         cookie_options: { path: '/', expires: 365 }
