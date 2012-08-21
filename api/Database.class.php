@@ -139,42 +139,22 @@
             };
         }
 
-        //Return an associative array of a multiple rows by random selection
-        public function getRandomItems($table, $count, $fields = array(), $where = false){
+        //Returns true, if exists
+        public function countRows($table, $where){
             if($where){
-                $where = "WHERE ".$where;
+                $where = " WHERE ".$where;
             };
 
-            $query = "SELECT COUNT(*) AS `count` FROM `".$this->quote($table)."` ".$this->quote($where);
+            $query = "
+                SELECT
+                    COUNT(*) AS `count`
+                FROM
+                    `".$this->quote($table)."`
+                ".$where."
+            ";
+
             $row_count = $this->assocItem($query);
-            $row_count = $row_count['count'];
-            $query = array();
-
-            if(!empty($fields)){
-                $f = implode(",", $fields);
-            }else{
-                $f = '*';
-            };
-
-            $rand_matrix = array();
-
-            while (count($query) < $count) {
-                $next_random = rand(0, $row_count);
-
-                while(in_array($next_random, $rand_matrix)){
-                    $next_random = rand(0, $row_count);
-                };
-
-                array_push($rand_matrix, $next_random);
-
-                $query[] = "(SELECT ".$this->quote($f)." FROM `".$this->quote($table)."` ".$this->quote($where)." LIMIT ".$next_random.", 1)";
-            };
-
-            unset($rand_matrix, $next_random);
-
-            $query = implode(" UNION ", $query);
-
-            return $this->assocMulti($query);
+            return $row_count['count'];
         }
 	};
 ?>

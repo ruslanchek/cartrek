@@ -8,9 +8,9 @@
             };
 
             $this->init(array(
-                'name'  => 'fleet',
+                'name'  => 'user.fleet',
                 'title' => 'Автопарк',
-                'dir'   => '/control/fleet'
+                'dir'   => '/control/user/fleet'
             ));
 
             /*if($this->uri_chain[2]){

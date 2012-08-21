@@ -35,12 +35,13 @@
                         {if $core->auth->user.status}
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> {$core->auth->user.data.login} <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li><a href="/control/user/"><i class="icon-wrench"></i> Учетные данные</a></li>
-                                <li><a href="/control/user/groups"><i class="icon-wrench"></i> Группы</a></li>
-                                <li><a href="/control/user/system"><i class="icon-wrench"></i> Система</a></li>
-                                <li><a href="/control/user/notifications"><i class="icon-wrench"></i> Уведомления</a></li>
-                                <li><a href="/control/user/tariff"><i class="icon-wrench"></i> Финансы и тарифы</a></li>
-                                <li><a href="/control/user/password_change"><i class="icon-wrench"></i> Изменить пароль</a></li>
+                                <li><a href="/control/user/"><i class="icon-user"></i> Учетные данные</a></li>
+                                <li><a href="/control/user/fleet"><i class="icon-list"></i> Автопарк</a></li>
+                                <li><a href="/control/user/groups"><i class="icon-list"></i> Группы</a></li>
+                                <li><a href="/control/user/system"><i class="icon-cog"></i> Система</a></li>
+                                <li><a href="/control/user/notifications"><i class="icon-exclamation-sign"></i> Уведомления</a></li>
+                                <li><a href="/control/user/tariff"><i class="icon-briefcase"></i> Финансы и тарифы</a></li>
+                                <li><a href="/control/user/password_change"><i class="icon-lock"></i> Изменить пароль</a></li>
 
                                 <li class="divider"></li>
                                 <li><a href="javascript:void(0)" onclick="core.exitUser()"><i class="icon-share"></i> Выйти</a></li>

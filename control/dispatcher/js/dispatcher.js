@@ -231,10 +231,13 @@ core.dispatcher = {
 
     createSortable: function(){
         $('.dispatcher_devices').sortable({
-            items: '.item',
-            handle: '.item_head',
-            cursor: 'move',
-            opacity: 0.6
+            items   : '.item',
+            handle  : '.item_head',
+            cursor  : 'move',
+            opacity : 0.6,
+            sort    : function(){
+
+            }
         });
     },
 

@@ -18,6 +18,7 @@
             if($this->ajax_mode){
                 switch($_GET['action']){
                     case 'getDivicesPositions' : {
+                        header('Content-type: application/json');
                         print json_encode($this->devices->getUserDevices()); //TODO: можно оптимизировать!
                     }; break;
                 };

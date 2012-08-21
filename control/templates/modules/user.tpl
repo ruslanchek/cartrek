@@ -4,6 +4,7 @@
 
 <ul class="nav nav-tabs" id="fleets">
     <li class="active"><a href="/control/user/">Учетные данные</a></li>
+    <li><a href="/control/user/fleet">Автопарк</a></li>
     <li><a href="/control/user/groups">Группы</a></li>
     <li><a href="/control/user/system">Система</a></li>
     <li><a href="/control/user/notifications">Уведомления</a></li>

@@ -4,6 +4,9 @@
             $current_date,
             $devices_present = false;
 
+        private
+            $fleets_limit = 20;
+
         public function __construct(){
             parent::__construct();
 
@@ -113,10 +116,12 @@
                     CONVERT_TZ(`devices`.`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`,
                     `fleets`.`name` AS `fleet_name`
                 FROM
-                    `devices`,
+                    `devices`
+                LEFT JOIN
                     `fleets`
+                ON
+                    `devices`.`fleet_id` = `fleets`.`id`
                 WHERE
-                    `devices`.`fleet_id` = `fleets`.`id` &&
                     `devices`.`user_id` = ".intval($this->auth->user['data']['id']).$addition;
 
             $devices    = $this->db->assocMulti($query);
@@ -232,18 +237,86 @@
             return $this->db->assocMulti($query);
         }
 
+
+
+        //TODO : Сделать отдельный API-класс для работы с группами
+
         public function getFleetsList(){
             $query = "
                 SELECT
-                    `id`,
-                    `name`
+                    `f`.`id`        AS `id`,
+                    `f`.`name`      AS `name`,
+                    COUNT(`d`.`id`) AS `cars`
                 FROM
-                    `fleets`
+                    `fleets` `f`
+                LEFT JOIN
+                    `devices` `d`
+                ON
+                    `d`.`fleet_id` = `f`.`id`
                 WHERE
-                    `user_id`   = ".intval($this->auth->user['data']['id'])."
+                    `f`.`user_id`  = ".intval($this->auth->user['data']['id'])."
+                GROUP BY
+                    `f`.`name`
+                ORDER BY
+                    `f`.`id`
+                DESC
             ";
 
             return $this->db->assocMulti($query);
+        }
+
+        public function addNewFleet($name){
+            $c = $this->db->countRows('fleets', '`user_id` = '.intval($this->auth->user['data']['id']));
+
+            if($this->db->checkRowExistance('fleets', 'name', $name)){
+                return array(
+                    'status' => false,
+                    'message' => 'Группа с таким названием уже существует'
+                );
+            }elseif($c > $this->fleets_limit){
+                return array(
+                    'status' => false,
+                    'message' => 'Достигнуто максимальное количество групп &mdash; '.$this->fleets_limit
+                );
+
+            }else{
+                $this->db->query("
+                    INSERT INTO `fleets` (
+                        `name`,
+                        `user_id`
+                    ) VALUES (
+                        '".$this->db->quote($name)."',
+                        ".intval($this->auth->user['data']['id'])."
+                    )
+                ");
+
+                return array(
+                    'status' => true,
+                    'message' => 'Группа создана!'
+                );
+            };
+        }
+
+        public function deleteFleet($id){
+            if($this->auth->user['data']['id'] > 0){
+                $this->db->query("
+                    UPDATE
+                        `devices`
+                    SET
+                        `fleet_id` = 0
+                    WHERE
+                        `fleet_id` = ".intval($id)." &&
+                        `user_id` = ".intval($this->auth->user['data']['id'])."
+                ");
+
+                $this->db->query("
+                    DELETE FROM
+                        `fleets`
+                    WHERE
+                        `id` = ".intval($id)." &&
+                        `user_id` = ".intval($this->auth->user['data']['id'])."
+                ");
+            };
         }
     };
 ?>

@@ -1151,3 +1151,20 @@ h1 {
 .auth_body .logo {
     background-image: url(../img/logos/logo_w.png);
 }
+
+
+.modal_message {
+    padding: 5px 15px;
+    display: none;
+    cursor: pointer;
+}
+
+.modal_message.ok {
+    background: #009253;
+    color: #fff;
+}
+
+.modal_message.error {
+    background: #89101a;
+    color: #fff;
+}

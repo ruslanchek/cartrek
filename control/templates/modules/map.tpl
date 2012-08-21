@@ -21,7 +21,7 @@
                     <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu" id="fleets_menu">
-                    <li {if !isset($smarty.get.fleet)}class="active"{/if}><a href="javascript:void(0)" fleet_id="all">Все группы</a></li>
+                    <li {if !isset($smarty.get.fleet)}class="active"{/if}><a href="javascript:void(0)" fleet_id="all">Все</a></li>
                     {foreach $fleets_list as $fleet}
                     <li {if isset($smarty.get.fleet) && $smarty.get.fleet == $fleet.id}class="active"{/if}><a href="javascript:void(0)" fleet_id="{$fleet.id}">{$fleet.name}</a></li>
                     {/foreach}

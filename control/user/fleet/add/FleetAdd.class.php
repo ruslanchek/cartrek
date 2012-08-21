@@ -15,9 +15,9 @@
             };
 
             $this->init(array(
-                'name'  => 'fleet.add',
+                'name'  => 'user.fleet.add',
                 'title' => 'Добавление устройства',
-                'dir'   => '/control/fleet/add',
+                'dir'   => '/control/user/fleet/add',
                 'form'  => $form
             ));
         }

@@ -16,13 +16,15 @@
 
             //If user have any actve devices
             if($this->devices->devices_present){
-                if($this->ajax_mode){
+                if($this->ajax_mode && isset($_GET['action'])){
                     switch($_GET['action']){
                         case 'getOptions' : {
+                            header('Content-type: application/json');
                             print json_encode($this->getOptions());
                         }; break;
 
                         case 'getPoints' : {
+                            header('Content-type: application/json');
                             print json_encode($this->devices->getPoints($_GET['device_id']));
                         }; break;
 
@@ -31,6 +33,7 @@
                         }; break;
 
                         case 'getRenewedData' : {
+                            header('Content-type: application/json');
                             print json_encode($this->devices->getUserDevices()); //TODO: можно оптимизировать!
                         }; break;
                     };

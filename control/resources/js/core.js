@@ -68,6 +68,24 @@ core.modal = {
         this.modal.find('.save_modal').button('loading');
     },
 
+    setMessage: function(data){
+        $('.modal_message').html(data.message).removeClass('error').removeClass('ok');
+
+        if(data.status){
+            $('.modal_message').addClass('ok');
+        }else{
+            $('.modal_message').addClass('error');
+        };
+
+        $('.modal_message').slideDown(70);
+    },
+
+    unSetMessage: function(){
+        $('.modal_message').slideUp(70, function(){
+            $('.modal_message').removeClass('error').removeClass('ok').html('');
+        });
+    },
+
     show: function(options){
         var $modal_html = $('<div class="modal_overlay"></div>' +
                             '<div class="modal">' +
@@ -75,7 +93,8 @@ core.modal = {
                                     '<a class="close" data-dismiss="modal">×</a>' +
                                     '<h3>' + options.header + '</h3>' +
                                 '</div>' +
-                                '<div class="modal-body"></div>' +
+                                '<div class="modal_message error"></div>' +
+                                '<div class="modal-body">' + options.body + '</div>' +
                                 '<div class="modal-footer">' +
                                     '<a href="javascript:void(0)" class="btn btn-primary save_modal pull-left" autocomplete="off">Сохранить</a>' +
                                     '<a href="javascript:void(0)" class="btn close_modal pull-left">Закрыть</a>' +
@@ -104,9 +123,12 @@ core.modal = {
             if(typeof options.width == 'number'){
                 w = options.width;
                 m = -options.width/2;
-            }else{
+            }else if(typeof options.width != 'number' && options.width > 0){
                 w = options.width;
                 m = -options.width.substring(0, options.width.length - 1) / 2+'%';
+            }else{
+                w = 400;
+                m = -200;
             };
 
             $('.modal').css({
@@ -114,6 +136,20 @@ core.modal = {
                 marginLeft: m
             });
         };
+
+        $('.modal_message').off('click').on('click', function(){
+            core.modal.unSetMessage();
+        });
+
+        $('body').off('keyup.modal').on('keyup.modal', function(e){
+            if(e.keyCode == 13){
+                options.action();
+            };
+
+            if(e.keyCode == 27){
+                core.modal.hide();
+            };
+        });
     }
 };
 
@@ -754,8 +790,8 @@ core.utilities = {
 core.effects = {
     breathe: function(obj){
         if(obj.is(':visible')){
-            obj.delay(1000).fadeTo(2500, 0.3);
-            obj.fadeTo(1200, 1.0, function(){
+            obj.delay(800).fadeTo(2000, 0.3);
+            obj.fadeTo(1000, 1.0, function(){
                 core.effects.breathe(obj);
             });
         };

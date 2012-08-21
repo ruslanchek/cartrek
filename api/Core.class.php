@@ -79,7 +79,7 @@
             $this->smarty->setConfigDir($_SERVER['DOCUMENT_ROOT'].'/smarty/configs');
             $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'].'/cache');
 
-            $this->smarty->force_compile    = false;
+            $this->smarty->force_compile    = true;
             $this->smarty->debugging        = false;
             $this->smarty->caching          = false;
             $this->smarty->cache_lifetime   = 120;

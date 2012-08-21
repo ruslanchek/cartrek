@@ -3,12 +3,16 @@
 </div>
 
 {if $core->devices->devices_present}
+
+{$fleets = $core->devices->getFleetsList()}
+{if $fleets}
 <ul class="nav nav-tabs" id="fleets">
     <li {if !isset($smarty.get.fleet)}class="active"{/if}><a href="/control/dispatcher/">Все</a></li>
-    {foreach $core->devices->getFleetsList() as $fleet}
+    {foreach $fleets as $fleet}
     <li {if isset($smarty.get.fleet) && $smarty.get.fleet == $fleet.id}class="active"{/if}><a href="/control/dispatcher/?fleet={$fleet.id}">{$fleet.name}</a></li>
     {/foreach}
 </ul>
+{/if}
 
 <div class="dispatcher_devices">
     {foreach $core->devices->getUserDevices() as $item}

@@ -12,6 +12,28 @@
                 'title' => 'Группы',
                 'dir'   => '/control/user/groups'
             ));
+
+            if($this->ajax_mode && isset($_GET['action'])){
+                switch($_GET['action']){
+                    case 'addNewFleet' : {
+                        header('Content-type: application/json');
+                        print json_encode($this->devices->addNewFleet($_POST['name']));
+                    }; break;
+                };
+
+                exit;
+            };
+
+            if(isset($_GET['action'])){
+                switch($_GET['action']){
+                    case 'delete' : {
+                        $this->devices->deleteFleet($_GET['id']);
+                        header("Location: /control/user/groups");
+                    }; break;
+                };
+
+                exit;
+            };
         }
 
         public function __destruct(){

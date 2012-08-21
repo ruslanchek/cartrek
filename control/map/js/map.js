@@ -1257,7 +1257,7 @@ core.map = {
 
     setSelectedFleet: function(){
         if(this.options.fleet_id == 'all' || !this.options.fleet_id){
-            $('#fleet_name_info').html('Все группы');
+            $('#fleet_name_info').html('Все');
         }else{
             $('#fleet_name_info').html($('ul#fleets_menu li a[fleet_id="'+$.cookie('fleet_id')+'"]').html());
         };
