@@ -647,7 +647,7 @@
 
         private function readGetRequest($section, $params, $json = true){
             $result = file_get_contents($this->getRequestString($section, $params));
-            
+
             if($json){
                 return json_decode($result);
             }else{
@@ -737,7 +737,7 @@
 
             if(isset($_GET['error'])){
                 $this->showOAuthError($_GET['error'], $_GET['error_description']);
-                
+
             }else{
                 switch($_GET['step']){
                     case 'auth' : {

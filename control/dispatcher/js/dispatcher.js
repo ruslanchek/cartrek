@@ -150,8 +150,6 @@ core.dispatcher = {
         this.getMetrics();
     },
 
-    //TODO БЛЯТЬ, СУКА, ПИДО ЕБАНЫЙ!, ТУТ НАХУЙ ВСЕ В ОШИБКАХ!!! Еблан собачий!!! :-((((((((((((((((((((((((((((((
-
     renewData: function(){
         this.get_renew_info = $.ajax({
             url : '/control/dispatcher/?ajax',
