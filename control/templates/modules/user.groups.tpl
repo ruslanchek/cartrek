@@ -24,8 +24,8 @@
 <table class="table table-striped table-bordered fleet_table">
     <thead>
         <tr>
-            <th width="70%">Название</th>
-            <th width="28%">Машин</th>
+            <th width="98%">Название</th>
+            <th width="1%">Машин</th>
             <th width="1%"></th>
         </tr>
     </thead>

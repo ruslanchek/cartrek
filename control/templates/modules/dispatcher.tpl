@@ -16,7 +16,7 @@
 
 <div class="dispatcher_devices">
     {foreach $core->devices->getUserDevices() as $item}
-        <div class="item span4" id="item_{$item.id}">
+        <div class="item span4" id="item_{$item.id}" data-id="{$item.id}">
 
             <div class="item_head">
                 <h2><span class="car_name">{$item.name} <span class="thin">{$item.make} {$item.model}</span></span> <span class="g_id">{$item.g_id}</span></h2>

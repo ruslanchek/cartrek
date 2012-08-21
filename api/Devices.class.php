@@ -122,7 +122,11 @@
                 ON
                     `devices`.`fleet_id` = `fleets`.`id`
                 WHERE
-                    `devices`.`user_id` = ".intval($this->auth->user['data']['id']).$addition;
+                    `devices`.`user_id` = ".intval($this->auth->user['data']['id']).$addition."
+                ORDER BY
+                     `devices`.`sort`
+                ASC
+            ";
 
             $devices    = $this->db->assocMulti($query);
             $result     = array();

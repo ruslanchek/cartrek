@@ -235,8 +235,26 @@ core.dispatcher = {
             handle  : '.item_head',
             cursor  : 'move',
             opacity : 0.6,
-            sort    : function(){
+            stop    : function(e, ui){
+                var i = 0,
+                    sorting_result = [];
 
+                $('.dispatcher_devices .item').each(function(){
+                    i++;
+                    sorting_result.push({
+                        id: $(this).data('id'),
+                        sort: i
+                    });
+                });
+
+                $.ajax({
+                    url : '/control/dispatcher/?ajax&action=setDivicesSorting',
+                    data : {
+                        sorting_result : sorting_result
+                    },
+                    dataType : 'json',
+                    type : 'post'
+                });
             }
         });
     },
