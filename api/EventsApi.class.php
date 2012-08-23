@@ -69,27 +69,6 @@
                 $more_items = false;
             };
 
-            if(count($items) > 0){
-                $in = "";
-
-                foreach($items as $item){
-                    $in .= "'".$this->db->quote($item['id'])."', ";
-                };
-
-                $in = substr($in, 0, strlen($in) - 2);
-
-                $query = "
-                    UPDATE
-                        `events`
-                    SET
-                        `active`     = 0
-                    WHERE
-                        `id` IN (".$in.") &&
-                        `user_id`     = ".intval($this->auth->user['data']['id']);
-
-                $this->db->query($query);
-            };
-
             return array(
                 'items'         => $items,
                 'more_items'    => $more_items

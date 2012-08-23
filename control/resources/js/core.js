@@ -832,7 +832,7 @@ core.ticker = {
     }
 };
 
-core.events = {
+core.events_api = {
     checkNewEvents: function(){
         console.log('EVENTS', 'Checking for new events...');
     }
@@ -855,8 +855,10 @@ core.exitUser = function(){
 //Object starter
 $(function(){
     core.ticker.startSystemInterval();
+
     core.ticker.addIntervalMethod(function(){
-        core.events.checkNewEvents();
+        core.events_api.checkNewEvents();
     });
+
     core.effects.breathe($('#global_events_counter'));
 });

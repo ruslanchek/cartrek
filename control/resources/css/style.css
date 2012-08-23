@@ -53,6 +53,12 @@ a:hover, a:active {
     margin: 5px auto 0;
 }
 
+
+.strong {
+    font-weight: bold;
+}
+
+
 .thin {
     font-weight: normal;
 }
@@ -954,20 +960,19 @@ h1 {
     opacity: 0.3;
     position: relative;
     top: 3px;
-    right: -20px;
+    right: 0px;
     line-height: 18px;
     float: right;
     width: 18px;
 }
 
-.event_item .close {
-    top: 1px;
-    right: -20px;
-    display: none;
-}
-
 .event_item .icon-eye-open:hover {
     opacity: 0.5;
+}
+
+.event_item .close {
+    top: 1px;
+    right: -40px;
 }
 
 
@@ -1167,4 +1172,32 @@ h1 {
 .modal_message.error {
     background: #89101a;
     color: #fff;
+}
+
+
+
+.left_col {
+    float: left;
+    width: 70%;
+}
+
+.right_col {
+    float: right;
+    width: 25%;
+}
+
+.right_tabbed_menu {
+    float: left;
+}
+
+.right_tabbed_menu ul {
+    margin: 0 0 1em !important;
+}
+
+.well_nopadding {
+    padding: 8px 0;
+}
+
+.well_nopadding li {
+    margin: 4px 0;
 }
