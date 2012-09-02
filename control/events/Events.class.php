@@ -21,7 +21,11 @@
                     }; break;
 
                     case 'delItem' : {
-                        $this->eventsApi->hideItem($_GET['id']);
+                        $this->eventsApi->delItem($_GET['id'], $_GET['cond']);
+                    }; break;
+
+                    case 'hideItem' : {
+                        $this->eventsApi->hideItem($_GET['id'], $_GET['cond']);
                     }; break;
                 };
 

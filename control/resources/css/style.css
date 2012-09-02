@@ -980,16 +980,17 @@ h1 {
 }
 
 .event_item {
-
+    position: relative;
 }
 
 .event_item .icon-eye-open {
     opacity: 0.3;
-    position: relative;
+    position: absolute;
     top: 3px;
-    right: 0px;
+    right: 30px;
+    top: 50%;
+    margin-top: -6px;
     line-height: 18px;
-    float: right;
     width: 18px;
 }
 
@@ -998,8 +999,10 @@ h1 {
 }
 
 .event_item .close {
-    top: 1px;
-    right: -40px;
+    right: 10px;
+    top: 50%;
+    margin-top: -10px;
+    position: absolute;
 }
 
 

@@ -131,7 +131,7 @@
             $this->db->query($query);
         }
 
-        public function hideItem($id){
+        public function hideItem($id, $cond){
             $query = "
                 UPDATE
                     `events`
@@ -143,7 +143,20 @@
 
             $this->db->query($query);
 
-            print $this->getNewEventsCount();
+            print $this->getNewEventsCount($cond);
+        }
+
+        public function delItem($id, $cond){
+            $query = "
+                DELETE FROM
+                    `events`
+                WHERE
+                    `id`          = ".intval($id)." &&
+                    `user_id`     = ".intval($this->auth->user['data']['id']);
+
+            $this->db->query($query);
+
+            print $this->getNewEventsCount($cond);
         }
     };
 ?>

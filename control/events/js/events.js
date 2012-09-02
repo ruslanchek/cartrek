@@ -7,14 +7,16 @@ core.events = {
     drawItems: function(data){
         var html = '',
             active_count = 0,
-            new_count = parseInt($('#global_events_counter').html());
+            new_count = parseInt($('#global_events_counter').html()),
+            hide_button_html = '';
 
         if(!data.more_items && this.step == 0 && data.items.length < 1){
             $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
         }else{
             for(var i = 0, l = data.items.length; i < l; i++){
                 var timestamp = core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL')+', в '+core.utilities.humanizeTime(data.items[i].datetime),
-                    item_class = '';
+                    item_class = '',
+                    hide_button_html = '';
 
                 switch(data.items[i].status){
                     case '1' : {
@@ -34,10 +36,14 @@ core.events = {
                     }; break;
                 };
 
+                if(data.items[i].active == '1'){
+                    hide_button_html = '<a class="icon-eye-open" href="javascript:void(0)" title="Отметить как просмотренное"></a>';
+                };
+
                 html += '<div rel="' + data.items[i].id + '" class="alert '+item_class+' event_item">' +
                             '<b>'+ timestamp + '</b> &nbsp;&nbsp;&nbsp;' +
                             data.items[i].message +
-                            '<a class="icon-eye-open" href="javascript:void(0)" title="Отметить как просмотренное"></a>' +
+                            hide_button_html +
                             '<a class="close" href="javascript:void(0)" title="Удалить">×</a>' +
                         '</div>';
 
@@ -94,7 +100,8 @@ core.events = {
             type: 'get',
             data: {
                 action  : 'hideItem',
-                id      : o.parent().attr('rel')
+                id      : o.parent().attr('rel'),
+                cond    : this.cond
             },
             beforeSend: function(){
                 o.html('&nbsp;');
@@ -128,7 +135,8 @@ core.events = {
             type: 'get',
             data: {
                 action  : 'delItem',
-                id      : o.parent().attr('rel')
+                id      : o.parent().attr('rel'),
+                cond    : this.cond
             },
             beforeSend: function(){
                 core.loading.unsetLoading('event', false);
