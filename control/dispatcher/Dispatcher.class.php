@@ -29,6 +29,8 @@
 
                 exit;
             };
+
+            $this->template = 'dispatcher.tpl';
         }
 
         public function __destruct(){

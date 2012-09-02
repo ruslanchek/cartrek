@@ -108,7 +108,7 @@
                     FROM
                         `public_users`
                     LEFT JOIN
-                        `events` ON (`events`.`user_id` = `public_users`.`id` && `events`.`active` = 1 && `events`.`archive` = 0)
+                        `events` ON (`events`.`user_id` = `public_users`.`id` && `events`.`active` = 1)
                     WHERE
                         `public_users`.`id` = '".intval($_COOKIE['id'])."'
                     LIMIT 1
@@ -718,7 +718,7 @@
                         FROM
                             `public_users`
                         LEFT JOIN
-                            `events` ON (`events`.`user_id` = `public_users`.`id` && `events`.`active` = 1 && `events`.`archive` = 0)
+                            `events` ON (`events`.`user_id` = `public_users`.`id` && `events`.`active` = 1)
                         WHERE
                             `public_users`.`id` = ".intval($new_user_id)."
                         LIMIT 1

@@ -510,6 +510,10 @@ core.utilities = {
     },
 
     humanizeDate: function(value, type){
+        if(!value){
+            return '&mdash;';
+        };
+
         if(!type){
             type = 'NMEA';
         };
@@ -557,6 +561,10 @@ core.utilities = {
     },
 
     humanizeTime: function(value){
+        if(!value){
+            return '&mdash;';
+        };
+
         var h = value.substring(11, 13),
             m = value.substring(14, 16),
             s = value.substring(17, 19);

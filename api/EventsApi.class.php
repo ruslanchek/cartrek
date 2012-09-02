@@ -12,33 +12,60 @@
                     `events`
                 WHERE
                     `user_id` = ".intval($this->auth->user['data']['id'])." &&
-                    `active` = 1 &&
-                    `archive` = 0
+                    `active` = 1
             ";
 
             $result = $this->db->assocItem($query);
             return $result['count'];
         }
 
-        public function getAllEventsCount(){
+        public function getAllEventsCount($cond = 'all'){
+            switch($cond){
+                case 'unreaded' : {
+                    $cond_where = ' && `active` = 1';
+                }; break;
+
+                case 'readed' : {
+                    $cond_where = ' && `active` = 0';
+                }; break;
+
+                default : {
+                    $cond_where = '';
+                }; break;
+            };
+
+
             $query = "
                 SELECT
                     COUNT(*) AS `count`
                 FROM
                     `events`
                 WHERE
-                    `user_id` = ".intval($this->auth->user['data']['id'])." &&
-                    `archive` = 0
+                    `user_id` = ".intval($this->auth->user['data']['id']).$cond_where."
             ";
 
             $result = $this->db->assocItem($query);
             return $result['count'];
         }
 
-        public function getEvents($step = 0, $per_step = 10, $offset = 0){
+        public function getEvents($step = 0, $per_step = 10, $offset = 0, $cond = 'all'){
             $offset = intval($offset);
             $current_party_from = $step * $per_step;
             $current_party_to = ($step * $per_step) + $per_step;
+
+            switch($cond){
+                case 'unreaded' : {
+                    $cond_where = ' && `active` = 1';
+                }; break;
+
+                case 'readed' : {
+                    $cond_where = ' && `active` = 0';
+                }; break;
+
+                default : {
+                    $cond_where = '';
+                }; break;
+            };
 
             $query = "
                 SELECT
@@ -52,8 +79,7 @@
                 FROM
                     `events`
                 WHERE
-                    `user_id` = ".intval($this->auth->user['data']['id'])." &&
-                    `archive` = 0
+                    `user_id` = ".intval($this->auth->user['data']['id']).$cond_where."
                 ORDER BY
                     `id` DESC,
                     `datetime` DESC
@@ -61,7 +87,7 @@
                     ".intval($current_party_from - $offset).", ".intval($per_step);
 
             $items = $this->db->assocMulti($query);
-            $total = $this->getAllEventsCount();
+            $total = $this->getAllEventsCount($cond);
 
             if($current_party_to < $total){
                 $more_items = true;
@@ -91,16 +117,14 @@
                     `user_id`,
                     `datetime`,
                     `active`,
-                    `type`,
-                    `archive`
+                    `type`
                 ) VALUES (
                     ".intval($status).",
                     '".$this->db->quote($message)."',
                     ".intval($user_id).",
                     CONVERT_TZ(NOW(), 'SYSTEM', 'GMT'),
                     1,
-                    ".intval($type).",
-                    0
+                    ".intval($type)."
                 )
             ";
 
@@ -112,7 +136,7 @@
                 UPDATE
                     `events`
                 SET
-                    `archive`     = 1
+                    `active`      = 0
                 WHERE
                     `id`          = ".intval($id)." &&
                     `user_id`     = ".intval($this->auth->user['data']['id']);

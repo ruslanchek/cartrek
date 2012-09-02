@@ -4,10 +4,10 @@
 
     Class Config{
         public $db_vars = array(
-            'host'  => '31.31.200.15',
+            'host'  => '127.0.0.1',
             'db'    => 'gps',
-            'user'  => 'gps',
-            'pass'  => 'Tukzara12'
+            'user'  => 'root',
+            'pass'  => '123'
         );
 
         //public $yandex_maps_api_key = 'AGZOc08BAAAA7AGgVQMAN-Zv3AH9T_SickfIRKaGBWPt6lUAAAAAAAAAAABfuEjMQhwWcAaQkE4J-qk7YcdyBQ==';
