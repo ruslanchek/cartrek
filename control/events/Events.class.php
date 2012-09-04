@@ -27,6 +27,11 @@
                     case 'hideItem' : {
                         $this->eventsApi->hideItem($_GET['id'], $_GET['cond']);
                     }; break;
+
+                    case 'checkForNewEvents' : {
+                        header('Content-type: application/json');
+                        print json_encode($this->eventsApi->getNewEvents());
+                    }; break;
                 };
 
                 exit;

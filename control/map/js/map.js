@@ -1,7 +1,5 @@
 'use strict';
 
-var google = google;
-
 core.map = {
     options: {
         current_device_id: null,

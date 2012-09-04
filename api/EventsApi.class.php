@@ -34,7 +34,6 @@
                 }; break;
             };
 
-
             $query = "
                 SELECT
                     COUNT(*) AS `count`
@@ -46,6 +45,32 @@
 
             $result = $this->db->assocItem($query);
             return $result['count'];
+        }
+
+        public function getNewEvents(){
+            $query = "
+                SELECT
+                    `id`,
+                    `status`,
+                    `message`,
+                    `type`,
+                    CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `datetime`
+                FROM
+                    `events`
+                WHERE
+                    `user_id` = ".intval($this->auth->user['data']['id'])."
+                ORDER BY
+                    `id` DESC,
+                    `datetime` DESC
+            ";
+
+            $items = $this->db->assocMulti($query);
+            $total = $this->getAllEventsCount('unreaded');
+
+            return array(
+                'items' => $items,
+                'total' => $total
+            );
         }
 
         public function getEvents($step = 0, $per_step = 10, $offset = 0, $cond = 'all'){

@@ -808,7 +808,7 @@ core.effects = {
 
 core.ticker = {
     interval: null,
-    delay: 10000,
+    delay: 5000,
     interval_methods: [],
 
     processSystemInterval: function(){
@@ -842,7 +842,23 @@ core.ticker = {
 
 core.events_api = {
     checkNewEvents: function(){
-        console.log('EVENTS', 'Checking for new events...');
+        $.ajax({
+            url: '/control/events/?ajax',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                action  : 'checkForNewEvents'
+            },
+            success: function(data){
+                for(var i = 0, l = data.items.length; i < l; i++){
+                    $.meow({
+                        title   : '',
+                        message : data.items[i].message,
+                        duration: 15000
+                    });
+                };
+            }
+        });
     }
 
     //TODO: Сделать чекер ивентов и вообще отображение новых ивентов в рилтайме
