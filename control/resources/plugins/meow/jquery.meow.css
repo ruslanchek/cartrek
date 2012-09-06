@@ -2,7 +2,7 @@
   position: fixed;
   top: 35px;
   right: 0;
-  z-index: 100;
+  z-index: 5000;
 }
 
 .meow {

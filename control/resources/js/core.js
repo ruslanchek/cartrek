@@ -841,6 +841,14 @@ core.ticker = {
 };
 
 core.events_api = {
+    showEventsMeow: function(data){
+        $.meow({
+            title   : '',
+            message : data.items[i].message,
+            duration: 15000
+        });
+    },
+
     checkNewEvents: function(){
         $.ajax({
             url: '/control/events/?ajax',
@@ -851,11 +859,7 @@ core.events_api = {
             },
             success: function(data){
                 for(var i = 0, l = data.items.length; i < l; i++){
-                    $.meow({
-                        title   : '',
-                        message : data.items[i].message,
-                        duration: 15000
-                    });
+                    core.events_api.showEventsMeow(data.items[i]);
                 };
             }
         });
