@@ -55,6 +55,7 @@ Class EventsApi extends Core {
                 `status`,
                 `message`,
                 `type`,
+                `active`,
                 CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `datetime`
             FROM
                 `events`

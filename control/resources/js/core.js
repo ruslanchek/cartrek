@@ -812,7 +812,7 @@ core.effects = {
 
 core.ticker = {
     interval: null,
-    delay: 30000,
+    delay: 2000,
     interval_methods: [],
 
     processSystemInterval: function(){
@@ -870,6 +870,10 @@ core.events_api = {
                     $('#global_events_counter').show().html(data.total);
                 }else{
                     $('#global_events_counter').hide().html('');
+                };
+
+                if(core.events){
+                    core.events.drawItems(data);
                 };
             }
         });

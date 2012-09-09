@@ -11,6 +11,8 @@ core.events = {
         if(!data.more_items && this.step == 0 && data.items.length < 1){
             $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
         }else{
+            $('#events_load_area .no_items').remove();
+
             for(var i = 0, l = data.items.length; i < l; i++){
                 var timestamp = core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL')+', в '+core.utilities.humanizeTime(data.items[i].datetime),
                     item_class = '',
@@ -60,7 +62,7 @@ core.events = {
         $('#events_load_area').append(html);
     },
 
-    getItems: function(){
+    getItems: function(silent_loading){
         core.events.events_loading_process = $.ajax({
             url: '/control/events/?ajax',
             type: 'get',
@@ -74,11 +76,15 @@ core.events = {
             beforeSend: function(){
                 $('#load_more').hide();
 
-                core.loading.unsetLoading('global', false);
-                core.loading.setLoadingWithNotify('global', false, 'Загрузка');
+                if(!silent_loading){
+                    core.loading.unsetLoading('global', false);
+                    core.loading.setLoadingWithNotify('global', false, 'Загрузка');
+                };
             },
             success: function(data){
-                core.loading.unsetLoading('global', false);
+                if(!silent_loading){
+                    core.loading.unsetLoading('global', false);
+                };
 
                 core.events.drawItems(data);
                 core.events.step++;
