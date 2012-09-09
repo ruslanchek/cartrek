@@ -11,8 +11,6 @@ core.events = {
         if(!data.more_items && this.step == 0 && data.items.length < 1){
             $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
         }else{
-            $('#events_load_area .no_items').remove();
-
             for(var i = 0, l = data.items.length; i < l; i++){
                 var timestamp = core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL')+', в '+core.utilities.humanizeTime(data.items[i].datetime),
                     item_class = '',
@@ -50,6 +48,10 @@ core.events = {
                 if(data.items[i].active == '1'){
                     active_count++;
                 };
+            };
+
+            if(i > 0){
+                $('#events_load_area .no_items').remove();
             };
         };
 
