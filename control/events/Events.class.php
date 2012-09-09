@@ -32,6 +32,14 @@
                         header('Content-type: application/json');
                         print json_encode($this->eventsApi->getNewEvents());
                     }; break;
+
+                    case 'delAllItems' : {
+                        $this->eventsApi->delAllItems();
+                    }; break;
+
+                    case 'hideAllItems' : {
+                        $this->eventsApi->hideAllItems();
+                    }; break;
                 };
 
                 exit;

@@ -535,7 +535,7 @@ core.utilities = {
 
         switch(type){
             case 'NMEA' : {
-                d = parseInt(value.substring(0, 2)),
+                d = parseInt(value.substring(0, 2) * 1),
                 m = value.substring(2, 4),
                 y = value.substring(4, 6);
 
@@ -543,7 +543,7 @@ core.utilities = {
             }; break;
 
             case 'COMMON' : {
-                d = parseInt(value.substring(0, 2)),
+                d = parseInt(value.substring(0, 2) * 1),
                 m = value.substring(3, 5),
                 y = value.substring(6, 11);
 
@@ -551,7 +551,7 @@ core.utilities = {
             }; break;
 
             case 'MYSQL' : {
-                d = parseInt(value.substring(8, 10)),
+                d = parseInt(value.substring(8, 10) * 1),
                 m = value.substring(5, 7),
                 y = value.substring(0, 4);
 
@@ -795,6 +795,10 @@ core.utilities = {
     }
 };
 
+core.maps = {
+
+};
+
 core.effects = {
     breathe: function(obj){
         if(obj.is(':visible')){
@@ -808,7 +812,7 @@ core.effects = {
 
 core.ticker = {
     interval: null,
-    delay: 5000,
+    delay: 30000,
     interval_methods: [],
 
     processSystemInterval: function(){
@@ -844,8 +848,8 @@ core.events_api = {
     showEventsMeow: function(data){
         $.meow({
             title   : '',
-            message : data.items[i].message,
-            duration: 15000
+            message : data.message,
+            duration: 12000
         });
     },
 
@@ -860,6 +864,12 @@ core.events_api = {
             success: function(data){
                 for(var i = 0, l = data.items.length; i < l; i++){
                     core.events_api.showEventsMeow(data.items[i]);
+                };
+
+                if(data.total > 0){
+                    $('#global_events_counter').show().html(data.total);
+                }else{
+                    $('#global_events_counter').hide().html('');
                 };
             }
         });

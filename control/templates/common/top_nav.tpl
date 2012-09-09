@@ -24,9 +24,9 @@
                 </ul>
                 <ul class="nav pull-right">
                     {if $core->auth->user.status}
-                        <li{if $core->module.name == 'events'} class="active"{/if}><a href="/control/events">{if $core->auth->user.data.new_events_count > 0}<span id="global_events_counter" class="badge badge-warning">{$core->auth->user.data.new_events_count}</span>{/if} Уведомления</a></li>
+                        <li{if $core->module.name == 'events'} class="active"{/if}><a href="/control/events"><span id="global_events_counter" class="badge badge-warning" {if $core->auth->user.data.new_events_count <= 0}style="display: none"{/if}>{$core->auth->user.data.new_events_count}</span> Уведомления</a></li>
                         <li class="divider-vertical"></li>
-                        <li{if $core->module.name == 'billing'} class="active"{/if}><a href="/control/billing">{$core->auth->user.data.balance|price} руб.</a></li>
+                        <li{if $core->module.name == 'billing'} class="active"{/if}><a href="/control/user/billing">{$core->auth->user.data.balance|price} руб.</a></li>
                     {/if}
 
                     <li class="divider-vertical"></li>
@@ -39,7 +39,7 @@
                                 <li><a href="/control/user/groups"><i class="icon-list"></i> Группы</a></li>
                                 <li><a href="/control/user/system"><i class="icon-cog"></i> Система</a></li>
                                 <li><a href="/control/user/notifications"><i class="icon-exclamation-sign"></i> Уведомления</a></li>
-                                <li><a href="/control/user/tariff"><i class="icon-briefcase"></i> Финансы и тарифы</a></li>
+                                <li><a href="/control/user/billing"><i class="icon-briefcase"></i> Баланс и тарифы</a></li>
                                 <li><a href="/control/user/password_change"><i class="icon-lock"></i> Изменить пароль</a></li>
 
                                 <li class="divider"></li>

@@ -6,9 +6,7 @@ core.events = {
 
     drawItems: function(data){
         var html = '',
-            active_count = 0,
-            new_count = parseInt($('#global_events_counter').html()),
-            hide_button_html = '';
+            active_count = 0;
 
         if(!data.more_items && this.step == 0 && data.items.length < 1){
             $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
@@ -53,12 +51,6 @@ core.events = {
             };
         };
 
-        if(new_count - active_count > 0){
-            $('#global_events_counter').html(new_count - active_count);
-        }else{
-            $('#global_events_counter').hide();
-        };
-
         this.more_items = data.more_items;
 
         if(data.more_items){
@@ -83,7 +75,7 @@ core.events = {
                 $('#load_more').hide();
 
                 core.loading.unsetLoading('global', false);
-                core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+                core.loading.setLoadingWithNotify('global', false, 'Загрузка');
             },
             success: function(data){
                 core.loading.unsetLoading('global', false);
@@ -105,6 +97,7 @@ core.events = {
             },
             beforeSend: function(){
                 o.html('&nbsp;');
+                core.events.events_loading_process.abort();
                 core.loading.unsetLoading('event', false);
                 core.loading.setLoadingToElementCenter('event', o, 2, false);
             },
@@ -139,12 +132,12 @@ core.events = {
                 cond    : this.cond
             },
             beforeSend: function(){
+                core.events.events_loading_process.abort();
                 core.loading.unsetLoading('event', false);
                 core.loading.setLoadingToElementCenter('event', o, 2, false);
             },
             success: function(count){
                 core.loading.unsetLoading('event', false);
-
                 core.events.offset++;
 
                 //todo сделать маркер reader/unreaded для того чтобы если был удален непрочитанный эвент - то в верхнем счетчике -1 если нет - то ничего
@@ -164,19 +157,62 @@ core.events = {
         });
     },
 
+    delAllEvents: function(){
+        core.events.events_loading_process = $.ajax({
+            url: '/control/events/?ajax',
+            type: 'get',
+            data: {
+                action  : 'delAllItems'
+            },
+            beforeSend: function(){
+                core.events.events_loading_process.abort();
+                core.loading.unsetLoading('global', false);
+                core.loading.setLoadingWithNotify('global', false, 'Удаляем');
+            },
+            success: function(){
+                core.loading.unsetLoading('global', false);
+                $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
+                $('#global_events_counter').hide();
+                $('#load_more').hide();
+            }
+        });
+    },
+
+    hideAllEvents: function(){
+        core.events.events_loading_process = $.ajax({
+            url: '/control/events/?ajax',
+            type: 'get',
+            data: {
+                action  : 'hideAllItems'
+            },
+            beforeSend: function(){
+                core.events.events_loading_process.abort();
+                core.loading.unsetLoading('global', false);
+                core.loading.setLoadingWithNotify('global', false, 'Отмечаем');
+            },
+            success: function(){
+                core.loading.unsetLoading('global', false);
+                $('#global_events_counter').hide();
+
+                if(core.events.cond == 'unreaded'){
+                    $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
+                    $('#load_more').hide();
+                };
+            }
+        });
+    },
+
     triggerAction: function(action){
         switch(action){
             case 'read_all' : {
                 if(confirm('Отметить все уведомления как прочитанные?')){
-                    $('#global_events_counter').html('').hide();
+                    this.hideAllEvents();
                 };
             }; break;
 
             case 'delete_all' : {
                 if(confirm('Удалить все уведомления?')){
-                    $('#events_load_area').html('');
-                    $('#global_events_counter').html('').hide();
-                    $('#load_more').hide();
+                    this.delAllEvents();
                 };
             }; break;
 

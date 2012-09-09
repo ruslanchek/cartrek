@@ -8,15 +8,7 @@
     <div class="clear"></div>
 </div>
 
-<ul class="nav nav-tabs" id="fleets">
-    <li><a href="/control/user/">Учетные данные</a></li>
-    <li><a href="/control/user/fleet">Автопарк</a></li>
-    <li class="active"><a href="/control/user/groups">Группы</a></li>
-    <li><a href="/control/user/system">Система</a></li>
-    <li><a href="/control/user/notifications">Уведомления</a></li>
-    <li><a href="/control/user/tariff">Финансы и тарифы</a></li>
-    <li><a href="/control/user/password_change">Изменить пароль</a></li>
-</ul>
+{include file="modules/user.menu.tpl"}
 
 {$fleets = $core->devices->getFleetsList()}
 

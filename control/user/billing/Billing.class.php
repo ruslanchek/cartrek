@@ -8,9 +8,9 @@
             };
 
             $this->init(array(
-                'name'  => 'billing',
+                'name'  => 'user.billing',
                 'title' => 'Баланс',
-                'dir'   => '/control/billing'
+                'dir'   => '/control/user/billing'
             ));
         }
 

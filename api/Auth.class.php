@@ -29,7 +29,7 @@
 
             $this->password_length = 6;
             $this->addition_fields = array();
-            $this->session_time = 60*60*12;
+            $this->session_time = 60*60*24;
             
             $this->checkLogin();
 

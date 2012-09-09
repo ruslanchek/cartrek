@@ -5,7 +5,7 @@
     Class Config{
         public $db_vars = array(
             'host'  => '127.0.0.1',
-            'db'    => 'gps',
+            'db'    => 'cartrek',
             'user'  => 'root',
             'pass'  => '123'
         );
