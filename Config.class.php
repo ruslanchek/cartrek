@@ -4,10 +4,10 @@
 
     Class Config{
         public $db_vars = array(
-            'host'  => '127.0.0.1',
+            'host'  => 'dev.cartrek.ru',
             'db'    => 'cartrek',
-            'user'  => 'root',
-            'pass'  => '123'
+            'user'  => 'fortyfour',
+            'pass'  => 'W8zXGYPa'
         );
 
         //public $yandex_maps_api_key = 'AGZOc08BAAAA7AGgVQMAN-Zv3AH9T_SickfIRKaGBWPt6lUAAAAAAAAAAABfuEjMQhwWcAaQkE4J-qk7YcdyBQ==';
