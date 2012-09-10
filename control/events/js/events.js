@@ -78,6 +78,10 @@ core.events = {
             beforeSend: function(){
                 $('#load_more').hide();
 
+                if(core.events.events_loading_process){
+                    core.events.events_loading_process.abort();
+                };
+
                 if(!silent_loading){
                     core.loading.unsetLoading('global', false);
                     core.loading.setLoadingWithNotify('global', false, 'Загрузка');
@@ -105,7 +109,11 @@ core.events = {
             },
             beforeSend: function(){
                 o.html('&nbsp;');
-                core.events.events_loading_process.abort();
+
+                if(core.events.events_loading_process){
+                    core.events.events_loading_process.abort();
+                };
+
                 core.loading.unsetLoading('event', false);
                 core.loading.setLoadingToElementCenter('event', o, 2, false);
             },
@@ -140,7 +148,10 @@ core.events = {
                 cond    : this.cond
             },
             beforeSend: function(){
-                core.events.events_loading_process.abort();
+                if(core.events.events_loading_process){
+                    core.events.events_loading_process.abort();
+                };
+
                 core.loading.unsetLoading('event', false);
                 core.loading.setLoadingToElementCenter('event', o, 2, false);
             },
@@ -173,7 +184,10 @@ core.events = {
                 action  : 'delAllItems'
             },
             beforeSend: function(){
-                core.events.events_loading_process.abort();
+                if(core.events.events_loading_process){
+                    core.events.events_loading_process.abort();
+                };
+
                 core.loading.unsetLoading('global', false);
                 core.loading.setLoadingWithNotify('global', false, 'Удаляем');
             },
@@ -194,7 +208,10 @@ core.events = {
                 action  : 'hideAllItems'
             },
             beforeSend: function(){
-                core.events.events_loading_process.abort();
+                if(core.events.events_loading_process){
+                    core.events.events_loading_process.abort();
+                };
+
                 core.loading.unsetLoading('global', false);
                 core.loading.setLoadingWithNotify('global', false, 'Отмечаем');
             },

@@ -441,6 +441,97 @@ core.map = {
         };
     },
 
+    getDeviceDataHtml: function(device){
+        var max_speed_block = '';
+
+        if(device.max_speed_marker){
+            max_speed_block =   '<tr>' +
+                                    '<th>Макс. скорость</th>' +
+                                    '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
+                                '</tr>';
+        };
+
+        //Show statistics
+        var html =  '<b>Сводка за день <a href="javascript:void(0)" class="caret"></a></b>' +
+                    '<div class="side_block_content"><table class="">' +
+                        max_speed_block +
+                        '<tr>' +
+                            '<th>Средняя скорость</th>' +
+                            '<td><span id="average_speed">'+device.path.statistics.average_speed+' км/ч</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>Пройдено пути</th>' +
+                            '<td><span id="distance_driven">'+device.path.statistics.distance+' км</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th>Остановки</th>' +
+                            '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th title="Последнее обновление местоположения">Обн. местополож.</th>' +
+                            '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+', в '+core.utilities.humanizeTime(device.last_registered_point.date)+'">'+
+                                '<span id="position_time_gone" data-time_from="'+device.last_registered_point.date+'">'+core.utilities.dateRange(device.last_registered_point.date, new Date())+'</span>'+
+                            '</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<th title="Последнее обновление статуса устройства">Обн. статуса</th>' +
+                            '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_update, 'MYSQL') +', в '+core.utilities.humanizeTime(device.last_update)+'">'+
+                                '<span id="status_time_gone" data-time_from="'+device.last_update+'">'+core.utilities.dateRange(device.last_update, new Date())+'</span>'+
+                            '</span></td>' +
+                        '</tr>' +
+                        /*'<tr>' +
+                            '<th>График</th>' +
+                            '<td><a href="javascript:void(0)" class="label label-info" onclick="core.map.showCharts()">Показать</a></td>' +
+                        '</tr>' +*/
+                    '</table></div>';
+
+        return html;
+    },
+
+    getDeviceInfoHtml: function(device){
+        var heading     = core.utilities.humanizeHeadingDegrees(device.last_registered_point.bb),
+            html        =   '<b>Cостояние устройства <a href="javascript:void(0)" class="caret"></a></b>' +
+                            '<div class="side_block_content"><table class="">' +
+                                /*'<tr>' +
+                                    '<td width="70%">Последнее обновление местоположения</td>' +
+                                    '<td width="30%"><span class="label">' +
+                                        core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
+                                        core.utilities.humanizeTime(device.last_registered_point.date)+'</span>' +
+                                    '</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<td width="70%">Последнее обновление статуса</td>' +
+                                    '<td width="30%"><span class="label">' +
+                                        core.utilities.humanizeDate(device.last_update, 'MYSQL')+'<br>'+
+                                        core.utilities.humanizeTime(device.last_update)+'</span>' +
+                                    '</td>' +
+                                '</tr>' +*/
+
+                                '<tr>' +
+                                    '<th>Курс</th>' +
+                                    '<td><span><i class="heading_icon hi_'+heading.code+'" title="'+device.last_registered_point.bb+'&deg;"></i><span>'+heading.name+'</span></span></td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<th>Скорость</th>' +
+                                    '<td><span>'+core.utilities.convertKnotsToKms(device.last_registered_point.velocity)+' км/ч</span></td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<th>Высота</th>' +
+                                    '<td><span>'+device.last_registered_point.altitude+' м</span></td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<th>Сигнал GSM</td>' +
+                                    '<td>'+core.utilities.getCSQIndicator(device.csq)+'</td>' +
+                                '</tr>' +
+                                '<tr>' +
+                                    '<th>Сигнал GPS</td>' +
+                                    '<td>'+core.utilities.getHDOPIndicator(device.hdop)+'</td>' +
+                                '</tr>' +
+                            '</table></div>';
+
+        return html;
+    },
+
     showDeviceData: function(device_id){
         var device = this.options.devices[this.getDeviceIndexById(device_id)];
 
@@ -455,60 +546,7 @@ core.map = {
             };
 
             if(device.path.statistics){
-                var max_speed_block = '';
-
-                if(device.max_speed_marker){
-                    max_speed_block =   '<tr>' +
-                                            '<th>Макс. скорость</th>' +
-                                            '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
-                                        '</tr>';
-                };
-
-                //Show statistics
-                var html =  '<b>Сводка за день <a href="javascript:void(0)" class="caret"></a></b>' +
-                            '<div class="side_block_content"><table class="">' +
-                                max_speed_block +
-                                '<tr>' +
-                                    '<th>Средняя скорость</th>' +
-                                    '<td><span id="average_speed">'+device.path.statistics.average_speed+' км/ч</span></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<th>Пройдено пути</th>' +
-                                    '<td><span id="distance_driven">'+device.path.statistics.distance+' км</span></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<th>Остановки</th>' +
-                                    '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<th title="Последнее обновление местоположения">Обн. местополож.</th>' +
-                                    '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+', в '+core.utilities.humanizeTime(device.last_registered_point.date)+'">'+
-                                        '<span id="position_time_gone" data-time_from="'+device.last_registered_point.date+'">'+core.utilities.dateRange(device.last_registered_point.date, new Date())+'</span>'+
-                                    '</span></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<th title="Последнее обновление статуса устройства">Обн. статуса</th>' +
-                                    '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_update, 'MYSQL') +', в '+core.utilities.humanizeTime(device.last_update)+'">'+
-                                        '<span id="status_time_gone" data-time_from="'+device.last_update+'">'+core.utilities.dateRange(device.last_update, new Date())+'</span>'+
-                                    '</span></td>' +
-                                '</tr>' +
-                                /*'<tr>' +
-                                    '<th>График</th>' +
-                                    '<td><a href="javascript:void(0)" class="label label-info" onclick="core.map.showCharts()">Показать</a></td>' +
-                                '</tr>' +*/
-                            '</table></div>';
-
-                $('#registered_data').html(html).fadeIn(150);
-
-                core.ticker.addIntervalMethod(function(){
-                    $('#position_time_gone').text(
-                        core.utilities.dateRange($('#position_time_gone').data('time_from'), new Date())
-                    );
-
-                    $('#status_time_gone').text(
-                        core.utilities.dateRange($('#status_time_gone').data('time_from'), new Date())
-                    );
-                });
+                $('#registered_data').html(this.getDeviceDataHtml(device)).fadeIn(150);
             };
 
             $('#where_is_my_car').show();
@@ -520,48 +558,7 @@ core.map = {
         };
 
         if(device.last_registered_point){
-            var heading = core.utilities.humanizeHeadingDegrees(device.last_registered_point.bb),
-                info_html =     '<b>Cостояние устройства <a href="javascript:void(0)" class="caret"></a></b>' +
-                                '<div class="side_block_content"><table class="">' +
-                                    /*'<tr>' +
-                                        '<td width="70%">Последнее обновление местоположения</td>' +
-                                        '<td width="30%"><span class="label">' +
-                                            core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
-                                            core.utilities.humanizeTime(device.last_registered_point.date)+'</span>' +
-                                        '</td>' +
-                                    '</tr>' +
-                                    '<tr>' +
-                                        '<td width="70%">Последнее обновление статуса</td>' +
-                                        '<td width="30%"><span class="label">' +
-                                            core.utilities.humanizeDate(device.last_update, 'MYSQL')+'<br>'+
-                                            core.utilities.humanizeTime(device.last_update)+'</span>' +
-                                        '</td>' +
-                                    '</tr>' +*/
-
-                                    '<tr>' +
-                                        '<th>Курс</th>' +
-                                        '<td><span><i class="heading_icon hi_'+heading.code+'" title="'+device.last_registered_point.bb+'&deg;"></i><span>'+heading.name+'</span></span></td>' +
-                                    '</tr>' +
-                                    '<tr>' +
-                                        '<th>Скорость</th>' +
-                                        '<td><span>'+core.utilities.convertKnotsToKms(device.last_registered_point.velocity)+' км/ч</span></td>' +
-                                    '</tr>' +
-                                    '<tr>' +
-                                        '<th>Высота</th>' +
-                                        '<td><span>'+device.last_registered_point.altitude+' м</span></td>' +
-                                    '</tr>' +
-                                    '<tr>' +
-                                        '<th>Сигнал GSM</td>' +
-                                        '<td>'+core.utilities.getCSQIndicator(device.csq)+'</td>' +
-                                    '</tr>' +
-                                    '<tr>' +
-                                        '<th>Сигнал GPS</td>' +
-                                        '<td>'+core.utilities.getHDOPIndicator(device.hdop)+'</td>' +
-                                    '</tr>' +
-                                '</table></div>';
-
-            $('#registered_info').html(info_html);
-            $('#registered_info').fadeIn(150);
+            $('#registered_info').html(this.getDeviceInfoHtml(device)).fadeIn(150);
         };
     },
 
@@ -1278,7 +1275,7 @@ core.map = {
                 );
 
                 cd.current_position_marker.setPosition(latLng);
-                cd.current_position_marker.map.panTo(latLng); //TODO: Убрать потом!
+                //cd.current_position_marker.map.panTo(latLng); //TODO: Убрать потом!
                 cd.current_position_marker.setIcon(this.getHeadingIcon(point.bb).image);
 
                 if(cd.path.polyline){
@@ -1301,10 +1298,21 @@ core.map = {
         };
 
         if(d){
-            device.point = d.point;
+            $.extend(device, d);
         };
 
         this.addPointToCurrentPath(device.point);
+
+        $('#registered_data').html(this.getDeviceDataHtml(device));
+        $('#registered_info').html(this.getDeviceInfoHtml(device));
+
+        $('#position_time_gone').text(
+            core.utilities.dateRange($('#position_time_gone').data('time_from'), new Date())
+        );
+
+        $('#status_time_gone').text(
+            core.utilities.dateRange($('#status_time_gone').data('time_from'), new Date())
+        );
     },
 
     renewAllDevicesData: function(data){
@@ -1327,6 +1335,7 @@ core.map = {
             url: '/control/map/?ajax',
             dataType: 'json',
             type: 'get',
+            //cache: false,
             data: {
                 action: 'getRenewedData'
             },
