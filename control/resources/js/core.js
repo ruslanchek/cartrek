@@ -174,6 +174,26 @@ core.notify = {
 };
 
 core.loading = {
+    showTopIndicator: function(){
+        var $li = $('#loading_indicator');
+
+        if($li.is(':visible')){
+            $li.fadeOut(150, function(){
+                $li.fadeIn(150);
+            });
+        }else{
+            $li.fadeIn(150);
+        };
+    },
+
+    hideTopIndicator: function(){
+        var $li = $('#loading_indicator');
+
+        if($li.is(':visible')){
+            $li.fadeOut(150);
+        };
+    },
+
     unsetLoading: function(name, micro){
         if($('.notify .loading_area').html() != ''){
             core.notify.hideNotify();

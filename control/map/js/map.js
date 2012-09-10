@@ -1343,8 +1343,12 @@ core.map = {
                 if(this.renew_data_req){
                     this.renew_data_req.abort();
                 };
+
+                core.loading.showTopIndicator();
             },
             success: function(data){
+                core.loading.hideTopIndicator();
+
                 if(core.map.options.current_device_id == 'all'){
                     core.map.renewAllDevicesData(data);
                 }else{
