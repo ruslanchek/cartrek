@@ -888,12 +888,14 @@ core.map = {
 
     fitToDevicePathBounds: function(device_id){
         var bounds  = new google.maps.LatLngBounds(),
-            device  = this.options.devices[this.getDeviceIndexById(device_id)];
+            device  = this.options.devices[this.getDeviceIndexById(device_id)],
+            path    = core.map.options.devices[0].path.polyline.getPath();
 
-        if(device.path && device.path.waypoint_markers && device.path.waypoint_markers.length > 3){
-            for(var i = 0, l = device.path.waypoint_markers.length; i < l; i++){
-                bounds.extend(device.path.waypoint_markers[i].getPosition());
+        if(device.path && device.path.polyline && path && path.getLength() > 3){
+            for(var i = 0; i < path.getLength(); i++) {
+                bounds.extend(path.getAt(i));
             };
+
             this.map.fitBounds(bounds);
         }else{
             this.focusToMarker(device.current_position_marker);
