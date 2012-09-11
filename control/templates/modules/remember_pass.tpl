@@ -17,6 +17,7 @@
                         <div class="socials">
                             <a href="/control/auth/login?oauth&step=auth&provider=vk" class="vk" title="Вконтакте"></a>
                             <a href="/control/auth/login?oauth&step=auth&provider=fb" class="fb" title="Фейсбук"></a>
+                            <a href="/control/auth/login?oauth&step=auth&provider=tw" class="tw" title="Твиттер"></a>
 
                             <div class="clear"></div>
                         </div>

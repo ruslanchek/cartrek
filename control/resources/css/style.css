@@ -692,6 +692,10 @@ h1 {
     background: url(../img/icons/facebook.png);
 }
 
+.socials a.tw {
+    background: url(../img/icons/twitter.png);
+}
+
 .hero_login {
     text-shadow: 0px 1px 0px #ffffff;
     background: rgba(220, 220, 220, 0.2);
