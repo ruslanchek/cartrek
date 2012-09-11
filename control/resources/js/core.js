@@ -178,11 +178,10 @@ core.loading = {
         var $li = $('#loading_indicator');
 
         if($li.is(':visible')){
-            $li.fadeOut(150, function(){
-                $li.fadeIn(150);
-            });
+            $li.hide();
+            $li.show();
         }else{
-            $li.fadeIn(150);
+            $li.show();
         };
     },
 
@@ -190,7 +189,7 @@ core.loading = {
         var $li = $('#loading_indicator');
 
         if($li.is(':visible')){
-            $li.fadeOut(150);
+            $li.hide();
         };
     },
 
@@ -881,7 +880,12 @@ core.events_api = {
             data: {
                 action  : 'checkForNewEvents'
             },
+            beforeSend: function(){
+                core.loading.showTopIndicator();
+            },
             success: function(data){
+                core.loading.hideTopIndicator();
+
                 for(var i = 0, l = data.items.length; i < l; i++){
                     core.events_api.showEventsMeow(data.items[i]);
                 };
@@ -895,6 +899,9 @@ core.events_api = {
                 if(core.events){
                     core.events.drawItems(data);
                 };
+            },
+            error: function(){
+                core.loading.hideTopIndicator();
             }
         });
     }

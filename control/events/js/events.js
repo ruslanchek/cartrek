@@ -78,18 +78,21 @@ core.events = {
             beforeSend: function(){
                 $('#load_more').hide();
 
+                core.loading.unsetLoading('global', false);
+
                 if(core.events.events_loading_process){
                     core.events.events_loading_process.abort();
                 };
 
-                if(!silent_loading){
-                    core.loading.unsetLoading('global', false);
-                    core.loading.setLoadingWithNotify('global', false, 'Загрузка');
+                if(silent_loading){
+                    core.loading.showTopIndicator();
                 };
             },
             success: function(data){
-                if(!silent_loading){
-                    core.loading.unsetLoading('global', false);
+                core.loading.unsetLoading('global', false);
+
+                if(silent_loading){
+                    core.loading.hideTopIndicator();
                 };
 
                 core.events.drawItems(data);

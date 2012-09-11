@@ -1069,28 +1069,15 @@ h1 {
     font-size: 11px;
 }
 
-.dispatcher_devices .item .params_inline {
-    padding: 10px 12px 2px;
-    border-top: 1px solid #fff;
+.params_top {
+    width: 100%;
     border-bottom: 1px solid #ccc;
 }
 
-.dispatcher_devices .item .params_inline .params_inline_item {
-    float: left;
-    width: 31%;
-    margin: 0 2% 5px 0;
-}
-
-.dispatcher_devices .item .params_inline .parameters .csq_indicator {
-    margin-bottom: 4px !important;
-}
-
-.dispatcher_devices .item .params_inline .params_inline_item .heading_icon {
-    margin-bottom: -5px;
-}
-
-.dispatcher_devices .item .params_inline .params_inline_item .label {
-    line-height: 10px;
+.params_top td {
+    width: 33%;
+    text-align: left;
+    padding: 8px 12px;
 }
 
 .dispatcher_devices .item .map {
@@ -1125,7 +1112,7 @@ h1 {
 
 .dispatcher_devices .item .addition_params td {
     padding: 0 12px 5px;
-    width: 35%;
+    width: 33%;
     border: none;
     text-align: left;
     font-size: 11px;
@@ -1242,9 +1229,8 @@ h1 {
 
 #loading_indicator>i {
     background: #fff;
-    width: 2px;
+    width: 5px;
     height: 40px;
     display: inline-block;
-    box-shadow: 2px 3px 2px rgba(255, 255, 255, 1);
-    display: none;
+    opacity: 0.5;
 }

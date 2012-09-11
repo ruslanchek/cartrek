@@ -731,8 +731,8 @@
         }
 
         private function oauthVK(){
-            $oauth_client_id      = '2899938';
-            $oauth_secure_key     = 'IX61G9joOfg8rG0F5tWb';
+            $oauth_client_id      = '3121034';
+            $oauth_secure_key     = 'tz76NO7QfU5HhkQFhnVp';
             $oauth_scope          = '';
 
             if(isset($_GET['error'])){
@@ -787,8 +787,8 @@
         }
 
         private function oauthFB(){
-            $oauth_client_id      = '387660687942312';
-            $oauth_secure_key     = '61d98f655bb2e79a4da0e8ff76af1306';
+            $oauth_client_id      = '410104775715619';
+            $oauth_secure_key     = '1bf606af6afd1286aadfd510fca8dd94';
             $oauth_scope          = '';
             $redirect_uri         = urlencode('http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=fb');
 

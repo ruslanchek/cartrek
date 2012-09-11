@@ -23,10 +23,9 @@ core.dispatcher = {
     },
 
     getParams: function(){
-        $('.parameters').each(function(){
-            var html = core.utilities.getCSQIndicator($(this).data('csq')) + core.utilities.getHDOPIndicator($(this).data('hdop'));
-
-            $(this).html(html)
+        $('.dispatcher_devices .item').each(function(){
+            $(this).find('.device_hdop_indicator').html(core.utilities.getHDOPIndicator($(this).find('.device_hdop_indicator').data('hdop')));
+            $(this).find('.device_csq_indicator').html(core.utilities.getCSQIndicator($(this).find('.device_csq_indicator').data('csq')));
         });
     },
 
@@ -131,9 +130,9 @@ core.dispatcher = {
         item.find('.device_trip_status').html(trip_status);
 
         if(data.battery > 0){
-            battery_status = '<span>'+core.utilities.convertInputToVolts(data.battery)+' в</span>';
+            battery_status = '<span>'+core.utilities.convertInputToVolts(data.battery)+' В</span>';
         }else{
-            battery_status = '<span class="negative">'+core.utilities.convertInputToVolts(data.battery)+' в</span>';
+            battery_status = '<span class="negative">0.00 В</span>';
         };
 
         item.find('.device_battery_status').html(battery_status);
@@ -162,8 +161,12 @@ core.dispatcher = {
                 if(this.get_renew_info){
                     this.get_renew_info.abort();
                 };
+
+                core.loading.showTopIndicator();
             },
             success: function(data){
+                core.loading.hideTopIndicator();
+
                 for(var i = 0, l = data.length; i < l; i++){
                     for(var i1 = 0, l1 = core.dispatcher.maps.length; i1 < l1; i1++){
                         if(data[i].id == core.dispatcher.maps[i1].map.id){
@@ -198,6 +201,9 @@ core.dispatcher = {
                         };
                     };
                 };
+            },
+            error: function(){
+                core.loading.hideTopIndicator();
             }
         });
     },

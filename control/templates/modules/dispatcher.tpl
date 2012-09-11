@@ -23,12 +23,15 @@
                 <!--div class="address_item" data-id="{$item.id}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}">&nbsp;</div-->
             </div>
 
-            <div class="params_inline">
-                <div class="params_inline_item velocity"    style="width: 25%" data-velocity="{$item.last_registered_point.velocity}"></div>
-                <div class="params_inline_item heading"     style="width: 35%" data-heading="{$item.last_registered_point.bb}"></div>
-                <div class="params_inline_item parameters"  style="width: 34%; float: right !important; margin-right: 0" data-csq="{$item.last_registered_point.csq}" data-hdop="{$item.last_registered_point.hdop}"></div>
-                <div class="clear"></div>
-            </div>
+            <table class="params_top">
+                <tbody>
+                    <tr>
+                        <td><div class="params_inline_item velocity" data-velocity="{$item.last_registered_point.velocity}"></div></td>
+                        <td><div class="params_inline_item heading" data-heading="{$item.last_registered_point.bb}"></div></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
 
             <div class="map" id="map_{$item.id}" data-device_id="{$item.id}" data-heading="{$item.last_registered_point.bb}" data-lng="{$item.last_registered_point.lng}" data-lat="{$item.last_registered_point.lat}"></div>
 
@@ -37,7 +40,7 @@
                     <tr>
                         <th>Статус</th>
                         <th>Зажигание</th>
-                        <th>Бензин</th>
+                        <th>Аккумулятор</th>
                     </tr>
                     <tr>
                         <td class="device_trip_status">
@@ -58,35 +61,15 @@
                     </tr>
                     <tr>
                         <th>Аккумулятор</th>
-                        <th>tC, снаружи</th>
-                        <th>tC, салон</th>
-                    </tr>
-                    <tr >
-                        <td class="device_battery_status">
-                            <span {if $item.battery <= 0}class="negative"{/if}>{$item.battery|voltage} в</span>
-                        </td>
-                        <td class="device_outside_temp_status">
-                            25&deg;
-                        </td>
-                        <td class="device_inside_temp_status">
-                            27&deg;
-                        </td>
+                        <th>Сигнал GPS</th>
+                        <th>Сигнал GSM</th>
                     </tr>
                     <tr>
-                        <th>Пассажиры</th>
-                        <th>Груз</th>
-                        <th></th>
-                    </tr>
-                    <tr >
-                        <td class="device_passengers_status">
-                            4
+                        <td class="device_battery_status">
+                            <span {if $item.battery <= 0}class="negative"{/if}>{$item.battery|voltage} В</span>
                         </td>
-                        <td class="device_load_status">
-                            265 кг
-                        </td>
-                        <td>
-
-                        </td>
+                        <td class="device_csq_indicator" data-csq="{$item.last_registered_point.csq}"></td>
+                        <td class="device_hdop_indicator" data-hdop="{$item.last_registered_point.hdop}"></td>
                     </tr>
                 </tbody>
             </table>
