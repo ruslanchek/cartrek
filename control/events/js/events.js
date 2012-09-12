@@ -82,10 +82,13 @@ core.events = {
 
                 if(core.events.events_loading_process){
                     core.events.events_loading_process.abort();
+                    core.loading.unsetLoading('global', false);
                 };
 
                 if(silent_loading){
                     core.loading.showTopIndicator();
+                }else{
+                    core.loading.setLoadingWithNotify('global', false, 'Загрузка');
                 };
             },
             success: function(data){
@@ -97,6 +100,10 @@ core.events = {
 
                 core.events.drawItems(data);
                 core.events.step++;
+            },
+            error: function(){
+                core.loading.unsetLoading('event', false);
+                core.loading.unsetLoading('global', false);
             }
         });
     },
@@ -115,6 +122,7 @@ core.events = {
 
                 if(core.events.events_loading_process){
                     core.events.events_loading_process.abort();
+                    core.loading.unsetLoading('global', false);
                 };
 
                 core.loading.unsetLoading('event', false);
@@ -123,6 +131,7 @@ core.events = {
             success: function(count){
                 o.html();
                 core.loading.unsetLoading('event', false);
+                core.loading.unsetLoading('global', false);
 
                 core.events.offset++;
 
@@ -137,6 +146,10 @@ core.events = {
                         $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
                     };
                 });
+            },
+            error: function(){
+                core.loading.unsetLoading('event', false);
+                core.loading.unsetLoading('global', false);
             }
         });
     },
@@ -153,6 +166,7 @@ core.events = {
             beforeSend: function(){
                 if(core.events.events_loading_process){
                     core.events.events_loading_process.abort();
+                    core.loading.unsetLoading('global', false);
                 };
 
                 core.loading.unsetLoading('event', false);
@@ -160,6 +174,7 @@ core.events = {
             },
             success: function(count){
                 core.loading.unsetLoading('event', false);
+                core.loading.unsetLoading('global', false);
                 core.events.offset++;
 
                 //todo сделать маркер reader/unreaded для того чтобы если был удален непрочитанный эвент - то в верхнем счетчике -1 если нет - то ничего
@@ -175,6 +190,10 @@ core.events = {
                         $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
                     };
                 });
+            },
+            error: function(){
+                core.loading.unsetLoading('event', false);
+                core.loading.unsetLoading('global', false);
             }
         });
     },
@@ -199,6 +218,10 @@ core.events = {
                 $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
                 $('#global_events_counter').hide();
                 $('#load_more').hide();
+            },
+            error: function(){
+                core.loading.unsetLoading('event', false);
+                core.loading.unsetLoading('global', false);
             }
         });
     },
@@ -226,6 +249,10 @@ core.events = {
                     $('#events_load_area').html('<div class="no_items">Нет уведомлений.</div>');
                     $('#load_more').hide();
                 };
+            },
+            error: function(){
+                core.loading.unsetLoading('event', false);
+                core.loading.unsetLoading('global', false);
             }
         });
     },
@@ -250,6 +277,7 @@ core.events = {
                 this.cond = action;
                 $('#events_load_area').html('');
                 core.events.step = 0;
+                core.events.offset = 0;
 
                 this.getItems();
             }; break;
