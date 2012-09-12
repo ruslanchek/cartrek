@@ -630,7 +630,7 @@ class Auth extends Core{
         $parsed_params = '?';
 
         foreach($params as $key => $value){
-            $parsed_params .= $key.'='.$value.'&';
+            $parsed_params .= $key.'='.urlencode($value).'&';
         };
 
         $parsed_params = trim($parsed_params, '&');
@@ -646,7 +646,7 @@ class Auth extends Core{
         header("Location: ".$this->getRequestString($section, $params));
     }
 
-    private function readPostRequest($section, $params){
+    private function readPostRequest($section, $params, $json = true){
         $opts_parsed = '?';
 
         foreach($params as $key => $value){
@@ -655,47 +655,54 @@ class Auth extends Core{
 
         $opts_parsed = substr($opts_parsed, 0, strlen($opts_parsed) - 1);
 
-        //инициализируем сеанс
         $curl = curl_init();
 
-        //уcтанавливаем урл, к которому обратимся
         curl_setopt($curl, CURLOPT_URL, $section);
-
-        //включаем вывод заголовков
-        curl_setopt($curl, CURLOPT_HEADER, 0);
-
-        //передаем данные по методу post
-        curl_setopt($curl, CURLOPT_POST, 1);
-
-        //теперь curl вернет нам ответ, а не выведет
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-        //переменные, которые будут переданные по методу post
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $opts_parsed);
-
         curl_setopt($curl, CURLOPT_USERAGENT, 'Cartrek 1.0');
 
         $res = curl_exec($curl);
 
-        //проверяем, если ошибка, то получаем номер и сообщение
         if(!$res){
             $error = curl_error($curl).'('.curl_errno($curl).')';
             return $error;
         }else{
-            return $res;
+            return ($json) ? json_decode($res) : $res;
         };
 
         curl_close($curl);
     }
 
     private function readGetRequest($section, $params, $json = true){
-        $result = file_get_contents($this->getRequestString($section, $params));
+        $opts_parsed = '?';
 
-        if($json){
-            return json_decode($result);
-        }else{
-            return $result;
+        foreach($params as $key => $value){
+            $opts_parsed .= $key.'='.urlencode($value).'&';
         };
+
+        $opts_parsed = substr($opts_parsed, 0, strlen($opts_parsed) - 1);
+
+        $curl = curl_init();
+
+        curl_setopt($curl, CURLOPT_URL, $section.$opts_parsed);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Cartrek 1.0');
+
+        $res = curl_exec($curl);
+
+        if(!$res){
+            $error = curl_error($curl).'('.curl_errno($curl).')';
+            return $error;
+        }else{
+            return ($json) ? json_decode($res) : $res;
+        };
+
+        curl_close($curl);
     }
 
     private function registerFromOAuth($provider, $fields){
@@ -774,8 +781,8 @@ class Auth extends Core{
     }
 
     private function oauthVK(){
-        $oauth_client_id      = '3121034';
-        $oauth_secure_key     = 'tz76NO7QfU5HhkQFhnVp';
+        $oauth_client_id      = '3122226';
+        $oauth_secure_key     = 'boPWbfhxxPdmbjt6zyp2';
         $oauth_scope          = '';
 
         if(isset($_GET['error'])){
@@ -788,7 +795,7 @@ class Auth extends Core{
                         'client_id'     => $oauth_client_id,
                         'scope'         => $oauth_scope,
                         'response_type' => 'code',
-                        'redirect_uri'  => urlencode('http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=vk&step=receive_code')
+                        'redirect_uri'  => 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/login/?oauth&provider=vk&step=receive_code&'
                     ));
                 }; break;
 
@@ -796,37 +803,36 @@ class Auth extends Core{
                     $response = $this->readGetRequest('https://oauth.vk.com/access_token', array(
                         'client_id'     => $oauth_client_id,
                         'client_secret' => $oauth_secure_key,
-                        'code'          => $_GET['code']
+                        'code'          => $_GET['code'],
+                        'redirect_uri'  => 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/login/?oauth&provider=vk&step=receive_code&'
                     ));
 
-                    if($response){
-                        if($response->error->error_code){
-                            $this->showOAuthError($response->error->error_code, $response->error->error_msg);
-                        }else{
-                            $response = $this->readGetRequest('https://api.vk.com/method/getProfiles', array(
-                                'fields'        => 'uid,first_name,last_name,nickname,domain,sex,bdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,contacts',
-                                'uid'           => $response->user_id,
-                                'access_token'  => $response->access_token
-                            ));
+                    if($response->error){
+                        $this->showOAuthError($response->error, $response->error_description);
+                    }else{
+                        $response = $this->readGetRequest('https://api.vk.com/method/getProfiles', array(
+                            'fields'        => 'uid,first_name,last_name,nickname,domain,sex,bdate,city,country,timezone,photo,photo_medium,photo_big,has_mobile,contacts',
+                            'uid'           => $response->user_id,
+                            'access_token'  => $response->access_token
+                        ));
 
-                            if($response){
-                                if($response->error->error_code){
-                                    $this->showOAuthError($response->error->error_code, $response->error->error_msg);
-                                }else{
-                                    $data = $response->response[0];
+                        if($response){
+                            if($response->error->error_code){
+                                $this->showOAuthError($response->error->error_code, $response->error->error_msg);
+                            }else{
+                                $data = $response->response[0];
 
-                                    $this->registerFromOAuth('vk', array(
-                                        'uid'               => $data->uid,
-                                        'first_name'        => $data->first_name,
-                                        'last_name'         => $data->last_name,
-                                        'name'              => $data->nickname,
-                                        'login'             => $data->nickname,
-                                        'sex'               => $data->sex,
-                                        'bdate'             => date("Y-m-d H:i:s", strtotime($data->bdate))
-                                    ));
+                                $this->registerFromOAuth('vk', array(
+                                    'uid'               => $data->uid,
+                                    'first_name'        => $data->first_name,
+                                    'last_name'         => $data->last_name,
+                                    'name'              => $data->nickname,
+                                    'login'             => $data->nickname,
+                                    'sex'               => $data->sex,
+                                    'bdate'             => date("Y-m-d H:i:s", strtotime($data->bdate))
+                                ));
 
-                                    header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
-                                };
+                                header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
                             };
                         };
                     };
@@ -840,7 +846,7 @@ class Auth extends Core{
         $oauth_client_id      = '410104775715619';
         $oauth_secure_key     = '1bf606af6afd1286aadfd510fca8dd94';
         $oauth_scope          = '';
-        $redirect_uri         = urlencode('http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=fb');
+        $redirect_uri         = 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=fb';
 
         if(!isset($_GET["code"])){
             $this->doGetRequest('http://www.facebook.com/dialog/oauth', array(
