@@ -26,9 +26,8 @@
             <table class="params_top">
                 <tbody>
                     <tr>
-                        <td><div class="params_inline_item velocity" data-velocity="{$item.last_registered_point.velocity}"></div></td>
-                        <td><div class="params_inline_item heading" data-heading="{$item.last_registered_point.bb}"></div></td>
-                        <td></td>
+                        <td width="33%"><div class="params_inline_item velocity" data-velocity="{$item.last_registered_point.velocity}"></div></td>
+                        <td width="67%"><div class="params_inline_item heading" data-heading="{$item.last_registered_point.bb}"></div></td>
                     </tr>
                 </tbody>
             </table>
