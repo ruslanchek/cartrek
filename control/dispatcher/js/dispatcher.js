@@ -51,6 +51,10 @@ core.dispatcher = {
             degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
         };
 
+        if(degrees_zone == 360){
+            degrees_zone = 0;
+        };
+
         var image = new google.maps.MarkerImage(
             '/control/map/img/markers/heading/'+degrees_zone+'.png',
             new google.maps.Size(16,16),
