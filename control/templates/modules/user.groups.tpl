@@ -23,9 +23,9 @@
             {foreach $fleets as $item}
             <tr>
                 <td>{$item.name}</td>
-                <td>{$item.cars}</td>
+                <td class="text-centered">{$item.cars}</td>
                 <td>
-                    <a href="#" class="delete_group label label-important" data-id="{$item.id}" data-name="{$item.name|escape}">Удалить</a>
+                    <a href="#" class="red" data-id="{$item.id}" data-name="{$item.name|escape}">Удалить</a>
                 </td>
             </tr>
             {/foreach}

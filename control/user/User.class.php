@@ -11,7 +11,7 @@
 
             $this->init(array(
                 'name'  => 'user',
-                'title' => 'Пользователь',
+                'title' => 'Учетные данные',
                 'dir'   => '/control/user'
             ));
 

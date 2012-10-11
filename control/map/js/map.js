@@ -280,11 +280,10 @@ core.map = {
                         date: dateText
                     },
                     beforeSend: function(){
-                        core.loading.unsetLoading('global', false);
-                        core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+                        core.loading.setGlobalLoading();
                     },
                     success: function(){
-                        core.loading.unsetLoading('global', false);
+                        core.loading.unsetGlobalLoading();
                         core.map.changeDate(dateText);
                     }
                 });
@@ -838,20 +837,17 @@ core.map = {
             dataType : 'json',
             type : 'get',
             beforeSend: function(){
-                core.loading.unsetLoading('global', false);
-                core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+                core.loading.setGlobalLoading();
             },
             success: function(points){
-                setTimeout(function(){
-                    core.loading.unsetLoading('global', false);
-                }, 200);
+                core.loading.unsetGlobalLoading();
 
                 if(points.length > 0){
                     core.map.createDevicePathData(device_id, points);
                 };
             },
             error: function(){
-                core.loading.unsetLoading('global', false);
+                core.loading.unsetGlobalLoading();
             }
         });
     },
@@ -870,11 +866,10 @@ core.map = {
             dataType : 'json',
             type : 'get',
             beforeSend: function(){
-                core.loading.unsetLoading('global', false);
-                core.loading.setLoadingWithNotify('global', false, 'Загрузка данных');
+                core.loading.setGlobalLoading();
             },
             success: function(options){
-                core.loading.unsetLoading('global', false);
+                core.loading.unsetGlobalLoading();
                 core.map.options = $.extend(core.map.options, options);
 
                 if(reinit){
@@ -884,7 +879,7 @@ core.map = {
                 };
             },
             error: function(){
-                core.loading.unsetLoading('global', false);
+                core.loading.unsetGlobalLoading();
             }
         });
     },

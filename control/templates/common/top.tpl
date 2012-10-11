@@ -1,6 +1,5 @@
 <div class="global-loading-bar"></div>
 
-<!-- Top panel -->
 <div class="top-panel">
     <div class="container">
         <ul class="top-menu">

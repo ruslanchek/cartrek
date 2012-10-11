@@ -9,7 +9,7 @@
 
             $this->init(array(
                 'name'  => 'events',
-                'title' => 'Уведомления',
+                'title' => 'События',
                 'dir'   => '/control/events'
             ));
 

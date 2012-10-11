@@ -11,9 +11,10 @@
         <table class="width-100 bordered hovered">
             <thead class="thead-gray">
                 <tr>
-                    <th width="74%">Название</th>
-                    <th width="20%">Группа</th>
+                    <th width="44%">Название</th>
+                    <th width="30%">Марка/модель</th>
                     <th width="5%">Госномер</th>
+                    <th width="20%">Группа</th>
                     <th width="1%">Режим</th>
                 </tr>
             </thead>
@@ -21,15 +22,12 @@
             <tbody>
                 {foreach $core->devices->getUserDevices(true) as $item}
                 <tr{if !$item.active} class="unactive_row"{/if}>
-                    <td><a href="/control/fleet/{$item.id}"><strong>{$item.name}</strong> {$item.make} {$item.model}</a></td>
-                    <td>{$item.fleet_name}</td>
+                    <td><a href="/control/fleet/{$item.id}"><strong>{$item.name}</strong></a></td>
+                    <td>{$item.make} {$item.model}</td>
                     <td><span class="g_id">{$item.g_id}</span></td>
+                    <td>{$item.fleet_name}</td>
                     <td>
-                        {if $item.active}
-                            <a href="#" class="label label-success">Вкл</a>
-                        {else}
-                            <a href="#" class="label label-important">Выкл</a>
-                        {/if}
+                        <label for="item_active_{$item.id}"></label><input type="checkbox" {if $item.active}checked="checked"{/if} id="item_active_{$item.id}" name="item_active" />
                     </td>
                 </tr>
                 {/foreach}

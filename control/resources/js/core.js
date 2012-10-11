@@ -333,6 +333,39 @@ core.loading = {
     setLoadingWithNotify: function(name, micro, text){
         core.notify.showNotify('<h2>'+text+'</h2><div class="loading_area"></div>');
         this.setLoadingToElementByAppend(name, $('.notify .loading_area'), micro);
+    },
+
+    unsetGlobalLoading: function(){
+        setTimeout(function(){
+            $('div.global-loading-bar').animate({
+                height: 0,
+                opacity: 0
+            }, 200, 'easeOutQuad', function(){
+                core.loading.c = 0;
+
+                if(core.loading.global_loadin_interval){
+                    clearInterval(core.loading.global_loadin_interval);
+                };
+            });
+        }, 1000);
+    },
+
+    setGlobalLoading: function(){
+        this.c = 0;
+
+        if(this.global_loadin_interval){
+            clearInterval(this.global_loadin_interval);
+        };
+
+        this.global_loadin_interval = setInterval(function(){
+            core.loading.c += 1;
+            $('div.global-loading-bar').css("backgroundPosition", "0 " + core.loading.c+"px");
+        }, 10);
+
+        $('div.global-loading-bar').animate({
+            height: 5,
+            opacity: 1
+        }, 200, 'easeInQuad');
     }
 };
 
@@ -929,5 +962,7 @@ $(function(){
         core.events_api.checkNewEvents();
     });
 
-    core.effects.breathe($('#global_events_counter'));
+    //core.effects.breathe($('#global_events_counter'));
+
+    $('input[type=checkbox]').tzCheckbox();
 });

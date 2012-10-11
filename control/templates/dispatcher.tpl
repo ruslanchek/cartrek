@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         {include file="common/head.tpl"}
+        <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
     </head>
 
     <body>

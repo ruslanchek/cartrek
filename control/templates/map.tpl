@@ -1,7 +1,9 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
+        <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
         {include file="common/head.tpl"}
+
     </head>
 
     <body>
