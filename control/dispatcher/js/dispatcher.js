@@ -82,7 +82,7 @@ core.dispatcher = {
     },
 
     createMap: function(options){
-        var latlng = new google.maps.LatLng(core.utilities.convertNMEAtoWGS84(options.lat), core.utilities.convertNMEAtoWGS84(options.lng));
+        var latlng = new google.maps.LatLng(options.lat, options.lng);
 
         var map_options = {
             zoom        : 10,
@@ -102,8 +102,8 @@ core.dispatcher = {
         var icon = this.getHeadingIcon(options.heading);
         var marker = new google.maps.Marker({
             position    : new google.maps.LatLng(
-                core.utilities.convertNMEAtoWGS84(options.lat),
-                core.utilities.convertNMEAtoWGS84(options.lng)
+                options.lat,
+                options.lng
             ),
             icon        : icon.image,
             shadow      : icon.shadow,
@@ -186,8 +186,8 @@ core.dispatcher = {
                                     lng != address_block.data('lng')
                                 ){
                                     var new_position = new google.maps.LatLng(
-                                        core.utilities.convertNMEAtoWGS84(lat),
-                                        core.utilities.convertNMEAtoWGS84(lng)
+                                        lat,
+                                        lng
                                     );
 
                                     address_block.data('lat', lat);
