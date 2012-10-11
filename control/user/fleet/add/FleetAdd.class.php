@@ -14,6 +14,8 @@
                 $form = $this->addDevice();
             };
 
+            $this->template = 'user.tpl';
+
             $this->init(array(
                 'name'  => 'user.fleet.add',
                 'title' => 'Добавление устройства',

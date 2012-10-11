@@ -553,7 +553,7 @@ core.map = {
                 };
             };
 
-            if(device.path.statistics){
+            if(device.path && device.path.statistics){
                 $('#registered_data').html(this.getDeviceDataHtml(device)).fadeIn(150);
             };
 
@@ -578,8 +578,8 @@ core.map = {
             for(var i = 0, l = points.length; i < l; i++){
                 polyline_shape.push(
                     new google.maps.LatLng(
-                        core.utilities.convertNMEAtoWGS84(points[i].lat),
-                        core.utilities.convertNMEAtoWGS84(points[i].lng)
+                        points[i].lat,
+                        points[i].lng
                     )
                 );
 
@@ -659,8 +659,8 @@ core.map = {
             var icon = this.getHeadingIcon(options.device.point.bb);
             var marker = new google.maps.Marker({
                 position    : new google.maps.LatLng(
-                    core.utilities.convertNMEAtoWGS84(options.device.point.lat),
-                    core.utilities.convertNMEAtoWGS84(options.device.point.lng)
+                    options.device.point.lat,
+                    options.device.point.lng
                 ),
                 zIndex      : 10000,
                 icon        : icon.image,
@@ -696,8 +696,8 @@ core.map = {
 
         var marker = new google.maps.Marker({
             position    : new google.maps.LatLng(
-                core.utilities.convertNMEAtoWGS84(options.point.lat),
-                core.utilities.convertNMEAtoWGS84(options.point.lng)
+                options.point.lat,
+                options.point.lng
             ),
             icon        : style.image,
             shape       : style.shape,
@@ -774,7 +774,7 @@ core.map = {
                         '</tr>' +
                         '<tr>' +
                             '<td>Координаты</td>' +
-                            '<td>'+core.utilities.convertNMEAtoWGS84(marker.point.lat)+', '+core.utilities.convertNMEAtoWGS84(marker.point.lng)+'</td>' +
+                            '<td>'+marker.point.lat+', '+marker.point.lng+'</td>' +
                         '</tr>' +
                     '</table>' + additional;
 
@@ -1280,8 +1280,8 @@ core.map = {
 
             if(point && cd.current_position_marker.point.id != point.id){
                 var latLng = new google.maps.LatLng(
-                    core.utilities.convertNMEAtoWGS84(point.lat),
-                    core.utilities.convertNMEAtoWGS84(point.lng)
+                    point.lat,
+                    point.lng
                 );
 
                 cd.current_position_marker.setPosition(latLng);
@@ -1313,7 +1313,10 @@ core.map = {
 
         this.addPointToCurrentPath(device.point);
 
-        $('#registered_data').html(this.getDeviceDataHtml(device));
+        if(device.path && device.path.statistics){
+            $('#registered_data').html(this.getDeviceDataHtml(device));
+        };
+
         $('#registered_info').html(this.getDeviceInfoHtml(device));
 
         $('#position_time_gone').text(
@@ -1330,8 +1333,8 @@ core.map = {
             if((data[i].point && this.options.devices[i].point) && data[i].point.id != this.options.devices[i].point.id){
                 this.options.devices[i].current_position_marker.setPosition(
                     new google.maps.LatLng(
-                        core.utilities.convertNMEAtoWGS84(data[i].point.lat),
-                        core.utilities.convertNMEAtoWGS84(data[i].point.lng)
+                        data[i].point.lat,
+                        data[i].point.lng
                     )
                 );
 

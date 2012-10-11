@@ -8,6 +8,8 @@ Class Billing extends Core {
             header('Location: /control/auth/login');
         };
 
+        $this->template = 'user.tpl';
+
         $this->init(array(
             'name'  => 'user.billing',
             'title' => 'Баланс',

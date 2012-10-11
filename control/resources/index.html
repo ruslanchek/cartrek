@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Title</title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" type="text/css" href="css/kube.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/master.css" />
+        <link rel="stylesheet" type="text/css" href="plugins/jquery-checkbox/jquery.tzCheckbox.css" />
+
+        <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+        <script type="text/javascript" src="plugins/jquery-checkbox/jquery.tzCheckbox.js"></script>
+
+        <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+        <script>
+            var c = 0;
+
+            $(document).ready(function(){
+            	$('input[type=checkbox]').tzCheckbox();
+                setInterval(function(){
+                    c -= 1;
+                    $('div.global-loading-bar').css("backgroundPosition", "0 " + c+"px");
+                }, 10);
+            });
+
+            setTimeout(function(){
+                $('div.global-loading-bar').animate({height: 0, opacity: 0}, 200)
+            }, 1000)
+        </script>
+    </head>
+    <body>
+        <div id="wrapper">
+            <div class="limiter">
+                <div class="global-loading-bar"></div>
+
+                <!-- Top panel -->
+                <div class="top-panel">
+                    <div class="container">
+                        <ul class="top-menu">
+                            <li><a href="#">Карта</a></li>
+                            <li><b>Диспетчер</b></li>
+                            <li><a href="#" class="events-link"><span>События</span><sup>21</sup></a></li>
+                        </ul>
+
+                        <a title="Картрек" class="logo" href="#">Картрек</a>
+
+                        <span class="loading-ball" title="Загрузка данных"></span>
+
+                        <div class="top-user-menu">
+                            <a class="menu-exit" href="#" title="Выход"></a>
+                            <a class="menu-button" href="#" title="Настройка"><i class="r"></i><i class="icon icon-gear"></i> Настройка</a>
+                            <div class="user-info"><a href="#" class="balance" title="Состояние счета: 829.07 руб. - хватит еще на 24 дня">829.07 руб.</a></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container h1">
+                    <div class="container-padding">
+                        <h1 class="twothird te">Настройка системы</h1>
+                    </div>
+                </div>
+
+                <div class="container main-content">
+                    <div class="row container-padding">
+                        <div class="quarter">
+                            <ul class="left-nav">
+                                <li class="active"><a href="/control/user">Учетные данные</a></li>
+                                <li><a href="/control/user/fleet">Автопарк</a></li>
+                                <li><a href="/control/user/groups">Группы</a></li>
+                                <li><a href="/control/user/system">Система</a></li>
+                                <li><a href="/control/user/notifications">Уведомления</a></li>
+                                <li><a href="/control/user/billing">Баланс и тарифы</a></li>
+                                <li><a href="/control/user/password_change">Изменить пароль</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="threequarter">
+                            <h2>Учетные данные</h2>
+
+                            <form method="post" action="" class="forms">
+                                <div class="form-item">
+                                    <label for="user_email" class="bold">Email</label>
+                                    <input class="text" type="email" name="user_email" id="user_email" autofocus="autofocus" />
+                                </div>
+
+                                <div class="form-item">
+                                    <label for="user_name" class="bold">Name<span class="error">Ошибка этого поля</span></label>
+                                    <input class="text" type="text" name="user_name" id="user_name" />
+                                </div>
+
+                                <input type="submit" name="send" class="btn" value="Сохранить" />
+                            </form>
+
+
+                            <h2>Автопарк</h2>
+                            <table class="width-100 bordered hovered">
+                                <thead class="thead-gray">
+                                    <tr>
+                                        <th width="35%">Название</th>
+                                        <th width="25%">Марка и модель</th>
+                                        <th width="1%">Госномер</th>
+                                        <th width="37%">Группа</th>
+                                        <th width="1%">Охрана</th>
+                                        <th width="1%">Режим</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><a href="#">Вольво (Galileo)</a></td>
+                                        <td>Volvo S40</td>
+                                        <td><span class="g_id standart small" title="Регистрационные знаки транспортных средств"><i class="shade"></i><span class="id">е086ом</span><span class="region"><b>199</b><i><label></label><em>RUS</em></i></span></span></td>
+                                        <td>Легковые</td>
+                                        <td><label for="z1"></label><input type="checkbox" id="z1" checked name="ch_emails" /></td>
+                                        <td><label for="z2"></label><input type="checkbox" id="z2" name="ch_emails" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td><a href="#">Вольво (Galileo)</a></td>
+                                        <td>Volvo S40</td>
+                                        <td><span class="g_id standart small" title="Регистрационные знаки транспортных средств"><i class="shade"></i><span class="id">е086ом</span><span class="region"><b>199</b><i><label></label><em>RUS</em></i></span></span></td>
+                                        <td>Легковые</td>
+                                        <td><label for="z3"></label><input type="checkbox" id="z3" name="ch_emails" /></td>
+                                        <td><label for="z4"></label><input type="checkbox" id="z4" checked name="ch_emails" /></td>
+                                    </tr>
+                                </tbody>
+                           </table>
+                       </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="container-padding">
+                    <div class="quarter">
+                        &copy; 2012, Картрек.
+                    </div>
+
+                    <div class="threequarter">
+
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

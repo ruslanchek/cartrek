@@ -1,6 +1,7 @@
-<div class="page-header">
-    <h1>{$core->module.title}</h1>
+<div class="quarter">
+    {include file="modules/user.menu.tpl"}
 </div>
 
-{include file="modules/user.menu.tpl"}
-
+<div class="threequarter">
+    <h2>{$core->module.title}</h2>
+</div>

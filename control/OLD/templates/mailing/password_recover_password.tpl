@@ -1,0 +1,1 @@
+<p>Ваш новый пароль: <code>{$mail_vars.password}</code></p>

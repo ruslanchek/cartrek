@@ -186,8 +186,8 @@
             $query = "
                 SELECT
                     `id`,
-                    `longitude_dms`         AS `lng`,
-                    `lattitude_dms`         AS `lat`,
+                    `lng`                   AS `lng`,
+                    `lat`                   AS `lat`,
                     `speed`                 AS `velocity`,
                     `heading`               AS `bb`,
                     `altitude`              AS `altitude`,
@@ -221,8 +221,8 @@
             $query = "
                 SELECT
                     `id`,
-                    `longitude_dms`         AS `lng`,
-                    `lattitude_dms`         AS `lat`,
+                    `lng`                   AS `lng`,
+                    `lat`                   AS `lat`,
                     `speed`                 AS `velocity`,
                     `heading`               AS `bb`,
                     `altitude`              AS `altitude`,

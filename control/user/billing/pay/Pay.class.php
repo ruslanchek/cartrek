@@ -8,6 +8,8 @@ Class Pay extends Core {
             header('Location: /control/auth/login');
         };
 
+        $this->template = 'user.tpl';
+
         $this->init(array(
             'name'  => 'user.billing.pay',
             'title' => 'Оплата',
