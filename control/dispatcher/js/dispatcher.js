@@ -82,18 +82,16 @@ core.dispatcher = {
     },
 
     createMap: function(options){
-        var latlng = new google.maps.LatLng(options.lat, options.lng);
-
-        var map_options = {
-            zoom        : 10,
-            center      : latlng,
-            scrollwheel : false,
-            mapTypeId   : google.maps.MapTypeId.ROADMAP,
-            id          : options.id,
-            streetViewControl: false
-        };
-
-        var map = new google.maps.Map(document.getElementById('map_'+options.id), map_options);
+        var latlng = new google.maps.LatLng(options.lat, options.lng),
+            map_options = {
+                zoom        : 10,
+                center      : latlng,
+                scrollwheel : false,
+                mapTypeId   : google.maps.MapTypeId.ROADMAP,
+                id          : options.id,
+                streetViewControl: false
+            },
+            map = new google.maps.Map(document.getElementById('map_'+options.id), map_options);
 
         return map;
     },
