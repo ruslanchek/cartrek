@@ -1,4 +1,4 @@
-{if $core->devices->devices_present}
+{*if $core->devices->devices_present}
     <div class="calendar_place closed">
         <div class="datepicker">
             <div id="datepicker"></div>
@@ -70,4 +70,14 @@
         <h4 class="alert-heading">Внимание!</h4>
         У вас нет активных устройств для отслеживания, необходимо <a href="/control/fleet/add">добавить</a> или активировать устройство в разделе <a href="/control/fleet">автопарк</a>.
     </div>
-{/if}
+{/if*}
+
+
+
+<div class="quarter">
+
+</div>
+
+<div class="threequarter">
+    <h2>{$core->module.title}</h2>
+</div>
