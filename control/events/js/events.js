@@ -39,14 +39,14 @@ core.events = {
                 };
 
                 if(data.items[i].active == '1'){
-                    hide_button_html = '<a class="icon-eye-open" href="javascript:void(0)" title="Отметить как просмотренное"></a>';
+                    hide_button_html = '<a class="hide" href="javascript:void(0)" title="Отметить как просмотренное">−</a>';
                 };
 
-                html += '<div rel="' + data.items[i].id + '" class="alert '+item_class+' event-item">' +
+                html += '<div rel="' + data.items[i].id + '" class="event-item alert '+item_class+'">' +
                             '<span class="date">'+ timestamp + '</span>' +
                             data.items[i].message +
                             hide_button_html +
-                            '<a class="close" href="javascript:void(0)" title="Удалить">×</a>' +
+                            '<a class="close" href="javascript:void(0)" title="Удалить">&times;</a>' +
                         '</div>';
 
                 if(data.items[i].active == '1'){
@@ -88,6 +88,7 @@ core.events = {
 
                 if(core.events.events_loading_process){
                     core.events.events_loading_process.abort();
+                    core.loading.unsetGlobalLoading();
                 };
 
                 if(silent_loading){
@@ -107,8 +108,7 @@ core.events = {
                 core.events.step++;
             },
             error: function(){
-                core.loading.unsetLoading('event', false);
-                core.loading.setGlobalLoading();
+                core.loading.unsetGlobalLoading();
             }
         });
     },
@@ -130,12 +130,10 @@ core.events = {
                     core.loading.unsetGlobalLoading();
                 };
 
-                core.loading.unsetLoading('event', false);
-                core.loading.setLoadingToElementCenter('event', o, 2, false);
+                core.loading.setGlobalLoading();
             },
             success: function(count){
                 o.html();
-                core.loading.unsetLoading('event', false);
                 core.loading.unsetGlobalLoading();
 
                 core.events.offset++;
@@ -147,13 +145,12 @@ core.events = {
                 };
 
                 o.parent().slideUp(120, function(){
-                    if(!core.events.more_items && $('.event_item:visible').length <= 0){
+                    if(!core.events.more_items && $('.event-item:visible').length <= 0){
                         $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                     };
                 });
             },
             error: function(){
-                core.loading.unsetLoading('event', false);
                 core.loading.unsetGlobalLoading();
             }
         });
@@ -174,11 +171,9 @@ core.events = {
                     core.loading.unsetGlobalLoading();
                 };
 
-                core.loading.unsetLoading('event', false);
-                core.loading.setLoadingToElementCenter('event', o, 2, false);
+                core.loading.setGlobalLoading();
             },
             success: function(count){
-                core.loading.unsetLoading('event', false);
                 core.loading.unsetGlobalLoading();
                 core.events.offset++;
 
@@ -191,13 +186,12 @@ core.events = {
                 };
 
                 o.parent().slideUp(120, function(){
-                    if(!core.events.more_items && $('.event_item:visible').length <= 0){
+                    if(!core.events.more_items && $('.event-item:visible').length <= 0){
                         $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                     };
                 });
             },
             error: function(){
-                core.loading.unsetLoading('event', false);
                 core.loading.unsetGlobalLoading();
             }
         });
@@ -213,9 +207,9 @@ core.events = {
             beforeSend: function(){
                 if(core.events.events_loading_process){
                     core.events.events_loading_process.abort();
+                    core.loading.unsetGlobalLoading();
                 };
 
-                core.loading.unsetGlobalLoading();
                 core.loading.setGlobalLoading();
             },
             success: function(){
@@ -225,7 +219,6 @@ core.events = {
                 $('#load_more').hide();
             },
             error: function(){
-                core.loading.unsetLoading('event', false);
                 core.loading.unsetGlobalLoading();
             }
         });
@@ -241,9 +234,9 @@ core.events = {
             beforeSend: function(){
                 if(core.events.events_loading_process){
                     core.events.events_loading_process.abort();
+                    core.loading.unsetGlobalLoading();
                 };
 
-                core.loading.unsetGlobalLoading();
                 core.loading.setGlobalLoading();
             },
             success: function(){
@@ -256,7 +249,6 @@ core.events = {
                 };
             },
             error: function(){
-                core.loading.unsetLoading('event', false);
                 core.loading.unsetGlobalLoading();
             }
         });
@@ -294,11 +286,11 @@ core.events = {
             core.events.getItems();
         });
 
-        $('.event_item .icon-eye-open').live('click', function(){
+        $('.event-item .hide').live('click', function(){
             core.events.hideEvent($(this));
         });
 
-        $('.event_item .close').live('click', function(){
+        $('.event-item .close').live('click', function(){
             core.events.delEvent($(this));
         });
 
