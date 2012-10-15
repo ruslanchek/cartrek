@@ -4,15 +4,15 @@ core.events = {
     more_items: false,
     cond: 'unreaded',
 
-    drawItems: function(data){
+    drawItems: function(data, adding_method){
         var html = '',
             active_count = 0;
 
         if(!data.more_items && this.step == 0 && data.items.length < 1){
-            $('#events_load_area').html('<div class="no_items">Нет cобытий</div>');
+            $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
         }else{
             for(var i = 0, l = data.items.length; i < l; i++){
-                var timestamp = core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL')+', в '+core.utilities.humanizeTime(data.items[i].datetime),
+                var timestamp = core.utilities.humanizeTime(data.items[i].datetime)+ ', ' + core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL'),
                     item_class = '',
                     hide_button_html = '';
 
@@ -22,15 +22,19 @@ core.events = {
                     }; break;
 
                     case '2' : {
-                        item_class = '';
+                        item_class = 'alert-attention';
                     }; break;
 
                     case '3' : {
-                        item_class = 'alert-info';
+                        item_class = 'alert-notify';
                     }; break;
 
                     case '4' : {
                         item_class = 'alert-success';
+                    }; break;
+
+                    default : {
+                        item_class = 'alert';
                     }; break;
                 };
 
@@ -38,8 +42,8 @@ core.events = {
                     hide_button_html = '<a class="icon-eye-open" href="javascript:void(0)" title="Отметить как просмотренное"></a>';
                 };
 
-                html += '<div rel="' + data.items[i].id + '" class="alert '+item_class+' event_item">' +
-                            '<b>'+ timestamp + '</b> &nbsp;&nbsp;&nbsp;' +
+                html += '<div rel="' + data.items[i].id + '" class="alert '+item_class+' event-item">' +
+                            '<span class="date">'+ timestamp + '</span>' +
                             data.items[i].message +
                             hide_button_html +
                             '<a class="close" href="javascript:void(0)" title="Удалить">×</a>' +
@@ -51,7 +55,7 @@ core.events = {
             };
 
             if(i > 0){
-                $('#events_load_area .no_items').remove();
+                $('#events_load_area .no-items').remove();
             };
         };
 
@@ -61,7 +65,11 @@ core.events = {
             $('#load_more').show();
         };
 
-        $('#events_load_area').append(html);
+        if(adding_method == 'prepend'){
+            $('#events_load_area').prepend(html);
+        }else{
+            $('#events_load_area').append(html);
+        };
     },
 
     getItems: function(silent_loading){
@@ -95,7 +103,7 @@ core.events = {
                     core.loading.hideTopIndicator();
                 };
 
-                core.events.drawItems(data);
+                core.events.drawItems(data, 'append');
                 core.events.step++;
             },
             error: function(){
@@ -140,7 +148,7 @@ core.events = {
 
                 o.parent().slideUp(120, function(){
                     if(!core.events.more_items && $('.event_item:visible').length <= 0){
-                        $('#events_load_area').html('<div class="no_items">Нет cобытий</div>');
+                        $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                     };
                 });
             },
@@ -184,7 +192,7 @@ core.events = {
 
                 o.parent().slideUp(120, function(){
                     if(!core.events.more_items && $('.event_item:visible').length <= 0){
-                        $('#events_load_area').html('<div class="no_items">Нет cобытий</div>');
+                        $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                     };
                 });
             },
@@ -212,7 +220,7 @@ core.events = {
             },
             success: function(){
                 core.loading.unsetGlobalLoading();
-                $('#events_load_area').html('<div class="no_items">Нет cобытий</div>');
+                $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                 $('#global_events_counter').hide();
                 $('#load_more').hide();
             },
@@ -243,7 +251,7 @@ core.events = {
                 $('#global_events_counter').hide();
 
                 if(core.events.cond == 'unreaded'){
-                    $('#events_load_area').html('<div class="no_items">Нет cобытий</div>');
+                    $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                     $('#load_more').hide();
                 };
             },
@@ -295,6 +303,11 @@ core.events = {
         });
 
         $('.action_menu_item').on('click', function(){
+            if(!$(this).parent().hasClass('red-button') && !$(this).parent().hasClass('gray-button')){
+                $('.left-nav li').removeClass('active');
+                $(this).parent().addClass('active');
+            };
+
             core.events.triggerAction($(this).data('action'));
         });
     },

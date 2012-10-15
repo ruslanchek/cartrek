@@ -6,8 +6,8 @@
 
         <li class="divider"></li>
 
-        <li><a data-action="read_all" class="gray_link action_menu_item" href="javascript:void(0)">Отметить все как просмотренные</a></li>
-        <li><a data-action="delete_all" class="red_link action_menu_item" href="javascript:void(0)" class="red">Удалить все</a></li>
+        <li class="gray-button"><a data-action="read_all" class="action_menu_item" href="javascript:void(0)">Отметить все как просмотренные</a></li>
+        <li class="red-button"><a data-action="delete_all" class="action_menu_item" href="javascript:void(0)" class="red">Удалить все</a></li>
     </ul>
 </div>
 

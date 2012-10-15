@@ -929,8 +929,8 @@ core.events_api = {
                     $('#global_events_counter').hide().html('');
                 };
 
-                if(core.events){
-                    core.events.drawItems(data);
+                if(data && data.items && data.items.length > 0){
+                    core.events.drawItems(data, 'prepend');
                 };
             },
             error: function(){
