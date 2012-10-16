@@ -89,7 +89,7 @@
     </label>
     {/if}
 
-    <div id="cars_menu_holder">
+    <div id="cars_menu_holder" class="scroll-pane">
         <ul id="cars_menu" class="left-nav"></ul>
     </div>
 

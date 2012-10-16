@@ -12,6 +12,13 @@
 
         <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
         <script type="text/javascript" src="plugins/jquery-checkbox/jquery.tzCheckbox.js"></script>
+        <link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-core-ui-select/css/jquery.scrollpane.css" />
+        <link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-core-ui-select/css/core-ui-select.css" />
+
+
+        <script src="/control/resources/js/jquery.mousewheel.js"></script>
+        <script src="/control/resources/js/jquery.scrollpane.js"></script>
+        <script src="/control/resources/plugins/jquery-core-ui-select/js/jquery.core-ui-select.js"></script>
 
         <!--[if lt IE 9]>
         <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -92,6 +99,16 @@
                                     <label for="user_name" class="bold">Name<span class="error">Ошибка этого поля</span></label>
                                     <input class="text" type="text" name="user_name" id="user_name" />
                                 </div>
+
+                                <select class="core-ui-select" id="fleets_menu">
+                                    <option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option><option>Все группы</option>
+                                </select>
+
+                                <script>
+                                    $(function(){
+                                        $('.core-ui-select').coreUISelect();
+                                    })
+                                </script>
 
                                 <input type="submit" name="send" class="btn" value="Сохранить" />
                             </form>
