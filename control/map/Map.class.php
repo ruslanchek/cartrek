@@ -10,7 +10,7 @@
 
             $this->init(array(
                 'name'  => 'map',
-                'title' => 'Карта',
+                'title' => 'Наблюдение',
                 'dir'   => '/control/map'
             ));
 

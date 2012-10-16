@@ -3,7 +3,7 @@
 <div class="top-panel">
     <div class="container">
         <ul class="top-menu">
-            <li>{if $core->module.name == 'map'}<b>Карта</b>{else}<a href="/control/map">Карта</a>{/if}</li>
+            <li>{if $core->module.name == 'map'}<b>Наблюдение</b>{else}<a href="/control/map">Наблюдение</a>{/if}</li>
             <li>{if $core->module.name == 'dispatcher'}<b>Диспетчер</b>{else}<a href="/control/dispatcher">Диспетчер</a>{/if}</li>
 
             <li>

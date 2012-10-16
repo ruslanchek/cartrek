@@ -75,6 +75,17 @@
 
 
 <div class="quarter">
+    {assign var="fleets_list" value=$core->devices->getFleetsList()}
+
+    {if $fleets_list}
+    <select>
+        <option {if !isset($smarty.get.fleet)}selected{/if} fleet_id="all">Все</option>
+        {foreach $fleets_list as $fleet}
+        <option {if isset($smarty.get.fleet) && $smarty.get.fleet == $fleet.id}selected{/if} fleet_id="{$fleet.id}">{$fleet.name}</option></li>
+        {/foreach}
+    </select>
+    {/if}
+
     <div id="registered_info" class="side_block"></div>
     <div id="registered_data" class="side_block"></div>
 </div>

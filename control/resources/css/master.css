@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Cuprum&subset=latin,cyrillic);
+@import url(http://fonts.googleapis.com/css?family=Cuprum:400,700&subset=latin,cyrillic);
 
 /* =Typography
 -----------------------------------------------------------------------------*/
@@ -398,6 +398,7 @@ footer {
     position: relative;
     -webkit-border-radius: 2px;
     border-radius: 2px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .alert-error {
@@ -875,7 +876,17 @@ footer {
 /* =Map
 -----------------------------------------------------------------------------*/
 #map {
+    width: 100%;
     border: 1px solid #ddd;
     -webkit-border-radius: 2px;
     border-radius: 2px;
+}
+
+#current-car {
+    font-weight: normal;
+}
+
+#current-car .g_id {
+    display: inline-block;
+    margin-bottom: -5px;
 }

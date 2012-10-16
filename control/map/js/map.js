@@ -437,15 +437,18 @@ core.map = {
     },
 
     setCurrentDeviceName: function(device_id){
-        var device = this.options.devices[this.getDeviceIndexById(device_id)];
+        var device = this.options.devices[this.getDeviceIndexById(device_id)],
+            dev_name = '';
 
         if(device){
-            $('#car_name_info').html('<b>'+device.name+'</b> '+device.make+' '+((device.model != null) ? device.model : '')+' '+core.utilities.drawGId(device.g_id, 'small'));
+            dev_name = ' &mdash; '+device.name+' '+core.utilities.drawGId(device.g_id, 'small');
             $('#car_name_info').css({paddingRight: $('#car_name_info .g_id').width() + 8});
         }else{
-            $('#car_name_info').html('<b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span>');
+            dev_name = ' &mdash; <b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span>';
             $('#car_name_info').css({paddingRight: 0});
         };
+
+        $('#car_name_info, #current-car').html(dev_name);
     },
 
     getDeviceDataHtml: function(device){
@@ -722,6 +725,7 @@ core.map = {
         if(marker.point.id == device.current_position_marker.point.id){
             status = 'Текущее положение';
             status_class = 'label-info';
+
             if(this.options.current_device_id != marker.device_id){
                 additional = '<a class="btn btn-info select_car_button" rel="'+marker.device_id+'" href="javascript:void(0)"><i class="icon-share-alt icon-white"></i> Выбрать машину</a>';
             };
