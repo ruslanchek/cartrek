@@ -980,5 +980,7 @@ $(function(){
 
     $('input[type=checkbox]').tzCheckbox();
 
-    $('.core-ui-select').coreUISelect();
+    $('.core-ui-select').coreUISelect({
+        jScrollPane: true
+    });
 });
