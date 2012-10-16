@@ -624,6 +624,14 @@ core.utilities = {
         return h + ':' + m + ':' + s;
     },
 
+    timestampToDate: function(str){
+        var t = str.split(/[- :]/);
+
+        console.log('t', t)
+
+        return new Date(t[0], t[1]-1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
+    },
+
     convertInputToVolts: function(val){
         return ((val * 4.6 * 11)/4096).toFixed(2);
     },
@@ -811,18 +819,18 @@ core.utilities = {
                 core.utilities.leadingZero(date.getSeconds(), 2);
     },
 
-    dateRange: function(date_from, date_to){
-        var startDate = new Date(date_from);
-        var currDate = new Date(date_to);
-        var duration = new Date(currDate - startDate);
+    dateRange: function(startDate, currDate){
+        if(!(startDate instanceof Date)){
+            startDate = this.timestampToDate(startDate);
+        }
 
-        var s = (duration.getTime() - duration.getMilliseconds())/1000;
+        if(!(currDate instanceof Date)){
+            currDate = this.timestampToDate(currDate);
+        };
 
-        console.log('date_to', date_to)
-        console.log('currDate', currDate)
-        console.log('duration', duration)
-        console.log('s', s)
 
+        var duration = new Date(currDate - startDate),
+            s = (duration.getTime() - duration.getMilliseconds())/1000;
 
         if(s < 1){
             return 'только что';
