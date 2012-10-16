@@ -3,8 +3,6 @@
 </div>
 
 <div class="threequarter">
-    <h2>{$core->module.title}</h2>
-
     <div class="row-fluid">
         {if $core->module.form.step == 1}
             <div class="span9">

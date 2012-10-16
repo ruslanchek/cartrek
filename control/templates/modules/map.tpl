@@ -78,13 +78,20 @@
     {assign var="fleets_list" value=$core->devices->getFleetsList()}
 
     {if $fleets_list}
-    <select>
-        <option {if !isset($smarty.get.fleet)}selected{/if} fleet_id="all">Все</option>
-        {foreach $fleets_list as $fleet}
-        <option {if isset($smarty.get.fleet) && $smarty.get.fleet == $fleet.id}selected{/if} fleet_id="{$fleet.id}">{$fleet.name}</option></li>
-        {/foreach}
-    </select>
+    <label class="select-label">
+        <strong>Группа</strong>
+        <select class="core-ui-select" id="fleets_menu">
+            <option {if !isset($smarty.cookies.fleet_id)}selected{/if} value="all">Все группы</option>
+            {foreach $fleets_list as $fleet}
+            <option {if isset($smarty.cookies.fleet_id) && $smarty.cookies.fleet_id == $fleet.id}selected{/if} value="{$fleet.id}">{$fleet.name}</option></li>
+            {/foreach}
+        </select>
+    </label>
     {/if}
+
+    <div id="cars_menu_holder">
+        <ul id="cars_menu" class="left-nav"></ul>
+    </div>
 
     <div id="registered_info" class="side_block"></div>
     <div id="registered_data" class="side_block"></div>

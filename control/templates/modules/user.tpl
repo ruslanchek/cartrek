@@ -3,8 +3,6 @@
 </div>
 
 <div class="threequarter">
-    <h2>{$core->module.title}</h2>
-
     <form class="forms" action="" method="POST">
         {if isset($core->module.form.message)}
             <div class="alert {if $core->module.form.status}alert-success{else}alert-error{/if}">

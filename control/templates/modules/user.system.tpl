@@ -3,5 +3,5 @@
 </div>
 
 <div class="threequarter">
-    <h2>{$core->module.title}</h2>
+
 </div>

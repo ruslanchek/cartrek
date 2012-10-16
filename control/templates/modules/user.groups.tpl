@@ -3,8 +3,6 @@
 </div>
 
 <div class="threequarter">
-    <h2>{$core->module.title}</h2>
-
     <a href="#" class="btn btn-success add_fleet"><i class="icon-plus icon-white"></i> Добавить группу</a>
 
     {$fleets = $core->devices->getFleetsList()}

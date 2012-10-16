@@ -625,11 +625,11 @@ core.utilities = {
     },
 
     timestampToDate: function(str){
-        var t = str.split(/[- :]/);
+        if(str){
+            var t = str.split(/[- :]/);
 
-        console.log('t', t)
-
-        return new Date(t[0], t[1]-1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
+            return new Date(t[0], t[1]-1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
+        };
     },
 
     convertInputToVolts: function(val){
@@ -979,4 +979,6 @@ $(function(){
     //core.effects.breathe($('#global_events_counter'));
 
     $('input[type=checkbox]').tzCheckbox();
+
+    $('.core-ui-select').coreUISelect();
 });

@@ -11,7 +11,7 @@
 
                 <div class="container h1">
                     <div class="container-padding">
-                        <h1>Настройка{if $core->module.title}<span> / {$core->module.title}</span>{/if}</h1>
+                        <h1>События<span id="events_type_header_suffix"> / Непросмотренные</span></h1>
                     </div>
                 </div>
 

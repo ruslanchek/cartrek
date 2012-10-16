@@ -7,6 +7,8 @@
                 header('Location: /control/auth/login');
             };
 
+            $this->template = 'events.tpl';
+
             $this->init(array(
                 'name'  => 'events',
                 'title' => 'События',

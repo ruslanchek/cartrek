@@ -3,8 +3,6 @@
 </div>
 
 <div class="threequarter">
-    <h2>{$core->module.title}</h2>
-
     <a href="/control/user/fleet/add" class="btn btn-success"><i class="icon-plus icon-white"></i> Добавить автомобиль</a>
 
     {if $core->devices->devices_present}

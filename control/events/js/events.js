@@ -300,6 +300,8 @@ core.events = {
             if(!$(this).parent().hasClass('red-button') && !$(this).parent().hasClass('gray-button')){
                 $('.left-nav li').removeClass('active');
                 $(this).parent().addClass('active');
+
+                $('#events_type_header_suffix').html(' / '+$(this).html());
             };
 
             core.events.triggerAction($(this).data('action'));

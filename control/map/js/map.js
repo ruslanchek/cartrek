@@ -441,10 +441,10 @@ core.map = {
             dev_name = '';
 
         if(device){
-            dev_name = ' &mdash; '+device.name+' '+core.utilities.drawGId(device.g_id, 'small');
+            dev_name = ' / '+device.name+' '+core.utilities.drawGId(device.g_id, 'small');
             $('#car_name_info').css({paddingRight: $('#car_name_info .g_id').width() + 8});
         }else{
-            dev_name = ' &mdash; <b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span>';
+            dev_name = ' / Все машины <span class="badge">'+this.options.devices.length+'</span>';
             $('#car_name_info').css({paddingRight: 0});
         };
 
@@ -499,47 +499,49 @@ core.map = {
     },
 
     getDeviceInfoHtml: function(device){
-        var heading     = core.utilities.humanizeHeadingDegrees(device.last_registered_point.bb),
-            html        =   '<b>Cостояние устройства <a href="javascript:void(0)" class="caret"></a></b>' +
-                            '<div class="side_block_content"><table class="">' +
-                                /*'<tr>' +
-                                    '<td width="70%">Последнее обновление местоположения</td>' +
-                                    '<td width="30%"><span class="label">' +
-                                        core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
-                                        core.utilities.humanizeTime(device.last_registered_point.date)+'</span>' +
-                                    '</td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<td width="70%">Последнее обновление статуса</td>' +
-                                    '<td width="30%"><span class="label">' +
-                                        core.utilities.humanizeDate(device.last_update, 'MYSQL')+'<br>'+
-                                        core.utilities.humanizeTime(device.last_update)+'</span>' +
-                                    '</td>' +
-                                '</tr>' +*/
+        if(device.last_registered_point){
+            var heading     =   core.utilities.humanizeHeadingDegrees(device.last_registered_point.bb),
+                html        =   '<b>Cостояние устройства <a href="javascript:void(0)" class="caret"></a></b>' +
+                                '<div class="side_block_content"><table class="">' +
+                                    /*'<tr>' +
+                                        '<td width="70%">Последнее обновление местоположения</td>' +
+                                        '<td width="30%"><span class="label">' +
+                                            core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+'<br>'+
+                                            core.utilities.humanizeTime(device.last_registered_point.date)+'</span>' +
+                                        '</td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<td width="70%">Последнее обновление статуса</td>' +
+                                        '<td width="30%"><span class="label">' +
+                                            core.utilities.humanizeDate(device.last_update, 'MYSQL')+'<br>'+
+                                            core.utilities.humanizeTime(device.last_update)+'</span>' +
+                                        '</td>' +
+                                    '</tr>' +*/
 
-                                '<tr>' +
-                                    '<th>Курс</th>' +
-                                    '<td><span><i class="heading_icon hi_'+heading.code+'" title="'+device.last_registered_point.bb+'&deg;"></i><span>'+heading.name+'</span></span></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<th>Скорость</th>' +
-                                    '<td><span>'+core.utilities.convertKnotsToKms(device.last_registered_point.velocity)+' км/ч</span></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<th>Высота</th>' +
-                                    '<td><span>'+device.last_registered_point.altitude+' м</span></td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<th>Сигнал GSM</td>' +
-                                    '<td>'+core.utilities.getCSQIndicator(device.csq)+'</td>' +
-                                '</tr>' +
-                                '<tr>' +
-                                    '<th>Сигнал GPS</td>' +
-                                    '<td>'+core.utilities.getHDOPIndicator(device.hdop)+'</td>' +
-                                '</tr>' +
-                            '</table></div>';
+                                    '<tr>' +
+                                        '<th>Курс</th>' +
+                                        '<td><span><i class="heading_icon hi_'+heading.code+'" title="'+device.last_registered_point.bb+'&deg;"></i><span>'+heading.name+'</span></span></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<th>Скорость</th>' +
+                                        '<td><span>'+core.utilities.convertKnotsToKms(device.last_registered_point.velocity)+' км/ч</span></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<th>Высота</th>' +
+                                        '<td><span>'+device.last_registered_point.altitude+' м</span></td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<th>Сигнал GSM</td>' +
+                                        '<td>'+core.utilities.getCSQIndicator(device.csq)+'</td>' +
+                                    '</tr>' +
+                                    '<tr>' +
+                                        '<th>Сигнал GPS</td>' +
+                                        '<td>'+core.utilities.getHDOPIndicator(device.hdop)+'</td>' +
+                                    '</tr>' +
+                                '</table></div>';
 
-        return html;
+            return html;
+        };
     },
 
     showDeviceData: function(device_id){
@@ -977,6 +979,9 @@ core.map = {
         };
 
         this.checkPeriodPoints(car_id);
+
+        $('#cars_menu li').removeClass('active');
+        $('#cars_menu li a[rel="'+car_id+'"]').parent().addClass('active');
     },
 
     showMapNotice: function(message){
@@ -986,7 +991,7 @@ core.map = {
 
         var setMapNoticeSize = function(){
             $('.map_notice').css({
-                width: ($('#map').width() * 0.55) - 50 ,
+                width: ($('#map').width() * 0.7) - 40 ,
                 top: $('#map').offset().top + (($('#map').height() / 2) - ($('.map_notice').height() / 2)) - 25,
                 left: $('#map').offset().left + (($('#map').width() / 2) - ($('.map_notice').width() / 2)) - 25
             });
@@ -1045,10 +1050,10 @@ core.map = {
 
             if(!device.current_position_marker){
                 if(device.last_registered_point){
-                    var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b>.</p>' +
-                                    '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+'</b></p>';
+                    var message =   '<p>На&nbsp;выбранный период не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины <b>&laquo;'+device['name']+'&raquo;</b>.</p>' +
+                                    '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+'</b>.</p>';
                 }else{
-                    var message =   '<p>Для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b> нет ни одной отметки</p>';
+                    var message =   '<p>Для&nbsp;машины&nbsp;<b>&laquo;'+device['name']+'&raquo;</b> нет ни одной отметки.</p>';
                 };
 
                 this.showMapNotice(message);
@@ -1072,9 +1077,7 @@ core.map = {
         for(var i = 0, l = this.options.devices.length; i < l; i++){
             cars_menu_html +=   '<li>' +
                                     '<a href="javascript:void(0)" rel="'+this.options.devices[i].id+'">' +
-                                        '<b>'+this.options.devices[i].name+'</b> '+
-                                        this.options.devices[i].make+' '+((this.options.devices[i].model != null) ? this.options.devices[i].model : '') +' ' +
-                                        core.utilities.drawGId(this.options.devices[i].g_id, 'small') +
+                                        this.options.devices[i].name+
                                     '</a>' +
                                 '</li>';
         };
@@ -1089,7 +1092,10 @@ core.map = {
         }, 600);
 
         $('#cars_menu').html(cars_menu_html);
-        setTimeout("$('.select_car').show(250);", 500);
+
+        $('#cars_menu_holder').jScrollPane();
+
+        $('.select_car').show();
 
         this.map = this.createMap({
             map_container_id: 'map',
@@ -1198,7 +1204,7 @@ core.map = {
             };
         });
 
-        $('#fleets_menu li a').live('click', function(){
+        $('#fleets_menu').live('change', function(){
             core.map.selectFleet($(this));
         });
 
@@ -1261,16 +1267,17 @@ core.map = {
 
     setSelectedFleet: function(){
         if(this.options.fleet_id == 'all' || !this.options.fleet_id){
-            $('#fleet_name_info').html('Все');
+            $('#current-fleet').html(' / Все группы ');
         }else{
-            $('#fleet_name_info').html($('ul#fleets_menu li a[fleet_id="'+$.cookie('fleet_id')+'"]').html());
+            $('#current-fleet').html(' / ' + $('#fleets_menu>option[value="'+this.options.fleet_id+'"]').html());
         };
     },
 
     selectFleet: function(o){
-        $('#fleet_name_info').html(o.html());
-        $.cookie('fleet_id', o.attr('fleet_id'), this.options.cookie_options);
-        document.location.reload();
+        if(this.options.fleet_id != o.val()){
+            $.cookie('fleet_id', o.val(), this.options.cookie_options);
+            document.location.reload();
+        };
     },
 
     addPointToCurrentPath: function(point){

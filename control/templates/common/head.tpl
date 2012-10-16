@@ -17,6 +17,8 @@
 
 <script src="/control/resources/js/jquery-1.8.2.min.js"></script>
 <script src="/control/resources/js/jquery.cookie.js"></script>
+<script src="/control/resources/js/jquery.mousewheel.js"></script>
+<script src="/control/resources/js/jquery.scrollpane.js"></script>
 
 <script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
 <script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>

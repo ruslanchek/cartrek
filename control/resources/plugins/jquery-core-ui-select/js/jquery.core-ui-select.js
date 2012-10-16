@@ -309,7 +309,7 @@
             var marginDifferenceBySelect = this.select.outerWidth() - this.select.width();
             var marginDifferenceByDropdown = this.dropdown.outerWidth() - this.dropdown.width();
 
-            this.dropdown.width(this.select.outerWidth(true));
+            this.dropdown.width(this.select.outerWidth(true) - 2);
 
             if(this.dropdown.width() == this.select.outerWidth()) {
                 this.dropdown.width((this.select.width()+marginDifferenceBySelect)-marginDifferenceByDropdown);
