@@ -818,6 +818,12 @@ core.utilities = {
 
         var s = (duration.getTime() - duration.getMilliseconds())/1000;
 
+        console.log('date_to', date_to)
+        console.log('currDate', currDate)
+        console.log('duration', duration)
+        console.log('s', s)
+
+
         if(s < 1){
             return 'только что';
         };

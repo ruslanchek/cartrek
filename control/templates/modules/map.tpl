@@ -75,7 +75,8 @@
 
 
 <div class="quarter">
-
+    <div id="registered_info" class="side_block"></div>
+    <div id="registered_data" class="side_block"></div>
 </div>
 
 <div class="threequarter">

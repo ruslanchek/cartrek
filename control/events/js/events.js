@@ -157,44 +157,46 @@ core.events = {
     },
 
     delEvent: function(o){
-        core.events.events_loading_process = $.ajax({
-            url: '/control/events/?ajax',
-            type: 'get',
-            data: {
-                action  : 'delItem',
-                id      : o.parent().attr('rel'),
-                cond    : this.cond
-            },
-            beforeSend: function(){
-                if(core.events.events_loading_process){
-                    core.events.events_loading_process.abort();
-                    core.loading.unsetGlobalLoading();
-                };
-
-                core.loading.setGlobalLoading();
-            },
-            success: function(count){
-                core.loading.unsetGlobalLoading();
-                core.events.offset++;
-
-                //todo сделать маркер reader/unreaded для того чтобы если был удален непрочитанный эвент - то в верхнем счетчике -1 если нет - то ничего
-
-                if(count > 0){
-                    $('#global_events_counter').html(count)
-                }else{
-                    $('#global_events_counter').hide();
-                };
-
-                o.parent().slideUp(120, function(){
-                    if(!core.events.more_items && $('.event-item:visible').length <= 0){
-                        $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
+        if(confirm('Удалить событие?')){
+            core.events.events_loading_process = $.ajax({
+                url: '/control/events/?ajax',
+                type: 'get',
+                data: {
+                    action  : 'delItem',
+                    id      : o.parent().attr('rel'),
+                    cond    : this.cond
+                },
+                beforeSend: function(){
+                    if(core.events.events_loading_process){
+                        core.events.events_loading_process.abort();
+                        core.loading.unsetGlobalLoading();
                     };
-                });
-            },
-            error: function(){
-                core.loading.unsetGlobalLoading();
-            }
-        });
+
+                    core.loading.setGlobalLoading();
+                },
+                success: function(count){
+                    core.loading.unsetGlobalLoading();
+                    core.events.offset++;
+
+                    //todo сделать маркер reader/unreaded для того чтобы если был удален непрочитанный эвент - то в верхнем счетчике -1 если нет - то ничего
+
+                    if(count > 0){
+                        $('#global_events_counter').html(count)
+                    }else{
+                        $('#global_events_counter').hide();
+                    };
+
+                    o.parent().slideUp(120, function(){
+                        if(!core.events.more_items && $('.event-item:visible').length <= 0){
+                            $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
+                        };
+                    });
+                },
+                error: function(){
+                    core.loading.unsetGlobalLoading();
+                }
+            });
+        };
     },
 
     delAllEvents: function(){
