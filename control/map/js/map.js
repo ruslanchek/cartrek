@@ -983,7 +983,7 @@ core.map = {
         this.checkPeriodPoints(car_id);
 
         $('#cars_menu').val(car_id);
-        $('#cars_menu').coreUISelect('update')
+        $('#cars_menu').coreUISelect('update');
     },
 
     showMapNotice: function(message){
