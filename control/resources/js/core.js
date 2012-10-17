@@ -943,7 +943,7 @@ core.events_api = {
                     $('#global_events_counter').hide().html('');
                 };
 
-                if(data && data.items && data.items.length > 0){
+                if(core.events && data && data.items && data.items.length > 0){
                     core.events.drawItems(data, 'prepend');
                 };
             },

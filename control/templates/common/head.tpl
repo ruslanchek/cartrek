@@ -9,7 +9,6 @@
 <link rel="stylesheet" type="text/css" href="/control/resources/css/kube.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/css/master.css" />
 
-<link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery_ui/ui-lightness/jquery-ui-1.8.20.custom.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/meow/jquery.meow.css" type="text/css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-checkbox/jquery.tzCheckbox.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-core-ui-select/css/jquery.scrollpane.css" />
@@ -22,7 +21,7 @@
 
 <script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
 <script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>
-<script src="/control/resources/plugins/jquery_ui/jquery-ui-1.8.20.custom.min.js"></script>
+<script src="/control/resources/plugins/jquery_ui/jquery-ui-1.9.0.custom.min.js"></script>
 <script src="/control/resources/plugins/meow/jquery.meow.js"></script>
 <script src="/control/resources/plugins/jquery-checkbox/jquery.tzCheckbox.js"></script>
 <script src="/control/resources/plugins/jquery-core-ui-select/js/jquery.core-ui-select.js"></script>
@@ -33,3 +32,5 @@
 <!--[if lt IE 9]>
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
+
+//+8 800 200-01-31 (1478) Иван

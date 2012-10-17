@@ -1093,6 +1093,16 @@ core.map = {
 
         $('#cars_menu').html(cars_menu_html);
 
+        var jsp_height = (this.options.devices.length + 1) * 33;
+
+        if(jsp_height > 231){
+            jsp_height = 231;
+        };
+
+        $('#cars_menu_holder').css({
+            height: jsp_height
+        });
+
         $('#cars_menu_holder').jScrollPane();
 
         $('.select_car').show();

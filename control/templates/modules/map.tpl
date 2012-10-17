@@ -88,7 +88,7 @@
     </label>
     {/if}
 
-    <div id="cars_menu_holder">
+    <div id="cars_menu_holder" style="height: 150px;">
         <ul id="cars_menu" class="left-nav"></ul>
     </div>
 
