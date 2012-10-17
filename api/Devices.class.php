@@ -55,7 +55,7 @@
 
             $query = "
                 SELECT
-                    MIN(CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."')) AS `date`
+                    MIN(CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."')) AS `date`
                 FROM
                     `tracks`
                 WHERE
@@ -113,7 +113,7 @@
                     `devices`.`active`,
                     `devices`.`fleet_id`,
                     `devices`.`battery`,
-                    CONVERT_TZ(`devices`.`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`,
+                    CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`,
                     `fleets`.`name` AS `fleet_name`
                 FROM
                     `devices`
@@ -156,7 +156,7 @@
                     `journey`,
                     `active`,
                     `battery`,
-                    CONVERT_TZ(`last_update`, 'GMT', '".$this->db->quote(date('P'))."') AS `last_update`
+                    CONVERT_TZ(`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`
                 FROM
                     `devices`
                 WHERE
@@ -193,7 +193,7 @@
                     `altitude`              AS `altitude`,
                     `csq`,
                     `hdop`,
-                    CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `date`
+                    CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `date`
                 FROM
                     `tracks`
                 WHERE
@@ -228,7 +228,7 @@
                     `altitude`              AS `altitude`,
                     `csq`,
                     `hdop`,
-                    CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `date`
+                    CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `date`
                 FROM
                     `tracks`
                 WHERE

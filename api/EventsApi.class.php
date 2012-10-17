@@ -56,7 +56,7 @@ Class EventsApi extends Core {
                 `message`,
                 `type`,
                 `active`,
-                CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `datetime`
+                CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `datetime`
             FROM
                 `events`
             WHERE
@@ -113,7 +113,7 @@ Class EventsApi extends Core {
                 `user_id`,
                 `type`,
                 `active`,
-                CONVERT_TZ(`datetime`, 'GMT', '".$this->db->quote(date('P'))."') AS `datetime`
+                CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `datetime`
             FROM
                 `events`
             WHERE
@@ -161,7 +161,7 @@ Class EventsApi extends Core {
                 ".intval($status).",
                 '".$this->db->quote($message)."',
                 ".intval($user_id).",
-                CONVERT_TZ(NOW(), 'SYSTEM', 'GMT'),
+                CONVERT_TZ(NOW(), 'SYSTEM', 'Europe/Moscow'),
                 1,
                 ".intval($type).",
                 0

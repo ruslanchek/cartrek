@@ -321,8 +321,10 @@ core.map = {
         });*/
     },
 
+
+
     resizeMap: function(bind){
-        /*$('#map').css({
+        $('#map').css({
             height: $(window).height() - $('#map').offset().top - 20
         });
 
@@ -334,7 +336,7 @@ core.map = {
 
         if(this.map){
             google.maps.event.trigger(this.map, 'resize');
-        };*/
+        };
     },
 
     getDeviceIndexById: function(id){
@@ -982,8 +984,8 @@ core.map = {
 
         this.checkPeriodPoints(car_id);
 
-        $('#cars_menu').val(car_id);
-        $('#cars_menu').coreUISelect('update')
+        $('#cars_menu li').removeClass('active');
+        $('#cars_menu li a[rel="'+car_id+'"]').parent().addClass('active');
     },
 
     showMapNotice: function(message){
@@ -1074,12 +1076,14 @@ core.map = {
     },
 
     initGlobal: function(){
-        var cars_menu_html = '<option value="all">Все машины</option>';
+        var cars_menu_html = '<li><a href="javascript:void(0)" rel="all"><b>Все машины</b> <span class="badge">'+this.options.devices.length+'</span></a></li>';
 
         for(var i = 0, l = this.options.devices.length; i < l; i++){
-            cars_menu_html +=   '<option value="'+this.options.devices[i].id+'">' +
-                                    this.options.devices[i].name+
-                                '</option>';
+            cars_menu_html +=   '<li>' +
+                                    '<a href="javascript:void(0)" rel="'+this.options.devices[i].id+'">' +
+                                        this.options.devices[i].name+
+                                    '</a>' +
+                                '</li>';
         };
 
         $('.current_date').html(core.utilities.humanizeDate(this.options.date, 'COMMON'));
@@ -1093,9 +1097,17 @@ core.map = {
 
         $('#cars_menu').html(cars_menu_html);
 
-        $('#cars_menu').coreUISelect({
-            jScrollPane: true
+        var jsp_height = (this.options.devices.length + 1) * 35;
+
+        if(jsp_height > 251){
+            jsp_height = 251;
+        };
+
+        $('#cars_menu_holder').css({
+            height: jsp_height
         });
+
+        $('#cars_menu_holder').jScrollPane();
 
         $('.select_car').show();
 
@@ -1138,8 +1150,8 @@ core.map = {
             };
         });
 
-        $('#cars_menu').live('change', function(){
-            core.map.selectCar($(this).val());
+        $('#cars_menu li a').live('click', function(){
+            core.map.selectCar($(this).attr('rel'));
         });
 
         $('a.select_car_button').live('click', function(){

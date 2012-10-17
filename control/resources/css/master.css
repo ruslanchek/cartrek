@@ -1075,22 +1075,19 @@ footer {
 -----------------------------------------------------------------------------*/
 #map {
     width: 100%;
+    height: 400px;
     border: 1px solid #ddd;
     -webkit-border-radius: 2px;
     border-radius: 2px;
 }
 
+.map-top-panel {
+    margin-bottom: 1em;
+}
+
 #current-car .g_id {
     display: inline-block;
     margin-bottom: -5px;
-}
-
-#cars_menu {
-    margin: 0;
-}
-
-#cars_menu li {
-    list-style-type: none;
 }
 
 .map_notice {
@@ -1101,33 +1098,3 @@ footer {
     -webkit-box-shadow:  0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     box-shadow:  0px 5px 30px 0px rgba(0, 0, 0, 0.5);
 }
-
-#cars_menu_holder {
-    max-height: 251px !important;
-    width: 100% !important;
-    margin: 0 0 1.2em;
-    border: 1px solid #ddd;
-}
-
-.side_block {
-    margin: 0 0 1em;
-    position: relative;
-}
-
-.side_block table {
-    margin: 0;
-}
-
-.side_block table td {
-    padding: 7px 10px;
-}
-
-.side_block.closed .side_block_content {
-    display: none;
-}
-
-.side_block.closed .caret-inverse,
-.side_block.opened .caret {
-    display: none !important;
-}
-
