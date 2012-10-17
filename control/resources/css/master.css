@@ -939,4 +939,5 @@ footer {
 
 #cars_menu_holder {
     max-height: 198px;
+    width: 100% !important;
 }

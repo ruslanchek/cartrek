@@ -74,7 +74,7 @@
 
                 <div class="container main-content">
                     <div class="row container-padding">
-                        <div class="quarter">
+                        <div class="quarter" id="sz" style="height: 150px;">
                             <ul class="left-nav">
                                 <li class="active"><a href="/control/user">Учетные данные</a></li>
                                 <li><a href="/control/user/fleet">Автопарк</a></li>
@@ -107,8 +107,18 @@
                                 <script>
                                     $(function(){
                                         $('.core-ui-select').coreUISelect({
-                                                jScrollPane: true
-                                            });
+                                            jScrollPane: true
+                                        });
+                                    })
+                                </script>
+
+                                <div id="ss" style="height: 200px;">
+                                    <p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p><p>test</p>
+                                </div>
+
+                                <script>
+                                    $(function(){
+                                        $('#sz').jScrollPane();
                                     })
                                 </script>
 

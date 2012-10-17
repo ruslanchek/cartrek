@@ -1,11 +1,11 @@
 
 /*
 	Kube Professional CSS-framework
-	
+
 	Copyright (c) 2012, Imperavi Inc.
 
 	http://imperavi.com/kube/
-	
+
 	License: free
 
 */
@@ -118,10 +118,6 @@ img,
 object,
 embed,
 video,
-iframe {
-  width: auto;
-  max-width: 100%;
-}
 /* Responsive images aspeсt ratio */
 img,
 video,

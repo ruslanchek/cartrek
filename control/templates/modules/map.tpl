@@ -79,7 +79,6 @@
 
     {if $fleets_list}
     <label class="select-label">
-        <strong>Группа</strong>
         <select class="core-ui-select" id="fleets_menu">
             <option {if !isset($smarty.cookies.fleet_id)}selected{/if} value="all">Все группы</option>
             {foreach $fleets_list as $fleet}

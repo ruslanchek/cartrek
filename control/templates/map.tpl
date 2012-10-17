@@ -3,7 +3,6 @@
     <head>
         <script src="https://maps.google.com/maps/api/js?sensor=false"></script>
         {include file="common/head.tpl"}
-
     </head>
 
     <body>
