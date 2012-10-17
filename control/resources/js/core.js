@@ -637,15 +637,17 @@ core.utilities = {
     },
 
     getCSQIndicator: function(csq){
-        var csq = this.parseCSQ(csq);
+        var csq = this.parseCSQ(csq),
+            perc = Math.floor((8/100)*csq.percentage);
 
-        return '<div title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)" class="indicator csq_indicator progress progress-'+csq.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+csq.percentage+'%;"></div></div>';
+        return '<div title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)"><div class="signal-indicator si-level-'+perc+'"></div></div>';
     },
 
     getHDOPIndicator: function(hdop){
-        var hdop = this.parseHDOP(hdop);
+        var hdop = this.parseHDOP(hdop),
+            perc = Math.floor((8/100)*hdop.percentage);
 
-        return '<div title="GPS: '+hdop.level_name+'" class="indicator hdop_indicator progress progress-'+hdop.level_class+'" style="margin-bottom: 0; height: 16px;"><div class="bar" style="width: '+hdop.percentage+'%;"></div></div>';
+        return '<div title="GPS: '+hdop.level_name+'"><div class="signal-indicator si-level-'+perc+'"></div></div>';
     },
 
     //Google maps utils

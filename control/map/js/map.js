@@ -463,7 +463,7 @@ core.map = {
 
         //Show statistics
         var html =  '<a class="collapsable-header gray-button" href="javascript:void(0)">Сводка за день <span class="caret"></span><span class="caret-inverse"></span></a>' +
-                    '<div class="side_block_content"><table class="width-100 bordered hovered table-small">' +
+                    '<div class="side_block_content"><table class="width-100">' +
                         max_speed_block +
                         '<tr>' +
                             '<td>Средняя скорость</td>' +
@@ -502,7 +502,7 @@ core.map = {
         if(device.last_registered_point){
             var heading     =   core.utilities.humanizeHeadingDegrees(device.last_registered_point.bb),
                 html        =   '<a class="collapsable-header gray-button" href="javascript:void(0)">Cостояние устройства <span class="caret"></span><span class="caret-inverse"></span></a>' +
-                                '<div class="side_block_content"><table class="width-100 bordered hovered table-small">' +
+                                '<div class="side_block_content"><table class="width-100">' +
                                     /*'<tr>' +
                                         '<td width="70%">Последнее обновление местоположения</td>' +
                                         '<td width="30%"><span class="label">' +
@@ -1099,8 +1099,8 @@ core.map = {
 
         var jsp_height = (this.options.devices.length + 1) * 35;
 
-        if(jsp_height > 245){
-            jsp_height = 245;
+        if(jsp_height > 251){
+            jsp_height = 251;
         };
 
         $('#cars_menu_holder').css({

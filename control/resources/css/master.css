@@ -157,7 +157,7 @@ html, body{
 
 .container {
 	width: 82%;
-    min-width: 960px;
+    min-width: 1000px;
     max-width: 1200px;
 	margin: 0 auto;
 }
@@ -176,7 +176,7 @@ html, body{
 footer {
 	margin-top: -70px;
 	height: 45px;
-    min-width: 980px;
+    min-width: 1000px;
     padding: 25px 0 0 0;
 }
 
@@ -589,9 +589,18 @@ footer {
 }
 
 .table-small td {
-    padding: 4px 9px;
-    font-size: 0.85em;
+    padding: 3px 9px 2px;
+    font-size: 0.75em;
 }
+
+.table-small tr td:first-child {
+    width: 55%;
+}
+
+.table-small tr td:last-child {
+    width: 45%;
+}
+
 
 .collapsable-header {
     background: #ddd;
@@ -1015,6 +1024,53 @@ footer {
 }
 
 
+/* ==Indicator
+-----------------------------------------------------------------------------*/
+.signal-indicator {
+    height: 9px;
+    width: 47px;
+    margin-top: 6px;
+    background-image: url(../img/signal.png);
+    background-repeat: no-repeat;
+}
+
+.si-level-0 {
+    background-position: 0 -72px;
+}
+
+.si-level-1 {
+    background-position: 0 -63px;
+}
+
+.si-level-2 {
+    background-position: 0 -54px;
+}
+
+.si-level-3 {
+    background-position: 0 -45px;
+}
+
+.si-level-4 {
+    background-position: 0 -36px;
+}
+
+.si-level-5 {
+    background-position: 0 -27px;
+}
+
+.si-level-6 {
+    background-position: 0 -18px;
+}
+
+.si-level-7 {
+    background-position: 0 -9px;
+}
+
+.si-level-8 {
+    background-position: 0 0;
+}
+
+
 /* =Map
 -----------------------------------------------------------------------------*/
 #map {
@@ -1047,9 +1103,10 @@ footer {
 }
 
 #cars_menu_holder {
-    max-height: 245px !important;
+    max-height: 251px !important;
     width: 100% !important;
     margin: 0 0 1.2em;
+    border: 1px solid #ddd;
 }
 
 .side_block {
@@ -1059,6 +1116,10 @@ footer {
 
 .side_block table {
     margin: 0;
+}
+
+.side_block table td {
+    padding: 7px 10px;
 }
 
 .side_block.closed .side_block_content {
