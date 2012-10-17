@@ -456,35 +456,35 @@ core.map = {
 
         if(device.max_speed_marker){
             max_speed_block =   '<tr>' +
-                                    '<th>Макс. скорость</th>' +
-                                    '<td><a id="max_speed" class="label label-info" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
+                                    '<td>Макс. скорость</td>' +
+                                    '<td><a id="max_speed" href="javascript:void(0)">'+device.path.statistics.max_speed+' км/ч</a></td>' +
                                 '</tr>';
         };
 
         //Show statistics
-        var html =  '<b>Сводка за день <a href="javascript:void(0)" class="caret"></a></b>' +
-                    '<div class="side_block_content"><table class="">' +
+        var html =  '<a class="collapsable-header gray-button" href="javascript:void(0)">Сводка за день <span class="caret"></span><span class="caret-inverse"></span></a>' +
+                    '<div class="side_block_content"><table class="width-100 bordered hovered table-small">' +
                         max_speed_block +
                         '<tr>' +
-                            '<th>Средняя скорость</th>' +
+                            '<td>Средняя скорость</td>' +
                             '<td><span id="average_speed">'+device.path.statistics.average_speed+' км/ч</span></td>' +
                         '</tr>' +
                         '<tr>' +
-                            '<th>Пройдено пути</th>' +
+                            '<td>Пройдено пути</td>' +
                             '<td><span id="distance_driven">'+device.path.statistics.distance+' км</span></td>' +
                         '</tr>' +
                         '<tr>' +
-                            '<th>Остановки</th>' +
+                            '<td>Остановки</td>' +
                             '<td><span id="distance_driven">'+device.path.statistics.stops+'</span></td>' +
                         '</tr>' +
                         '<tr>' +
-                            '<th title="Последнее обновление местоположения">Обн. местополож.</th>' +
+                            '<td title="Последнее обновление местоположения">Обн. местополож.</td>' +
                             '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_registered_point.date, 'MYSQL')+', в '+core.utilities.humanizeTime(device.last_registered_point.date)+'">'+
                                 '<span id="position_time_gone" data-time_from="'+device.last_registered_point.date+'">'+core.utilities.dateRange(device.last_registered_point.date, new Date())+'</span>'+
                             '</span></td>' +
                         '</tr>' +
                         '<tr>' +
-                            '<th title="Последнее обновление статуса устройства">Обн. статуса</th>' +
+                            '<td title="Последнее обновление статуса устройства">Обн. статуса</td>' +
                             '<td><span id="distance_driven" title="'+core.utilities.humanizeDate(device.last_update, 'MYSQL') +', в '+core.utilities.humanizeTime(device.last_update)+'">'+
                                 '<span id="status_time_gone" data-time_from="'+device.last_update+'">'+core.utilities.dateRange(device.last_update, new Date())+'</span>'+
                             '</span></td>' +
@@ -501,8 +501,8 @@ core.map = {
     getDeviceInfoHtml: function(device){
         if(device.last_registered_point){
             var heading     =   core.utilities.humanizeHeadingDegrees(device.last_registered_point.bb),
-                html        =   '<b>Cостояние устройства <a href="javascript:void(0)" class="caret"></a></b>' +
-                                '<div class="side_block_content"><table class="">' +
+                html        =   '<a class="collapsable-header gray-button" href="javascript:void(0)">Cостояние устройства <span class="caret"></span><span class="caret-inverse"></span></a>' +
+                                '<div class="side_block_content"><table class="width-100 bordered hovered table-small">' +
                                     /*'<tr>' +
                                         '<td width="70%">Последнее обновление местоположения</td>' +
                                         '<td width="30%"><span class="label">' +
@@ -519,23 +519,23 @@ core.map = {
                                     '</tr>' +*/
 
                                     '<tr>' +
-                                        '<th>Курс</th>' +
+                                        '<td>Курс</td>' +
                                         '<td><span><i class="heading_icon hi_'+heading.code+'" title="'+device.last_registered_point.bb+'&deg;"></i><span>'+heading.name+'</span></span></td>' +
                                     '</tr>' +
                                     '<tr>' +
-                                        '<th>Скорость</th>' +
+                                        '<td>Скорость</td>' +
                                         '<td><span>'+core.utilities.convertKnotsToKms(device.last_registered_point.velocity)+' км/ч</span></td>' +
                                     '</tr>' +
                                     '<tr>' +
-                                        '<th>Высота</th>' +
+                                        '<td>Высота</td>' +
                                         '<td><span>'+device.last_registered_point.altitude+' м</span></td>' +
                                     '</tr>' +
                                     '<tr>' +
-                                        '<th>Сигнал GSM</td>' +
+                                        '<td>Сигнал GSM</td>' +
                                         '<td>'+core.utilities.getCSQIndicator(device.csq)+'</td>' +
                                     '</tr>' +
                                     '<tr>' +
-                                        '<th>Сигнал GPS</td>' +
+                                        '<td>Сигнал GPS</td>' +
                                         '<td>'+core.utilities.getHDOPIndicator(device.hdop)+'</td>' +
                                     '</tr>' +
                                 '</table></div>';
@@ -912,8 +912,8 @@ core.map = {
     },
 
     fitToAllDevicesMarkersBounds: function(){
-        var bounds = new google.maps.LatLngBounds();
-        var cond = false;
+        var bounds = new google.maps.LatLngBounds(),
+            cond = false;
 
         for(var i = 0, l = this.options.devices.length; i < l; i++){
             if(this.options.devices[i].current_position_marker){
@@ -932,6 +932,10 @@ core.map = {
 
         if(cond){
             this.map.fitBounds(bounds);
+
+            if(this.map.getZoom() > 14){
+                this.map.setZoom(14);
+            };
         };
     },
 
@@ -1093,10 +1097,10 @@ core.map = {
 
         $('#cars_menu').html(cars_menu_html);
 
-        var jsp_height = (this.options.devices.length + 1) * 33;
+        var jsp_height = (this.options.devices.length + 1) * 35;
 
-        if(jsp_height > 231){
-            jsp_height = 231;
+        if(jsp_height > 245){
+            jsp_height = 245;
         };
 
         $('#cars_menu_holder').css({
@@ -1187,30 +1191,32 @@ core.map = {
             clearTimeout(core.map.options.calendar_timeout);
         });
 
-        $('.map_container .side_block>b').live('click', function(){
+        $('.collapsable-header').live('click', function(){
             var p = $(this).parent();
             if(p.hasClass('closed')){
-                p.find('table').show();
-                p.animate({height: 140}, 300, 'easeOutExpo');
+                p.find('.side_block_content').show();
                 p.removeClass('closed');
+                p.addClass('opened');
 
                 $.cookie(p.attr('id'), '1', core.map.options.cookie_options);
             }else{
-                p.find('table').hide();
-                p.animate({height: 19}, 300, 'easeOutExpo');
+                p.find('.side_block_content').hide();
                 p.addClass('closed');
+                p.removeClass('opened');
 
                 $.cookie(p.attr('id'), '0', core.map.options.cookie_options);
             };
         });
 
-        $('.map_container .side_block').each(function(){
+        $('.side_block').each(function(){
             if($.cookie($(this).attr('id')) === '1'){
                 $(this).removeClass('closed');
-                $(this).css({height: 140});
+                $(this).addClass('opened');
+                $(this).show();
             }else{
+                $(this).removeClass('opened');
                 $(this).addClass('closed');
-                $(this).css({height: 19});
+                $(this).hide();
             };
         });
 

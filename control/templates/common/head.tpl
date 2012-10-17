@@ -33,4 +33,3 @@
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
-//+8 800 200-01-31 (1478) Иван

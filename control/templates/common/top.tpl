@@ -1,5 +1,3 @@
-<div class="global-loading-bar"></div>
-
 <div class="top-panel">
     <div class="container">
         <ul class="top-menu">
@@ -32,6 +30,8 @@
             <div class="user-info"><a href="/control/user/billing" class="balance" title="Состояние счета: 829.07 руб. - хватит еще на 24 дня">{$core->auth->user.data.balance|price} руб.</a></div>
         </div>
     </div>
+
+    <div class="global-loading-bar"></div>
 </div>
 
 {*<i id="loading_indicator"><i></i></i>*}
