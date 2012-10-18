@@ -69,8 +69,8 @@ var map = {
     },
 
     prepareMap: function(){
-        //this.m_ctrl = map_box_ctrl;
-        //this.map = this.m_ctrl.createMap(this.m_options);
+        this.m_ctrl = map_box_ctrl;
+        this.map = this.m_ctrl.createMap(this.m_options);
     },
 
     createCarsSelect: function(data, fleet_id){
