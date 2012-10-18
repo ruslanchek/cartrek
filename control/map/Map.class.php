@@ -18,9 +18,9 @@
             if($this->devices->devices_present){
                 if($this->ajax_mode && isset($_GET['action'])){
                     switch($_GET['action']){
-                        case 'getOptions' : {
+                        case 'getUserFleetsAndDevices' : {
                             header('Content-type: application/json');
-                            print json_encode($this->getOptions());
+                            print json_encode($this->devices->getUserFleetsAndDevices());
                         }; break;
 
                         case 'getPoints' : {
@@ -41,23 +41,10 @@
                     exit;
                 };
 
-                $this->smarty->assign('options', json_encode($this->getOptions()));
                 $this->template = 'map.tpl';
             }else{
                 $this->template = 'main.tpl';
             };
-        }
-
-        public function getOptions(){
-            $options = new stdClass();
-
-            $options->date          = $this->devices->current_date;
-            $options->now           = gmdate("Y-m-d H-i-s", time() + date("Z"));
-            $options->gmt_offset    = date('Z');
-            $options->min_date      = $this->devices->getMinDate();
-            $options->devices       = $this->devices->getUserDevices();
-
-            return $options;
         }
 
         public function __destruct(){

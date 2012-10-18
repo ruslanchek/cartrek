@@ -132,10 +132,20 @@
             $result     = array();
 
             foreach($devices as $device){
-                $device['point']                    = $this->getLatestDevicePoint($device['id'], false);
-                $device['last_registered_point']    = $this->getLatestDevicePoint($device['id'], true);
+                $device['last_point']         = $this->getLatestDevicePoint($device['id'], false);
+                $device['last_point_today']   = $this->getLatestDevicePoint($device['id'], true);
                 $result[] = $device;
             };
+
+            return $result;
+        }
+
+        //Get complete list of user's cars with last points
+        public function getUserFleetsAndDevices(){
+            $result = new StdClass();
+
+            $result->fleets = $this->getFleetsList();
+            $result->devices = $this->getUserDevices();
 
             return $result;
         }
@@ -224,7 +234,7 @@
                     `lng`                   AS `lng`,
                     `lat`                   AS `lat`,
                     `speed`                 AS `velocity`,
-                    `heading`               AS `bb`,
+                    `heading`               AS `heading`,
                     `altitude`              AS `altitude`,
                     `csq`,
                     `hdop`,

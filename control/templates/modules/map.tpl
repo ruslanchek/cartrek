@@ -26,4 +26,7 @@
 
 <div id="map"></div>
 
-<script>core.map.init();</script>
+<script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
+<link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.css' rel='stylesheet' />
+
+<script>map.init();</script>
