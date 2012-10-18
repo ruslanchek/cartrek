@@ -347,7 +347,7 @@ core.loading = {
                     clearInterval(core.loading.global_loadin_interval);
                 };
             });
-        }, 1000);
+        }, 650);
     },
 
     setGlobalLoading: function(){
@@ -863,8 +863,66 @@ core.utilities = {
     }
 };
 
-core.maps = {
+core.ui = {
+    getHashData: function(){
+        var h = document.location.hash;
 
+        if(h != ''){
+            h = h.substr(1, h.length);
+
+            h = h.split('&');
+
+            var result = {};
+
+            for(var i = 0, l = h.length; i < l; i++){
+                var part = h[i].split('=', 2);
+                result[part[0]] = part[1];
+            };
+
+            return result;
+        };
+    },
+
+    createSelect: function(selector, opts){
+        var options = {
+            id          : null,
+            items       : [],
+            key_name    : 'id',
+            value_name  : 'name',
+            default_opt : false,
+            default     : null,
+            exclude     : null,
+            onChange    : function(){}
+        };
+
+        $.extend(options, opts);
+
+        var html = '<select id="'+options.id+'">';
+
+        if(options.default_opt){
+            html += '<option '+((options.default == options.default_opt.val) ? 'selected' : '') +' value="'+options.default_opt.val+'">'+options.default_opt.name+'</option>';
+        };
+
+        if(options.items){
+            for(var i = 0, l = options.items.length; i < l; i++){
+                if(!(options.exclude && options.items[i][options.exclude.param_name] != options.exclude.param_value)){
+                    html += '<option '+((options.default == options.items[i][options.key_name]) ? 'selected' : '') +' value="'+options.items[i][options.key_name]+'">'+options.items[i][options.value_name]+'</option>';
+                };
+            };
+        };
+
+        html += '</select>';
+
+        $(selector).html(html);
+
+        $('select#'+options.id).off('change').on('change', function(){
+            options.onChange($(this).val());
+        });
+
+        $('select#'+options.id).coreUISelect({
+            jScrollPane: true
+        });
+    }
 };
 
 core.effects = {

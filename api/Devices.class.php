@@ -196,11 +196,11 @@
             $query = "
                 SELECT
                     `id`,
-                    `lng`                   AS `lng`,
-                    `lat`                   AS `lat`,
-                    `speed`                 AS `velocity`,
-                    `heading`               AS `bb`,
-                    `altitude`              AS `altitude`,
+                    `lng`,
+                    `lat`,
+                    `speed`,
+                    `heading`,
+                    `altitude`,
                     `csq`,
                     `hdop`,
                     CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `date`
