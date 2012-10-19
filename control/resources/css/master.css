@@ -400,12 +400,16 @@ footer {
 .top-panel .top-menu li b
 
 .top-panel .top-menu li a:link,
-.top-panel .top-menu li a:visited {
+.top-panel .top-menu li a:link span,
+.top-panel .top-menu li a:visited,
+.top-panel .top-menu li a:visited span {
     color: #fff;
 }
 
 .top-panel .top-menu li a:hover,
-.top-panel .top-menu li a:active {
+.top-panel .top-menu li a:hover span,
+.top-panel .top-menu li a:active,
+.top-panel .top-menu li a:active span {
     color: #ddd;
     background: #31363e;
 }
