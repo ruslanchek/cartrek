@@ -1,14 +1,32 @@
 var map_box_ctrl = {
     createMap: function(m_options){
-        var map = mapbox.map(
-            m_options.container,
-            mapbox.layer().id('ruslanchek.map-5sa7s6em')
-        );
+        var map = mapbox.map(m_options.container);
 
+        map.addLayer(mapbox.layer().id('ruslanchek.map-5sa7s6em'));
         map.centerzoom(m_options.coordinates, m_options.zoom);
         map.smooth(true);
 
         return map;
+    },
+
+    drawCurrentPositionMarker: function(options){
+        // Create and add marker layer
+        var markerLayer = mapbox.markers.layer().features([{
+            "geometry": {
+                "type": "Point",
+                "coordinates": [options.lat, options.lon]
+            },
+            "properties": {
+                "image": core.map_tools.getHeadingIcon(options.heading)
+            }
+        }]).factory(function(f) {
+            var img = document.createElement('img');
+            img.className = 'marker-image';
+            img.setAttribute('src', f.properties.image);
+            return img;
+        });
+
+        options.map.addLayer(markerLayer).setExtent(markerLayer.extent());
     }
 };
 
@@ -17,6 +35,7 @@ var data_ctrl = {
         console.log('error')
     },
 
+    //Загружаем данные о группах и тачках с сервера
     getUserFleetsAndDevices: function(callback){
         this.options_loading_process = $.ajax({
             url : '/control/map/?ajax',
@@ -146,28 +165,62 @@ var map = {
         //Читаем параметры из адресной строки (хеш)
         var new_hash = core.ui.getHashData();
 
-        if(!new_hash.fleet){
-            new_hash.fleet = 'all';
-        };
+        if(new_hash){
+            if(!new_hash.fleet){
+                new_hash.fleet = 'all';
+            };
 
-        if(!new_hash.car){
-            new_hash.car = 'all';
-        };
+            if(!new_hash.car){
+                new_hash.car = 'all';
+            };
 
-        $.extend(this.hash, new_hash);
+            $.extend(this.hash, new_hash);
+        }else{
+            this.hash = {
+                fleet: 'all',
+                car: 'all'
+            };
+        };
 
         //Создаем селекты
-        map.createFleetsSelect();
-        map.createCarsSelect(this.hash.fleet);
+        this.createFleetsSelect();
+        this.createCarsSelect(this.hash.fleet);
 
         //Находим в массиве тукущую тачку и группу и сохраняем
-        map.setCurrentFleetAndCar();
+        this.setCurrentFleetAndCar();
 
         //Ставим хедер
-        map.setHeaderTexts();
+        this.setHeaderTexts();
+
+        //Рисуем тачки на карте
+        this.drawCars();
+    },
+
+    drawCars: function(){
+        //Находим все тачки, соответствующие выбранным опциям (группа/тачка)
+        if(this.current_car && this.current_car.id > 0){
+            var cars = $.grep(this.cars_list, function(e){return e.id == map.current_car.id;});
+        }else if(this.current_fleet && this.current_fleet.id > 0){
+            var cars = $.grep(this.cars_list, function(e){return e.fleet_id == map.current_fleet.id;});
+        }else{
+            var cars = this.cars_list;
+        };
+
+        //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
+        for(var i = 0, l = cars.length; i < l; i++){
+            if(cars[i].last_point && cars[i].last_point.lat && cars[i].last_point.lng){
+                this.m_ctrl.drawCurrentPositionMarker({
+                    map     : this.map,
+                    lat     : cars[i].last_point_today.lng,
+                    lon     : cars[i].last_point_today.lat,
+                    heading : cars[i].last_point_today.heading
+                });
+            };
+        };
     },
 
     bindControls: function(){
+        //Отлеживаем событие изменения хеша
         $(window).on('hashchange', function() {
             map.renewOptions();
         });

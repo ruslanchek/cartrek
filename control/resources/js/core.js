@@ -863,6 +863,22 @@ core.utilities = {
     }
 };
 
+core.map_tools = {
+    getHeadingIcon: function(heading){
+        var degrees_zone = Math.round(parseInt(heading)/15) * 15;
+
+        if(isNaN(degrees_zone)){
+            degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
+        };
+
+        if(degrees_zone == 360){
+            degrees_zone = 0;
+        };
+
+        return '/control/map/img/markers/heading/'+degrees_zone+'.png';
+    }
+};
+
 core.ui = {
     getHashData: function(){
         var h = document.location.hash;
