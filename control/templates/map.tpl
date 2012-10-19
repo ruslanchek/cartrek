@@ -11,7 +11,7 @@
 
                 <div class="container h1">
                     <div class="container-padding">
-                        <h1>{$core->module.title}<span id="current-fleet"></span><span id="current-car"></span></h1>
+                        <h1>{$core->module.title}<span id="current-fleet-and-car"></span></h1>
                     </div>
                 </div>
 

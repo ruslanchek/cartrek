@@ -48,6 +48,12 @@ var map = {
     m_ctrl: null,
     map: null,
 
+    current_fleet: null,
+    current_car: null,
+
+    fleets_list: [],
+    cars_list: [],
+
     m_options: {
         container: 'map',
         zoom: 8,
@@ -57,23 +63,14 @@ var map = {
         }
     },
 
-    u_options: {
-        hash: {
-            fleet   : 'all',
-            car     : 'all'
-        }
-    },
-
-    bindControls: function(){
-
-    },
+    hash: {},
 
     prepareMap: function(){
         this.m_ctrl = map_box_ctrl;
         this.map = this.m_ctrl.createMap(this.m_options);
     },
 
-    createCarsSelect: function(data, fleet_id){
+    createCarsSelect: function(fleet_id){
         //Создаем селект тачек
         var exclude = null;
 
@@ -87,41 +84,104 @@ var map = {
         core.ui.createSelect('#cars-menu', {
             id          : 'cars-menu-select',
             default_opt : {val: 'all', name: 'Все машины'},
-            default     : this.u_options.hash.car,
+            default     : this.hash.car,
             key_name    : 'id',
             value_name  : 'name',
             exclude     : exclude,
-            items       : data.devices,
+            items       : this.cars_list,
             onChange    : function(val){
                 document.location.hash = '#fleet='+fleet_id+'&car='+val;
             }
         });
     },
 
-    createFleetsSelect: function(data){
+    createFleetsSelect: function(){
         //Создаем селект групп
         core.ui.createSelect('#fleets-menu', {
             id          : 'fleets-menu-select',
             default_opt : {val: 'all', name: 'Все группы'},
-            default     : this.u_options.hash.fleet,
+            default     : this.hash.fleet,
             key_name    : 'id',
             value_name  : 'name',
-            items       : data.fleets,
+            items       : this.fleets_list,
             onChange    : function(val){
                 document.location.hash = '#fleet='+val;
-                map.createCarsSelect(data, val);
+                map.createCarsSelect(val);
             }
         });
     },
 
-    prepareDFandControls: function(){
-        //Читаем параметры из адресной строки (хеш)
-        $.extend(this.u_options.hash, core.ui.getHashData());
+    setCurrentFleetAndCar: function(){
+        var fleet = $.grep(this.fleets_list, function(e){return e.id == map.hash.fleet;}),
+            car   = $.grep(this.cars_list, function(e){return e.id == map.hash.car;});
 
+        if(fleet){
+            this.current_fleet = fleet[0];
+        }else{
+            this.current_fleet = null;
+        };
+
+        if(car){
+            this.current_car = car[0];
+        }else{
+            this.current_fleet = null;
+        };
+    },
+
+    setHeaderTexts: function(){
+        var html = '';
+
+        if(this.current_fleet){
+            html += ' / ' + this.current_fleet.name;
+        };
+
+        if(this.current_car){
+            html += ' / ' + this.current_car.name;
+        };
+
+        $('#current-fleet-and-car').html(html);
+    },
+
+    renewOptions: function(){
+        //Читаем параметры из адресной строки (хеш)
+        var new_hash = core.ui.getHashData();
+
+        if(!new_hash.fleet){
+            new_hash.fleet = 'all';
+        };
+
+        if(!new_hash.car){
+            new_hash.car = 'all';
+        };
+
+        $.extend(this.hash, new_hash);
+
+        //Создаем селекты
+        map.createFleetsSelect();
+        map.createCarsSelect(this.hash.fleet);
+
+        //Находим в массиве тукущую тачку и группу и сохраняем
+        map.setCurrentFleetAndCar();
+
+        //Ставим хедер
+        map.setHeaderTexts();
+    },
+
+    bindControls: function(){
+        $(window).on('hashchange', function() {
+            map.renewOptions();
+        });
+    },
+
+    prepareDFandControls: function(){
         //Грузим группы и тачки
         data_ctrl.getUserFleetsAndDevices(function(data){
-            map.createFleetsSelect(data);
-            map.createCarsSelect(data, map.u_options.hash.fleet);
+            //Сохраняем принятые данные
+            map.fleets_list = data.fleets;
+            map.cars_list   = data.devices;
+
+            map.renewOptions();
+            map.bindControls();
         });
     },
 

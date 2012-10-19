@@ -869,7 +869,6 @@ core.ui = {
 
         if(h != ''){
             h = h.substr(1, h.length);
-
             h = h.split('&');
 
             var result = {};
