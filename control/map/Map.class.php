@@ -36,6 +36,11 @@
                             header('Content-type: application/json');
                             print json_encode($this->devices->getUserDevices()); //TODO: можно оптимизировать!
                         }; break;
+
+                        case 'getDynamicDevicesData' : {
+                            header('Content-type: application/json');
+                            print json_encode($this->devices->getDynamicDevicesData(json_decode($_POST['cars'])));
+                        }; break;
                     };
 
                     exit;

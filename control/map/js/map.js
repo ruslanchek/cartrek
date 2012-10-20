@@ -37,7 +37,7 @@ var data_ctrl = {
 
     //Загружаем данные о группах и тачках с сервера
     getUserFleetsAndDevices: function(callback){
-        this.options_loading_process = $.ajax({
+        this.loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
                 action  : 'getUserFleetsAndDevices'
@@ -45,8 +45,35 @@ var data_ctrl = {
             dataType : 'json',
             type : 'get',
             beforeSend: function(){
-                if(this.options_loading_process){
-                    this.options_loading_process.abort();
+                if(this.loading_process){
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                };
+
+                core.loading.setGlobalLoading();
+            },
+            success: function(data){
+                core.loading.unsetGlobalLoading();
+                callback(data);
+            },
+            error: function(){
+                core.loading.unsetGlobalLoading();
+            }
+        });
+    },
+
+    //Загружаем динамические данные тачек (координаты, скорость, HDOP и пр.)
+    getDynamicCarsData: function(cars, callback){
+        this.loading_process = $.ajax({
+            url : '/control/map/?ajax&action=getDynamicDevicesData',
+            data : {
+                cars    : JSON.stringify(cars)
+            },
+            dataType : 'json',
+            type : 'post',
+            beforeSend: function(){
+                if(this.loading_process){
+                    this.loading_process.abort();
                     core.loading.unsetGlobalLoading();
                 };
 
@@ -155,7 +182,7 @@ var map = {
         };
 
         if(this.current_car){
-            html += ' / ' + this.current_car.name;
+            html += ' / ' + this.current_car.name + ' ' + core.utilities.drawGId(this.current_car.g_id, 'small');
         };
 
         $('#current-fleet-and-car').html(html);
@@ -206,16 +233,28 @@ var map = {
             var cars = this.cars_list;
         };
 
-        //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
+        //Готовим массив с ID тачек
+        var cars_ids = [];
+
         for(var i = 0, l = cars.length; i < l; i++){
-            if(cars[i].last_point && cars[i].last_point.lat && cars[i].last_point.lng){
-                this.m_ctrl.drawCurrentPositionMarker({
-                    map     : this.map,
-                    lat     : cars[i].last_point_today.lng,
-                    lon     : cars[i].last_point_today.lat,
-                    heading : cars[i].last_point_today.heading
-                });
-            };
+            cars_ids.push(cars[i].id);
+        };
+
+        //Если набралась хотябы одна тачка - грузим динамические данные
+        if(cars_ids.length > 0){
+            data_ctrl.getDynamicCarsData(cars_ids, function(){
+                //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
+                for(var i = 0, l = cars.length; i < l; i++){
+                    if(cars[i].current_point && cars[i].current_point.lat && cars[i].current_point.lon){
+                        this.m_ctrl.drawCurrentPositionMarker({
+                            map     : this.map,
+                            lat     : cars[i].current_point.lng,
+                            lon     : cars[i].current_point.lon,
+                            heading : cars[i].current_point.heading
+                        });
+                    };
+                };
+            });
         };
     },
 

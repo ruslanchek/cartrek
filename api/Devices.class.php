@@ -100,44 +100,74 @@
 
             $query = "
                 SELECT
-                    `devices`.`id`,
-                    `devices`.`imei`,
-                    `devices`.`name`,
-                    `devices`.`model`,
-                    `devices`.`make`,
-                    `devices`.`g_id`,
-                    `devices`.`color`,
-                    `devices`.`hdop`,
-                    `devices`.`csq`,
-                    `devices`.`journey`,
-                    `devices`.`active`,
-                    `devices`.`fleet_id`,
-                    `devices`.`battery`,
-                    CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`,
-                    `fleets`.`name` AS `fleet_name`
+                	`devices`.`id`,
+                	`devices`.`imei`,
+                	`devices`.`name`,
+                	`devices`.`model`,
+                	`devices`.`make`,
+                	`devices`.`g_id`,
+                	`devices`.`color`,
+                	`devices`.`active`,
+                	`devices`.`fleet_id`,
+                	CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`,
+                    CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_point_date`,
+                	`fleets`.`name` AS `fleet_name`
                 FROM
-                    `devices`
-                LEFT JOIN
-                    `fleets`
-                ON
-                    `devices`.`fleet_id` = `fleets`.`id`
+                	`devices`
+                LEFT JOIN `fleets` ON `devices`.`fleet_id` = `fleets`.`id` && `fleets`.`user_id` = ".intval($this->auth->user['data']['id']).$addition."
+                LEFT JOIN `tracks` ON  `tracks`.`device_id` = `devices`.`id`
                 WHERE
-                    `devices`.`user_id` = ".intval($this->auth->user['data']['id']).$addition."
+                	`devices`.`user_id` = ".intval($this->auth->user['data']['id']).$addition."
+                GROUP BY
+                	`devices`.`id`
                 ORDER BY
-                     `devices`.`sort`
-                ASC
+                	`devices`.`sort` ASC,
+                	`tracks`.`datetime` DESC
             ";
 
-            $devices    = $this->db->assocMulti($query);
-            $result     = array();
+            return $this->db->assocMulti($query);
+        }
 
-            foreach($devices as $device){
-                $device['last_point']         = $this->getLatestDevicePoint($device['id'], false);
-                $device['last_point_today']   = $this->getLatestDevicePoint($device['id'], true);
-                $result[] = $device;
+        public function getDynamicDevicesData($cars){
+            if($cars && count($cars) > 0){
+                $in = '';
+
+                foreach($cars as $car){
+                    $in .= intval($car).",";
+                };
+
+                $in = substr($in, 0, strlen($in) - 1);
+
+                $query = "
+                    SELECT
+                        `devices`.`id`,
+                        `devices`.`hdop`,
+                        `devices`.`csq`,
+                        `devices`.`journey`,
+                        `devices`.`active`,
+                        `devices`.`battery`,
+                        CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`,
+                        CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_point_date`,
+                        `tracks`.`id` AS `point_id`,
+                        `tracks`.`lat`,
+                        `tracks`.`lon`,
+                        `tracks`.`speed`,
+                        `tracks`.`heading`,
+                        `tracks`.`altitude`
+                    FROM
+                        `devices`
+                    LEFT JOIN `tracks` ON  `tracks`.`device_id` = `devices`.`id`
+                    WHERE
+                        `devices`.`user_id` = ".intval($this->auth->user['data']['id'])." &&
+                        `devices`.`id` IN (".$in.")
+                    GROUP BY
+                        `devices`.`id`
+                    ORDER BY
+                        `tracks`.`datetime` DESC
+                ";
+
+                return $this->db->assocMulti($query);
             };
-
-            return $result;
         }
 
         //Get complete list of user's cars with last points
@@ -196,8 +226,8 @@
             $query = "
                 SELECT
                     `id`,
-                    `lng`,
                     `lat`,
+                    `lon`,
                     `speed`,
                     `heading`,
                     `altitude`,
@@ -231,11 +261,11 @@
             $query = "
                 SELECT
                     `id`,
-                    `lng`                   AS `lng`,
-                    `lat`                   AS `lat`,
-                    `speed`                 AS `velocity`,
-                    `heading`               AS `heading`,
-                    `altitude`              AS `altitude`,
+                    `lat`,
+                    `lon`,
+                    `speed`,
+                    `heading`,
+                    `altitude`,
                     `csq`,
                     `hdop`,
                     CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `date`
@@ -251,10 +281,7 @@
             return $this->db->assocMulti($query);
         }
 
-
-
         //TODO : Сделать отдельный API-класс для работы с группами
-
         public function getFleetsList(){
             $query = "
                 SELECT
