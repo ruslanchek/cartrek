@@ -1,10 +1,14 @@
 var map_box_ctrl = {
+    marker_layer: null,
+
     createMap: function(m_options){
         var map = mapbox.map('map');
 
         map.addLayer(mapbox.layer().id('ruslanchek.map-5sa7s6em'));
         map.centerzoom(m_options.coordinates, m_options.zoom);
         map.smooth(true);
+
+        this.marker_layer = mapbox.markers.layer();
 
         return map;
     },
@@ -26,16 +30,18 @@ var map_box_ctrl = {
             };
         };
 
-        var markerLayer = mapbox.markers.layer().features(markers);
+        this.marker_layer.features(markers);
 
-        markerLayer.factory(function(f) {
+        this.marker_layer.factory(function(f) {
             var img = document.createElement('img');
             img.className = 'marker-image';
             img.setAttribute('src', f.properties.image);
             return img;
         });
 
-        map.addLayer(markerLayer).setExtent(markerLayer.extent());
+        map.addLayer(this.marker_layer).setExtent(this.marker_layer.extent());
+
+        map.refresh();
     }
 };
 
