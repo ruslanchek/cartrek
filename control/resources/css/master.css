@@ -1081,16 +1081,24 @@ footer {
 -----------------------------------------------------------------------------*/
 #map {
     width: 100%;
+}
+
+.map-container {
+    position: relative;
+    padding-bottom: 15px;
     height: 400px;
     border: 1px solid #ddd;
 }
 
-#map-resizer {
-    height: 16px;
+.map-container .ui-resizable-s {
+    height: 14px;
+    width: 100%;
     background: #eee;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #ccc;
     cursor: ns-resize;
+    position: absolute;
+    bottom: -1px;
 }
 
 .map-top-panel {
@@ -1103,7 +1111,7 @@ footer {
     bottom: -4px;
 }
 
-.map_notice {
+.map-notice {
     position: absolute;
     z-index: 10;
     background: #fff;

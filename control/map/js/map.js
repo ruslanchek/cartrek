@@ -1,6 +1,6 @@
 var map_box_ctrl = {
     createMap: function(m_options){
-        var map = mapbox.map(m_options.container);
+        var map = mapbox.map('map');
 
         map.addLayer(mapbox.layer().id('ruslanchek.map-5sa7s6em'));
         map.centerzoom(m_options.coordinates, m_options.zoom);
@@ -9,24 +9,33 @@ var map_box_ctrl = {
         return map;
     },
 
-    drawCurrentPositionMarker: function(options){
-        // Create and add marker layer
-        var markerLayer = mapbox.markers.layer().features([{
-            "geometry": {
-                "type": "Point",
-                "coordinates": [options.lon, options.lat]
-            },
-            "properties": {
-                "image": core.map_tools.getHeadingIcon(options.heading)
-            }
-        }]).factory(function(f) {
+    drawCurrentPositionMarkersGroup: function(map, data){
+        var markers = [];
+
+        for(var i = 0, l = data.length; i < l; i++){
+            if(data[i].lat && data[i].lon){
+                markers.push({
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [data[i].lon, data[i].lat]
+                    },
+                    "properties": {
+                        "image": core.map_tools.getHeadingIcon(data[i].heading)
+                    }
+                });
+            };
+        };
+
+        var markerLayer = mapbox.markers.layer().features(markers);
+
+        markerLayer.factory(function(f) {
             var img = document.createElement('img');
             img.className = 'marker-image';
             img.setAttribute('src', f.properties.image);
             return img;
         });
 
-        options.map.addLayer(markerLayer).setExtent(markerLayer.extent());
+        map.addLayer(markerLayer).setExtent(markerLayer.extent());
     }
 };
 
@@ -103,18 +112,36 @@ var map = {
     cars_in_fleet: 0,
 
     m_options: {
-        container: 'map',
         zoom: 8,
         coordinates: {
             lat: 55,
             lon: 35
-        }
+        },
+        minHeight: 250,
+        height: 400
     },
 
     hash: {},
 
     prepareMap: function(){
-        $('#'+this.m_options.container).resizable();
+        if($.cookie('map-height') && $.cookie('map-height') > this.m_options.minHeight){
+            $('#map, .map-container').css({height: parseInt($.cookie('map-height'))});
+        }else{
+            $('#map, .map-container').css({height: this.m_options.height});
+        };
+
+        $('.map-container').resizable({
+            handles: 's',
+            minHeight: this.m_options.minHeight + 1,
+            resize: function(event, ui){
+                $('#map').css({
+                    height: ui.size.height + 2
+                });
+
+                $.cookie('map-height', ui.size.height, core.options.cookie_options);
+            }
+        });
+
         this.m_ctrl = map_box_ctrl;
         this.map = this.m_ctrl.createMap(this.m_options);
     },
@@ -238,16 +265,7 @@ var map = {
     drawDynamicCarsData: function(data){
         //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
         if(data.length > 0){
-            for(var i = 0, l = data.length; i < l; i++){
-                if(data[i].lat && data[i].lon){
-                    this.m_ctrl.drawCurrentPositionMarker({
-                        map     : this.map,
-                        lat     : data[i].lat,
-                        lon     : data[i].lon,
-                        heading : data[i].heading
-                    });
-                };
-            };
+            this.m_ctrl.drawCurrentPositionMarkersGroup(this.map, data);
         };
     },
 

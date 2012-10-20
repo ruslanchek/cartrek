@@ -11,8 +11,9 @@
     <div class="clear"></div>
 </div>
 
-<div id="map"></div>
-<div id="map-resizer"></div>
+<div class="map-container">
+    <div id="map"></div>
+</div>
 
 <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
 <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.css' rel='stylesheet' />
