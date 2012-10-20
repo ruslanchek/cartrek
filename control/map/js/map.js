@@ -14,7 +14,7 @@ var map_box_ctrl = {
         var markerLayer = mapbox.markers.layer().features([{
             "geometry": {
                 "type": "Point",
-                "coordinates": [options.lat, options.lon]
+                "coordinates": [options.lon, options.lat]
             },
             "properties": {
                 "image": core.map_tools.getHeadingIcon(options.heading)
@@ -67,7 +67,8 @@ var data_ctrl = {
         this.loading_process = $.ajax({
             url : '/control/map/?ajax&action=getDynamicDevicesData',
             data : {
-                cars    : JSON.stringify(cars)
+                cars    : JSON.stringify(cars),
+                date    : new Date()
             },
             dataType : 'json',
             type : 'post',
@@ -99,6 +100,7 @@ var map = {
 
     fleets_list: [],
     cars_list: [],
+    cars_in_fleet: 0,
 
     m_options: {
         container: 'map',
@@ -112,6 +114,7 @@ var map = {
     hash: {},
 
     prepareMap: function(){
+        $('#'+this.m_options.container).resizable();
         this.m_ctrl = map_box_ctrl;
         this.map = this.m_ctrl.createMap(this.m_options);
     },
@@ -183,6 +186,8 @@ var map = {
 
         if(this.current_car){
             html += ' / ' + this.current_car.name + ' ' + core.utilities.drawGId(this.current_car.g_id, 'small');
+        }else{
+            html += ' <span class="badge">'+this.cars_in_fleet+' ' + core.utilities.plural(this.cars_in_fleet, 'машина', 'машины', 'машин') + '</span>';
         };
 
         $('#current-fleet-and-car').html(html);
@@ -216,11 +221,34 @@ var map = {
         //Находим в массиве тукущую тачку и группу и сохраняем
         this.setCurrentFleetAndCar();
 
+        //Считаем количество машин всего и в текущей группе
+        if(map.current_fleet && map.current_fleet.id > 0){
+            this.cars_in_fleet = $.grep(this.cars_list, function(e){return e.fleet_id == map.current_fleet.id;}).length;
+        }else{
+            this.cars_in_fleet = this.cars_list.length;
+        };
+
         //Ставим хедер
         this.setHeaderTexts();
 
         //Рисуем тачки на карте
         this.drawCars();
+    },
+
+    drawDynamicCarsData: function(data){
+        //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
+        if(data.length > 0){
+            for(var i = 0, l = data.length; i < l; i++){
+                if(data[i].lat && data[i].lon){
+                    this.m_ctrl.drawCurrentPositionMarker({
+                        map     : this.map,
+                        lat     : data[i].lat,
+                        lon     : data[i].lon,
+                        heading : data[i].heading
+                    });
+                };
+            };
+        };
     },
 
     drawCars: function(){
@@ -242,18 +270,9 @@ var map = {
 
         //Если набралась хотябы одна тачка - грузим динамические данные
         if(cars_ids.length > 0){
-            data_ctrl.getDynamicCarsData(cars_ids, function(){
-                //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
-                for(var i = 0, l = cars.length; i < l; i++){
-                    if(cars[i].current_point && cars[i].current_point.lat && cars[i].current_point.lon){
-                        this.m_ctrl.drawCurrentPositionMarker({
-                            map     : this.map,
-                            lat     : cars[i].current_point.lng,
-                            lon     : cars[i].current_point.lon,
-                            heading : cars[i].current_point.heading
-                        });
-                    };
-                };
+            data_ctrl.getDynamicCarsData(cars_ids, function(data){
+                //Запускаем функцию отрисовки динамических данных о тачке или группе тачек
+                map.drawDynamicCarsData(data);
             });
         };
     },

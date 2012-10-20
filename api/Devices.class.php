@@ -145,7 +145,7 @@
                         `devices`.`csq`,
                         `devices`.`journey`,
                         `devices`.`active`,
-                        `devices`.`battery`,
+                        `devices`.`params`,
                         CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`,
                         CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_point_date`,
                         `tracks`.`id` AS `point_id`,
@@ -195,7 +195,6 @@
                     `csq`,
                     `journey`,
                     `active`,
-                    `battery`,
                     CONVERT_TZ(`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`
                 FROM
                     `devices`
