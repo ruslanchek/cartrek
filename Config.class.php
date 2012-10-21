@@ -6,7 +6,7 @@ date_default_timezone_set('Europe/Moscow');
 
 Class Config{
     public $db_vars = array(
-        'host'  => 'dev.cartrek.ru',
+        'host'  => 'localhost',
         'db'    => 'cartrek',
         'user'  => 'fortyfour',
         'pass'  => 'W8zXGYPa'

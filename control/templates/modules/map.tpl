@@ -5,7 +5,7 @@
 
     <div class="fifth">
         <button id="refresh_data" class="btn" title="Обновить данные">Обновить</button>
-        <button id="where_is_my_car" class="btn" title="Показать машины/путь">Фокус</button>
+        <button id="focus" class="btn" title="Показать машины/путь">Фокус</button>
     </div>
 
     <div class="clear"></div>
@@ -15,7 +15,12 @@
     <div id="map"></div>
 </div>
 
-<script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
-<link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.css' rel='stylesheet' />
+<link rel="stylesheet" href="/control/resources/leaflet/dist/leaflet.css" />
+<!--[if lte IE 8]>
+    <link rel="stylesheet" href="/control/resources/leaflet/dist/leaflet.ie.css" />
+<![endif]-->
+
+<script src="/control/resources/leaflet/dist/leaflet.js"></script>
+<script src="/control/resources/mapbox-wax/dist/wax.leaf.js"></script>
 
 <script>map.init();</script>

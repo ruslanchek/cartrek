@@ -971,7 +971,7 @@ core.ticker = {
 
     callIntervalMethods: function(){
         for(var i = 0, l = this.interval_methods.length; i < l; i++){
-            this.interval_methods[i]();
+            this.interval_methods[i].call();
         };
     },
 

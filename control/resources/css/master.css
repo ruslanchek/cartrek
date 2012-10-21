@@ -452,8 +452,8 @@ footer {
 
 .badge {
     background: #3C4E5A;
-    -webkit-border-radius: 30px;
-    border-radius: 30px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
     padding: 0 10px;
     color: #fff;
     text-shadow: none;
@@ -1085,7 +1085,7 @@ footer {
 
 .map-container {
     position: relative;
-    padding-bottom: 15px;
+    padding-bottom: 16px;
     height: 400px;
     border: 1px solid #ddd;
 }
@@ -1098,7 +1098,7 @@ footer {
     border-bottom: 1px solid #ccc;
     cursor: ns-resize;
     position: absolute;
-    bottom: -1px;
+    bottom: 0px;
 }
 
 .map-top-panel {
@@ -1107,8 +1107,9 @@ footer {
 
 #current-fleet-and-car .g_id {
     display: inline-block;
-    position: relative;
-    bottom: -4px;
+    position: absolute;
+    bottom: 1px;
+    margin-left: 10px;
 }
 
 .map-notice {

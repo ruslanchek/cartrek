@@ -11,7 +11,7 @@
             parent::__construct();
 
             $this->checkForDevices();
-            $this->setCurrentDate();
+            $this->setCurrentDate(); //Сделать прием даты через AJAX
         }
 
         public function checkForDevices(){
@@ -67,22 +67,10 @@
         }
 
         public function setCurrentDate($date = false){
-            $expire = 86400 - 3600 * date("H") - date("i") - date("s");
-            $expire = time() + $expire;
-            $now = date('d').'-'.date('m').'-'.date('Y');
-
             if(!$date){
-                if(!isset($_COOKIE['current_date'])){
-                    setcookie("current_date", $now, $expire, '/');
-                };
+                $this->current_date = date('d').'-'.date('m').'-'.date('Y');
             }else{
-                setcookie("current_date", $date, $expire, '/');
-            };
-
-            if(!isset($_COOKIE['current_date'])){
-                $this->current_date = $now;
-            }else{
-                $this->current_date = $_COOKIE['current_date'];
+                $this->current_date = $date;
             };
         }
 
@@ -138,6 +126,13 @@
 
                 $in = substr($in, 0, strlen($in) - 1);
 
+                $d = intval(substr($this->current_date, 0, 2));
+                $m = intval(substr($this->current_date, 3, 2));
+                $y = intval('20'.substr($this->current_date, 8, 2));
+
+                $date_start = date("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
+                $date_end   = date("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
+
                 $query = "
                     SELECT
                         `devices`.`id`,
@@ -156,7 +151,12 @@
                         `tracks`.`altitude`
                     FROM
                         `devices`
-                    LEFT JOIN `tracks` ON  `tracks`.`device_id` = `devices`.`id`
+                    LEFT JOIN
+                        `tracks`
+                    ON
+                        `tracks`.`device_id` = `devices`.`id` &&
+                        `tracks`.`datetime` >= CONVERT_TZ('".$this->db->quote($date_start)."', '".$this->db->quote(date('P'))."', 'Europe/Moscow') &&
+                        `tracks`.`datetime` <= CONVERT_TZ('".$this->db->quote($date_end)."', '".$this->db->quote(date('P'))."', 'Europe/Moscow')
                     WHERE
                         `devices`.`user_id` = ".intval($this->auth->user['data']['id'])." &&
                         `devices`.`id` IN (".$in.")
