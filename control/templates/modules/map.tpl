@@ -3,9 +3,11 @@
 
     <div class="fifth" id="cars-menu"></div>
 
-    <div class="fifth">
-        <button id="refresh_data" class="btn" title="Обновить данные">Обновить</button>
-        <button id="focus" class="btn" title="Показать машины/путь">Фокус</button>
+    <div class="third push-right">
+        <button id="focus" class="btn" title="Показать машины">Фокус</button>
+        <button id="auto-renew" class="btn" title="Обновить данные"></button>
+
+        <button id="show-path" class="btn" title="Показать путь"></button>
     </div>
 
     <div class="clear"></div>
@@ -15,14 +17,14 @@
     <div id="map"></div>
 </div>
 
-<script src="/control/resources/mapping-tools/raphael-layer/dist/rlayer.js"></script>
-
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 <!--[if lte IE 8]>
     <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.ie.css" />
 <![endif]-->
 
 <script src="/control/resources/mapping-tools/leaflet/dist/leaflet-src.js"></script>
+{*<script src="/control/resources/mapping-tools/raphael-layer/debug/libs/raphael/raphael-min.js"></script>
+<script src="/control/resources/mapping-tools/raphael-layer/dist/rlayer.js"></script>*}
 <script src="/control/resources/mapping-tools/mapbox-wax/dist/wax.leaf.min.js"></script>
 
 <script>map.init();</script>

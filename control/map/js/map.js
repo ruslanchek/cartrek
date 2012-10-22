@@ -136,6 +136,9 @@ var leaflet_ctrl = {
             }
         );
 
+        /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
+        map_instance.addLayer(m);*/
+
         marker.on('click', function(){
             this.bindPopup(map.getCurrentPositionPopupHtml(this.options.id));
             this.openPopup();
@@ -163,7 +166,9 @@ var leaflet_ctrl = {
             if(markers.length > 0){
                 this.cp_group = L.layerGroup(markers).addTo(map_instance);
                 this.focusToAllMarkers(map_instance);
+                map.unsetNoPointsInfo();
             }else{
+                map.setNoPointsInfo();
                 map_instance.setView(new L.LatLng(map.m_options.coordinates.lat, map.m_options.coordinates.lon), map.m_options.zoom);
             };
         };
@@ -227,12 +232,41 @@ var data_ctrl = {
         console.log('error')
     },
 
+    getCarPath: function(car_id, callback){
+        this.loading_process = $.ajax({
+            url : '/control/map/?ajax',
+            data : {
+                action      : 'getPoints',
+                date        : map.date,
+                device_id   : car_id
+            },
+            dataType : 'json',
+            type : 'get',
+            beforeSend: function(){
+                if(this.loading_process){
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                };
+
+                core.loading.setGlobalLoading();
+            },
+            success: function(data){
+                core.loading.unsetGlobalLoading();
+                callback(data);
+            },
+            error: function(){
+                core.loading.unsetGlobalLoading();
+            }
+        });
+    },
+
     //Загружаем данные о группах и тачках с сервера
     getUserFleetsAndDevices: function(callback){
         this.loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
-                action  : 'getUserFleetsAndDevices'
+                action  : 'getUserFleetsAndDevices',
+                date    : map.date
             },
             dataType : 'json',
             type : 'get',
@@ -260,7 +294,7 @@ var data_ctrl = {
             url : '/control/map/?ajax&action=getDynamicDevicesData',
             data : {
                 cars    : JSON.stringify(cars),
-                date    : new Date()
+                date    : map.date
             },
             dataType : 'json',
             type : 'post',
@@ -312,6 +346,7 @@ var data_ctrl = {
 var map = {
     m_ctrl: null,
     map: null,
+    date: null,
 
     current_fleet: null,
     current_car: null,
@@ -321,6 +356,7 @@ var map = {
     cars_in_fleet: 0,
 
     auto_renew: true,
+    show_car_path: false,
 
     m_options: {
         zoom: 4,
@@ -483,6 +519,8 @@ var map = {
             }else{
                 this.m_ctrl.drawCurrentPositionMarkersGroup(this.map, data);
             };
+
+            this.drawCarPath();
         };
     },
 
@@ -510,17 +548,6 @@ var map = {
                 map.drawDynamicCarsData(data, options);
             });
         };
-    },
-
-    bindControls: function(){
-        //Отлеживаем событие изменения хеша
-        $(window).on('hashchange', function() {
-            map.renewOptions();
-        });
-
-        $('#focus').live('click', function(){
-            map.m_ctrl.focusToAllMarkers(map.map);
-        });
     },
 
     renewIntervalPool: function(){
@@ -566,11 +593,138 @@ var map = {
         return html;
     },
 
+    setNoPointsInfo: function(){
+        $('.map-container .map-notice').remove();
+
+        var message;
+
+        if(this.current_car){
+            if(this.current_car.last_point_date != null){
+                message =   '<p>На&nbsp;<b>'+this.date+'</b>' +
+                            'не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины <b>&laquo;'+this.current_car.name+'&raquo;</b>.</p>' +
+                            '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.current_car.last_point_date+'</b>.</p>';
+            }else{
+                message =  '<p>Для&nbsp;машины&nbsp;<b>&laquo;'+this.current_car.name+'&raquo;</b> нет ни одной отметки.</p>';
+            };
+        }else if(!this.current_car && this.current_fleet){
+            message =  '<p>На&nbsp;<b>'+this.date+'</b> ' +
+                       'не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины в группе &laquo;'+this.current_fleet.name+'&raquo;.</p>';
+        }else{
+            message =  '<p>На&nbsp;<b>'+this.date+'</b> ' +
+                       'не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>';
+        };
+
+        message += '<a id="hide-map-notice" href="javascript:void(0)" class="btn">Закрыть</a>';
+
+        var $mn = $('<div/>').addClass('map-notice').html(message);
+
+        $('.map-container').append($mn);
+
+        $('.map-container .map-notice').css({
+            marginTop: -$('.map-container .map-notice').height() + 40 / 2
+        });
+
+        $('#focus').fadeOut(150);
+    },
+
+    unsetNoPointsInfo: function(){
+        $('#focus').fadeIn(150);
+
+        $('.map-container .map-notice').fadeOut(150, function(){
+            $('.map-container .map-notice').remove();
+        });
+    },
+
+    toggleCarPath: function(){
+        if(!this.show_car_path){
+            this.show_car_path = true;
+            $.cookie('car-path', '1', core.options.cookie_options);
+        }else{
+            this.show_car_path = false;
+            $.cookie('car-path', '0', core.options.cookie_options);
+        };
+
+        this.setButtons();
+    },
+
+    toggleAutoRenew: function(){
+        if(!this.auto_renew){
+            this.auto_renew = true;
+            $.cookie('auto-renew', '1', core.options.cookie_options);
+        }else{
+            this.auto_renew = false;
+            $.cookie('auto-renew', '0', core.options.cookie_options);
+        };
+
+        this.setButtons();
+    },
+
+    setButtons: function(){
+        if(this.auto_renew){
+            $('#auto-renew').html('Авто вкл');
+        }else{
+            $('#auto-renew').html('Авто выкл');
+        };
+
+        if(this.show_car_path){
+            $('#show-path').html('Путь вкл');
+        }else{
+            $('#show-path').html('Путь выкл');
+        };
+    },
+
+    drawCarPath: function(){
+        if(this.current_car && this.current_car.cp_marker && this.show_car_path){
+            if(this.current_car.path_points){
+                data_ctrl.getCarPath(this.current_car.id, false, function(data){
+
+                });
+            }else{
+                data_ctrl.getCarPath(this.current_car.id, false, function(data){
+
+                });
+            };
+        };
+    },
+
+    bindControls: function(){
+        //Отлеживаем событие изменения хеша
+        $(window).on('hashchange', function() {
+            map.renewOptions();
+        });
+
+        $('#focus').live('click', function(){
+            map.m_ctrl.focusToAllMarkers(map.map);
+        });
+
+        $('#hide-map-notice').live('click', function(){
+            $('.map-container .map-notice').fadeOut(150, function(){
+                $('.map-container .map-notice').remove();
+            });
+        });
+
+        $('#auto-renew').live('click', function(){
+            map.toggleAutoRenew();
+        });
+
+        $('#show-path').live('click', function(){
+            map.toggleCarPath();
+        });
+    },
+
     init: function(){
+        this.date = new Date();
+
         //Проверяем на наличие отключенного автообновления в куках
         if($.cookie('auto-renew') == '0'){
             this.auto_renew = false;
         };
+
+        if($.cookie('car-path') == '1'){
+            this.show_car_path = true;
+        };
+
+        this.setButtons();
 
         //Готовим карту (контроллер карт может иметь синхронный вызов,
         // поэтому, дальнейшие действия вызываются через коллбэк)

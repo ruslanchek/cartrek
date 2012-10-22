@@ -265,8 +265,6 @@
                     `speed`,
                     `heading`,
                     `altitude`,
-                    `csq`,
-                    `hdop`,
                     CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `date`
                 FROM
                     `tracks`
