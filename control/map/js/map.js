@@ -1,5 +1,7 @@
 var leaflet_ctrl = {
     cp_group: null,
+    path: null,
+    first_loaded_car_id: false,
 
     icons: {
         headingIcon: function(heading){
@@ -47,8 +49,9 @@ var leaflet_ctrl = {
             this.openPopup();
         });
 
-        car.cp_marker = marker;
-        car.last_point_id = data.point_id;
+        car.cp_marker       = marker;
+        car.last_point_id   = data.point_id;
+        car.last_point_date = data.last_point_date;
 
         return marker;
     },
@@ -69,7 +72,7 @@ var leaflet_ctrl = {
 
             if(markers.length > 0){
                 this.cp_group = L.layerGroup(markers).addTo(map_instance);
-                this.focusToAllMarkers(map_instance);
+                this.focus(map_instance);
                 map.unsetNoPointsInfo();
             }else{
                 map.setNoPointsInfo();
@@ -85,6 +88,15 @@ var leaflet_ctrl = {
         marker.setLatLng(new L.LatLng(data.lat, data.lon));
         marker.setIcon(this.icons.headingIcon(data.heading));
         marker.update();
+
+        if(map.current_car && map.show_car_path){
+            if(!map.current_car.path_points){
+                map.current_car.path_points = [];
+            };
+
+            map.current_car.path_points.push(data);
+            this.drawAllThePath(map.map, data.id);
+        };
     },
 
     changeCurrentPositionMarkersData: function(map_instance, data){
@@ -101,7 +113,7 @@ var leaflet_ctrl = {
         };
     },
 
-    drawAllThePath: function(map_controller, car_id){
+    drawAllThePath: function(map_instance, car_id){
         var latlngs = [],
             car = map.cars_list[map.getCarIndexById(car_id)];
 
@@ -111,7 +123,24 @@ var leaflet_ctrl = {
             };
         };
 
-        var polyline = L.polyline(latlngs, {color: car.color}).addTo(map_controller);
+        if(this.path){
+            map_instance.removeLayer(this.path);
+        };
+
+        this.path = L.polyline(latlngs, {color: car.color}).addTo(map_instance);
+
+        //Ставим флаг, чтобы фокусировка роизошла только
+        // при смене авто, а не каждое обновление пути
+        if(this.first_loaded_car_id != car_id){
+            this.focus(map_instance);
+            this.first_loaded_car_id = car_id;
+        };
+    },
+
+    removeAllThePath: function(map_instance){
+        if(this.path){
+            map_instance.removeLayer(this.path);
+        };
     },
 
     removeAllCurrentPositionMarkers: function(map_instance){
@@ -122,15 +151,19 @@ var leaflet_ctrl = {
         };
     },
 
-    focusToAllMarkers: function(map_instance){
-        if(this.cp_group){
-            var bounds = [];
+    focus: function(map_instance){
+        if(map.current_car && map.show_car_path && this.path){
+            map_instance.fitBounds(this.path.getBounds());
+        }else{
+            if(this.cp_group){
+                var bounds = [];
 
-            this.cp_group.eachLayer(function(marker){
-                bounds.push(marker.getLatLng());
-            });
+                this.cp_group.eachLayer(function(marker){
+                    bounds.push(marker.getLatLng());
+                });
 
-            map_instance.fitBounds(bounds);
+                map_instance.fitBounds(bounds);
+            };
         };
     },
 
@@ -149,7 +182,11 @@ var leaflet_ctrl = {
 
 var data_ctrl = {
     error: function(){
-        console.log('error')
+        $.meow({
+            title   : 'Ошибка',
+            message : 'Внутренняя ошибка сервиса',
+            duration: 12000
+        });
     },
 
     getCarPath: function(car_id, last_point_id, callback){
@@ -509,7 +546,9 @@ var map = {
         var car = $.grep(this.cars_list, function(e){return e.id == car_id;})[0],
             html = '';
 
-        html += 'g_id: '+ car.g_id;
+        html += 'g_id: '+ car.g_id + '<br>';
+        html += 'date: '+ car.last_point_date + '<br>';
+        html += 'date: '+ car.last_point_id + '<br>';
 
         return html;
     },
@@ -521,7 +560,7 @@ var map = {
 
         if(this.current_car){
             if(this.current_car.last_point_date != null){
-                message =   '<p>На&nbsp;<b>'+this.date+'</b>' +
+                message =   '<p>На&nbsp;<b>'+this.date+'</b> ' +
                             'не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины <b>&laquo;'+this.current_car.name+'&raquo;</b>.</p>' +
                             '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.current_car.last_point_date+'</b>.</p>';
             }else{
@@ -560,9 +599,17 @@ var map = {
         if(!this.show_car_path){
             this.show_car_path = true;
             $.cookie('car-path', '1', core.options.cookie_options);
+
+            //Форсируем загрузку пути, т.к во время отключения
+            // автозагрузки могли появится новые точки.
+            //this.m_ctrl.first_loaded_car_id = false;
+            this.drawCarPath(true);
         }else{
             this.show_car_path = false;
             $.cookie('car-path', '0', core.options.cookie_options);
+
+            this.m_ctrl.removeAllThePath(this.map);
+            //this.m_ctrl.focus(this.map);
         };
 
         this.setButtons();
@@ -572,6 +619,10 @@ var map = {
         if(!this.auto_renew){
             this.auto_renew = true;
             $.cookie('auto-renew', '1', core.options.cookie_options);
+
+            //Форсируем загрузку пути, т.к во время отключения
+            // автозагрузки могли появится новые точки.
+            this.drawCarPath(true);
         }else{
             this.auto_renew = false;
             $.cookie('auto-renew', '0', core.options.cookie_options);
@@ -582,21 +633,21 @@ var map = {
 
     setButtons: function(){
         if(this.auto_renew){
-            $('#auto-renew').html('Авто вкл');
+            $('#auto-renew').attr('class', 'btn toggler toggler-on').html('Авто<i></i>');
         }else{
-            $('#auto-renew').html('Авто выкл');
+            $('#auto-renew').attr('class', 'btn toggler toggler-off').html('Авто<i></i>');
         };
 
         if(this.show_car_path){
-            $('#show-path').html('Путь вкл');
+            $('#show-path').attr('class', 'btn toggler toggler-on').html('Путь<i></i>');
         }else{
-            $('#show-path').html('Путь выкл');
+            $('#show-path').attr('class', 'btn toggler toggler-off').html('Путь<i></i>');
         };
     },
 
-    drawCarPath: function(){
+    drawCarPath: function(forced){
         if(this.current_car && this.current_car.cp_marker && this.show_car_path){
-            if(!this.current_car.path_points){
+            if(!this.current_car.path_points || forced === true){
                 data_ctrl.getCarPath(this.current_car.id, false, function(data){
                     map.current_car.path_points = data;
                     map.m_ctrl.drawAllThePath(map.map, map.current_car.id);
@@ -612,7 +663,7 @@ var map = {
         });
 
         $('#focus').live('click', function(){
-            map.m_ctrl.focusToAllMarkers(map.map);
+            map.m_ctrl.focus(map.map);
         });
 
         $('#hide-map-notice').live('click', function(){

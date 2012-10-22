@@ -11,7 +11,7 @@
             parent::__construct();
 
             $this->checkForDevices();
-            $this->setCurrentDate(); //Сделать прием даты через AJAX
+            $this->setCurrentDate('22-10-2012'); //Сделать прием даты через AJAX
         }
 
         public function checkForDevices(){
@@ -98,22 +98,41 @@
                 	`devices`.`active`,
                 	`devices`.`fleet_id`,
                 	CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`,
-                    CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_point_date`,
                 	`fleets`.`name` AS `fleet_name`
                 FROM
                 	`devices`
                 LEFT JOIN `fleets` ON `devices`.`fleet_id` = `fleets`.`id` && `fleets`.`user_id` = ".intval($this->auth->user['data']['id']).$addition."
-                LEFT JOIN `tracks` ON  `tracks`.`device_id` = `devices`.`id`
                 WHERE
                 	`devices`.`user_id` = ".intval($this->auth->user['data']['id']).$addition."
                 GROUP BY
                 	`devices`.`id`
                 ORDER BY
-                	`devices`.`sort` ASC,
-                	`tracks`.`datetime` DESC
+                	`devices`.`sort` ASC
             ";
 
-            return $this->db->assocMulti($query);
+            $devices = $this->db->assocMulti($query);
+
+            for($i = 0, $l = count($devices); $i < $l; $i++){
+                $query = "
+                    SELECT
+                        CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_point_date`
+                    FROM
+                        `tracks`
+                    WHERE
+                        `tracks`.`device_id` = ".intval($devices[$i]['id'])."
+                    ORDER BY
+                        `tracks`.`datetime` DESC
+                    LIMIT 1
+                ";
+
+                $track = $this->db->assocItem($query);
+
+                if($track){
+                    $devices[$i] = array_merge($devices[$i], $track);
+                };
+            };
+
+            return $devices;
         }
 
         public function getDynamicDevicesData($cars){
@@ -141,34 +160,47 @@
                         `devices`.`journey`,
                         `devices`.`active`,
                         `devices`.`params`,
-                        CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`,
-                        CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_point_date`,
-                        `tracks`.`id` AS `point_id`,
-                        `tracks`.`lat`,
-                        `tracks`.`lon`,
-                        `tracks`.`speed`,
-                        `tracks`.`heading`,
-                        `tracks`.`altitude`
+                        CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`
                     FROM
                         `devices`
-                    LEFT JOIN
-                        `tracks`
-                    ON
-                        `tracks`.`device_id` = `devices`.`id` &&
-                        `tracks`.`datetime` >= CONVERT_TZ('".$this->db->quote($date_start)."', '".$this->db->quote(date('P'))."', 'Europe/Moscow') &&
-                        `tracks`.`datetime` <= CONVERT_TZ('".$this->db->quote($date_end)."', '".$this->db->quote(date('P'))."', 'Europe/Moscow')
                     WHERE
                         `devices`.`user_id` = ".intval($this->auth->user['data']['id'])." &&
                         `devices`.`id` IN (".$in.")
                     GROUP BY
                         `devices`.`id`
-                    ORDER BY
-                        `tracks`.`datetime` DESC
                 ";
 
-                print $query;
+                $devices = $this->db->assocMulti($query);
 
-                return $this->db->assocMulti($query);
+                for($i = 0, $l = count($devices); $i < $l; $i++){
+                    $query = "
+                        SELECT
+                        	CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_point_date`,
+                        	`tracks`.`id` AS `point_id`,
+                        	`tracks`.`lat`,
+                        	`tracks`.`lon`,
+                        	`tracks`.`speed`,
+                        	`tracks`.`heading`,
+                        	`tracks`.`altitude`
+                        FROM
+                        	`tracks`
+                        WHERE
+                        	`tracks`.`device_id` = ".intval($devices[$i]['id'])." &&
+                        	`tracks`.`datetime` >= CONVERT_TZ('".$date_start."', '+04:00', 'Europe/Moscow') &&
+                        	`tracks`.`datetime` <= CONVERT_TZ('".$date_end."', '+04:00', 'Europe/Moscow')
+                        ORDER BY
+                        	`tracks`.`datetime` DESC
+                        LIMIT 1
+                    ";
+
+                    $track = $this->db->assocItem($query);
+
+                    if($track){
+                        $devices[$i] = array_merge($devices[$i], $track);
+                    };
+                };
+
+                return $devices;
             };
         }
 
@@ -215,8 +247,8 @@
             $m = intval(substr($this->current_date, 3, 2));
             $y = intval('20'.substr($this->current_date, 8, 2));
 
-            $date_start = gmdate("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
-            $date_end   = gmdate("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
+            $date_start = date("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
+            $date_end   = date("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
 
             if(!$date_related){
                 $date_related_where = " && (`datetime` >= '".$this->db->quote($date_start)."' && `datetime` <= '".$this->db->quote($date_end)."')";
@@ -254,13 +286,13 @@
             $m = intval(substr($this->current_date, 3, 2));
             $y = intval('20'.substr($this->current_date, 8, 2));
 
-            $date_start = gmdate("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
-            $date_end   = gmdate("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
+            $date_start = date("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
+            $date_end   = date("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
 
             $date_related_where = " && (`datetime` >= '".$this->db->quote($date_start)."' && `datetime` <= '".$this->db->quote($date_end)."')";
 
             if($gt_id > 0){
-                $gt_id = " && `id` > ".intval($gt_id);
+                $gt_id = " && `id` >= ".intval($gt_id);
             }else{
                 $gt_id = "";
             };

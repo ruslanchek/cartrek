@@ -1128,3 +1128,32 @@ footer {
 #focus {
     display: none;
 }
+
+button.toggler {
+    position: relative;
+    padding-left: 25px;
+}
+
+button.toggler i {
+    width: 13px;
+    height: 23px;
+    display: block;
+    position: absolute;
+    top: 50%;
+    margin-top: -12px;
+    left: 2px;
+    background-image: url(../img/sprite.png);
+}
+
+button.toggler-off i {
+    background-position: -104px -117px;
+}
+
+button.toggler-on i {
+    background-position: -117px -117px;
+}
+
+#togglers .btn {
+    float: right;
+    margin-left: 15px;
+}

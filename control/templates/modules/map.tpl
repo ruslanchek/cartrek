@@ -3,10 +3,12 @@
 
     <div class="fifth" id="cars-menu"></div>
 
-    <div class="third push-right">
+    <div class="sixth">
         <button id="focus" class="btn" title="Показать машины">Фокус</button>
-        <button id="auto-renew" class="btn" title="Обновить данные"></button>
+    </div>
 
+    <div class="third push-right" id="togglers">
+        <button id="auto-renew" class="btn" title="Автообновление"></button>
         <button id="show-path" class="btn" title="Показать путь"></button>
     </div>
 
