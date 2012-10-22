@@ -101,8 +101,17 @@ var leaflet_ctrl = {
         };
     },
 
-    drawAllThePath: function(car_id){
+    drawAllThePath: function(map_controller, car_id){
+        var latlngs = [],
+            car = map.cars_list[map.getCarIndexById(car_id)];
 
+        if(car.path_points){
+            for(var i = 0, l = car.path_points.length; i < l; i++){
+                latlngs.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
+            };
+        };
+
+        var polyline = L.polyline(latlngs, {color: car.color}).addTo(map_controller);
     },
 
     removeAllCurrentPositionMarkers: function(map_instance){
@@ -590,7 +599,7 @@ var map = {
             if(!this.current_car.path_points){
                 data_ctrl.getCarPath(this.current_car.id, false, function(data){
                     map.current_car.path_points = data;
-                    map.m_ctrl.drawAllThePath(map.current_car.id);
+                    map.m_ctrl.drawAllThePath(map.map, map.current_car.id);
                 });
             };
         };

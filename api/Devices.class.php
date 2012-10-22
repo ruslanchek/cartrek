@@ -166,6 +166,8 @@
                         `tracks`.`datetime` DESC
                 ";
 
+                print $query;
+
                 return $this->db->assocMulti($query);
             };
         }
