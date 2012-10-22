@@ -15,14 +15,14 @@
     <div id="map"></div>
 </div>
 
-<script src="/control/resources/raphael-layer/dist/rlayer.js"></script>
+<script src="/control/resources/mapping-tools/raphael-layer/dist/rlayer.js"></script>
 
-<link rel="stylesheet" href="/control/resources/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/control/resources/leaflet/dist/leaflet.ie.css" />
+    <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.ie.css" />
 <![endif]-->
 
-<script src="/control/resources/leaflet/dist/leaflet-src.js"></script>
-<script src="/control/resources/mapbox-wax/dist/wax.leaf.min.js"></script>
+<script src="/control/resources/mapping-tools/leaflet/dist/leaflet-src.js"></script>
+<script src="/control/resources/mapping-tools/mapbox-wax/dist/wax.leaf.min.js"></script>
 
 <script>map.init();</script>
