@@ -25,7 +25,7 @@
 
                         case 'getPoints' : {
                             header('Content-type: application/json');
-                            print json_encode($this->devices->getPoints($_GET['device_id']));
+                            print json_encode($this->devices->getPoints($_GET['device_id'], $_GET['last_point_id']));
                         }; break;
 
                         case 'setCurrentDate' : {

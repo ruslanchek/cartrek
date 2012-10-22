@@ -247,7 +247,7 @@
             return $this->db->assocItem($query);
         }
 
-        public function getPoints($id){
+        public function getPoints($id, $gt_id){
             $d = intval(substr($this->current_date, 0, 2));
             $m = intval(substr($this->current_date, 3, 2));
             $y = intval('20'.substr($this->current_date, 8, 2));
@@ -256,6 +256,12 @@
             $date_end   = gmdate("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
 
             $date_related_where = " && (`datetime` >= '".$this->db->quote($date_start)."' && `datetime` <= '".$this->db->quote($date_end)."')";
+
+            if($gt_id > 0){
+                $gt_id = " && `id` > ".intval($gt_id);
+            }else{
+                $gt_id = "";
+            };
 
             $query = "
                 SELECT
@@ -270,7 +276,7 @@
                     `tracks`
                 WHERE
                     `device_id` = '".$this->db->quote($id)."'
-                    ".$date_related_where."
+                    ".$date_related_where.$gt_id."
                 ORDER BY
                     `datetime` ASC
             ";

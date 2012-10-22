@@ -1,100 +1,3 @@
-var map_box_ctrl = {
-    markers_layer: null,
-
-    createMap: function(m_options){
-        var map_instance = mapbox.map('map');
-
-        map_instance.addLayer(mapbox.layer().id('ruslanchek.map-5sa7s6em'));
-        map_instance.centerzoom(m_options.coordinates, m_options.zoom);
-        map_instance.smooth(true);
-
-        this.markers_layer = mapbox.markers.layer();
-
-        return map_instance;
-    },
-
-    drawCurrentPositionMarkersGroup: function(map_instance, data){
-        map_instance.removeLayer(this.markers_layer);
-
-        var features = [];
-
-        for(var i = 0, l = data.length; i < l; i++){
-            var on_map = false;
-
-            if(data[i].lat && data[i].lon){
-                features.push({
-                    geometry: {
-                        type        : "Point",
-                        coordinates : [data[i].lon, data[i].lat]
-                    },
-                    properties: {
-                        id          : data[i].id + 1,
-                        car_id      : data[i].id,
-                        image       : core.map_tools.getHeadingIcon(data[i].heading)
-                    }
-                });
-
-                on_map = true;
-            }else{
-                map.cars_list[map.getCarIndexById(data[i].id)].on_map = on_map;
-            };
-        };
-
-        this.markers_layer
-            .features(features)
-            .key(function(f){
-                return f.properties.id;
-            });
-
-        var interaction = mapbox.markers.interaction(this.markers_layer);
-
-        this.markers_layer.factory(function(f) {
-            var img = document.createElement('img');
-            img.className = 'marker-image';
-            img.setAttribute('src', f.properties.image);
-            return img;
-        });
-
-        map_instance.addLayer(this.markers_layer).setExtent(this.markers_layer.extent());
-
-        interaction.formatter(function(feature) {
-            var o = '<a target="_blank" href="' + feature.properties.id + '">' +
-                '<h2>' + feature.properties.id + '</h2>' +
-                '</a>';
-
-            return o;
-        });
-    },
-
-    changeCurrentPositionMarkersData: function(map_instance, data){
-        var features = [];
-
-        for(var i = 0, l = data.length; i < l; i++){
-            if(data[i].lat && data[i].lon){
-                features.push({
-                    geometry: {
-                        type        : "Point",
-                        coordinates : [data[i].lon, data[i].lat]
-                    },
-                    properties: {
-                        id          : data[i].id + 1,
-                        car_id      : data[i].id,
-                        image       : core.map_tools.getHeadingIcon(data[i].heading)
-                    }
-                });
-            };
-        };
-
-        this.markers_layer.features(features);
-
-        //map_instance.setExtent(this.markers_layer.extent())
-    },
-
-    focusToAllMarkers: function(map_instance){
-        map_instance.setExtent(this.markers_layer.extent())
-    }
-};
-
 var leaflet_ctrl = {
     cp_group: null,
 
@@ -145,6 +48,7 @@ var leaflet_ctrl = {
         });
 
         car.cp_marker = marker;
+        car.last_point_id = data.point_id;
 
         return marker;
     },
@@ -175,6 +79,9 @@ var leaflet_ctrl = {
     },
 
     updateCurrentPositionMarker: function(marker, data){
+        var car = map.cars_list[map.getCarIndexById(data.id)];
+        car.last_point_id = data.point_id;
+
         marker.setLatLng(new L.LatLng(data.lat, data.lon));
         marker.setIcon(this.icons.headingIcon(data.heading));
         marker.update();
@@ -192,6 +99,10 @@ var leaflet_ctrl = {
                 };
             };
         };
+    },
+
+    drawAllThePath: function(car_id){
+
     },
 
     removeAllCurrentPositionMarkers: function(map_instance){
@@ -232,13 +143,14 @@ var data_ctrl = {
         console.log('error')
     },
 
-    getCarPath: function(car_id, callback){
+    getCarPath: function(car_id, last_point_id, callback){
         this.loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
-                action      : 'getPoints',
-                date        : map.date,
-                device_id   : car_id
+                action          : 'getPoints',
+                date            : map.date,
+                device_id       : car_id,
+                last_point_id   : (last_point_id) ? last_point_id : '0'
             },
             dataType : 'json',
             type : 'get',
@@ -675,13 +587,10 @@ var map = {
 
     drawCarPath: function(){
         if(this.current_car && this.current_car.cp_marker && this.show_car_path){
-            if(this.current_car.path_points){
+            if(!this.current_car.path_points){
                 data_ctrl.getCarPath(this.current_car.id, false, function(data){
-
-                });
-            }else{
-                data_ctrl.getCarPath(this.current_car.id, false, function(data){
-
+                    map.current_car.path_points = data;
+                    map.m_ctrl.drawAllThePath(map.current_car.id);
                 });
             };
         };
