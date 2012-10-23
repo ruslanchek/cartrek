@@ -61,6 +61,10 @@ var leaflet_ctrl = {
             this.cp_group.clearLayers();
         };
 
+        if(this.path){
+            this.removeAllThePath(map_instance);
+        };
+
         if(data){
             var markers = [];
 
