@@ -473,7 +473,8 @@ var map = {
         }else{
             this.hash = {
                 fleet: 'all',
-                car: 'all'
+                car: 'all',
+                timemachine: this.date.getDate() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear()
             };
         };
 
