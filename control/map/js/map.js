@@ -695,6 +695,12 @@ var map = {
 
             hash = '#' + hash;
 
+        if(h && h.timemachine){
+            var current = hash.timemachine;
+        }else{
+            var current = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear();
+        };
+
         while(i > 0){
             var hs = '';
 
@@ -702,9 +708,10 @@ var map = {
                 hs = hs+'&';
             };
 
-            var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear();
+            var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear(),
+                isactive = (current == date_str) ? ' active' : '';
 
-            html += '<a class="day" style="left: '+ (3.3333333 * i) +'%" href="' + hash + hs + 'timemachine=' + date_str + '" data-day="'+date_str+'"></a>';
+            html += '<a class="day'+isactive+'" style="left: '+ (3.3333333 * i) +'%" href="' + hash + hs + 'timemachine=' + date_str + '" data-day="'+date_str+'"></a>';
 
             i--;
 
@@ -716,6 +723,8 @@ var map = {
         $('#time-machine .days .day').off('click').on('click', function(e){
             $('#time-machine .days .day').removeClass('active').removeClass('nearest');
             $(this).addClass('active');
+
+            document.location.hash = $(this).attr('href');
 
             e.preventDefault();
         });

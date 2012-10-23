@@ -1176,6 +1176,7 @@ button.toggler-on i {
 
     transition: width 80ms linear;
     -webkit-transition: width 80ms linear;
+
     transition: background 80ms linear;
     -webkit-transition: background 80ms linear;
 }
