@@ -313,6 +313,8 @@ var map = {
     map: null,
     date: null,
 
+    initialized: false,
+
     current_fleet: null,
     current_car: null,
 
@@ -380,7 +382,13 @@ var map = {
             exclude     : exclude,
             items       : this.cars_list,
             onChange    : function(val){
-                document.location.hash = '#fleet='+fleet_id+'&car='+val;
+                var tm_hash;
+
+                if(map.hash && map.hash.timemachine && map.hash.timemachine != ''){
+                    tm_hash = '&timemachine='+map.hash.timemachine;
+                };
+
+                document.location.hash = '#fleet='+fleet_id+'&car='+val+tm_hash;
             }
         });
     },
@@ -395,7 +403,13 @@ var map = {
             value_name  : 'name',
             items       : this.fleets_list,
             onChange    : function(val){
-                document.location.hash = '#fleet='+val;
+                var tm_hash;
+
+                if(map.hash && map.hash.timemachine && map.hash.timemachine != ''){
+                    tm_hash = '&timemachine='+map.hash.timemachine;
+                };
+
+                document.location.hash = '#fleet='+val+tm_hash;
                 map.createCarsSelect(val);
             }
         });
@@ -445,6 +459,14 @@ var map = {
 
             if(!new_hash.car){
                 new_hash.car = 'all';
+            };
+
+            if(!new_hash.timemachine){
+                new_hash.timemachine = this.date.getDate() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear();
+            }else{
+                if(new_hash.timemachine != this.hash.timemachine){
+                    this.changeDate(core.utilities.timestampToDateYearLast(new_hash.timemachine));
+                };
             };
 
             $.extend(this.hash, new_hash);
@@ -511,6 +533,7 @@ var map = {
             data_ctrl.getDynamicCarsData(cars_ids, options, function(data){
                 //Запускаем функцию отрисовки динамических данных о тачке или группе тачек
                 map.drawDynamicCarsData(data, options);
+                map.initialized = true;
             });
         };
     },
@@ -693,10 +716,21 @@ var map = {
         this.updateAllCarsData();
     },
 
+    setDateByHash: function(){
+        var hash = core.ui.getHashData();
+
+        if(hash && hash.timemachine){
+            this.setDate(core.utilities.timestampToDateYearLast(hash.timemachine));
+        }else{
+            this.setDate(new Date());
+        };
+    },
+
     bindControls: function(){
         //Отлеживаем событие изменения хеша
         $(window).on('hashchange', function() {
             map.renewOptions();
+            map.setDateByHash();
         });
 
         $('#focus').live('click', function(){
@@ -719,7 +753,7 @@ var map = {
     },
 
     init: function(){
-        this.setDate(new Date());
+        this.setDateByHash();
 
         //Проверяем на наличие отключенного автообновления в куках
         if($.cookie('auto-renew') == '0'){

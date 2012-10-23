@@ -632,6 +632,14 @@ core.utilities = {
         };
     },
 
+    timestampToDateYearLast: function(str){
+        if(str){
+            var t = str.split(/[- :]/);
+
+            return new Date(t[2], t[1]-1, t[0], t[3] || 0, t[4] || 0, t[5] || 0);
+        };
+    },
+
     convertInputToVolts: function(val){
         return ((val * 4.6 * 11)/4096).toFixed(2);
     },
