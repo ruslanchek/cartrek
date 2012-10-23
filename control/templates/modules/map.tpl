@@ -13,6 +13,8 @@
     </div>
 
     <div class="clear"></div>
+
+    <div id="time-machine"></div>
 </div>
 
 <div class="map-container">

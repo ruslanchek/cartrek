@@ -478,6 +478,8 @@ var map = {
             };
         };
 
+        this.createTimeMachine();
+
         //Создаем селекты
         this.createFleetsSelect();
         this.createCarsSelect(this.hash.fleet);
@@ -674,6 +676,43 @@ var map = {
         }else{
             $('#show-path').attr('class', 'btn toggler toggler-off').html('Путь<i></i>');
         };
+    },
+
+    createTimeMachine: function(){
+        var html = '',
+            i = 30,
+            date = new Date(),
+            hash = '',
+            h = core.ui.getHashData();
+
+            date.setDate(date.getDate() - 30);
+
+            if(h && h.fleet){
+                hash += 'fleet='+h.fleet;
+            };
+
+            if(h && h.car){
+                hash += '&car='+h.car;
+            };
+
+            hash = '#' + hash;
+
+        while(i > 0){
+            date.setDate(date.getDate() + 1);
+            var hs = '';
+
+            if(hash != '#'){
+                hs = hs+'&';
+            };
+
+            var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear();
+
+            html += '<a href="' + hash + hs + 'timemachine=' + date_str + '">'+date_str+'</a>';
+
+            i--;
+        };
+
+        $('#time-machine').html(html);
     },
 
     drawCarPath: function(forced){
