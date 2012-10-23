@@ -685,8 +685,6 @@ var map = {
             hash = '',
             h = core.ui.getHashData();
 
-            date.setDate(date.getDate() - 30);
-
             if(h && h.fleet){
                 hash += 'fleet='+h.fleet;
             };
@@ -698,7 +696,6 @@ var map = {
             hash = '#' + hash;
 
         while(i > 0){
-            date.setDate(date.getDate() + 1);
             var hs = '';
 
             if(hash != '#'){
@@ -707,12 +704,30 @@ var map = {
 
             var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear();
 
-            html += '<a href="' + hash + hs + 'timemachine=' + date_str + '">'+date_str+'</a>';
+            html += '<a class="day" style="left: '+ (3.3333333 * i) +'%" href="' + hash + hs + 'timemachine=' + date_str + '" data-day="'+date_str+'"></a>';
 
             i--;
+
+            date.setDate(date.getDate() - 1);
         };
 
-        $('#time-machine').html(html);
+        $('#time-machine .days').html(html);
+
+        $('#time-machine .days .day').off('click').on('click', function(e){
+            $('#time-machine .days .day').removeClass('active').removeClass('nearest');
+            $(this).addClass('active');
+
+            e.preventDefault();
+        });
+
+        $('#time-machine .days .day').off('hover').hover(function(e){
+            $('#time-machine .days .day').removeClass('nearest').removeClass('hover');
+            $(this).addClass('hover');
+            $(this).prev('.day').addClass('nearest');
+            $(this).next('.day').addClass('nearest');
+        }, function(){
+            $('#time-machine .days .day').removeClass('nearest').removeClass('hover');
+        });
     },
 
     drawCarPath: function(forced){

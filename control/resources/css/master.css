@@ -1157,3 +1157,46 @@ button.toggler-on i {
     float: right;
     margin-left: 15px;
 }
+
+#time-machine .days {
+    position: relative;
+    height: 50px;
+    margin-left: 11%;
+    width: 75%;
+}
+
+#time-machine .days .day {
+    height: 35px;
+    width: 15px;
+    background: #eee;
+    top: 15px;
+    position: absolute;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+
+    transition: width 80ms linear;
+    -webkit-transition: width 80ms linear;
+    transition: background 80ms linear;
+    -webkit-transition: background 80ms linear;
+}
+
+#time-machine .days .day.hover {
+    background: #999;
+    height: 40px;
+    width: 19px;
+    margin: 0 0 0 -2px;
+}
+
+#time-machine .days .day.nearest {
+    background: #ccc;
+    height: 37px;
+    width: 17px;
+    margin: 0 0 0 -1px;
+}
+
+#time-machine .days .day.active {
+    background: #1e90ff;
+    height: 40px;
+    width: 19px;
+    margin: 0 0 0 -2px;
+}

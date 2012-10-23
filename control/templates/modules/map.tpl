@@ -14,7 +14,7 @@
 
     <div class="clear"></div>
 
-    <div id="time-machine"></div>
+    <div id="time-machine"><div class="days"></div></div>
 </div>
 
 <div class="map-container">
