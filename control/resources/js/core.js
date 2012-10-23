@@ -358,9 +358,9 @@ core.loading = {
         };
 
         this.global_loadin_interval = setInterval(function(){
-            core.loading.c += 1;
+            core.loading.c += 2;
             $('div.global-loading-bar').css("backgroundPosition", "0 " + core.loading.c+"px");
-        }, 10);
+        }, 8);
 
         $('div.global-loading-bar').animate({
             height: 5,

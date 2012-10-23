@@ -19,11 +19,14 @@ var leaflet_ctrl = {
     },
 
     createMap: function(m_options, callback){
-        wax.tilejson('http://a.tiles.mapbox.com/v3/ruslanchek.map-5sa7s6em.jsonp',
+        wax.tilejson(
+            'http://a.tiles.mapbox.com/v3/ruslanchek.map-5sa7s6em.jsonp',
             function(tilejson){
                 var map_instance = new L.Map('map');
+
                 map_instance.addLayer(new wax.leaf.connector(tilejson));
                 map_instance.setView(new L.LatLng(m_options.coordinates.lat, m_options.coordinates.lon), m_options.zoom);
+                map_instance.addControl(new L.Control.FullScreen());
 
                 var interaction = wax.leaf.interaction(map_instance, tilejson);
 
@@ -194,8 +197,6 @@ var data_ctrl = {
     },
 
     getCarPath: function(car_id, last_point_id, callback){
-        console.log(map.date)
-
         this.loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
@@ -462,7 +463,7 @@ var map = {
             };
 
             if(!new_hash.timemachine){
-                new_hash.timemachine = this.date.getDate() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear();
+                new_hash.timemachine = this.date;
             }else{
                 if(new_hash.timemachine != this.hash.timemachine){
                     this.changeDate(core.utilities.timestampToDateYearLast(new_hash.timemachine));
@@ -474,7 +475,7 @@ var map = {
             this.hash = {
                 fleet: 'all',
                 car: 'all',
-                timemachine: this.date.getDate() + '-' + (this.date.getMonth() + 1) + '-' + this.date.getFullYear()
+                timemachine: this.date
             };
         };
 
@@ -683,7 +684,8 @@ var map = {
             i = 30,
             date = new Date(),
             hash = '',
-            h = core.ui.getHashData();
+            h = core.ui.getHashData(),
+            current;
 
             if(h && h.fleet){
                 hash += 'fleet='+h.fleet;
@@ -696,9 +698,9 @@ var map = {
             hash = '#' + hash;
 
         if(h && h.timemachine){
-            var current = hash.timemachine;
+            current = h.timemachine;
         }else{
-            var current = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear();
+            current = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear();
         };
 
         while(i > 0){
@@ -711,6 +713,9 @@ var map = {
             var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear(),
                 isactive = (current == date_str) ? ' active' : '';
 
+            console.log('date_str', date_str)
+            console.log('current', current)
+
             html += '<a class="day'+isactive+'" style="left: '+ (3.3333333 * i) +'%" href="' + hash + hs + 'timemachine=' + date_str + '" data-day="'+date_str+'"></a>';
 
             i--;
@@ -721,7 +726,7 @@ var map = {
         $('#time-machine .days').html(html);
 
         $('#time-machine .days .day').off('click').on('click', function(e){
-            $('#time-machine .days .day').removeClass('active').removeClass('nearest');
+            $('#time-machine .days .day').removeClass('active');
             $(this).addClass('active');
 
             document.location.hash = $(this).attr('href');
@@ -730,12 +735,10 @@ var map = {
         });
 
         $('#time-machine .days .day').off('hover').hover(function(e){
-            $('#time-machine .days .day').removeClass('nearest').removeClass('hover');
+            $('#time-machine .days .day').removeClass('hover');
             $(this).addClass('hover');
-            $(this).prev('.day').addClass('nearest');
-            $(this).next('.day').addClass('nearest');
         }, function(){
-            $('#time-machine .days .day').removeClass('nearest').removeClass('hover');
+            $('#time-machine .days .day').removeClass('hover');
         });
     },
 

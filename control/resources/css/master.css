@@ -1083,11 +1083,36 @@ footer {
     width: 100%;
 }
 
+#map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
+#map:-moz-full-screen { width: 100% !important; height: 100% !important; }
+#map:full-screen { width: 100% !important; height: 100% !important; }
+
+.leaflet-control-zoom-fullscreen { background-image: url(../mapping-tools/leaflet/plugins/leaflet-fullscreen/icon-fullscreen.png); }
+.leaflet-control-zoom-fullscreen.last { margin-top: 5px }
+
 .map-container {
     position: relative;
-    padding-bottom: 16px;
+    padding-bottom: 15px;
     height: 400px;
     border: 1px solid #ddd;
+}
+
+.map-container .shadow-top,
+.map-container .shadow-bottom {
+    height: 14px;
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+}
+
+.map-container .shadow-top {
+    background: url(../img/shadow-top.png) no-repeat center bottom;
+    top: 0;
+}
+
+.map-container .shadow-bottom {
+    background: url(../img/shadow-bottom.png) no-repeat top center;
+    bottom: 15px;
 }
 
 .map-container .ui-resizable-s {
@@ -1098,7 +1123,7 @@ footer {
     border-bottom: 1px solid #ccc;
     cursor: ns-resize;
     position: absolute;
-    bottom: 0px;
+    bottom: -1px;
 }
 
 .map-top-panel {
@@ -1161,43 +1186,18 @@ button.toggler-on i {
 #time-machine .days {
     position: relative;
     height: 50px;
-    margin-left: 11%;
-    width: 75%;
+    background: #eee;
+    border-bottom: 1px solid #fff;
 }
 
 #time-machine .days .day {
-    height: 35px;
-    width: 15px;
-    background: #eee;
-    top: 15px;
-    position: absolute;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
 
-    transition: width 80ms linear;
-    -webkit-transition: width 80ms linear;
-
-    transition: background 80ms linear;
-    -webkit-transition: background 80ms linear;
 }
 
 #time-machine .days .day.hover {
-    background: #999;
-    height: 40px;
-    width: 19px;
-    margin: 0 0 0 -2px;
-}
 
-#time-machine .days .day.nearest {
-    background: #ccc;
-    height: 37px;
-    width: 17px;
-    margin: 0 0 0 -1px;
 }
 
 #time-machine .days .day.active {
-    background: #1e90ff;
-    height: 40px;
-    width: 19px;
-    margin: 0 0 0 -2px;
+
 }

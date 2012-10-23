@@ -13,11 +13,15 @@
     </div>
 
     <div class="clear"></div>
+</div>
 
-    <div id="time-machine"><div class="days"></div></div>
+<div id="time-machine">
+    <div class="days"></div>
 </div>
 
 <div class="map-container">
+    <div class="shadow-top"></div>
+    <div class="shadow-bottom"></div>
     <div id="map"></div>
 </div>
 
@@ -27,8 +31,9 @@
 <![endif]-->
 
 <script src="/control/resources/mapping-tools/leaflet/dist/leaflet-src.js"></script>
-{*<script src="/control/resources/mapping-tools/raphael-layer/debug/libs/raphael/raphael-min.js"></script>
-<script src="/control/resources/mapping-tools/raphael-layer/dist/rlayer.js"></script>*}
+<script src="/control/resources/mapping-tools/raphael-layer/debug/libs/raphael/raphael-min.js"></script>
+<script src="/control/resources/mapping-tools/raphael-layer/dist/rlayer.js"></script>
 <script src="/control/resources/mapping-tools/mapbox-wax/dist/wax.leaf.min.js"></script>
+<script src="/control/resources/mapping-tools/leaflet/plugins/leaflet-fullscreen/Control.FullScreen.js"></script>
 
 <script>map.init();</script>
