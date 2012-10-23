@@ -11,7 +11,14 @@
             parent::__construct();
 
             $this->checkForDevices();
-            $this->setCurrentDate('22-10-2012'); //Сделать прием даты через AJAX
+
+            if(isset($_GET['date'])){
+                $date = $_GET['date'];
+            }else{
+                $date = false;
+            };
+
+            $this->setCurrentDate($date); //Сделать прием даты через AJAX
         }
 
         public function checkForDevices(){

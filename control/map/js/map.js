@@ -194,6 +194,8 @@ var data_ctrl = {
     },
 
     getCarPath: function(car_id, last_point_id, callback){
+        console.log(map.date)
+
         this.loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
@@ -224,6 +226,7 @@ var data_ctrl = {
 
     //Загружаем данные о группах и тачках с сервера
     getUserFleetsAndDevices: function(callback){
+        console.log(map.date)
         this.loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
@@ -252,11 +255,11 @@ var data_ctrl = {
 
     //Загружаем динамические данные тачек (координаты, скорость, HDOP и пр.)
     getDynamicCarsData: function(cars, options, callback){
+        console.log(map.date)
         this.loading_process = $.ajax({
-            url : '/control/map/?ajax&action=getDynamicDevicesData',
+            url : '/control/map/?ajax&action=getDynamicDevicesData&date='+map.date,
             data : {
-                cars    : JSON.stringify(cars),
-                date    : map.date
+                cars    : JSON.stringify(cars)
             },
             dataType : 'json',
             type : 'post',
@@ -482,7 +485,7 @@ var map = {
                 this.m_ctrl.drawCurrentPositionMarkersGroup(this.map, data);
             };
 
-            this.drawCarPath();
+            this.drawCarPath(false);
         };
     },
 
@@ -660,6 +663,36 @@ var map = {
         };
     },
 
+    setDate: function(date){
+        this.date = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+    },
+
+    updateAllCarsData: function(){
+        this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
+        this.m_ctrl.removeAllThePath(this.map);
+
+        if(this.current_car){
+            this.current_car.cp_marker = false;
+            this.current_car.path_points = false;
+            this.current_car.last_point_id = false;
+        };
+
+        if(this.cars_list){
+            for(var i = 0, l = this.cars_list; i < l; i++){
+                this.cars_list[i].cp_marker = false;
+                this.cars_list[i].path_points = false;
+                this.cars_list[i].last_point_id = false;
+            };
+        };
+
+        this.drawCars({renew: false});
+    },
+
+    changeDate: function(date){
+        this.setDate(date);
+        this.updateAllCarsData();
+    },
+
     bindControls: function(){
         //Отлеживаем событие изменения хеша
         $(window).on('hashchange', function() {
@@ -686,7 +719,7 @@ var map = {
     },
 
     init: function(){
-        this.date = new Date();
+        this.setDate(new Date());
 
         //Проверяем на наличие отключенного автообновления в куках
         if($.cookie('auto-renew') == '0'){
