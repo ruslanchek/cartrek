@@ -184,6 +184,7 @@ var leaflet_ctrl = {
             markers = [],
             car = map.cars_list[map.getCarIndexById(car_id)];
 
+        //Если путевые маркеры уже отрисованы, то удаляем их
         if(this.pm_group){
             this.pm_group.clearLayers();
         };
@@ -210,7 +211,7 @@ var leaflet_ctrl = {
             smoothFactor: 4,
             weight: 3,
             opacity: 0.5,
-            dashArray: '5, 5'
+            dashArray: '1, 5'
         }).addTo(map_instance);
 
         //Ставим флаг, чтобы фокусировка роизошла только
