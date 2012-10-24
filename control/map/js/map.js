@@ -1,10 +1,11 @@
 var leaflet_ctrl = {
     cp_group: null,
+    pm_group: null,
     path: null,
     first_loaded_car_id: false,
 
     icons: {
-        headingIcon: function(heading){
+        heading: function(heading){
             return L.icon({
                 iconUrl     : core.map_tools.getHeadingIcon(heading),
                 shadowUrl   : '/control/map/img/markers/heading/flat_shadow.png',
@@ -15,7 +16,25 @@ var leaflet_ctrl = {
                 shadowAnchor: [15, 12],  // the same for the shadow
                 popupAnchor : [0, -8] // point from which the popup should open relative to the iconAnchor
             });
-        }
+        },
+        stop: function(){
+            return L.icon({
+                iconUrl     : '/control/map/img/markers/waypoint_stop.png',
+
+                iconSize    : [7, 7], // size of the icon
+                iconAnchor  : [3, 3], // point of the icon which will correspond to marker's location
+                popupAnchor : [0, -4] // point from which the popup should open relative to the iconAnchor
+            });
+        },
+        waypoint: function(){
+            return L.icon({
+                iconUrl     : '/control/map/img/markers/waypoint.png',
+
+                iconSize    : [7, 7], // size of the icon
+                iconAnchor  : [3, 3], // point of the icon which will correspond to marker's location
+                popupAnchor : [0, -4] // point from which the popup should open relative to the iconAnchor
+            });
+        },
     },
 
     createMap: function(m_options, callback){
@@ -36,13 +55,13 @@ var leaflet_ctrl = {
     },
 
     createCurrentPositionMarker: function(map_instance, data){
-        var car = map.cars_list[map.getCarIndexById(data.id)];
-        var marker = L.marker(
-            [data.lat, data.lon], {
-                icon: this.icons.headingIcon(data.heading),
-                id: data.id
-            }
-        );
+        var car = map.cars_list[map.getCarIndexById(data.id)],
+            marker = L.marker(
+                [data.lat, data.lon], {
+                    icon: this.icons.heading(data.heading),
+                    id: data.id
+                }
+            );
 
         /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
         map_instance.addLayer(m);*/
@@ -93,10 +112,12 @@ var leaflet_ctrl = {
         car.last_point_id = data.point_id;
 
         marker.setLatLng(new L.LatLng(data.lat, data.lon));
-        marker.setIcon(this.icons.headingIcon(data.heading));
+        marker.setIcon(this.icons.heading(data.heading));
         marker.update();
 
         if(map.current_car && map.show_car_path){
+            //Если у текущей тачки нет ни одной точки пути,
+            // то создаем точку, чтобы отрисовать путь
             if(!map.current_car.path_points){
                 map.current_car.path_points = [];
             };
@@ -111,8 +132,15 @@ var leaflet_ctrl = {
             if(data[i].lat && data[i].lon){
                 var car = map.cars_list[map.getCarIndexById(data[i].id)];
 
+                //Если тачка уже имеет маркер текущего положения,
+                // то обновляем положение
                 if(car && car.cp_marker){
                     this.updateCurrentPositionMarker(car.cp_marker, data[i]);
+
+                //Если нет, то создаем маркер текущего положения.
+                // Это нужно тогда, когда машина выбрана,
+                // а данных в базе еще нет, вдруг трекер отправляет точку,
+                // и машина появляется на карте.
                 }else{
                     this.createCurrentPositionMarker(map_instance, data[i]);
                 };
@@ -120,21 +148,70 @@ var leaflet_ctrl = {
         };
     },
 
+    createPathMarker: function(map_instance, car, point){
+        var type;
+
+        if(parseFloat(point.speed) <= 0){
+            type = 'stop';
+        }else{
+            type = 'run';
+        };
+
+        switch(type){
+            case 'stop' : {
+                var marker = L.marker(
+                    [point.lat, point.lon], {
+                        icon: this.icons.stop(),
+                        id: point.id,
+                        car_id: car.id
+                    }
+                );
+
+                marker.on('click', function(){
+                    this.bindPopup('stop');
+                    this.openPopup();
+                });
+            }; break;
+        };
+
+        if(marker){
+            return marker;
+        };
+    },
+
     drawAllThePath: function(map_instance, car_id){
         var latlngs = [],
+            markers = [],
             car = map.cars_list[map.getCarIndexById(car_id)];
+
+        if(this.pm_group){
+            this.pm_group.clearLayers();
+        };
 
         if(car.path_points){
             for(var i = 0, l = car.path_points.length; i < l; i++){
                 latlngs.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
+                var marker;
+                if(marker = this.createPathMarker(map_instance, car, car.path_points[i])){
+                    markers.push(marker);
+                };
             };
         };
 
+        this.pm_group = L.layerGroup(markers).addTo(map_instance);
+
+        //Если путь уже отрисован, то удаляем его
         if(this.path){
             map_instance.removeLayer(this.path);
         };
 
-        this.path = L.polyline(latlngs, {color: car.color}).addTo(map_instance);
+        this.path = L.polyline(latlngs, {
+            color: car.color,
+            smoothFactor: 4,
+            weight: 3,
+            opacity: 0.5,
+            dashArray: '5, 5'
+        }).addTo(map_instance);
 
         //Ставим флаг, чтобы фокусировка роизошла только
         // при смене авто, а не каждое обновление пути
@@ -227,7 +304,6 @@ var data_ctrl = {
 
     //Загружаем данные о группах и тачках с сервера
     getUserFleetsAndDevices: function(callback){
-        console.log(map.date)
         this.loading_process = $.ajax({
             url : '/control/map/?ajax',
             data : {
@@ -256,7 +332,6 @@ var data_ctrl = {
 
     //Загружаем динамические данные тачек (координаты, скорость, HDOP и пр.)
     getDynamicCarsData: function(cars, options, callback){
-        console.log(map.date)
         this.loading_process = $.ajax({
             url : '/control/map/?ajax&action=getDynamicDevicesData&date='+map.date,
             data : {
@@ -712,9 +787,6 @@ var map = {
 
             var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear(),
                 isactive = (current == date_str) ? ' active' : '';
-
-            console.log('date_str', date_str)
-            console.log('current', current)
 
             html += '<a class="day'+isactive+'" style="left: '+ (3.3333333 * i) +'%" href="' + hash + hs + 'timemachine=' + date_str + '" data-day="'+date_str+'"></a>';
 
