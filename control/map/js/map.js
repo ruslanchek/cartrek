@@ -232,6 +232,7 @@ var leaflet_ctrl = {
 
         if(car && car.path_points){
             car.stop_points             = 0;
+            car.max_speed               = 0;
             car.average_speed           = 0;
             car.average_speed_marker    = null;
 
@@ -250,27 +251,33 @@ var leaflet_ctrl = {
                     car.stop_points++;
                 };
 
-                if(car.path_points[i].speed > car.average_speed){
-                    car.average_speed = car.path_points[i].speed;
-                    car.average_speed_marker = markers;
+                car.path_points[i].speed = parseFloat(car.path_points[i].speed);
+
+                if(car.path_points[i].speed > car.max_speed){
+                    car.max_speed = car.path_points[i].speed;
+                    car.max_speed_marker = marker;
                 };
+            };
+
+            this.pm_group = L.layerGroup(markers).addTo(map_instance);
+
+            //Если путь уже отрисован, то удаляем его
+            if(this.path){
+                map_instance.removeLayer(this.path);
+            };
+
+            if(latlngs && latlngs.length > 0){
+                this.path = L.polyline(latlngs, {
+                    color: car.color,
+                    smoothFactor: 2,
+                    weight: 3,
+                    opacity: 0.5
+                    //dashArray: '1, 5'
+                }).addTo(map_instance);
             };
         };
 
-        this.pm_group = L.layerGroup(markers).addTo(map_instance);
 
-        //Если путь уже отрисован, то удаляем его
-        if(this.path){
-            map_instance.removeLayer(this.path);
-        };
-
-        this.path = L.polyline(latlngs, {
-            color: car.color,
-            smoothFactor: 2,
-            weight: 3,
-            opacity: 0.5
-            //dashArray: '1, 5'
-        }).addTo(map_instance);
 
         //Ставим флаг, чтобы фокусировка роизошла только
         // при смене авто, а не каждое обновление пути
@@ -287,6 +294,7 @@ var leaflet_ctrl = {
             if(this.pm_group){
                 //Если путевые маркеры уже отрисованы, то удаляем их
                 this.pm_group.clearLayers();
+                this.path_points_length = 0;
             };
         };
     },
@@ -630,7 +638,7 @@ var map = {
             this.hash = {
                 fleet: 'all',
                 car: 'all',
-                timemachine: this.date
+                timemachine:this.date
             };
         };
 
@@ -800,7 +808,7 @@ var map = {
             $.cookie('car-path', '0', core.options.cookie_options);
 
             this.m_ctrl.removeAllThePath(this.map);
-            this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
+            //this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
             //this.m_ctrl.focus(this.map);
         };
 
@@ -901,10 +909,25 @@ var map = {
         if(this.current_car && this.current_car.cp_marker && this.show_car_path){
             if(!this.current_car.path_points || forced === true){
                 data_ctrl.getCarPath(this.current_car.id, false, function(data){
+                    map.current_car.path_points = [];
                     map.current_car.path_points = data;
                     map.current_car.path_points.push(map.current_car.last_point);
                     map.m_ctrl.drawAllThePath(map.map, map.current_car.id);
+                    map.drawBottomPanels();
                 });
+            }else{
+                if(this.current_car && this.current_car.path_points){
+                    if(this.current_car.path_points.length > 0 && this.current_car.last_point){
+                        if(!this.current_car.path_points){
+                            this.current_car.path_points = [];
+                        };
+
+                        this.current_car.path_points.push(this.current_car.last_point);
+                    };
+                };
+
+                this.m_ctrl.drawAllThePath(this.map, this.current_car.id);
+                this.drawBottomPanels();
             };
         };
     },
@@ -915,7 +938,7 @@ var map = {
             panel3_html = '';
 
         if(this.current_car){
-            panel1_html +=  '<h3>Статус обновления данных</h3>' +
+            panel1_html +=  '<h3>Обновления данных</h3>' +
                             '<table>' +
                                 '<tr title="'+core.utilities.humanizeDate(this.current_car.last_point_date)+'">' +
                                     '<th>Координаты</th>' +
@@ -926,18 +949,18 @@ var map = {
                                     '<th>Статус</th>' +
                                     '<th>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</th>' +
                                 '</tr>' +
-                           '</table>';
+                            '</table>';
 
-            panel2_html +=  '<h3>Статус обновления данных</h3>' +
+            panel2_html +=  '<h3>Метрика</h3>' +
                             '<table>' +
                                 '<tr>' +
-                                    '<th>stop_points</th>' +
+                                    '<th>Остановок</th>' +
                                     '<th>'+this.current_car.stop_points+'</th>' +
                                 '</tr>' +
 
                                 '<tr>' +
-                                    '<th>average_speed</th>' +
-                                    '<th>'+this.current_car.average_speed+'</th>' +
+                                    '<th>Макс. скорость</th>' +
+                                    '<th>'+core.utilities.convertKnotsToKms(this.current_car.max_speed)+' км/ч</th>' +
                                 '</tr>' +
                            '</table>';
         };

@@ -26,9 +26,9 @@
 </div>
 
 <div class="map-bottom-panel">
-    <div class="third bottom-panel" id="bottom-panel-1"><div class="panel-content"></div></div>
-    <div class="third bottom-panel" id="bottom-panel-2"><div class="panel-content"></div></div>
-    <div class="third bottom-panel" id="bottom-panel-3"><div class="panel-content"></div></div>
+    <div class="quarter bottom-panel" id="bottom-panel-1"><div class="panel-content"></div></div>
+    <div class="quarter bottom-panel" id="bottom-panel-2"><div class="panel-content"></div></div>
+    <div class="quarter bottom-panel" id="bottom-panel-3"><div class="panel-content"></div></div>
 
     <div class="clear"></div>
 </div>
