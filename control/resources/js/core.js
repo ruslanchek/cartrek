@@ -609,6 +609,15 @@ core.utilities = {
 
                 return d+' '+month_names[parseInt(m - 1)]+', '+y;
             }; break;
+
+            default : {
+
+                d = value.getDate(),
+                m = value.getMonth(),
+                y = value.getFullYear();
+
+                return d+' '+month_names[m]+', '+y;
+            };
         };
     },
 

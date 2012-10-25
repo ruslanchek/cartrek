@@ -1,12 +1,12 @@
 var leaflet_ctrl = {
-    cp_group: null,
-    pm_group: null,
-    path: null,
-    first_loaded_car_id: false,
-    path_points_length: 0,
+    cp_group            : null,
+    pm_group            : null,
+    path                : null,
+    first_loaded_car_id : false,
+    path_points_length  : 0,
 
     icons: {
-        heading: function(heading){
+        heading: function(heading, z){
             return L.icon({
                 iconUrl     : core.map_tools.getHeadingIcon(heading),
                 shadowUrl   : '/control/map/img/markers/heading/flat_shadow.png',
@@ -15,7 +15,7 @@ var leaflet_ctrl = {
                 shadowSize  : [30, 30], // size of the shadow
                 iconAnchor  : [8, 8], // point of the icon which will correspond to marker's location
                 shadowAnchor: [15, 12],  // the same for the shadow
-                popupAnchor : [0, -8] // point from which the popup should open relative to the iconAnchor
+                popupAnchor : [0, -8]
             });
         },
         stop: function(){
@@ -64,8 +64,19 @@ var leaflet_ctrl = {
                 }
             );
 
+        marker.setZIndexOffset(300000 + data.id);
+
         /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
         map_instance.addLayer(m);*/
+
+        marker.on("mouseover", function() {
+            this.setZIndexOffset(300000 + this.options.id + 10);
+        });
+
+        marker.on("mouseout", function() {
+            this.setZIndexOffset(300000 + this.options.id);
+        });
+
         marker.on('click', function(){
             this.bindPopup(map.getCurrentPositionPopupHtml(this.options.id));
             this.openPopup();
@@ -178,6 +189,14 @@ var leaflet_ctrl = {
                     }
                 );
 
+                marker.on("mouseover", function() {
+                    this.setZIndexOffset(300000 + car.id + 10);
+                });
+
+                marker.on("mouseout", function() {
+                    this.setZIndexOffset(1);
+                });
+
                 marker.on('click', function(){
                     this.bindPopup('stop');
                     this.openPopup();
@@ -212,6 +231,10 @@ var leaflet_ctrl = {
         };
 
         if(car && car.path_points){
+            car.stop_points             = 0;
+            car.average_speed           = 0;
+            car.average_speed_marker    = null;
+
             for(var i = 0, l = car.path_points.length; i < l; i++){
                 latlngs.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
 
@@ -221,6 +244,15 @@ var leaflet_ctrl = {
                     if((marker = this.createPathMarker(map_instance, car, car.path_points[i])) && car.last_point_id != car.path_points[i].id){
                         markers.push(marker);
                     };
+                };
+
+                if(car.path_points[i].speed <= 0){
+                    car.stop_points++;
+                };
+
+                if(car.path_points[i].speed > car.average_speed){
+                    car.average_speed = car.path_points[i].speed;
+                    car.average_speed_marker = markers;
                 };
             };
         };
@@ -719,17 +751,17 @@ var map = {
 
         if(this.current_car){
             if(this.current_car.last_point_date != null){
-                message =   '<p>На&nbsp;<b>'+this.date+'</b> ' +
+                message =   '<p>На&nbsp;<b>'+core.utilities.humanizeDate(this.date, 'COMMON')+'</b> ' +
                             'не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины <b>&laquo;'+this.current_car.name+'&raquo;</b>.</p>' +
-                            '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+this.current_car.last_point_date+'</b>.</p>';
+                            '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQL')+'</b>.</p>';
             }else{
                 message =  '<p>Для&nbsp;машины&nbsp;<b>&laquo;'+this.current_car.name+'&raquo;</b> нет ни одной отметки.</p>';
             };
         }else if(!this.current_car && this.current_fleet){
-            message =  '<p>На&nbsp;<b>'+this.date+'</b> ' +
+            message =  '<p>На&nbsp;<b>'+core.utilities.humanizeDate(this.date, 'COMMON')+'</b> ' +
                        'не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины в группе &laquo;'+this.current_fleet.name+'&raquo;.</p>';
         }else{
-            message =  '<p>На&nbsp;<b>'+this.date+'</b> ' +
+            message =  '<p>На&nbsp;<b>'+core.utilities.humanizeDate(this.date, 'COMMON')+'</b> ' +
                        'не&nbsp;зарегистрированно ни&nbsp;одной отметки, ни&nbsp;для&nbsp;одной&nbsp;машины.</p>';
         };
 
@@ -885,13 +917,27 @@ var map = {
         if(this.current_car){
             panel1_html +=  '<h3>Статус обновления данных</h3>' +
                             '<table>' +
-                                '<tr title="'+this.current_car.last_point_date+'">' +
-                                    '<th>Местоположение</th>' +
+                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_point_date)+'">' +
+                                    '<th>Координаты</th>' +
                                     '<th>'+core.utilities.dateRange(this.current_car.last_point_date, new Date())+'</th>' +
                                 '</tr>' +
-                                '<tr title="'+this.current_car.last_update+'">' +
+
+                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_update)+'">' +
                                     '<th>Статус</th>' +
                                     '<th>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</th>' +
+                                '</tr>' +
+                           '</table>';
+
+            panel2_html +=  '<h3>Статус обновления данных</h3>' +
+                            '<table>' +
+                                '<tr>' +
+                                    '<th>stop_points</th>' +
+                                    '<th>'+this.current_car.stop_points+'</th>' +
+                                '</tr>' +
+
+                                '<tr>' +
+                                    '<th>average_speed</th>' +
+                                    '<th>'+this.current_car.average_speed+'</th>' +
                                 '</tr>' +
                            '</table>';
         };
@@ -899,16 +945,6 @@ var map = {
         $('#bottom-panel-1 .panel-content').html(panel1_html);
         $('#bottom-panel-2 .panel-content').html(panel2_html);
         $('#bottom-panel-3 .panel-content').html(panel3_html);
-
-        var h = 0;
-
-        $('.bottom-panel').each(function(){
-            if($(this).height() > h){
-                h = $(this).height();
-            };
-        });
-
-        $('.bottom-panel').css({height: h});
     },
 
     setDate: function(date){

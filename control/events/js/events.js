@@ -62,7 +62,7 @@ core.events = {
         this.more_items = data.more_items;
 
         if(data.more_items){
-            $('#load_more').show();
+            //$('#load_more').show();
         };
 
         if(adding_method == 'prepend'){
@@ -84,7 +84,7 @@ core.events = {
                 cond    : core.events.cond
             },
             beforeSend: function(){
-                $('#load_more').hide();
+                //$('#load_more').hide();
 
                 if(core.events.events_loading_process){
                     core.events.events_loading_process.abort();
@@ -218,7 +218,7 @@ core.events = {
                 core.loading.unsetGlobalLoading();
                 $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                 $('#global_events_counter').hide();
-                $('#load_more').hide();
+                //$('#load_more').hide();
             },
             error: function(){
                 core.loading.unsetGlobalLoading();
@@ -247,7 +247,7 @@ core.events = {
 
                 if(core.events.cond == 'unreaded'){
                     $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
-                    $('#load_more').hide();
+                    //$('#load_more').hide();
                 };
             },
             error: function(){
