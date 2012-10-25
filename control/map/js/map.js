@@ -3,6 +3,7 @@ var leaflet_ctrl = {
     pm_group: null,
     path: null,
     first_loaded_car_id: false,
+    path_points_length: 0,
 
     icons: {
         heading: function(heading){
@@ -74,6 +75,7 @@ var leaflet_ctrl = {
         car.last_point_id   = data.point_id;
         car.last_point      = data;
         car.last_point_date = data.last_point_date;
+        car.last_update     = data.last_update;
 
         return marker;
     },
@@ -109,24 +111,30 @@ var leaflet_ctrl = {
 
     updateCurrentPositionMarker: function(marker, data){
         var car = map.cars_list[map.getCarIndexById(data.id)];
-        car.last_point_id = data.point_id;
 
-        marker.setLatLng(new L.LatLng(data.lat, data.lon));
-        marker.setIcon(this.icons.heading(data.heading));
-        marker.update();
+        car.last_point_date = data.last_point_date;
+        car.last_update     = data.last_update;
 
-        if(map.current_car && map.show_car_path){
-            //Если у текущей тачки нет ни одной точки пути,
-            // то создаем точку, чтобы отрисовать путь
-            if(!map.current_car.path_points){
-                map.current_car.path_points = [];
+        if(car.last_point_id != data.point_id){
+            car.last_point_id   = data.point_id;
+
+            marker.setLatLng(new L.LatLng(data.lat, data.lon));
+            marker.setIcon(this.icons.heading(data.heading));
+            marker.update();
+
+            if(map.current_car && map.show_car_path){
+                //Если у текущей тачки нет ни одной точки пути,
+                // то создаем точку, чтобы отрисовать путь
+                if(!map.current_car.path_points){
+                    map.current_car.path_points = [];
+                };
+
+                if(map.current_car.path_points[map.current_car.path_points.length-1].point_id != data.point_id){
+                    map.current_car.path_points.push(data);
+                };
+
+                this.drawAllThePath(map.map, data.id);
             };
-
-            if(map.current_car.path_points[map.current_car.path_points.length-1].point_id != data.point_id){
-                map.current_car.path_points.push(data);
-            };
-
-            this.drawAllThePath(map.map, data.id);
         };
     },
 
@@ -187,19 +195,32 @@ var leaflet_ctrl = {
             markers = [],
             car = map.cars_list[map.getCarIndexById(car_id)];
 
+        if(car && car.path_points){
+            if(car.path_points.length > this.path_points_length){
+                //Запоминаем количество путевых точек
+                this.path_points_length = car.path_points.length;
+            }else{
+                //Если количество новых точек не больше предыдущего,
+                // не рисуем путь заново
+                return false;
+            };
+        };
+
         //Если путевые маркеры уже отрисованы, то удаляем их
         if(this.pm_group){
             this.pm_group.clearLayers();
         };
 
-        if(car.path_points){
-            for(var i = 0, l = car.path_points.length - 1; i < l; i++){
+        if(car && car.path_points){
+            for(var i = 0, l = car.path_points.length; i < l; i++){
                 latlngs.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
 
                 var marker;
 
-                if((marker = this.createPathMarker(map_instance, car, car.path_points[i])) && car.last_point_id != car.path_points[i].id){
-                    markers.push(marker);
+                if(i < car.path_points.length-1){
+                    if((marker = this.createPathMarker(map_instance, car, car.path_points[i])) && car.last_point_id != car.path_points[i].id){
+                        markers.push(marker);
+                    };
                 };
             };
         };
@@ -232,7 +253,7 @@ var leaflet_ctrl = {
             map_instance.removeLayer(this.path);
 
             if(this.pm_group){
-                 //Если путевые маркеры уже отрисованы, то удаляем их
+                //Если путевые маркеры уже отрисованы, то удаляем их
                 this.pm_group.clearLayers();
             };
         };
@@ -433,20 +454,36 @@ var map = {
 
         var center;
 
+        this.m_ctrl = leaflet_ctrl;
+        this.m_ctrl.createMap(this.m_options, callback);
+
         $('.map-container').resizable({
             handles: 's',
             minHeight: this.m_options.minHeight + 1,
             resize: function(event, ui){
                 $('#map').css({
-                    height: ui.size.height + 2
+                    height: ui.size.height + 2,
+                    width:  ui.size.width - 2
                 });
+
+                if(map.map){
+                    map.map.invalidateSize();
+                };
 
                 $.cookie('map-height', ui.size.height, core.options.cookie_options);
             }
         });
 
-        this.m_ctrl = leaflet_ctrl;
-        this.m_ctrl.createMap(this.m_options, callback);
+        $(window).on('resize', function(){
+
+            $('#map').css({
+                width:  $('.map-container').width() - 2
+            });
+
+            if(map.map){
+                map.map.invalidateSize();
+            };
+        });
     },
 
     createCarsSelect: function(fleet_id){
@@ -647,6 +684,7 @@ var map = {
 
             core.ticker.addIntervalMethod(function(){
                 map.renewIntervalPool();
+                map.drawBottomPanels();
             });
         });
     },
@@ -730,6 +768,7 @@ var map = {
             $.cookie('car-path', '0', core.options.cookie_options);
 
             this.m_ctrl.removeAllThePath(this.map);
+            this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
             //this.m_ctrl.focus(this.map);
         };
 
@@ -877,7 +916,6 @@ var map = {
     },
 
     updateAllCarsData: function(){
-        this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
         this.m_ctrl.removeAllThePath(this.map);
 
         if(this.current_car){
@@ -939,6 +977,8 @@ var map = {
     },
 
     init: function(){
+        core.ticker.delay = 5000;
+
         this.setDateByHash();
 
         //Проверяем на наличие отключенного автообновления в куках

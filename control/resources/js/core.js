@@ -832,12 +832,11 @@ core.utilities = {
     dateRange: function(startDate, currDate){
         if(!(startDate instanceof Date)){
             startDate = this.timestampToDate(startDate);
-        }
+        };
 
         if(!(currDate instanceof Date)){
             currDate = this.timestampToDate(currDate);
         };
-
 
         var duration = new Date(currDate - startDate),
             s = (duration.getTime() - duration.getMilliseconds())/1000;
@@ -853,20 +852,27 @@ core.utilities = {
             seconds: s
         };
 
+        var dc = {
+            days: Math.ceil(s / 60 / 60 / 24),
+            hours: Math.ceil(s / 60 / 60),
+            minutes: Math.ceil(s / 60),
+            seconds: s
+        };
+
         if(d.days > 0){
-            return d.days + ' ' + this.plural(d.days, 'день', 'дня', 'дней') + ' назад';
+            return dc.days + ' ' + this.plural(dc.days, 'день', 'дня', 'дней') + ' назад';
         };
 
         if(d.hours < 24 && d.hours > 0){
-            return d.hours + ' ' + this.plural(d.hours, 'час', 'часа', 'часов') + ' назад';
+            return dc.hours + ' ' + this.plural(dc.hours, 'час', 'часа', 'часов') + ' назад';
         };
 
         if(d.minutes < 60 && d.minutes > 0 && d.hours === 0 && d.days === 0){
-            return d.minutes + ' ' + this.plural(d.minutes, 'минуту', 'минуты', 'минут') + ' назад';
+            return dc.minutes + ' ' + this.plural(dc.minutes, 'минуту', 'минуты', 'минут') + ' назад';
         };
 
         if(d.seconds < 60 && d.minutes === 0 && d.hours === 0 && d.days === 0){
-            return d.seconds + ' ' + this.plural(d.seconds, 'секунду', 'секунды', 'секунд') + ' назад';
+            return dc.seconds + ' ' + this.plural(dc.seconds, 'секунду', 'секунды', 'секунд') + ' назад';
         };
     }
 };

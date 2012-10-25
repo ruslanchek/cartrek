@@ -1080,7 +1080,7 @@ footer {
 /* =Map
 -----------------------------------------------------------------------------*/
 #map {
-    width: 100%;
+    border: 1px solid #ddd;
 }
 
 #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
@@ -1094,7 +1094,7 @@ footer {
     position: relative;
     padding-bottom: 15px;
     height: 400px;
-    border: 1px solid #ddd;
+    width: 100% !important;
 }
 
 
