@@ -84,7 +84,15 @@ var leaflet_ctrl = {
 
         car.cp_marker       = marker;
         car.last_point_id   = data.point_id;
-        car.last_point      = data;
+        car.last_point      = {
+            altitude: data.altitude,
+            date    : data.date,
+            heading : data.heading,
+            id      : data.point_id,
+            lat     : data.lat,
+            lon     : data.lon,
+            speed   : data.speed
+        };
         car.last_point_date = data.last_point_date;
         car.last_update     = data.last_update;
 
@@ -140,8 +148,16 @@ var leaflet_ctrl = {
                     map.current_car.path_points = [];
                 };
 
-                if(map.current_car.path_points[map.current_car.path_points.length-1].point_id != data.point_id){
-                    map.current_car.path_points.push(data);
+                if(map.current_car.path_points[map.current_car.path_points.length-1].id != data.point_id){
+                    map.current_car.path_points.push({
+                        altitude: data.altitude,
+                        date    : data.date,
+                        heading : data.heading,
+                        id      : data.point_id,
+                        lat     : data.lat,
+                        lon     : data.lon,
+                        speed   : data.speed
+                    });
                 };
 
                 this.drawAllThePath(map.map, data.id);
@@ -702,6 +718,7 @@ var map = {
                 map.drawDynamicCarsData(data, options);
                 map.drawBottomPanels();
                 map.initialized = true;
+                this.focus();
             });
         };
     },
@@ -911,9 +928,14 @@ var map = {
                 data_ctrl.getCarPath(this.current_car.id, false, function(data){
                     map.current_car.path_points = [];
                     map.current_car.path_points = data;
-                    map.current_car.path_points.push(map.current_car.last_point);
+
+                    if(map.current_car.path_points[map.current_car.path_points.length - 1].point_id != data.point_id){
+                        map.current_car.path_points.push(map.current_car.last_point);
+                    };
+
                     map.m_ctrl.drawAllThePath(map.map, map.current_car.id);
                     map.drawBottomPanels();
+                    map.m_ctrl.focus(map.map);
                 });
             }else{
                 if(this.current_car && this.current_car.path_points){
@@ -922,7 +944,9 @@ var map = {
                             this.current_car.path_points = [];
                         };
 
-                        this.current_car.path_points.push(this.current_car.last_point);
+                        if(this.current_car.path_points[this.current_car.path_points.length - 1].point_id != this.current_car.last_point_id.id){
+                            this.current_car.path_points.push(this.current_car.last_point);
+                        };
                     };
                 };
 
