@@ -1097,6 +1097,8 @@ footer {
     border: 1px solid #ddd;
 }
 
+
+/* Map shadows */
 .map-container .shadow-top,
 .map-container .shadow-bottom {
     height: 14px;
@@ -1126,10 +1128,8 @@ footer {
     bottom: -1px;
 }
 
-.map-top-panel {
-    margin-bottom: 1em;
-}
 
+/* Map misc */
 #current-fleet-and-car .g_id {
     display: inline-block;
     position: absolute;
@@ -1137,6 +1137,8 @@ footer {
     margin-left: 10px;
 }
 
+
+/* Map Notice */
 .map-notice {
     position: absolute;
     z-index: 10;
@@ -1150,8 +1152,27 @@ footer {
     margin-left: -20%;
 }
 
+
+/* Map top panel */
+.map-top-panel {
+    margin-bottom: 1em;
+}
+
 #focus {
     display: none;
+    float: left;
+}
+
+#fleets-menu {
+    width: 30%;
+    float: left;
+    margin-right: 15px;
+}
+
+#cars-menu {
+    width: 40%;
+    float: left;
+    margin-right: 10px;
 }
 
 button.toggler {
@@ -1183,6 +1204,8 @@ button.toggler-on i {
     margin-left: 15px;
 }
 
+
+/* Time machine */
 #time-machine .days {
     position: relative;
     height: 50px;
@@ -1200,4 +1223,25 @@ button.toggler-on i {
 
 #time-machine .days .day.active {
 
+}
+
+
+/* Map bottom panel */
+.map-bottom-panel {
+    font-size: 0.85em;
+    background: #eee;
+}
+
+.bottom-panel .panel-content {
+    padding: 10px 20px;
+}
+
+.bottom-panel table th,
+.bottom-panel table td {
+    padding: 5px 0 !important;
+}
+
+.bottom-panel table {
+    margin: 0;
+    width: 100%;
 }

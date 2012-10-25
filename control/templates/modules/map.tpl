@@ -1,9 +1,9 @@
 <div class="map-top-panel">
-    <div class="fifth" id="fleets-menu"></div>
+    <div class="twothird">
+        <div id="fleets-menu"></div>
 
-    <div class="fifth" id="cars-menu"></div>
+        <div id="cars-menu"></div>
 
-    <div class="sixth">
         <button id="focus" class="btn" title="Показать машины">Фокус</button>
     </div>
 
@@ -23,6 +23,14 @@
     <div class="shadow-top"></div>
     <div class="shadow-bottom"></div>
     <div id="map"></div>
+</div>
+
+<div class="map-bottom-panel">
+    <div class="third bottom-panel" id="bottom-panel-1"><div class="panel-content"></div></div>
+    <div class="third bottom-panel" id="bottom-panel-2"><div class="panel-content"></div></div>
+    <div class="third bottom-panel" id="bottom-panel-3"><div class="panel-content"></div></div>
+
+    <div class="clear"></div>
 </div>
 
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />

@@ -623,6 +623,7 @@ var map = {
             data_ctrl.getDynamicCarsData(cars_ids, options, function(data){
                 //Запускаем функцию отрисовки динамических данных о тачке или группе тачек
                 map.drawDynamicCarsData(data, options);
+                map.drawBottomPanels();
                 map.initialized = true;
             });
         };
@@ -835,6 +836,40 @@ var map = {
                 });
             };
         };
+    },
+
+    drawBottomPanels: function(){
+        var panel1_html = '',
+            panel2_html = '',
+            panel3_html = '';
+
+        if(this.current_car){
+            panel1_html +=  '<h3>Статус обновления данных</h3>' +
+                            '<table>' +
+                                '<tr title="'+this.current_car.last_point_date+'">' +
+                                    '<th>Местоположение</th>' +
+                                    '<th>'+core.utilities.dateRange(this.current_car.last_point_date, new Date())+'</th>' +
+                                '</tr>' +
+                                '<tr title="'+this.current_car.last_update+'">' +
+                                    '<th>Статус</th>' +
+                                    '<th>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</th>' +
+                                '</tr>' +
+                           '</table>';
+        };
+
+        $('#bottom-panel-1 .panel-content').html(panel1_html);
+        $('#bottom-panel-2 .panel-content').html(panel2_html);
+        $('#bottom-panel-3 .panel-content').html(panel3_html);
+
+        var h = 0;
+
+        $('.bottom-panel').each(function(){
+            if($(this).height() > h){
+                h = $(this).height();
+            };
+        });
+
+        $('.bottom-panel').css({height: h});
     },
 
     setDate: function(date){
