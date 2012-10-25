@@ -34,7 +34,7 @@ var leaflet_ctrl = {
                 iconAnchor  : [3, 3], // point of the icon which will correspond to marker's location
                 popupAnchor : [0, -4] // point from which the popup should open relative to the iconAnchor
             });
-        },
+        }
     },
 
     createMap: function(m_options, callback){
@@ -65,7 +65,6 @@ var leaflet_ctrl = {
 
         /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
         map_instance.addLayer(m);*/
-
         marker.on('click', function(){
             this.bindPopup(map.getCurrentPositionPopupHtml(this.options.id));
             this.openPopup();
@@ -73,6 +72,7 @@ var leaflet_ctrl = {
 
         car.cp_marker       = marker;
         car.last_point_id   = data.point_id;
+        car.last_point      = data;
         car.last_point_date = data.last_point_date;
 
         return marker;
@@ -122,7 +122,10 @@ var leaflet_ctrl = {
                 map.current_car.path_points = [];
             };
 
-            map.current_car.path_points.push(data);
+            if(map.current_car.path_points[map.current_car.path_points.length-1].point_id != data.point_id){
+                map.current_car.path_points.push(data);
+            };
+
             this.drawAllThePath(map.map, data.id);
         };
     },
@@ -190,10 +193,12 @@ var leaflet_ctrl = {
         };
 
         if(car.path_points){
-            for(var i = 0, l = car.path_points.length; i < l; i++){
+            for(var i = 0, l = car.path_points.length - 1; i < l; i++){
                 latlngs.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
+
                 var marker;
-                if(marker = this.createPathMarker(map_instance, car, car.path_points[i])){
+
+                if((marker = this.createPathMarker(map_instance, car, car.path_points[i])) && car.last_point_id != car.path_points[i].id){
                     markers.push(marker);
                 };
             };
@@ -210,8 +215,8 @@ var leaflet_ctrl = {
             color: car.color,
             smoothFactor: 4,
             weight: 3,
-            opacity: 0.5,
-            dashArray: '1, 5'
+            opacity: 0.5
+            //dashArray: '1, 5'
         }).addTo(map_instance);
 
         //Ставим флаг, чтобы фокусировка роизошла только
@@ -225,6 +230,11 @@ var leaflet_ctrl = {
     removeAllThePath: function(map_instance){
         if(this.path){
             map_instance.removeLayer(this.path);
+
+            if(this.pm_group){
+                 //Если путевые маркеры уже отрисованы, то удаляем их
+                this.pm_group.clearLayers();
+            };
         };
     },
 
@@ -820,6 +830,7 @@ var map = {
             if(!this.current_car.path_points || forced === true){
                 data_ctrl.getCarPath(this.current_car.id, false, function(data){
                     map.current_car.path_points = data;
+                    map.current_car.path_points.push(map.current_car.last_point);
                     map.m_ctrl.drawAllThePath(map.map, map.current_car.id);
                 });
             };
