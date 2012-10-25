@@ -213,7 +213,7 @@ var leaflet_ctrl = {
 
         this.path = L.polyline(latlngs, {
             color: car.color,
-            smoothFactor: 4,
+            smoothFactor: 2,
             weight: 3,
             opacity: 0.5
             //dashArray: '1, 5'
