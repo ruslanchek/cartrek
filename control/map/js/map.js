@@ -992,6 +992,12 @@ var map = {
         $('#bottom-panel-1 .panel-content').html(panel1_html);
         $('#bottom-panel-2 .panel-content').html(panel2_html);
         $('#bottom-panel-3 .panel-content').html(panel3_html);
+
+        if(!panel1_html && !panel2_html && !panel3_html){
+            $('.bottom-panel').hide();
+        }else{
+            $('.bottom-panel').show();
+        }
     },
 
     setDate: function(date){
