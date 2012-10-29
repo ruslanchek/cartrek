@@ -58,11 +58,24 @@ var leaflet_ctrl = {
     },
 
     createCurrentPositionMarker: function(map_instance, data){
+        var markerLocation = new L.LatLng(data.lat, data.lon);
+
+        var CustomHtmlIcon = L.HtmlIcon.extend({
+            options : {
+                html : "<div style='background:white;color:red;'>Custom Html Icon!</div>"
+            }
+        });
+
+        var customHtmlIcon = new CustomHtmlIcon();
+
+        var label = new L.Marker(markerLocation, {icon: customHtmlIcon});
+
         var car = map.cars_list[map.getCarIndexById(data.id)],
             marker = L.marker(
                 [data.lat, data.lon], {
                     icon: this.icons.heading(data.heading),
-                    id: data.id
+                    id: data.id,
+                    label: label
                 }
             );
 
@@ -111,16 +124,18 @@ var leaflet_ctrl = {
         };
 
         if(data){
-            var markers = [];
+            var markers = [], layers = [];
 
             for(var i = 0, l = data.length; i < l; i++){
                 if(data[i].lat && data[i].lon){
                     markers.push(this.createCurrentPositionMarker(map_instance, data[i]));
+                    layers.push(this.createCurrentPositionMarker(map_instance, data[i].options.layer));
                 };
             };
 
             if(markers.length > 0){
                 this.current_position_markers_group = L.layerGroup(markers).addTo(map_instance);
+                this.current_position_layers_group = L.layerGroup(markers).addTo(map_instance);
                 this.focus(map_instance);
                 map.unsetNoPointsInfo();
             }else{
