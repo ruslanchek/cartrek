@@ -454,10 +454,19 @@ footer {
     background: #3C4E5A;
     -webkit-border-radius: 10px;
     border-radius: 10px;
-    padding: 0 10px;
+    padding: 2px 10px;
     color: #fff;
     text-shadow: none;
     font-weight: normal !important;
+}
+
+a.badge {
+    text-decoration: none;
+}
+
+a.badge:hover {
+    background: #506877;
+    color: #fff;
 }
 
 .active .badge {
@@ -1239,6 +1248,7 @@ button.toggler-on i {
 .map-bottom-panel {
     font-size: 0.85em;
     background: #eee;
+    display: none;
 }
 
 .bottom-panel .panel-content {
