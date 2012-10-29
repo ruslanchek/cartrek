@@ -1254,8 +1254,8 @@ button.toggler-on i {
     height: 16px;
     position: absolute;
     z-index: 2;
-    top: 0;
-    left: 0;
+    top: -8px;
+    left: -8px;
 }
 
 .marker-with-info .shadow {
@@ -1263,8 +1263,8 @@ button.toggler-on i {
     height: 30px;
     position: absolute;
     z-index: 1;
-    top: -3px;
-    left: -7px;
+    top: -11px;
+    left: -15px;
     background: url(/control/map/img/markers/heading/flat_shadow.png);
 }
 
@@ -1275,22 +1275,23 @@ button.toggler-on i {
 }
 
 .marker-with-info .info-block {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.85);
     -webkit-box-shadow:  0px 3px 14px 0px rgba(0, 0, 0, 0.5);
     box-shadow:  0px 3px 14px 0px rgba(0, 0, 0, 0.5);
     padding: 2px;
     -webkit-border-radius: 0px 5px 5px 5px;
     border-radius: 0px 5px 5px 5px;
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 12px;
+    left: 12px;
     opacity: 0.82;
-    transition: opacity 100ms linear;
-    -webkit-transition: opacity 100ms linear;
+    transition: opacity, background 100ms linear;
+    -webkit-transition: opacity, background 100ms linear;
 }
 
 .marker-with-info .info-block:hover {
     opacity: 1;
+    background: rgba(244, 244, 244, 1);
 }
 
 .marker-with-info .info-block i.arm {
@@ -1314,6 +1315,16 @@ button.toggler-on i {
     white-space: nowrap;
 }
 
+.marker-with-info .info-block .info {
+    margin: 0;
+    font-size: 0.8em;
+    color: #222;
+    padding: 3px 1px 0;
+}
+
+.marker-with-info .info-block .info li {
+    list-style-type: none;
+}
 
 
 /* Map bottom panel */

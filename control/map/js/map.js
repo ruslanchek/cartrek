@@ -5,6 +5,7 @@ var leaflet_ctrl = {
     max_markers_group               : null,
     path                            : null,
     first_loaded_car_id             : false,
+    max_speed_popup_opened          : false,
     path_points_length              : 0,
 
     icons: {
@@ -20,14 +21,14 @@ var leaflet_ctrl = {
                 popupAnchor : [0, -8]
             });
         },
-        heading_with_info: function(heading, car_data){
+        heading_with_info: function(car, point){
             var html =  '<div class="marker-with-info">' +
-                            '<div class="icon" style="background: url('+core.map_tools.getHeadingIcon(heading)+')"></div>' +
+                            '<div class="icon" style="background: url('+core.map_tools.getHeadingIcon(point.heading)+')"></div>' +
                             '<div class="shadow"></div>' +
                             '<div class="info-block">' +
                                 '<i class="arm"></i>' +
-                                '<div class="name">'+car_data.name+'</div>' +
-                                '<div class="id">'+core.utilities.drawGId(car_data.g_id, 'small')+'</div>' +
+                                '<div class="name">'+car.name+'</div>' +
+                                '<div class="id">'+core.utilities.drawGId(car.g_id, 'small')+'</div>' +
                             '</div>' +
                         '</div>';
             
@@ -82,7 +83,7 @@ var leaflet_ctrl = {
         if(map.current_car){
             icon = this.icons.heading(data.heading);
         }else{
-            icon = this.icons.heading_with_info(data.heading, car);
+            icon = this.icons.heading_with_info(car, data);
         };
 
         var marker = L.marker(
@@ -92,17 +93,19 @@ var leaflet_ctrl = {
             }
         );
 
-        marker.setZIndexOffset(300000 + data.id);
+        marker.setZIndexOffset(data.id);
 
         /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
         map_instance.addLayer(m);*/
 
         marker.on("mouseover", function() {
-            this.setZIndexOffset(300000 + this.options.id + 10);
+            this.setZIndexOffset(10000);
+            $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
         });
 
         marker.on("mouseout", function() {
-            this.setZIndexOffset(300000 + this.options.id);
+            this.setZIndexOffset(this.options.id);
+            $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
         });
 
         marker.on('click', function(){
@@ -280,6 +283,8 @@ var leaflet_ctrl = {
                 });
 
                 marker.on('click', function(){
+                    map.m_ctrl.max_speed_popup_opened = true;
+
                     this.bindPopup('max speed');
                     this.openPopup();
                 });
@@ -356,22 +361,7 @@ var leaflet_ctrl = {
                 };
             };
 
-
             if(car && car.max_speed_marker){
-                //Нужно отловить маркер run, у которого id = id max_speed маркера,
-                // удалить его, чтобы они не накладывались друг на друга
-                var del_index = false;
-
-                for(var i = 0, l = run_markers.length; i < l; i++){
-                    if(run_markers[i].options.id == car.max_speed_marker.options.id){
-                        del_index = i;
-                    };
-                };
-
-                if(del_index){
-                    run_markers.splice(del_index, 1);
-                };
-
                 this.max_markers_group = L.layerGroup([car.max_speed_marker]).addTo(map_instance);
             };
 
