@@ -8,7 +8,7 @@ var leaflet_ctrl = {
     path_points_length              : 0,
 
     icons: {
-        heading: function(heading, z){
+        heading: function(heading){
             return L.icon({
                 iconUrl     : core.map_tools.getHeadingIcon(heading),
                 shadowUrl   : '/control/map/img/markers/heading/flat_shadow.png',
@@ -17,6 +17,24 @@ var leaflet_ctrl = {
                 shadowSize  : [30, 30], // size of the shadow
                 iconAnchor  : [8, 8], // point of the icon which will correspond to marker's location
                 shadowAnchor: [15, 12],  // the same for the shadow
+                popupAnchor : [0, -8]
+            });
+        },
+        heading_with_info: function(heading, car_data){
+            var html =  '<div class="marker-with-info">' +
+                            '<div class="icon" style="background: url('+core.map_tools.getHeadingIcon(heading)+')"></div>' +
+                            '<div class="shadow"></div>' +
+                            '<div class="info-block">' +
+                                '<i class="arm"></i>' +
+                                '<div class="name">'+car_data.name+'</div>' +
+                                '<div class="id">'+core.utilities.drawGId(car_data.g_id, 'small')+'</div>' +
+                            '</div>' +
+                        '</div>';
+            
+            return new L.HtmlIcon({
+                html        : html,
+                iconSize    : [16, 16], // size of the icon
+                iconAnchor  : [8, 8], // point of the icon which will correspond to marker's location
                 popupAnchor : [0, -8]
             });
         },
@@ -58,26 +76,21 @@ var leaflet_ctrl = {
     },
 
     createCurrentPositionMarker: function(map_instance, data){
-        var markerLocation = new L.LatLng(data.lat, data.lon);
-
-        var CustomHtmlIcon = L.HtmlIcon.extend({
-            options : {
-                html : "<div style='background:white;color:red;'>Custom Html Icon!</div>"
-            }
-        });
-
-        var customHtmlIcon = new CustomHtmlIcon();
-
-        var label = new L.Marker(markerLocation, {icon: customHtmlIcon});
-
         var car = map.cars_list[map.getCarIndexById(data.id)],
-            marker = L.marker(
-                [data.lat, data.lon], {
-                    icon: this.icons.heading(data.heading),
-                    id: data.id,
-                    label: label
-                }
-            );
+            icon;
+
+        if(map.current_car){
+            icon = this.icons.heading(data.heading);
+        }else{
+            icon = this.icons.heading_with_info(data.heading, car);
+        };
+
+        var marker = L.marker(
+            [data.lat, data.lon], {
+                icon: icon,
+                id: data.id
+            }
+        );
 
         marker.setZIndexOffset(300000 + data.id);
 
@@ -124,18 +137,16 @@ var leaflet_ctrl = {
         };
 
         if(data){
-            var markers = [], layers = [];
+            var markers = [];
 
             for(var i = 0, l = data.length; i < l; i++){
                 if(data[i].lat && data[i].lon){
                     markers.push(this.createCurrentPositionMarker(map_instance, data[i]));
-                    layers.push(this.createCurrentPositionMarker(map_instance, data[i].options.layer));
                 };
             };
 
             if(markers.length > 0){
                 this.current_position_markers_group = L.layerGroup(markers).addTo(map_instance);
-                this.current_position_layers_group = L.layerGroup(markers).addTo(map_instance);
                 this.focus(map_instance);
                 map.unsetNoPointsInfo();
             }else{
