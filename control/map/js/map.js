@@ -324,7 +324,7 @@ var leaflet_ctrl = {
                         if(type == 'stop'){
                             stop_markers.push(marker);
                         }else{
-                            run_markers.push(marker);
+                            //run_markers.push(marker);
                         };
                     };
                 };
@@ -388,9 +388,9 @@ var leaflet_ctrl = {
         };
 
         //Если путевые маркеры уже отрисованы, то удаляем их
-        if(this.run_markers_group){
+        /*if(this.run_markers_group){
             this.run_markers_group.clearLayers();
-        };
+        };*/
 
         if(this.stop_markers_group){
             this.stop_markers_group.clearLayers();
