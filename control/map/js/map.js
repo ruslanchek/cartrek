@@ -313,6 +313,7 @@ var leaflet_ctrl = {
                 //Запоминаем количество путевых точек
                 this.path_points_length = car.path_points.length;
             }else{
+
                 //Если количество новых точек не больше предыдущего,
                 // не рисуем путь заново
                 return false;
@@ -395,7 +396,11 @@ var leaflet_ctrl = {
                     weight: 3,
                     opacity: 0.5
                     //dashArray: '1, 5'
-                }).addTo(map_instance);
+                });
+
+                if(this.path){
+                    this.path.addTo(map_instance)
+                };
             };
         };
 
