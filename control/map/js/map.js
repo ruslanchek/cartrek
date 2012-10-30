@@ -485,6 +485,7 @@ var leaflet_ctrl = {
             this.max_markers_group.clearLayers();
             this.max_markers_group = false;
         };
+
         this.max_speed_marker = false;
     },
 
