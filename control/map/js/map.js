@@ -370,10 +370,15 @@ var leaflet_ctrl = {
                 };
             };
 
-            if((car.max_speed_marker && car.max_speed_marker.options.id != max_speed_marker.options.id) || !car.max_speed_marker){
-                car.max_speed           = max_speed;
-                car.max_speed_marker    = max_speed_marker;
+            if(!car.max_speed_marker){
+                car.max_speed_marker = max_speed_marker;
+            }else{
+                car.max_speed_marker.setLatLng(max_speed_marker.getLatLng());
             };
+
+            car.max_speed = max_speed;
+
+            this.drawMaxSpeedMarker(map_instance, car);
 
             if(stop_markers.length > 0){
                 this.stop_markers_group = L.layerGroup(stop_markers).addTo(map_instance);
@@ -466,9 +471,13 @@ var leaflet_ctrl = {
     },
 
     drawMaxSpeedMarker: function(map_instance, car){
-        this.removeMaxSpeedMarker();
-
-        this.max_markers_group = L.layerGroup([car.max_speed_marker]).addTo(map_instance);
+        if(!this.max_speed_marker){
+            this.removeMaxSpeedMarker();
+            this.max_markers_group = L.layerGroup([car.max_speed_marker]).addTo(map_instance);
+            this.max_speed_marker = true;
+        }else{
+            car.max_speed_marker.update();
+        };
     },
 
     removeMaxSpeedMarker: function(){
@@ -476,6 +485,7 @@ var leaflet_ctrl = {
             this.max_markers_group.clearLayers();
             this.max_markers_group = false;
         };
+        this.max_speed_marker = false;
     },
 
     topSpeedMarker: function(){
@@ -1093,8 +1103,6 @@ var map = {
                     };
 
                     map.m_ctrl.drawAllThePath(map.map, map.current_car.id);
-                    map.m_ctrl.removeMaxSpeedMarker();
-                    map.m_ctrl.drawMaxSpeedMarker(map.map, map.current_car);
                     map.drawBottomPanels();
                     map.m_ctrl.focus(map.map);
                 });
