@@ -615,6 +615,15 @@ core.utilities = {
                 return d+'&nbsp;'+month_names[parseInt(m - 1)]+',&nbsp;'+y;
             }; break;
 
+            //TODO Check this type
+            case 'MYSQLTIME' : {
+                d = parseInt(value.substring(8, 10) * 1),
+                m = value.substring(5, 7),
+                y = value.substring(0, 4);
+
+                return d+'&nbsp;'+month_names[parseInt(m - 1)]+',&nbsp;'+ y + ', в ' + value.substring(10);
+            }; break;
+
             default : {
 
                 d = value.getDate(),

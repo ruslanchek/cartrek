@@ -452,9 +452,9 @@ footer {
 
 .badge {
     background: #3C4E5A;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    padding: 2px 10px;
+    -webkit-border-radius: 0.4em;
+    border-radius: 0.4em;
+    padding: 2px 0.7ex;
     color: #fff;
     text-shadow: none;
     font-weight: normal !important;
@@ -1326,6 +1326,22 @@ button.toggler-on i {
     list-style-type: none;
 }
 
+.tooltip-content table {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.tooltip-content table td {
+    padding: 2px 10px 2px 0;
+    border: none;
+}
+
+.tooltip-content table th {
+    padding: 2px 10px 2px 0;
+    font-weight: bold;
+    border: none;
+}
+
 
 /* Map bottom panel */
 .map-bottom-panel {
@@ -1338,12 +1354,21 @@ button.toggler-on i {
     padding: 10px 20px;
 }
 
-.bottom-panel table th,
-.bottom-panel table td {
-    padding: 5px 0 !important;
-}
-
 .bottom-panel table {
     margin: 0;
     width: 100%;
+}
+
+.bottom-panel table th {
+    padding: 1px 0 !important;
+    text-align: left;
+}
+
+.bottom-panel table td {
+    padding: 1px 10px !important;
+    text-align: left;
+}
+
+.bottom-panel .badge {
+    margin-left: -0.7ex;
 }

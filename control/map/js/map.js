@@ -136,7 +136,7 @@ var leaflet_ctrl = {
         };
 
         if(this.path){
-            this.removeAllThePath(map_instance);
+            this.removeAllThePath(map_instance, true);
         };
 
         if(data){
@@ -237,7 +237,11 @@ var leaflet_ctrl = {
                 });
 
                 marker.on('click', function(){
-                    this.bindPopup('stop');
+                    this.bindPopup(
+                        '<div class="tooltip-content"><h3>Остановка</h3>'+
+                        core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
+                        '</div>'
+                    );
                     this.openPopup();
                 });
             }; break;
@@ -283,10 +287,12 @@ var leaflet_ctrl = {
                 });
 
                 marker.on('click', function(){
-                    map.m_ctrl.max_speed_popup_opened = true;
-
-                    this.bindPopup('max speed');
-                    this.openPopup();
+                    this.bindPopup(
+                        '<div class="tooltip-content"><h3>Максимальная скорость &mdash; ' + core.utilities.convertKnotsToKms(point.speed) + ' км/ч</h3>'+
+                        core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
+                        '</div>'
+                    );
+                    map.m_ctrl.max_speed_popup_opened = this.openPopup();
                 });
             }; break;
         };
@@ -303,7 +309,7 @@ var leaflet_ctrl = {
             car = map.cars_list[map.getCarIndexById(car_id)];
 
         if(car && car.path_points){
-            if(car.path_points.length > this.path_points_length){
+            if(car.path_points.length > this.path_points_length || !this.path){
                 //Запоминаем количество путевых точек
                 this.path_points_length = car.path_points.length;
             }else{
@@ -311,22 +317,24 @@ var leaflet_ctrl = {
                 // не рисуем путь заново
                 return false;
             };
-        };
 
-        //Если путевые маркеры уже отрисованы, то удаляем их
-        this.removeAllThePath(map_instance);
+            //Если путевые маркеры уже отрисованы, то удаляем их
+            this.removeAllThePath(map_instance, true);
+        };
 
         if(car && car.path_points){
             car.stop_points             = 0;
-            car.max_speed               = 0;
-            car.max_speed_marker        = null;
+
+            var max_speed               = 0,
+                max_speed_marker        = null;
 
             for(var i = 0, l = car.path_points.length; i < l; i++){
                 //Добавляем координаты для следующей точки отрисовки путевой линии
                 path_points.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
 
                 //Объявляем переменные маркера и его типа (по умолчанию - run, движение)
-                var marker, type = 'run';
+                var marker,
+                    type = 'run';
 
                 //Если точка не последняя, создаем маркер
                 // (иначе будет рисоваться еще и маркер поверх маркера текущего положения)
@@ -344,12 +352,6 @@ var leaflet_ctrl = {
                     //Создаем маркер-объект
                     marker = this.createPathMarker(map_instance, car, car.path_points[i], type);
 
-                    //Переопределяем переменные максимальной скорости и маркера максимальной скорости
-                    if(marker && car.path_points[i].speed > car.max_speed){
-                        car.max_speed = car.path_points[i].speed;
-                        car.max_speed_marker = this.createPathMarker(map_instance, car, car.path_points[i], 'max_speed');
-                    };
-
                     //Если создался маркер id точки отличается от id точки текущего положения, добавляем маркер в массив
                     if(marker && car.last_point_id != car.path_points[i].id){
                         if(type == 'stop'){
@@ -359,10 +361,25 @@ var leaflet_ctrl = {
                         };
                     };
                 };
+
+                //Переопределяем переменные максимальной скорости и маркера максимальной скорости
+                if(car.path_points[i] && car.path_points[i].speed && car.path_points[i].speed > max_speed){
+                    max_speed           = car.path_points[i].speed;
+                    max_speed_marker    = this.createPathMarker(map_instance, car, car.path_points[i], 'max_speed');
+                };
             };
 
-            if(car && car.max_speed_marker){
-                this.max_markers_group = L.layerGroup([car.max_speed_marker]).addTo(map_instance);
+            if(car && max_speed_marker){
+                if((car.max_speed_marker && car.max_speed_marker.options.id != max_speed_marker.options.id) || !car.max_speed_marker){
+                    car.max_speed           = max_speed;
+                    car.max_speed_marker    = max_speed_marker;
+
+                    if(this.max_markers_group){
+                        this.max_markers_group.clearLayers();
+                    };
+
+                    this.max_markers_group = L.layerGroup([max_speed_marker]).addTo(map_instance);
+                };
             };
 
             if(stop_markers.length > 0){
@@ -398,7 +415,7 @@ var leaflet_ctrl = {
         };
     },
 
-    removeAllThePath: function(map_instance){
+    removeAllThePath: function(map_instance, graceful){
         if(this.path){
             map_instance.removeLayer(this.path);
         };
@@ -408,15 +425,17 @@ var leaflet_ctrl = {
             this.run_markers_group.clearLayers();
         };*/
 
-        if(this.stop_markers_group){
-            this.stop_markers_group.clearLayers();
-        };
+        if(!graceful){
+            if(this.stop_markers_group){
+                this.stop_markers_group.clearLayers();
+            };
 
-        if(this.max_markers_group){
-            this.max_markers_group.clearLayers();
-        };
+            if(this.max_markers_group){
+                this.max_markers_group.clearLayers();
+            };
 
-        this.path_points_length = 0;
+            this.path_points_length = 0;
+        };
     },
 
     removeAllCurrentPositionMarkers: function(map_instance){
@@ -872,11 +891,33 @@ var map = {
     //HTML-код для попапа текущей отметки
     getCurrentPositionPopupHtml: function(car_id){
         var car = $.grep(this.cars_list, function(e){return e.id == car_id;})[0],
-            html = '';
+            html = '<div class="tooltip-content">';
 
-        html += 'g_id: '+ car.g_id + '<br>';
-        html += 'date: '+ car.last_point_date + '<br>';
-        html += 'date: '+ car.last_point_id + '<br>';
+        html += '<h3>Текущее положение</h3>';
+        html += core.utilities.humanizeDate(car.last_point_date, 'MYSQLTIME') + '<br>';
+        html += '<table>';
+            html += '<tr><th>Скорость:</th><td>'+ core.utilities.convertKnotsToKms(car.last_point.speed) + ' км/ч</td></tr>';
+            html += '<tr><th>Высота:</th><td>'+ car.last_point.altitude + ' м</td></tr>';
+            html += '<tr><th>Координаты Ш/Д:</th><td>'+ car.last_point.lat + '&deg; / ' + car.last_point.lon + '&deg;</td></tr>';
+        html += '</table>';
+
+        if(!this.current_car){
+            var h = core.ui.getHashData(), hash = '';
+
+            if(h && h.fleet){
+                hash += '#fleet='+h.fleet+'&car='+car_id;
+            }else{
+                hash += '#car='+car_id;
+            };
+
+            if(h && h.timemachine){
+                hash += '&timemachine=' + h.timemachine;
+            };
+
+            html += '<a href="'+hash+'" class="btn btn-small">Выбрать эту машину</a>';
+        };
+
+        html += '</div>';
 
         return html;
     },
@@ -936,7 +977,7 @@ var map = {
             this.show_car_path = false;
             $.cookie('car-path', '0', core.options.cookie_options);
 
-            this.m_ctrl.removeAllThePath(this.map);
+            this.m_ctrl.removeAllThePath(this.map, true);
             //this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
             //this.m_ctrl.focus(this.map);
         };
@@ -1076,14 +1117,14 @@ var map = {
         if(this.current_car){
             panel1_html +=  '<h3>Обновления данных</h3>' +
                             '<table>' +
-                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_point_date)+'">' +
+                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQLTIME')+'">' +
                                     '<th>Координаты</th>' +
-                                    '<th>'+core.utilities.dateRange(this.current_car.last_point_date, new Date())+'</th>' +
+                                    '<td>'+core.utilities.dateRange(this.current_car.last_point_date, new Date())+'</td>' +
                                 '</tr>' +
 
-                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_update)+'">' +
+                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_update, 'MYSQLTIME')+'">' +
                                     '<th>Статус</th>' +
-                                    '<th>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</th>' +
+                                    '<td>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</td>' +
                                 '</tr>' +
                             '</table>';
 
@@ -1092,12 +1133,12 @@ var map = {
                                 '<table>' +
                                     '<tr>' +
                                         '<th>Остановок</th>' +
-                                        '<th>'+this.current_car.stop_points+'</th>' +
+                                        '<td>'+this.current_car.stop_points+'</td>' +
                                     '</tr>' +
 
                                     '<tr>' +
                                         '<th>Макс. скорость</th>' +
-                                        '<th><a id="max-speed-marker" class="badge" href="javascript:void(0)">'+core.utilities.convertKnotsToKms(this.current_car.max_speed) + ' км/ч</a></th>' +
+                                        '<td><a id="max-speed-marker" class="badge" href="javascript:void(0)">'+core.utilities.convertKnotsToKms(this.current_car.max_speed) + ' км/ч</a></td>' +
                                     '</tr>' +
                                '</table>';
             };
@@ -1119,7 +1160,7 @@ var map = {
     },
 
     updateAllCarsData: function(){
-        this.m_ctrl.removeAllThePath(this.map);
+        //this.m_ctrl.removeAllThePath(this.map);
 
         if(this.current_car){
             this.current_car.cp_marker = false;
