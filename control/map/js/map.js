@@ -406,6 +406,8 @@ var leaflet_ctrl = {
                 if(this.path){
                     this.path.addTo(map_instance)
                 };
+
+                car.path_length = this.path.length_in_meters();
             };
         };
 
@@ -1156,6 +1158,11 @@ var map = {
                                     '<tr>' +
                                         '<th>Макс. скорость</th>' +
                                         '<td><a id="max-speed-marker" class="badge" href="javascript:void(0)">'+core.utilities.convertKnotsToKms(this.current_car.max_speed) + ' км/ч</a></td>' +
+                                    '</tr>' +
+
+                                    '<tr>' +
+                                        '<th>Пройдено пути</th>' +
+                                        '<td>'+ this.current_car.path_length / 1000 + ' км</td>' +
                                     '</tr>' +
                                '</table>';
             };
