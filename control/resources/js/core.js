@@ -370,6 +370,16 @@ core.loading = {
 };
 
 core.utilities = {
+    pad: function(number, length) {
+        var str = '' + number;
+
+        while (str.length < length) {
+            str = '0' + str;
+        };
+
+        return str;
+    },
+
     plural: function(i, str1, str3, str5){
         function plural (a){
             if ( a % 10 == 1 && a % 100 != 11 ) return 0

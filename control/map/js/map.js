@@ -1180,7 +1180,7 @@ var map = {
     },
 
     setDate: function(date){
-        this.date = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+        this.date = core.utilities.pad(date.getDate(), 2) + '-' + core.utilities.pad(date.getMonth() + 1, 2) + '-' + date.getFullYear();
     },
 
     updateAllCarsData: function(){
