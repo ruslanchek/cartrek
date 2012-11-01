@@ -1361,6 +1361,7 @@ button.toggler-on i {
 .bottom-panel table th {
     padding: 1px 0 !important;
     text-align: left;
+    font-weight: bold;
 }
 
 .bottom-panel table td {

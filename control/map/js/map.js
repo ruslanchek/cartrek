@@ -219,6 +219,33 @@ var leaflet_ctrl = {
 
     createPathMarker: function(map_instance, car, point, type){
         switch(type){
+            case 'start' : {
+                var marker = L.marker(
+                    [point.lat, point.lon], {
+                        icon: this.icons.stop(),
+                        id: point.id,
+                        car_id: car.id
+                    }
+                );
+
+                marker.on("mouseover", function() {
+                    this.setZIndexOffset(300000 + car.id + 10);
+                });
+
+                marker.on("mouseout", function() {
+                    this.setZIndexOffset(1);
+                });
+
+                marker.on('click', function(){
+                    this.bindPopup(
+                        '<div class="tooltip-content"><h3>Начальное положение</h3>'+
+                        core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
+                        '</div>'
+                    );
+                    this.openPopup();
+                });
+            }; break;
+
             case 'stop' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
@@ -350,12 +377,16 @@ var leaflet_ctrl = {
                         type = 'stop';
                     };
 
+                    if(i == 0){
+                        type = 'start';
+                    };
+
                     //Создаем маркер-объект
                     marker = this.createPathMarker(map_instance, car, car.path_points[i], type);
 
                     //Если создался маркер id точки отличается от id точки текущего положения, добавляем маркер в массив
                     if(marker && car.last_point_id != car.path_points[i].id){
-                        if(type == 'stop'){
+                        if(type == 'stop' || type == 'start'){
                             stop_markers.push(marker);
                         }else{
                             //run_markers.push(marker);
@@ -831,6 +862,18 @@ var map = {
         this.drawCars({renew: false});
     },
 
+    addParamsToCars: function(data){
+        for(var i = 0, l = data.length; i < l; i++){
+            var car;
+            if(car = this.cars_list[this.getCarIndexById(data[i].id)]){
+                car.csq       = data[i].csq;
+                car.hdop      = data[i].hdop;
+                car.speed     = data[i].speed;
+                car.params    = $.parseJSON(data[i].params);
+            };
+        };
+    },
+
     drawDynamicCarsData: function(data, options){
         //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
         if(data.length > 0){
@@ -839,6 +882,8 @@ var map = {
             }else{
                 this.m_ctrl.drawCurrentPositionMarkersGroup(this.map, data);
             };
+
+            this.addParamsToCars(data);
 
             this.drawCarPath(false);
         };
@@ -1150,10 +1195,10 @@ var map = {
             if(this.current_car.stop_points && this.current_car.max_speed){
                 panel2_html +=  '<h3>Метрика</h3>' +
                                 '<table>' +
-                                    '<tr>' +
+                                    /*'<tr>' +
                                         '<th>Остановок</th>' +
                                         '<td>'+this.current_car.stop_points+'</td>' +
-                                    '</tr>' +
+                                    '</tr>' +*/
 
                                     '<tr>' +
                                         '<th>Макс. скорость</th>' +
@@ -1163,6 +1208,21 @@ var map = {
                                     '<tr>' +
                                         '<th>Пройдено пути</th>' +
                                         '<td>'+ this.current_car.path_length / 1000 + ' км</td>' +
+                                    '</tr>' +
+                               '</table>';
+            };
+
+            if(this.current_car.stop_points && this.current_car.max_speed){
+                panel3_html +=  '<h3>Статус трекера</h3>' +
+                                '<table>' +
+                                    '<tr>' +
+                                        '<th>Сигнал GPS</th>' +
+                                        '<td>'+core.utilities.getHDOPIndicator(this.current_car.hdop)+'</td>' +
+                                    '</tr>' +
+
+                                    '<tr>' +
+                                        '<th>Сигнал GSM</th>' +
+                                        '<td>'+core.utilities.getCSQIndicator(this.current_car.csq)+'</td>' +
                                     '</tr>' +
                                '</table>';
             };

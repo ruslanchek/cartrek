@@ -679,14 +679,14 @@ core.utilities = {
 
     getCSQIndicator: function(csq){
         var csq = this.parseCSQ(csq),
-            perc = Math.floor((8/100)*csq.percentage);
+            perc = Math.floor((8/100)*csq.percentage + 20);
 
         return '<div title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)"><div class="signal-indicator si-level-'+perc+'"></div></div>';
     },
 
     getHDOPIndicator: function(hdop){
         var hdop = this.parseHDOP(hdop),
-            perc = Math.floor((8/100)*hdop.percentage);
+            perc = Math.floor((8/100)*hdop.percentage + 20);
 
         return '<div title="GPS: '+hdop.level_name+'"><div class="signal-indicator si-level-'+perc+'"></div></div>';
     },
