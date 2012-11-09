@@ -179,7 +179,10 @@ var leaflet_ctrl = {
                     map.current_car.path_points = [];
                 };
 
-                if(map.current_car.path_points[map.current_car.path_points.length-1].id != data.point_id){
+                if( map.current_car.path_points &&
+                    map.current_car.path_points[map.current_car.path_points.length-1] &&
+                    map.current_car.path_points[map.current_car.path_points.length-1].id != data.point_id
+                ){
                     map.current_car.path_points.push({
                         altitude: data.altitude,
                         date    : data.date,
@@ -201,9 +204,12 @@ var leaflet_ctrl = {
             if(data[i].lat && data[i].lon){
                 var car = map.cars_list[map.getCarIndexById(data[i].id)];
 
+                console.log(car)
+
                 //Если тачка уже имеет маркер текущего положения,
                 // то обновляем положение
                 if(car && car.cp_marker){
+                    console.log('update')
                     this.updateCurrentPositionMarker(car.cp_marker, data[i], options);
 
                 //Если нет, то создаем маркер текущего положения.
@@ -211,6 +217,8 @@ var leaflet_ctrl = {
                 // а данных в базе еще нет, вдруг трекер отправляет точку,
                 // и машина появляется на карте.
                 }else{
+                    console.log('create')
+
                     this.createCurrentPositionMarker(map_instance, data[i]);
                 };
             };
