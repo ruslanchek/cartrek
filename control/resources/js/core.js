@@ -678,17 +678,16 @@ core.utilities = {
     },
 
     getCSQIndicator: function(csq){
-        var csq = this.parseCSQ(csq),
-            perc = Math.ceil((8/100)*csq.percentage);
+        var csq = this.parseCSQ(csq);
 
-        return '<div title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)"><div class="signal-indicator si-level-'+perc+'"></div></div>';
+        return '<span class="signal-indicator" title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)"><div style="width: '+csq.percentage+'%"></span></span>';
     },
 
     getHDOPIndicator: function(hdop){
         var hdop = this.parseHDOP(hdop),
             perc = Math.ceil((8/100)*hdop.percentage);
 
-        return '<div title="GPS: '+hdop.level_name+'"><div class="signal-indicator si-level-'+perc+'"></div></div>';
+        return '<span class="signal-indicator" title="GPS: '+hdop.level_name+'"><div style="width: '+hdop.percentage+'%"></span></span>';
     },
 
     //Google maps utils

@@ -4,7 +4,10 @@
 
         <div id="cars-menu"></div>
 
-        <button id="focus" class="btn" title="Показать машины">Фокус</button>
+        <div class="btn-parts">
+            <button id="auto-focus" class="btn-part-left" title="Автоматическое перемещение карты при обновлении данных"></button>
+            <button id="focus" class="btn-part-right" title="Показать текущее положение">Фокус</button>
+        </div>
     </div>
 
     <div class="third push-right" id="togglers">

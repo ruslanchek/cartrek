@@ -19,8 +19,8 @@
 <script src="/control/resources/js/jquery.mousewheel.js"></script>
 <script src="/control/resources/js/jquery.scrollpane.js"></script>
 
-<script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
-<script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>
+{*<script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
+<script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>*}
 <script src="/control/resources/plugins/jquery-ui/jquery-ui-1.9.0.custom.min.js"></script>
 <script src="/control/resources/plugins/meow/jquery.meow.js"></script>
 <script src="/control/resources/plugins/jquery-checkbox/jquery.tzCheckbox.js"></script>

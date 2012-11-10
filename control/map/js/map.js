@@ -99,7 +99,7 @@ var leaflet_ctrl = {
         map_instance.addLayer(m);*/
 
         marker.on("mouseover", function() {
-            this.setZIndexOffset(10000);
+            this.setZIndexOffset(1000000);
             $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
         });
 
@@ -660,21 +660,22 @@ var data_ctrl = {
 };
 
 var map = {
-    m_ctrl: null,
-    map: null,
-    date: null,
+    m_ctrl          : null,
+    map             : null,
+    date            : null,
 
-    initialized: false,
+    initialized     : false,
 
-    current_fleet: null,
-    current_car: null,
+    current_fleet   : null,
+    current_car     : null,
 
-    fleets_list: [],
-    cars_list: [],
-    cars_in_fleet: 0,
+    fleets_list     : [],
+    cars_list       : [],
+    cars_in_fleet   : 0,
 
-    auto_renew: true,
-    show_car_path: false,
+    auto_renew      : true,
+    auto_focus      : true,
+    show_car_path   : false,
 
     m_options: {
         zoom: 4,
@@ -749,10 +750,10 @@ var map = {
             exclude     : exclude,
             items       : this.cars_list,
             onChange    : function(val){
-                var tm_hash;
+                var tm_hash = '';
 
-                if(map.hash && map.hash.timemachine && map.hash.timemachine != ''){
-                    tm_hash = '&timemachine='+map.hash.timemachine;
+                if(core.ui.getHashData() && core.ui.getHashData().timemachine){
+                    tm_hash = '&timemachine='+core.ui.getHashData().timemachine;
                 };
 
                 document.location.hash = '#fleet='+fleet_id+'&car='+val+tm_hash;
@@ -770,10 +771,10 @@ var map = {
             value_name  : 'name',
             items       : this.fleets_list,
             onChange    : function(val){
-                var tm_hash;
+                var tm_hash = '';
 
-                if(map.hash && map.hash.timemachine && map.hash.timemachine != ''){
-                    tm_hash = '&timemachine='+map.hash.timemachine;
+                if(core.ui.getHashData() && core.ui.getHashData().timemachine){
+                    tm_hash = '&timemachine='+core.ui.getHashData().timemachine;
                 };
 
                 document.location.hash = '#fleet='+val+tm_hash;
@@ -921,7 +922,10 @@ var map = {
                 map.drawDynamicCarsData(data, options);
                 map.drawBottomPanels();
                 map.initialized = true;
-                this.focus();
+
+                if(!options.renew || options.renew && map.auto_focus){
+                    map.m_ctrl.focus(map.map);
+                };
             });
         };
     },
@@ -1054,7 +1058,19 @@ var map = {
             //this.m_ctrl.focus(this.map);
         };
 
-        this.setButtons();
+        this.drawButtons();
+    },
+
+    toggleAutoFocus: function(){
+        if(!this.auto_focus){
+            this.auto_focus = true;
+            $.cookie('auto-focus', '1', core.options.cookie_options);
+        }else{
+            this.auto_focus = false;
+            $.cookie('auto-focus', '0', core.options.cookie_options);
+        };
+
+        this.drawButtons();
     },
 
     toggleAutoRenew: function(){
@@ -1070,10 +1086,10 @@ var map = {
             $.cookie('auto-renew', '0', core.options.cookie_options);
         };
 
-        this.setButtons();
+        this.drawButtons();
     },
 
-    setButtons: function(){
+    drawButtons: function(){
         if(this.auto_renew){
             $('#auto-renew').attr('class', 'btn toggler toggler-on').html('Авто<i></i>');
         }else{
@@ -1084,6 +1100,12 @@ var map = {
             $('#show-path').attr('class', 'btn toggler toggler-on').html('Путь<i></i>');
         }else{
             $('#show-path').attr('class', 'btn toggler toggler-off').html('Путь<i></i>');
+        };
+
+        if(this.auto_focus){
+            $('#auto-focus').attr('class', 'btn-part-left toggler toggler-on').html('&nbsp;<i></i>');
+        }else{
+            $('#auto-focus').attr('class', 'btn-part-left toggler toggler-off').html('&nbsp;<i></i>');
         };
     },
 
@@ -1311,26 +1333,42 @@ var map = {
             map.toggleCarPath();
         });
 
+        $('#auto-focus').live('click', function(){
+            map.toggleAutoFocus();
+        });
+
         $('#max-speed-marker').live('click', function(){
             map.m_ctrl.topSpeedMarker();
         });
+    },
+
+    readOptionsFromCookies: function(){
+        //Проверяем на наличие отключенного автообновления в куках
+        if($.cookie('auto-renew') == '0'){
+            this.auto_renew = false;
+        }else{
+            this.auto_renew = true;
+        };
+
+        if($.cookie('auto-focus') == '1'){
+            this.auto_focus = true;
+        }else{
+            this.auto_focus = false;
+        };
+
+        if($.cookie('car-path') == '1'){
+            this.show_car_path = true;
+        }else{
+            this.show_car_path = false;
+        };
     },
 
     init: function(){
         core.ticker.delay = 5000;
 
         this.setDateByHash();
-
-        //Проверяем на наличие отключенного автообновления в куках
-        if($.cookie('auto-renew') == '0'){
-            this.auto_renew = false;
-        };
-
-        if($.cookie('car-path') == '1'){
-            this.show_car_path = true;
-        };
-
-        this.setButtons();
+        this.readOptionsFromCookies();
+        this.drawButtons();
 
         //Готовим карту (контроллер карт может иметь синхронный вызов,
         // поэтому, дальнейшие действия вызываются через коллбэк)
