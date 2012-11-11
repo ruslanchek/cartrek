@@ -922,6 +922,14 @@ core.map_tools = {
         };
 
         return '/control/map/img/markers/heading/'+degrees_zone+'.png';
+    },
+
+    getGeoposition: function(callback){
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(function(position){
+                callback(position);
+            });
+        };
     }
 };
 

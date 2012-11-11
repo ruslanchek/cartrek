@@ -42,8 +42,8 @@
 <![endif]-->
 
 <script src="/control/resources/mapping-tools/leaflet/dist/leaflet-src.js"></script>
-<script src="/control/resources/mapping-tools/raphael-layer/debug/libs/raphael/raphael-min.js"></script>
-<script src="/control/resources/mapping-tools/raphael-layer/dist/rlayer.js"></script>
+<script src="/control/resources/mapping-tools/leaflet/plugins/raphael-layer/debug/libs/raphael/raphael-min.js"></script>
+<script src="/control/resources/mapping-tools/leaflet/plugins/raphael-layer/dist/rlayer.js"></script>
 <script src="/control/resources/mapping-tools/mapbox-wax/dist/wax.leaf.min.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/proto/proto.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/leaflet-fullscreen/Control.FullScreen.js"></script>

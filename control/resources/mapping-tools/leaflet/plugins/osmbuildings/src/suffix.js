@@ -1,0 +1,3 @@
+}(this));
+
+/*jshint bitwise:true */

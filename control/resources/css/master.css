@@ -426,6 +426,23 @@ footer {
 }
 
 
+/* =16x16 icons
+-----------------------------------------------------------------------------*/
+.icon-16x16 {
+    display: block;
+    height: 16px;
+    width: 16px;
+}
+
+.icon-16x16.shape {
+    background: url(../img/sprite.png) 0 -157px;
+}
+
+.icon-16x16.cursor {
+    background: url(../img/sprite.png) -16px -157px;
+}
+
+
 /* =Misc
 -----------------------------------------------------------------------------*/
 .container-padding {

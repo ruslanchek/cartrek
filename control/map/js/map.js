@@ -719,7 +719,6 @@ var map = {
         });
 
         $(window).on('resize', function(){
-
             $('#map').css({
                 width:  $('.map-container').width() - 2
             });
@@ -784,8 +783,12 @@ var map = {
     },
 
     setCurrentFleetAndCar: function(){
-        var fleet = $.grep(this.fleets_list, function(e){return e.id == map.hash.fleet;}),
-            car   = $.grep(this.cars_list, function(e){return e.id == map.hash.car;});
+        var fleet = $.grep(this.fleets_list, function(e){
+                return e.id == map.hash.fleet;
+            }),
+            car   = $.grep(this.cars_list, function(e){
+                return e.id == map.hash.car;
+            });
 
         if(fleet){
             this.current_fleet = fleet[0];
