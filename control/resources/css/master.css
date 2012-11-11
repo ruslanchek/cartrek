@@ -442,9 +442,18 @@ footer {
     background: url(../img/sprite.png) -16px -157px;
 }
 
+.icon-16x16.menu {
+    background: url(../img/sprite.png) -32px -157px;
+}
+
+
 
 /* =Misc
 -----------------------------------------------------------------------------*/
+.pull-right {
+    float: right;
+}
+
 .container-padding {
     padding: 0 20px;
 }
@@ -1107,11 +1116,23 @@ footer {
 }
 
 
+/* =Buttons
+-----------------------------------------------------------------------------*/
+
+
 /* =Buttons separated
 -----------------------------------------------------------------------------*/
-.btn-parts {
-
+.btn.active {
+    filter: none;
+    background: none;
+    background: #eee;
+    text-shadow: 0 1px 0px rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+    color: #000;
+    cursor: default;
 }
+
 
 .btn-parts .btn-part-left,
 .btn-parts .btn-part-right {
@@ -1249,6 +1270,17 @@ footer {
 /* Map top panel */
 .map-top-panel {
     margin-bottom: 1em;
+}
+
+.map-instruments {
+    background: #eee;
+    border: 1px solid #ddd;
+    padding: 8px 10px 2px;
+    margin-bottom: 1px;
+}
+
+.map-instruments .btn-icon {
+    padding: 5px 6px;
 }
 
 #focus {
@@ -1457,3 +1489,7 @@ button.toggler-on i {
 .bottom-panel .badge {
     margin-left: -0.7ex;
 }
+
+
+/* =Geozones
+-----------------------------------------------------------------------------*/

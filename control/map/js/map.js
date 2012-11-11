@@ -60,20 +60,25 @@ var leaflet_ctrl = {
     },
 
     createMap: function(m_options, callback){
-        wax.tilejson(
-            'http://a.tiles.mapbox.com/v3/ruslanchek.map-5sa7s6em.jsonp',
-            function(tilejson){
-                var map_instance = new L.Map('map');
-
-                map_instance.addLayer(new wax.leaf.connector(tilejson));
-                map_instance.setView(new L.LatLng(m_options.coordinates.lat, m_options.coordinates.lon), m_options.zoom);
-                map_instance.addControl(new L.Control.FullScreen());
-
-                var interaction = wax.leaf.interaction(map_instance, tilejson);
-
-                callback(map_instance);
+        var map_box_layer = new L.TileLayer(
+            'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
+            {
+                attribution : '',
+                maxZoom     : 17
             }
         );
+
+        var map = new L.Map('map', {
+            layers      : [map_box_layer],
+            center      : new L.LatLng(m_options.coordinates.lat, m_options.coordinates.lon),
+            zoom        : m_options.zoom
+        });
+
+        map.addControl(new L.Control.FullScreen());
+
+        $('.leaflet-control-attribution').html('О наших <a href="/control/about-map">картах</a>');
+
+        callback(map);
     },
 
     createCurrentPositionMarker: function(map_instance, data){
@@ -695,8 +700,6 @@ var map = {
         }else{
             $('#map, .map-container').css({height: this.m_options.height});
         };
-
-        var center;
 
         this.m_ctrl = leaflet_ctrl;
         this.m_ctrl.createMap(this.m_options, callback);

@@ -2,7 +2,7 @@ var geozones = {
     map: null,
 
     m_options: {
-        zoom: 10,
+        zoom: 4,
         coordinates: {
             lat: 55,
             lon: 35
@@ -12,20 +12,41 @@ var geozones = {
     },
 
     createMap: function(callback){
-        wax.tilejson(
-            'http://a.tiles.mapbox.com/v3/ruslanchek.map-5sa7s6em.jsonp',
-            function(tilejson){
-                var map = new L.Map('map');
-
-                map.addLayer(new wax.leaf.connector(tilejson));
-                map.setView(new L.LatLng(geozones.m_options.coordinates.lat, geozones.m_options.coordinates.lon), geozones.m_options.zoom);
-                map.addControl(new L.Control.FullScreen());
-
-                var interaction = wax.leaf.interaction(map, tilejson);
-
-                callback(map);
+        var map_box_layer = new L.TileLayer(
+            'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
+            {
+                attribution : '',
+                maxZoom     : 17
             }
         );
+
+        var map = new L.Map('map', {
+            layers      : [map_box_layer],
+            center      : new L.LatLng(geozones.m_options.coordinates.lat, geozones.m_options.coordinates.lon),
+            zoom        : geozones.m_options.zoom
+        });
+
+        var draw_сontrol = new L.Control.Draw({
+            polyline    : true,
+            circle      : true,
+            polygon: {
+                allowIntersection: false,
+                drawError: {
+                    color: '#e1e100',
+                    message: 'Линии зоны не могут пересекаться!'
+                },
+                shapeOptions: {
+                    color: '#bada55'
+                }
+            }
+        });
+
+        map.addControl(draw_сontrol);
+        map.addControl(new L.Control.FullScreen());
+
+        $('.leaflet-control-attribution').html('О наших <a href="/control/about-map">картах</a>');
+
+        callback(map);
     },
 
     init: function(){
@@ -34,6 +55,7 @@ var geozones = {
 
             core.map_tools.getGeoposition(function(position){
                 geozones.map.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
+                geozones.map.setZoom(11);
             });
 
             if($.cookie('map-gz-height') && $.cookie('map-gz-height') > geozones.m_options.minHeight){

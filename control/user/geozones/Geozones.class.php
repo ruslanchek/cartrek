@@ -11,7 +11,7 @@
 
             $this->init(array(
                 'name'  => 'user.geozones',
-                'title' => 'Автопарк',
+                'title' => 'Геозоны',
                 'dir'   => '/control/user/geozones'
             ));
 
