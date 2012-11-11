@@ -38,13 +38,10 @@
 
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 <!--[if lte IE 8]>
-    <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.ie.css" />
+<link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.ie.css" />
 <![endif]-->
 
 <script src="/control/resources/mapping-tools/leaflet/dist/leaflet-src.js"></script>
-<script src="/control/resources/mapping-tools/leaflet/plugins/raphael-layer/debug/libs/raphael/raphael-min.js"></script>
-<script src="/control/resources/mapping-tools/leaflet/plugins/raphael-layer/dist/rlayer.js"></script>
-<script src="/control/resources/mapping-tools/mapbox-wax/dist/wax.leaf.min.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/proto/proto.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/leaflet-fullscreen/Control.FullScreen.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/html-icon/Html.icon.js"></script>

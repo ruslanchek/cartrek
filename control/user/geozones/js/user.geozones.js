@@ -12,21 +12,37 @@ var geozones = {
     },
 
     createMap: function(callback){
-        var map_box_layer = new L.TileLayer(
-            'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
-            {
-                attribution : '',
-                maxZoom     : 17
-            }
-        );
+        var layer, map_layer = $.cookie('map-layer');
+
+        switch(map_layer){
+            case 'cloudmade' : {
+                layer = new L.TileLayer(
+                    'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
+                    {
+                        attribution : '',
+                        maxZoom     : 18
+                    }
+                );
+            }; break;
+
+            default: {
+                layer = new L.TileLayer(
+                    'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
+                    {
+                        attribution : '',
+                        maxZoom     : 17
+                    }
+                );
+            }; break;
+        };
 
         var map = new L.Map('map', {
-            layers      : [map_box_layer],
+            layers      : [layer],
             center      : new L.LatLng(geozones.m_options.coordinates.lat, geozones.m_options.coordinates.lon),
             zoom        : geozones.m_options.zoom
         });
 
-        var draw_сontrol = new L.Control.Draw({
+        map.addControl(new L.Control.Draw({
             polyline    : true,
             circle      : true,
             polygon: {
@@ -39,12 +55,15 @@ var geozones = {
                     color: '#bada55'
                 }
             }
-        });
+        }));
 
-        map.addControl(draw_сontrol);
         map.addControl(new L.Control.FullScreen());
 
         $('.leaflet-control-attribution').html('О наших <a href="/control/about-map">картах</a>');
+
+        setTimeout(function(){
+            $('.leaflet-control-attribution').fadeOut(3000);
+        }, 10000);
 
         callback(map);
     },
