@@ -537,11 +537,11 @@ var leaflet_ctrl = {
     },
 
     drawMaxSpeedMarker: function(map_instance, car){
-        if(!this.max_speed_marker){
+        if(!this.max_speed_marker && car.max_speed_marker){
             this.removeMaxSpeedMarker();
             this.max_markers_group = L.layerGroup([car.max_speed_marker]).addTo(map_instance);
             this.max_speed_marker = true;
-        }else{
+        }else if(car.max_speed_marker){
             car.max_speed_marker.update();
         };
     },

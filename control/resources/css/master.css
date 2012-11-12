@@ -656,6 +656,20 @@ footer {
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 }
 
+footer .text-right a {
+    margin-left: 2ex;
+}
+
+footer a:link,
+footer a:visited {
+    color: #b9d0de;
+}
+
+footer a:hover,
+footer a:active {
+    color: #9db0be;
+}
+
 
 /* =GID's
 -----------------------------------------------------------------------------*/
