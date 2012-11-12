@@ -100,6 +100,7 @@ var geozones = {
         });
 
         map.addControl(new L.Control.Draw({
+            position        : 'topright',
             polyline        : false,
             circle          : false,
             marker          : false,

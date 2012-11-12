@@ -1,0 +1,1 @@
+{$core->module.static_content}

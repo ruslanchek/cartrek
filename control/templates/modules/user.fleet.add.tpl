@@ -1,7 +1,3 @@
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>
-
 <div class="threequarter">
     <div class="row-fluid">
         {if $core->module.form.step == 1}
@@ -145,4 +141,8 @@
             </div>
         {/if}
     </div>
+</div>
+
+<div class="quarter">
+    {include file="modules/user.menu.tpl"}
 </div>

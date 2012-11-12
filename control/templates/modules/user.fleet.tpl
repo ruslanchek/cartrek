@@ -1,7 +1,3 @@
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>
-
 <div class="threequarter">
     <a href="/control/user/fleet/add" class="btn btn-success"><i class="icon-plus icon-white"></i> Добавить автомобиль</a>
 
@@ -39,4 +35,8 @@
             У вас нет активных устройств для отслеживания, необходимо <a href="/control/fleet/add">добавить</a> или активировать устройство.
         </div>
     {/if}
+</div>
+
+<div class="quarter">
+    {include file="modules/user.menu.tpl"}
 </div>

@@ -1,7 +1,3 @@
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>
-
 <div class="threequarter">
     <form class="forms" action="" method="POST">
         {if isset($core->module.form.message)}
@@ -28,4 +24,8 @@
 
         <input type="submit" name="send" class="btn" value="Сохранить" />
     </form>
+</div>
+
+<div class="quarter">
+    {include file="modules/user.menu.tpl"}
 </div>

@@ -1,7 +1,3 @@
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>
-
 <div class="threequarter">
     <a href="#" class="btn btn-success add_fleet"><i class="icon-plus icon-white"></i> Добавить группу</a>
 
@@ -34,4 +30,8 @@
         У вас нет групп, но вы можете их <a href="#" class="add_fleet">создать</a>.
     </div>
     {/if}
+</div>
+
+<div class="quarter">
+    {include file="modules/user.menu.tpl"}
 </div>
