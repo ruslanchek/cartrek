@@ -1,5 +1,10 @@
 var geozones = {
     map: null,
+    zones_layers: null,
+    geozones: {
+        raw: [],
+        polygons: []
+    },
 
     m_options: {
         zoom: 4,
@@ -9,6 +14,58 @@ var geozones = {
         },
         minHeight: 250,
         height: 400
+    },
+
+    addGeozone: function(points, callback){
+        this.loading_process = $.ajax({
+            url : '/control/user/geozones/?ajax&action=addGeozone',
+            data : {
+                points : JSON.stringify(points)
+            },
+            dataType : 'json',
+            type : 'post',
+            beforeSend: function(){
+                if(this.loading_process){
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                };
+
+                core.loading.setGlobalLoading();
+            },
+            success: function(data){
+                core.loading.unsetGlobalLoading();
+                callback(data);
+            },
+            error: function(){
+                core.loading.unsetGlobalLoading();
+            }
+        });
+    },
+
+    getGeozones: function(callback){
+        this.loading_process = $.ajax({
+            url : '/control/user/geozones/?ajax',
+            data : {
+                action : 'getGeozones'
+            },
+            dataType : 'json',
+            type : 'get',
+            beforeSend: function(){
+                if(this.loading_process){
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                };
+
+                core.loading.setGlobalLoading();
+            },
+            success: function(data){
+                core.loading.unsetGlobalLoading();
+                callback(data);
+            },
+            error: function(){
+                core.loading.unsetGlobalLoading();
+            }
+        });
     },
 
     createMap: function(callback){
@@ -43,19 +100,27 @@ var geozones = {
         });
 
         map.addControl(new L.Control.Draw({
-            polyline    : true,
-            circle      : true,
-            polygon: {
+            polyline        : false,
+            circle          : false,
+            marker          : false,
+            rectangle       : false,
+            polygon         : {
                 allowIntersection: false,
                 drawError: {
-                    color: '#e1e100',
-                    message: 'Линии зоны не могут пересекаться!'
+                    color   : '#e1e100',
+                    message : 'Линии зоны не могут пересекаться!'
                 },
                 shapeOptions: {
                     color: '#bada55'
                 }
             }
         }));
+
+        map.on('draw:poly-created', function(e){
+            geozones.addGeozone(e.poly.getLatLngs(), function(data){
+                geozones.addShape(e.poly.getLatLngs(), data);
+            });
+        });
 
         map.addControl(new L.Control.FullScreen());
 
@@ -68,7 +133,40 @@ var geozones = {
         callback(map);
     },
 
+    addShape: function(lat_lngs, data){
+        var edges = [];
+
+        if(lat_lngs){
+            for(var i = 0, l = lat_lngs.length; i < l; i++){
+                if(!lat_lngs[i].lat && !lat_lngs[i].lng){
+                    edges.push([lat_lngs[i][0], lat_lngs[i][1]]);
+                }else{
+                    edges.push([lat_lngs[i].lat, lat_lngs[i].lng]);
+                };
+            };
+        };
+
+        var html = 'xxx';
+
+        //geozones.zones_layers.addLayer(e.poly);
+        var polygon = L.polygon(edges, {
+            color: 'red',
+            data: data
+        });
+
+        polygon.bindPopup(html);
+        polygon.on('click', function(){
+            this.openPopup('s');
+            console.log(this)
+        });
+
+
+        geozones.zones_layers.addLayer(polygon);
+    },
+
     init: function(){
+        this.zones_layers = new L.LayerGroup();
+
         this.createMap(function(map){
             geozones.map = map;
 
@@ -109,6 +207,21 @@ var geozones = {
 
                 if(geozones.map){
                     geozones.map.invalidateSize();
+                };
+            });
+
+            geozones.getGeozones(function(data){
+                geozones.geozones.raw = data;
+
+                if(data){
+                    for(var i = 0, l = data.length; i < l; i++){
+                        geozones.addShape(JSON.parse(data[i].points), {
+                            name: data[i].name,
+                            id: data[i].id
+                        });
+                    };
+
+                    geozones.map.addLayer(geozones.zones_layers);
                 };
             });
         });

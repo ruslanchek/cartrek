@@ -241,7 +241,7 @@ L.Polyline.Draw = L.Handler.Draw.extend({
 			fill: false,
 			clickable: true
 		},
-		zIndexOffset: 2000 // This should be > than the highest z-index any map layers
+		zIndexOffset: 2000000 // This should be > than the highest z-index any map layers
 	},
 
 	initialize: function (map, options) {
@@ -581,11 +581,11 @@ L.Polygon.Draw = L.Polyline.Draw.extend({
 	_getLabelText: function () {
 		var text;
 		if (this._markers.length === 0) {
-			text = 'Click to start drawing shape.';
+			text = 'Кликните, чтобы начать рисовать геозону';
 		} else if (this._markers.length < 3) {
-			text = 'Click to continue drawing shape.';
+			text = 'Кликните, чтобы продолжить рисовать геозону';
 		} else {
-			text = 'Click first point to close this shape.';
+			text = 'Кликните на первой точке, чтобы завершить рисование';
 		}
 		return {
 			text: text

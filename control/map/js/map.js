@@ -598,6 +598,7 @@ var data_ctrl = {
             },
             error: function(){
                 core.loading.unsetGlobalLoading();
+                data_ctrl.error();
             }
         });
     },
@@ -626,6 +627,7 @@ var data_ctrl = {
             },
             error: function(){
                 core.loading.unsetGlobalLoading();
+                data_ctrl.error();
             }
         });
     },
@@ -679,6 +681,8 @@ var data_ctrl = {
                 if(!options.renew){
                     core.loading.unsetGlobalLoading();
                 };
+
+                data_ctrl.error();
             }
         });
     }
