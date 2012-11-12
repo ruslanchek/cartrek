@@ -1,5 +1,5 @@
 <?php
-    Class AboutMap extends Core {
+    Class About extends Core {
         public function __construct(){
             parent::__construct();
 
@@ -9,8 +9,8 @@
 
             $this->init(array(
                 'name'  => '_default',
-                'title' => 'О наших картах',
-                'dir'   => '/control/about-map',
+                'title' => 'О Картреке',
+                'dir'   => '/control/about',
                 'static_content' => $this->getStaticContent()
             ));
         }
@@ -21,6 +21,7 @@
 
         private function getStaticContent(){
 $html = <<<EOF
+    <H2>О наших картах</h2>
     <p>
         Картрек использует карты <a href="http://www.mapbox.com/" target="_blank">MapBox</a>,
         созданные на&nbsp;основе данных картографического сервиса

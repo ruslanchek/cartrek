@@ -125,7 +125,7 @@ var geozones = {
 
         map.addControl(new L.Control.FullScreen());
 
-        $('.leaflet-control-attribution').html('О наших <a href="/control/about-map">картах</a>');
+        $('.leaflet-control-attribution').html('О наших <a href="/control/about#maps">картах</a>');
 
         setTimeout(function(){
             $('.leaflet-control-attribution').fadeOut(3000);

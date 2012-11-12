@@ -3,8 +3,8 @@
     require_once($_SERVER['DOCUMENT_ROOT'].'/api/Core.class.php');
 
     //Класс текущего модуля
-    require_once('AboutMap.class.php');
+    require_once('About.class.php');
 
     //Запуск модуля
-    $core = new AboutMap();
+    $core = new About();
 ?>
