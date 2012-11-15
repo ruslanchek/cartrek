@@ -1297,7 +1297,8 @@ footer a:active {
     padding: 5px 6px;
 }
 
-#focus {
+#focus,
+#auto-focus {
     display: none;
     float: left;
 }

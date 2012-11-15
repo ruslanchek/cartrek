@@ -1059,11 +1059,11 @@ var map = {
             marginTop: -$('.map-container .map-notice').height() + 40 / 2
         });
 
-        $('#focus').fadeOut(150);
+        $('#focus, #auto-focus').fadeOut(150);
     },
 
     unsetNoPointsInfo: function(){
-        $('#focus').fadeIn(150);
+        $('#focus, #auto-focus').fadeIn(150);
 
         $('.map-container .map-notice').fadeOut(150, function(){
             $('.map-container .map-notice').remove();
