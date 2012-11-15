@@ -13,6 +13,7 @@
 </div>
 
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/plugins/draw/dist/leaflet.draw.css" />
 
 <!--[if lte IE 8]>
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.ie.css" />
