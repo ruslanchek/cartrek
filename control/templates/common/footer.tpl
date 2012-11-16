@@ -5,7 +5,11 @@
         </div>
 
         <div class="third">
-
+            {if $core->module.name == 'main'}
+                <span title="Картрек" class="bottom-logo">Картрек</span>
+            {else}
+                <a title="Картрек" class="bottom-logo" href="/control">Картрек</a>
+            {/if}
         </div>
 
         <div class="third text-right">

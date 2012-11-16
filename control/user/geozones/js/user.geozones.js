@@ -17,29 +17,41 @@ var geozones = {
     },
 
     addGeozone: function(points, callback){
-        this.loading_process = $.ajax({
-            url : '/control/user/geozones/?ajax&action=addGeozone',
-            data : {
-                points : JSON.stringify(points)
-            },
-            dataType : 'json',
-            type : 'post',
-            beforeSend: function(){
-                if(this.loading_process){
-                    this.loading_process.abort();
-                    core.loading.unsetGlobalLoading();
-                };
+        var edges = [];
 
-                core.loading.setGlobalLoading();
-            },
-            success: function(data){
-                core.loading.unsetGlobalLoading();
-                callback(data);
-            },
-            error: function(){
-                core.loading.unsetGlobalLoading();
-            }
-        });
+        for(var i = 0, l = points.length; i < l; i++){
+            if(!points[i].lat && !points[i].lng){
+                edges.push([points[i][0], points[i][1]]);
+            }else{
+                edges.push([points[i].lat, points[i].lng]);
+            };
+        };
+
+        if(edges.length > 0){
+            this.loading_process = $.ajax({
+                url : '/control/user/geozones/?ajax&action=addGeozone',
+                data : {
+                    points : JSON.stringify(edges)
+                },
+                dataType : 'json',
+                type : 'post',
+                beforeSend: function(){
+                    if(this.loading_process){
+                        this.loading_process.abort();
+                        core.loading.unsetGlobalLoading();
+                    };
+
+                    core.loading.setGlobalLoading();
+                },
+                success: function(data){
+                    core.loading.unsetGlobalLoading();
+                    callback(data);
+                },
+                error: function(){
+                    core.loading.unsetGlobalLoading();
+                }
+            });
+        };
     },
 
     getGeozones: function(callback){
@@ -163,6 +175,8 @@ var geozones = {
 
 
         geozones.zones_layers.addLayer(polygon);
+
+        return edges;
     },
 
     init: function(){
