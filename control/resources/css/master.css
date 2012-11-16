@@ -171,14 +171,14 @@ html, body{
 }
 
 .limiter {
-    padding-bottom: 90px;
+    padding-bottom: 80px;
 }
 
 footer {
-	margin-top: -70px;
-	height: 45px;
+	margin-top: -60px;
+	height: 40px;
     min-width: 1000px;
-    padding: 25px 0 0 0;
+    padding: 20px 0 0 0;
 }
 
 

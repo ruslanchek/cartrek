@@ -102,57 +102,59 @@ var leaflet_ctrl = {
     },
 
     createCurrentPositionMarker: function(map_instance, data){
-        var car = map.cars_list[map.getCarIndexById(data.id)],
-            icon;
+        if(data){
+            var car = map.cars_list[map.getCarIndexById(data.id)],
+                icon;
 
-        if(map.current_car){
-            icon = this.icons.heading(data.heading);
-        }else{
-            icon = this.icons.heading_with_info(car, data);
+            if(map.current_car){
+                icon = this.icons.heading(data.heading);
+            }else{
+                icon = this.icons.heading_with_info(car, data);
+            };
+
+            var marker = L.marker(
+                [data.lat, data.lon], {
+                    icon: icon,
+                    id: data.id
+                }
+            );
+
+            marker.setZIndexOffset(data.id);
+
+            /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
+            map_instance.addLayer(m);*/
+
+            marker.on("mouseover", function() {
+                this.setZIndexOffset(1000000);
+                $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
+            });
+
+            marker.on("mouseout", function() {
+                this.setZIndexOffset(this.options.id);
+                $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
+            });
+
+            marker.on('click', function(){
+                this.bindPopup(map.getCurrentPositionPopupHtml(this.options.id));
+                this.openPopup();
+            });
+
+            car.cp_marker       = marker;
+            car.last_point_id   = data.point_id;
+            car.last_point      = {
+                altitude: data.altitude,
+                date    : data.date,
+                heading : data.heading,
+                id      : data.point_id,
+                lat     : data.lat,
+                lon     : data.lon,
+                speed   : data.speed
+            };
+            car.last_point_date = data.last_point_date;
+            car.last_update     = data.last_update;
+
+            return marker;
         };
-
-        var marker = L.marker(
-            [data.lat, data.lon], {
-                icon: icon,
-                id: data.id
-            }
-        );
-
-        marker.setZIndexOffset(data.id);
-
-        /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
-        map_instance.addLayer(m);*/
-
-        marker.on("mouseover", function() {
-            this.setZIndexOffset(1000000);
-            $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
-        });
-
-        marker.on("mouseout", function() {
-            this.setZIndexOffset(this.options.id);
-            $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
-        });
-
-        marker.on('click', function(){
-            this.bindPopup(map.getCurrentPositionPopupHtml(this.options.id));
-            this.openPopup();
-        });
-
-        car.cp_marker       = marker;
-        car.last_point_id   = data.point_id;
-        car.last_point      = {
-            altitude: data.altitude,
-            date    : data.date,
-            heading : data.heading,
-            id      : data.point_id,
-            lat     : data.lat,
-            lon     : data.lon,
-            speed   : data.speed
-        };
-        car.last_point_date = data.last_point_date;
-        car.last_update     = data.last_update;
-
-        return marker;
     },
 
     drawCurrentPositionMarkersGroup: function(map_instance, data){
@@ -193,7 +195,10 @@ var leaflet_ctrl = {
         if(car.last_point_id != data.point_id){
             car.last_point_id   = data.point_id;
 
-            marker.setLatLng(new L.LatLng(data.lat, data.lon));
+            if(data.lat && data.lon){
+                marker.setLatLng(new L.LatLng(data.lat, data.lon));
+            };
+
             marker.setIcon(this.icons.heading(data.heading));
             marker.update();
 
@@ -225,27 +230,24 @@ var leaflet_ctrl = {
     },
 
     changeCurrentPositionMarkersData: function(map_instance, data, options){
-        for(var i = 0, l = data.length; i < l; i++){
-            if(data[i].lat && data[i].lon){
-                var car = map.cars_list[map.getCarIndexById(data[i].id)];
+        if(data){
+            for(var i = 0, l = data.length; i < l; i++){
+                if(data[i].lat && data[i].lon){
+                    var car = map.cars_list[map.getCarIndexById(data[i].id)];
 
-                console.log(car)
+                    //Если тачка уже имеет маркер текущего положения,
+                    // то обновляем положение
+                    if(car && car.cp_marker){
+                        this.updateCurrentPositionMarker(car.cp_marker, data[i], options);
 
-                //Если тачка уже имеет маркер текущего положения,
-                // то обновляем положение
-                if(car && car.cp_marker){
-                    console.log('update')
-                    this.updateCurrentPositionMarker(car.cp_marker, data[i], options);
-
-                //Если нет, то создаем маркер текущего положения.
-                // Это нужно тогда, когда машина выбрана,
-                // а данных в базе еще нет, вдруг трекер отправляет точку,
-                // и машина появляется на карте.
-                }else{
-                    console.log('create')
-
-                    this.createCurrentPositionMarker(map_instance, data[i]);
-                };
+                    //Если нет, то создаем маркер текущего положения.
+                    // Это нужно тогда, когда машина выбрана,
+                    // а данных в базе еще нет, вдруг трекер отправляет точку,
+                    // и машина появляется на карте.
+                    }else{
+                        this.createCurrentPositionMarker(map_instance, data[i]);
+                    };
+                }
             };
         };
     },
@@ -519,7 +521,9 @@ var leaflet_ctrl = {
                     bounds.push(marker.getLatLng());
                 });
 
-                map_instance.fitBounds(bounds);
+                if(bounds.length > 0){
+                    map_instance.fitBounds(bounds);
+                };
             };
         };
     },
@@ -923,7 +927,6 @@ var map = {
             };
 
             this.addParamsToCars(data);
-
             this.drawCarPath(false);
         };
     },
