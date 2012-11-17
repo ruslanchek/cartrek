@@ -1062,11 +1062,11 @@ var map = {
             marginTop: -$('.map-container .map-notice').height() + 40 / 2
         });
 
-        $('#focus, #auto-focus').fadeOut(150);
+        $('#focus-block').parent().fadeOut(150);
     },
 
     unsetNoPointsInfo: function(){
-        $('#focus, #auto-focus').fadeIn(150);
+        $('#focus-block').parent().fadeIn(150);
 
         $('.map-container .map-notice').fadeOut(150, function(){
             $('.map-container .map-notice').remove();
@@ -1172,8 +1172,6 @@ var map = {
             current = h.timemachine;
 
             while(i > 0){
-
-
                 var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear(),
                     isactive = (current == date_str) ? ' active' : '';
 
@@ -1204,13 +1202,18 @@ var map = {
                 $('#time-machine .days .day').removeClass('hover');
             });
 
+            $('#timemachine-button').attr('href', hash).addClass('active');
+
             $('#time-machine .days').slideDown(100);
+            $('#map, .map-container').animate({height: $('.map-container').height() - 28}, 100);
+            map.map.invalidateSize();
 
-            $('#timemachine-button').off().on('click', function(){$('#time-machine .days').slideUp(100)}).attr('href', hash + hs);
         }else{
-            $('#time-machine .days').slideUp(100);
+            $('#timemachine-button').attr('href', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear()).removeClass('active');
 
-            $('#timemachine-button').attr('href', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear());
+            $('#time-machine .days').slideUp(100);
+            $('#map, .map-container').animate({height: $('.map-container').height() + 28}, 100);
+            map.map.invalidateSize();
         };
     },
 
@@ -1351,9 +1354,9 @@ var map = {
         var hash = core.ui.getHashData();
 
         if(hash && hash.timemachine){
-            this.setDate(core.utilities.timestampToDateYearLast(hash.timemachine));
+            this.changeDate(core.utilities.timestampToDateYearLast(hash.timemachine));
         }else{
-            this.setDate(new Date());
+            this.changeDate(new Date());
         };
     },
 
