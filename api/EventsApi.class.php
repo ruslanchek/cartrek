@@ -119,7 +119,6 @@ Class EventsApi extends Core {
             WHERE
                 `user_id` = ".intval($this->auth->user['data']['id']).$cond_where."
             ORDER BY
-                `id` DESC,
                 `datetime` DESC
             LIMIT
                 ".intval($current_party_from - $offset).", ".intval($per_step);
