@@ -54,7 +54,7 @@
 
       if (meows.size() <= 0) {
         meow_area = 'meows-' + new Date().getTime();
-        $('body').prepend($(window.document.createElement('div')).attr({'id': meow_area, 'class': 'meows'}));
+        $('.top-panel .container').prepend($(window.document.createElement('div')).attr({'id': meow_area, 'class': 'meows'}));
         if (typeof options.beforeCreateFirst === 'function') {
           options.beforeCreateFirst.call(that);
         }

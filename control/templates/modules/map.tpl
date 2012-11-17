@@ -1,25 +1,32 @@
-<div class="map-top-panel">
-    <div class="twothird">
-        <div id="fleets-menu"></div>
-
-        <div id="cars-menu"></div>
-
-        <div class="btn-parts">
-            <button id="auto-focus" class="btn-part-left" title="Автоматическое перемещение карты при обновлении данных"></button>
-            <button id="focus" class="btn-part-right" title="Показать текущее положение">Фокус</button>
+<div class="map-instruments">
+    <div class="map-top-panel">
+        <div class="half">
+            <div id="fleets-menu"></div>
+            <div id="cars-menu"></div>
         </div>
+
+        <div class="half push-right" id="togglers">
+            <button id="auto-renew" class="btn" title="Автообновление"></button>
+
+            <button id="show-path" class="btn" title="Показать путь"></button>
+
+            <div class="btn-parts push-right">
+                <button id="auto-focus" class="btn-part-left" title="Автоматическое перемещение карты при обновлении данных"></button>
+                <button id="focus" class="btn-part-right" title="Показать текущее положение">Фокус</button>
+            </div>
+
+            <a href="" id="timemachine-button">
+                <i></i>
+                <span>Машина времени</span>
+            </a>
+        </div>
+
+        <div class="clear"></div>
     </div>
 
-    <div class="third push-right" id="togglers">
-        <button id="auto-renew" class="btn" title="Автообновление"></button>
-        <button id="show-path" class="btn" title="Показать путь"></button>
+    <div id="time-machine">
+        <div class="days"></div>
     </div>
-
-    <div class="clear"></div>
-</div>
-
-<div id="time-machine" class="map-instruments">
-    <div class="days"></div>
 </div>
 
 <div class="map-container">

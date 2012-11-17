@@ -576,10 +576,6 @@ core.utilities = {
             return '&mdash;';
         };
 
-        if(!type){
-            type = 'NMEA';
-        };
-
         var d, m, y, month_names = [
             'января',
             'февраля',

@@ -31,7 +31,7 @@ var leaflet_ctrl = {
                                 '<div class="id">'+core.utilities.drawGId(car.g_id, 'small')+'</div>' +
                             '</div>' +
                         '</div>';
-            
+
             return new L.HtmlIcon({
                 html        : html,
                 iconSize    : [16, 16], // size of the icon
@@ -570,11 +570,11 @@ var leaflet_ctrl = {
 
 var data_ctrl = {
     error: function(){
-        $.meow({
+        /*$.meow({
             title   : 'Ошибка',
             message : 'Внутренняя ошибка сервиса',
             duration: 12000
-        });
+        });*/
     },
 
     getCarPath: function(car_id, last_point_id, callback){
@@ -1154,52 +1154,64 @@ var map = {
                 hash += 'fleet='+h.fleet;
             };
 
-            if(h && h.car){
+            if(h && h.car && h.fleet){
                 hash += '&car='+h.car;
+            }else if(h && h.car && !h.fleet){
+                hash += 'car='+h.car;
             };
 
             hash = '#' + hash;
 
-        if(h && h.timemachine){
-            current = h.timemachine;
-        }else{
-            current = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear();
-        };
-
-        while(i > 0){
             var hs = '';
 
             if(hash != '#'){
                 hs = hs+'&';
             };
 
-            var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear(),
-                isactive = (current == date_str) ? ' active' : '';
+        if(h && h.timemachine){
+            current = h.timemachine;
 
-            html += '<a class="day'+isactive+'" style="left: '+ (3.3333333 * i) +'%" href="' + hash + hs + 'timemachine=' + date_str + '" data-day="'+date_str+'"></a>';
+            while(i > 0){
 
-            i--;
 
-            date.setDate(date.getDate() - 1);
+                var date_str = date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear(),
+                    isactive = (current == date_str) ? ' active' : '';
+
+                html += '<a class="day'+isactive+'" href="' + hash + hs + 'timemachine=' + date_str + '" data-day="'+date_str+'" title="'+core.utilities.humanizeDate(date, '')+'">'+date.getDate()+'</a>';
+
+                i--;
+
+                date.setDate(date.getDate() - 1);
+            };
+
+            html += '<div class="clear"></div>';
+
+            $('#time-machine .days').html(html);
+
+            $('#time-machine .days .day').off('click').on('click', function(e){
+                $('#time-machine .days .day').removeClass('active');
+                $(this).addClass('active');
+
+                document.location.hash = $(this).attr('href');
+
+                e.preventDefault();
+            });
+
+            $('#time-machine .days .day').off('hover').hover(function(e){
+                $('#time-machine .days .day').removeClass('hover');
+                $(this).addClass('hover');
+            }, function(){
+                $('#time-machine .days .day').removeClass('hover');
+            });
+
+            $('#time-machine .days').slideDown(100);
+
+            $('#timemachine-button').off().on('click', function(){$('#time-machine .days').slideUp(100)}).attr('href', hash + hs);
+        }else{
+            $('#time-machine .days').slideUp(100);
+
+            $('#timemachine-button').attr('href', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear());
         };
-
-        $('#time-machine .days').html(html);
-
-        $('#time-machine .days .day').off('click').on('click', function(e){
-            $('#time-machine .days .day').removeClass('active');
-            $(this).addClass('active');
-
-            document.location.hash = $(this).attr('href');
-
-            e.preventDefault();
-        });
-
-        $('#time-machine .days .day').off('hover').hover(function(e){
-            $('#time-machine .days .day').removeClass('hover');
-            $(this).addClass('hover');
-        }, function(){
-            $('#time-machine .days .day').removeClass('hover');
-        });
     },
 
     drawCarPath: function(forced){
@@ -1209,7 +1221,11 @@ var map = {
                     map.current_car.path_points = [];
                     map.current_car.path_points = data;
 
-                    if(map.current_car.path_points[map.current_car.path_points.length - 1].point_id != data.point_id){
+                    if(
+                        map.current_car.path_points &&
+                        map.current_car.path_points[map.current_car.path_points.length - 1] &&
+                        map.current_car.path_points[map.current_car.path_points.length - 1].point_id != data.point_id
+                    ){
                         map.current_car.path_points.push(map.current_car.last_point);
                     };
 
