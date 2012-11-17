@@ -171,14 +171,14 @@ html, body{
 }
 
 .limiter {
-    padding-bottom: 90px;
+    padding-bottom: 80px;
 }
 
 footer {
-	margin-top: -70px;
-	height: 45px;
+	margin-top: -60px;
+	height: 40px;
     min-width: 1000px;
-    padding: 25px 0 0 0;
+    padding: 20px 0 0 0;
 }
 
 
@@ -648,12 +648,14 @@ a.badge:hover {
     display: block;
 }
 
+
 /* =Footer
 -----------------------------------------------------------------------------*/
 footer {
     background: #718592;
     color: #b9d0de;
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
 }
 
 footer .text-right a {
@@ -668,6 +670,17 @@ footer a:visited {
 footer a:hover,
 footer a:active {
     color: #9db0be;
+}
+
+.bottom-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    text-indent: -99999px;
+    background: url(../img/sprite.png) -130px 0;
+    width: 128px;
+    height: 32px;
+    margin: -16px 0 0 -64px;
 }
 
 
