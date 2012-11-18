@@ -1062,11 +1062,11 @@ var map = {
             marginTop: -$('.map-container .map-notice').height() + 40 / 2
         });
 
-        $('#focus-block').parent().fadeOut(150);
+        $('#focus-block').fadeOut(150);
     },
 
     unsetNoPointsInfo: function(){
-        $('#focus-block').parent().fadeIn(150);
+        $('#focus-block').fadeIn(150);
 
         $('.map-container .map-notice').fadeOut(150, function(){
             $('.map-container .map-notice').remove();
@@ -1205,15 +1205,11 @@ var map = {
             $('#timemachine-button').attr('href', hash).addClass('active');
 
             $('#time-machine .days').slideDown(100);
-            $('#map, .map-container').animate({height: $('.map-container').height() - 28}, 100);
-            map.map.invalidateSize();
 
         }else{
             $('#timemachine-button').attr('href', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear()).removeClass('active');
 
             $('#time-machine .days').slideUp(100);
-            $('#map, .map-container').animate({height: $('.map-container').height() + 28}, 100);
-            map.map.invalidateSize();
         };
     },
 
@@ -1274,7 +1270,7 @@ var map = {
                                 '</tr>' +
                             '</table>';
 
-            if(this.current_car.stop_points && this.current_car.max_speed){
+            if(this.current_car.stop_points || this.current_car.max_speed){
                 panel2_html +=  '<h3>Метрика</h3>' +
                                 '<table>' +
                                     /*'<tr>' +
@@ -1294,7 +1290,7 @@ var map = {
                                '</table>';
             };
 
-            if(this.current_car.stop_points && this.current_car.max_speed){
+            if(this.current_car.hdop || this.current_car.csq){
                 panel3_html +=  '<h3>Статус трекера</h3>' +
                                 '<table>' +
                                     '<tr>' +
@@ -1315,9 +1311,26 @@ var map = {
         }else{
             $('.map-bottom-panel').show();
 
-            $('#bottom-panel-1 .panel-content').html(panel1_html);
-            $('#bottom-panel-2 .panel-content').html(panel2_html);
-            $('#bottom-panel-3 .panel-content').html(panel3_html);
+            if(panel1_html){
+                $('#bottom-panel-1').show()
+                $('#bottom-panel-1 .panel-content').html(panel1_html);
+            }else{
+                $('#bottom-panel-1').hide();
+            };
+
+            if(panel2_html){
+                $('#bottom-panel-2').show()
+                $('#bottom-panel-2 .panel-content').html(panel2_html);
+            }else{
+                $('#bottom-panel-2').hide();
+            };
+
+            if(panel3_html){
+                $('#bottom-panel-3').show()
+                $('#bottom-panel-3 .panel-content').html(panel3_html);
+            }else{
+                $('#bottom-panel-3').hide();
+            };
         }
     },
 
