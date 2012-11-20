@@ -1,3 +1,9 @@
+<div class="threequarter">
+    <div id="events_load_area"></div>
+    <button class="btn" id="load_more">Показать еще</button>
+</div>
+
+
 <div class="quarter">
     <ul class="left-nav">
         <li class="active"><a data-action="unreaded" class="action_menu_item" href="javascript:void(0)" data-toggle="tab">Непросмотренные</a></li>
@@ -9,11 +15,6 @@
         <li class="gray-button"><a data-action="read_all" class="action_menu_item" href="javascript:void(0)">Отметить все как просмотренные</a></li>
         <li class="red-button"><a data-action="delete_all" class="action_menu_item" href="javascript:void(0)" class="red">Удалить все</a></li>
     </ul>
-</div>
-
-<div class="threequarter">
-    <div id="events_load_area"></div>
-    <button class="btn" id="load_more">Показать еще</button>
 </div>
 
 <script>
