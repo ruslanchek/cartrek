@@ -1136,9 +1136,9 @@ var map = {
         };
 
         if(this.auto_focus){
-            $('#auto-focus').attr('class', 'btn-part-left toggler toggler-on').html('&nbsp;<i></i>');
+            $('#auto-focus').attr('class', 'btn btn-part-left toggler toggler-on').html('&nbsp;<i></i>');
         }else{
-            $('#auto-focus').attr('class', 'btn-part-left toggler toggler-off').html('&nbsp;<i></i>');
+            $('#auto-focus').attr('class', 'btn btn-part-left toggler toggler-off').html('&nbsp;<i></i>');
         };
     },
 

@@ -11,8 +11,8 @@
             <button id="show-path" class="btn" title="Показать путь"></button>
 
             <div class="btn-parts push-right" id="focus-block">
-                <button id="auto-focus" class="btn-part-left" title="Автоматическое перемещение карты при обновлении данных"></button>
-                <button id="focus" class="btn-part-right" title="Показать текущее положение">Фокус</button>
+                <button id="auto-focus" class="btn btn-part-left" title="Автоматическое перемещение карты при обновлении данных"></button>
+                <button id="focus" class="btn btn-part-right" title="Показать текущее положение">Фокус</button>
             </div>
 
             <a href="" id="timemachine-button">
