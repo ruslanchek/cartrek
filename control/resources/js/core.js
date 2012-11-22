@@ -571,6 +571,18 @@ core.utilities = {
         };
     },
 
+    //22-11-2011 => Date()
+    parseDateStrToDateOdject: function(str){
+        var d_str = str.split('-'),
+            d = new Date();
+
+        d.setDate(d_str[0] * 1);
+        d.setMonth(d_str[1] - 1);
+        d.setFullYear(d_str[2] * 1);
+
+        return d;
+    },
+
     humanizeDate: function(value, type){
         if(!value){
             return '&mdash;';

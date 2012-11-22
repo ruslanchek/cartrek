@@ -835,7 +835,8 @@ var map = {
     },
 
     setHeaderTexts: function(){
-        var html = '';
+        var html = '',
+            hash = core.ui.getHashData();
 
         if(this.current_fleet){
             html += ' / ' + this.current_fleet.name;
@@ -845,6 +846,10 @@ var map = {
             html += ' / ' + this.current_car.name + ' ' + core.utilities.drawGId(this.current_car.g_id, 'small');
         }else{
             html += ' <span class="badge">'+this.cars_in_fleet+' ' + core.utilities.plural(this.cars_in_fleet, 'машина', 'машины', 'машин') + '</span>';
+        };
+
+        if(hash & hash.timemachine){
+            html += core.utilities.parseDateStrToDateOdject(hash.timemachine);
         };
 
         $('#current-fleet-and-car').html(html);
@@ -1129,7 +1134,7 @@ var map = {
             auto_renew,
             show_car_path;
 
-        if(hash.timemachine){
+        if(hash && hash.timemachine){
             auto_renew = false;
             show_car_path = false;
             this.auto_renew = false;

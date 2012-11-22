@@ -1204,7 +1204,7 @@ footer a:active {
 /* =Map
 -----------------------------------------------------------------------------*/
 #map {
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
 }
 
 #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
