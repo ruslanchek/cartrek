@@ -865,6 +865,7 @@ var map = {
 
             if(!new_hash.timemachine){
                 new_hash.timemachine = this.date;
+
             }else{
                 if(new_hash.timemachine != this.hash.timemachine){
                     this.changeDate(core.utilities.timestampToDateYearLast(new_hash.timemachine));
@@ -880,6 +881,7 @@ var map = {
             };
         };
 
+        this.drawButtons();
         this.createTimeMachine();
 
         //Создаем селекты
@@ -1123,19 +1125,50 @@ var map = {
     },
 
     drawButtons: function(){
-        if(this.auto_renew){
+        var hash = core.ui.getHashData(),
+            auto_renew,
+            show_car_path;
+
+        if(hash.timemachine){
+            auto_renew = false;
+            show_car_path = false;
+            this.auto_renew = false;
+            this.show_car_path = false;
+        }else{
+            this.readOptionsFromCookies();
+            auto_renew = true;
+            show_car_path = true;
+        };
+
+
+        if(auto_renew === false){
+            $('#auto-renew').fadeOut(100);
+        }else{
+            $('#auto-renew').fadeIn(100);
+        };
+
+        if(this.auto_renew === true){
             $('#auto-renew').attr('class', 'btn toggler toggler-on').html('Авто<i></i>');
         }else{
             $('#auto-renew').attr('class', 'btn toggler toggler-off').html('Авто<i></i>');
         };
 
-        if(this.show_car_path){
+
+        if(show_car_path === false){
+            $('#show-path').fadeOut(100);
+        }else{
+            $('#show-path').fadeIn(100);
+        };
+
+        if(this.show_car_path === true){
             $('#show-path').attr('class', 'btn toggler toggler-on').html('Путь<i></i>');
         }else{
             $('#show-path').attr('class', 'btn toggler toggler-off').html('Путь<i></i>');
         };
 
-        if(this.auto_focus){
+
+
+        if(this.auto_focus === true){
             $('#auto-focus').attr('class', 'btn btn-part-left toggler toggler-on').html('&nbsp;<i></i>');
         }else{
             $('#auto-focus').attr('class', 'btn btn-part-left toggler toggler-off').html('&nbsp;<i></i>');
