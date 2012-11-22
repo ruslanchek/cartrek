@@ -848,8 +848,8 @@ var map = {
             html += ' <span class="badge">'+this.cars_in_fleet+' ' + core.utilities.plural(this.cars_in_fleet, 'машина', 'машины', 'машин') + '</span>';
         };
 
-        if(hash & hash.timemachine){
-            html += core.utilities.parseDateStrToDateOdject(hash.timemachine);
+        if(hash && hash.timemachine){
+            html += core.utilities.humanizeDate(core.utilities.parseDateStrToDateOdject(hash.timemachine));
         };
 
         $('#current-fleet-and-car').html(html);
