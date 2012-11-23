@@ -132,6 +132,14 @@ var geozones = {
         map.on('draw:poly-created', function(e){
             geozones.addGeozone(e.poly.getLatLngs(), function(data){
                 geozones.addShape(e.poly.getLatLngs(), data);
+
+                console.log(data);
+
+                core.events_api.pushEvent({
+                    status: 4,
+                    type: 1,
+                    message: 'Геозона «'+data.name+'» добавлена'
+                });
             });
         });
 

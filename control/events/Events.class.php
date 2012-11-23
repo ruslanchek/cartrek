@@ -35,6 +35,11 @@
                         print json_encode($this->eventsApi->getNewEvents());
                     }; break;
 
+                    case 'pushEvent' : {
+                        $this->eventsApi->pushEvent($_POST['status'], $_POST['type'], $_POST['message'], $_POST['showed']);
+
+                    }; break;
+
                     case 'delAllItems' : {
                         $this->eventsApi->delAllItems();
                     }; break;

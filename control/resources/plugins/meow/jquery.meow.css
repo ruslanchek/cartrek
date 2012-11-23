@@ -21,7 +21,7 @@
 .meow .inner {
     width: 250px;
     background: #fff;
-    padding: 8px 10px 2px;
+    padding: 8px 10px;
     border: 1px solid rgba(0, 0, 0, 0.3);
     -webkit-box-shadow:  0px 1px 4px 0px rgba(0, 0, 0, 0.3);
             box-shadow:  0px 1px 4px 0px rgba(0, 0, 0, 0.3);
@@ -53,6 +53,7 @@
     font-size: 1em;
     font-weight: bold;
     line-height: 1;
+    display: none;
 }
 
 .meow .inner .icon {
@@ -77,7 +78,7 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 14px;
-    color: #444;
+    color: #888;
     text-align: center;
     text-decoration: none;
     zoom: 1;
@@ -89,5 +90,5 @@
 }
 
 .meow.hover .inner .close:hover {
-    color: #777!important;
+    color: #444!important;
 }

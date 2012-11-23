@@ -1047,11 +1047,29 @@ core.ticker = {
 };
 
 core.events_api = {
+    events_meow_duration: 10000,
+
     showEventsMeow: function(data){
         $.meow({
             title   : '',
             message : data.message,
-            duration: 12000
+            duration: this.events_meow_duration
+        });
+    },
+
+    pushEvent: function(data){
+        core.events_api.showEventsMeow(data);
+
+        $.ajax({
+            url: '/control/events/?ajax&action=pushEvent',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                status      : data.status,
+                type        : data.type,
+                message     : data.message,
+                showed      : 1
+            }
         });
     },
 

@@ -158,7 +158,7 @@ Class EventsApi extends Core {
      *
      * @return void add a event to user.
      */
-    public function pushEvent($user_id, $status, $type, $message){
+    public function pushEvent($status, $type, $message, $showed = 0){
         $query = "
             INSERT INTO `events` (
                 `status`,
@@ -171,11 +171,11 @@ Class EventsApi extends Core {
             ) VALUES (
                 ".intval($status).",
                 '".$this->db->quote($message)."',
-                ".intval($user_id).",
+                ".intval($this->auth->user['data']['id']).",
                 CONVERT_TZ(NOW(), 'SYSTEM', 'Europe/Moscow'),
                 1,
                 ".intval($type).",
-                0
+                ".intval($showed)."
             )
         ";
 

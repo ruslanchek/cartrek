@@ -349,6 +349,13 @@ footer {
     right: -10px;
 }
 
+.top-panel .top-user-menu .menu-button .mb-content {
+    max-width: 145px;
+    overflow: hidden;
+    display: block;
+    text-overflow: ellipsis;
+}
+
 .top-panel .top-user-menu .menu-button:hover {
     background-position: -16px -59px;
     color: #eee;
@@ -632,6 +639,13 @@ a.badge:hover {
     margin: 0 0 1.3em;
     display: block;
     padding: 0 3px;
+}
+
+.forms select {
+    width: 328px;
+    margin: 0 0 1.3em;
+    display: block;
+    padding: 2px 3px;
 }
 
 .forms input.btn {
