@@ -1069,14 +1069,18 @@ core.events_api = {
             success: function(data){
                 core.loading.hideTopIndicator();
 
-                for(var i = 0, l = data.items.length; i < l; i++){
-                    core.events_api.showEventsMeow(data.items[i]);
+                if(data && data.items){
+                    for(var i = 0, l = data.items.length; i < l; i++){
+                        core.events_api.showEventsMeow(data.items[i]);
+                    };
                 };
 
                 if(data.total > 0){
                     $('#global_events_counter').show().html(data.total);
+                    $('title').html(core.page_title_raw + ' ('+data.total+')');
                 }else{
                     $('#global_events_counter').hide().html('');
+                    $('title').html(core.page_title_raw);
                 };
 
                 if(core.events && data && data.items && data.items.length > 0){
@@ -1104,8 +1108,14 @@ core.exitUser = function(){
     };
 };
 
+core.getRawTitle = function(){
+    this.page_title_raw = $('title').html();
+};
+
 //Object starter
 $(function(){
+    core.getRawTitle();
+
     core.ticker.startSystemInterval();
 
     core.ticker.addIntervalMethod(function(){

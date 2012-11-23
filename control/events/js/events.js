@@ -12,45 +12,54 @@ core.events = {
             $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
         }else{
             for(var i = 0, l = data.items.length; i < l; i++){
-                var timestamp = core.utilities.humanizeTime(data.items[i].datetime)+ ', ' + core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL'),
-                    item_class = '',
-                    hide_button_html = '';
+                if($('.event-item[rel="'+data.items[i].id+'"]').length <= 0){
+                    var timestamp = core.utilities.humanizeTime(data.items[i].datetime)+ ', ' + core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL'),
+                        item_class = '',
+                        hide_button_html = '';
 
-                switch(data.items[i].status){
-                    case '1' : {
-                        item_class = 'alert-error';
-                    }; break;
+                    switch(data.items[i].status){
+                        case '1' : {
+                            item_class = 'alert-error';
+                        }; break;
 
-                    case '2' : {
-                        item_class = 'alert-attention';
-                    }; break;
+                        case '2' : {
+                            item_class = 'alert-attention';
+                        }; break;
 
-                    case '3' : {
-                        item_class = 'alert-notify';
-                    }; break;
+                        case '3' : {
+                            item_class = 'alert-notify';
+                        }; break;
 
-                    case '4' : {
-                        item_class = 'alert-success';
-                    }; break;
+                        case '4' : {
+                            item_class = 'alert-success';
+                        }; break;
 
-                    default : {
-                        item_class = 'alert';
-                    }; break;
-                };
+                        default : {
+                            item_class = 'alert';
+                        }; break;
+                    };
 
-                if(data.items[i].active == '1'){
-                    hide_button_html = '<a class="hide" href="javascript:void(0)" title="Отметить как просмотренное">−</a>';
-                };
+                    if(
+                        data.items[i].active == '1' &&
+                        (this.cond != 'error' &&
+                        this.cond != 'attention' &&
+                        this.cond != 'notify' &&
+                        this.cond != 'success')
+                    ){
+                        hide_button_html = '<a class="hide" href="javascript:void(0)" title="Отметить как просмотренное">−</a>';
+                    };
 
-                html += '<div rel="' + data.items[i].id + '" class="event-item alert '+item_class+'">' +
-                            '<span class="date">'+ timestamp + '</span>' +
-                            data.items[i].message +
-                            hide_button_html +
-                            '<a class="close" href="javascript:void(0)" title="Удалить">&times;</a>' +
-                        '</div>';
+                    html += '<div rel="' + data.items[i].id + '" class="event-item alert '+item_class+'">' +
+                                '<span class="date">'+ timestamp + '</span>' +
+                                data.items[i].message +
+                                hide_button_html +
+                                '<a class="close" href="javascript:void(0)" title="Удалить">&times;</a>' +
+                            '</div>';
 
-                if(data.items[i].active == '1'){
-                    active_count++;
+
+                    if(data.items[i].active == '1'){
+                        active_count++;
+                    };
                 };
             };
 
@@ -259,7 +268,7 @@ core.events = {
     triggerAction: function(action){
         switch(action){
             case 'read_all' : {
-                if(confirm('Отметить все cобытия как прочитанные?')){
+                if(confirm('Отметить все cобытия как просмотренные?')){
                     this.hideAllEvents();
                 };
             }; break;
@@ -272,6 +281,10 @@ core.events = {
 
             case 'unreaded' :
             case 'readed' :
+            case 'error' :
+            case 'notify' :
+            case 'attention' :
+            case 'success' :
             case 'all' : {
                 this.cond = action;
                 $('#events_load_area').html('');
@@ -297,11 +310,11 @@ core.events = {
         });
 
         $('.action_menu_item').on('click', function(){
-            if(!$(this).parent().hasClass('red-button') && !$(this).parent().hasClass('gray-button')){
+            if(!$(this).hasClass('btn')){
                 $('.left-nav li').removeClass('active');
                 $(this).parent().addClass('active');
 
-                $('#events_type_header_suffix').html(' / '+$(this).html());
+                $('#events_type_header_suffix').html(' / '+$(this).text());
             };
 
             core.events.triggerAction($(this).data('action'));

@@ -20,7 +20,7 @@ Class EventsApi extends Core {
         return $result['count'];
     }
 
-    public function getAllEventsCount($cond = 'all'){
+    private function getCondWhere($cond){
         switch($cond){
             case 'unreaded' : {
                 $cond_where = ' && `active` = 1';
@@ -30,10 +30,33 @@ Class EventsApi extends Core {
                 $cond_where = ' && `active` = 0';
             }; break;
 
+            case 'error' : {
+                $cond_where = ' && `status` = 1';
+            }; break;
+
+            case 'notify' : {
+                $cond_where = ' && `status` = 3';
+            }; break;
+
+            case 'attention' : {
+                $cond_where = ' && `status` = 2';
+            }; break;
+
+            case 'success' : {
+                $cond_where = ' && `status` = 4';
+            }; break;
+
+            case 'all';
             default : {
                 $cond_where = '';
             }; break;
         };
+
+        return $cond_where;
+    }
+
+    public function getAllEventsCount($cond = 'all'){
+        $cond_where = $this->getCondWhere($cond);
 
         $query = "
             SELECT
@@ -45,6 +68,7 @@ Class EventsApi extends Core {
         ";
 
         $result = $this->db->assocItem($query);
+
         return $result['count'];
     }
 
@@ -91,19 +115,7 @@ Class EventsApi extends Core {
         $current_party_from = $step * $per_step;
         $current_party_to = ($step * $per_step) + $per_step;
 
-        switch($cond){
-            case 'unreaded' : {
-                $cond_where = ' && `active` = 1';
-            }; break;
-
-            case 'readed' : {
-                $cond_where = ' && `active` = 0';
-            }; break;
-
-            default : {
-                $cond_where = '';
-            }; break;
-        };
+        $cond_where = $this->getCondWhere($cond);
 
         $query = "
             SELECT

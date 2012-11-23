@@ -45,6 +45,9 @@ p {
     color: #3C4E5A;
     display: block;
     text-decoration: none;
+    margin-left: 0;
+    font-weight: inherit;
+    font-size: inherit;
 }
 
 .left-nav li a:hover {
@@ -64,10 +67,28 @@ p {
     cursor: default;
 }
 
+.left-nav li.active a i.label {
+    border-color: #fff;
+}
+
 .left-nav li.divider {
     background: none;
     border: none;
     height: 2em;
+}
+
+.left-nav li i.label {
+    display: block;
+    float: right;
+    width: 16px;
+    height: 16px;
+    -webkit-border-radius: 2px;
+            border-radius: 2px;
+}
+
+.action_menu_item.btn {
+    display: block;
+    margin: 0 0 1em;
 }
 
 li.red-button,
