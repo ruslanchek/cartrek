@@ -571,6 +571,18 @@ core.utilities = {
         };
     },
 
+    //2012-11-18 16:05:49 => Date()
+    parseDateMysqlStrToDateOdject: function(str){
+        var d_str = str.substring(0, 10).split('-'),
+            d = new Date();
+
+        d.setDate(d_str[2] * 1);
+        d.setMonth(d_str[1]);
+        d.setFullYear(d_str[0] * 1);
+
+        return d;
+    },
+
     //22-11-2011 => Date()
     parseDateStrToDateOdject: function(str){
         var d_str = str.split('-'),

@@ -1048,9 +1048,34 @@ var map = {
 
         if(this.current_car){
             if(this.current_car.last_point_date != null){
+                var hash = '',
+                    h = core.ui.getHashData();
+
+                if(h && h.fleet){
+                    hash += 'fleet='+h.fleet;
+                };
+
+                if(h && h.car && h.fleet){
+                    hash += '&car='+h.car;
+                }else if(h && h.car && !h.fleet){
+                    hash += 'car='+h.car;
+                };
+
+                hash = '#' + hash;
+
+                var hs = '';
+
+                if(hash != '#'){
+                    hs = hs+'&';
+                };
+
+                var d = core.utilities.parseDateMysqlStrToDateOdject(this.current_car.last_point_date);
+
+                hash = hash + hs + 'timemachine=' + d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear();
+
                 message =   '<p>На&nbsp;<b>'+core.utilities.humanizeDate(this.date, 'COMMON')+'</b> ' +
                             'не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины <b>&laquo;'+this.current_car.name+'&raquo;</b>.</p>' +
-                            '<p>Последняя отметка была зарегистрированна&nbsp;<b>'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQL')+'</b>.</p>';
+                            '<p>Последняя отметка была зарегистрированна&nbsp;<b><a href="'+hash+'">'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQL')+'</a></b>.</p>';
             }else{
                 message =  '<p>Для&nbsp;машины&nbsp;<b>&laquo;'+this.current_car.name+'&raquo;</b> нет ни одной отметки.</p>';
             };
