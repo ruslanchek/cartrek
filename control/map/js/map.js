@@ -838,19 +838,22 @@ var map = {
         var html = '',
             hash = core.ui.getHashData();
 
+        if(hash && hash.timemachine){
+            html += '<span class="header-timemeachine"> / ' + core.utilities.humanizeDate(core.utilities.parseDateStrToDateOdject(hash.timemachine)) + '</span>';
+        };
+
         if(this.current_fleet){
             html += ' / ' + this.current_fleet.name;
         };
 
         if(this.current_car){
             html += ' / ' + this.current_car.name + ' ' + core.utilities.drawGId(this.current_car.g_id, 'small');
+            html += '<span class="g_id-spacer"></span>';
         }else{
             html += ' <span class="badge">'+this.cars_in_fleet+' ' + core.utilities.plural(this.cars_in_fleet, 'машина', 'машины', 'машин') + '</span>';
         };
 
-        if(hash && hash.timemachine){
-            html += core.utilities.humanizeDate(core.utilities.parseDateStrToDateOdject(hash.timemachine));
-        };
+
 
         $('#current-fleet-and-car').html(html);
     },

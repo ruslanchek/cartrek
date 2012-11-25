@@ -1293,9 +1293,13 @@ footer a:active {
     display: inline-block;
     position: absolute;
     bottom: 1px;
-    margin-left: 10px;
 }
 
+.g_id-spacer {
+    width: 16.5ex;
+    font-size: 13px;
+    display: inline-block;
+}
 
 /* Map Notice */
 .map-notice {
