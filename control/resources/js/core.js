@@ -1106,11 +1106,13 @@ core.events_api = {
                 };
 
                 if(data.total > 0){
-                    $('#global_events_counter').show().html(data.total);
+                    $('#global_events_counter, #icon-events-main-counter-bubble').show().html(data.total);
                     $('title').html(core.page_title_raw + ' ('+data.total+')');
+                    $('#icon-events-main').addClass('events-active').removeClass('events-unactive');
                 }else{
-                    $('#global_events_counter').hide().html('');
+                    $('#global_events_counter, #icon-events-main-counter-bubble').hide().html('');
                     $('title').html(core.page_title_raw);
+                    $('#icon-events-main').addClass('events-unactive').removeClass('events-active');
                 };
 
                 if(core.events && data && data.items && data.items.length > 0){

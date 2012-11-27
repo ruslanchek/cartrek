@@ -89,6 +89,8 @@ Class EventsApi extends Core {
             ORDER BY
                 `id` DESC,
                 `datetime` DESC
+            LIMIT
+                5
         ";
 
         $items = $this->db->assocMulti($query);
@@ -99,8 +101,10 @@ Class EventsApi extends Core {
             SET
                 `showed` = 1
             WHERE
-                `user_id` = ".intval($this->auth->user['data']['id'])
-        );
+                `user_id` = ".intval($this->auth->user['data']['id'])."
+            LIMIT
+                5
+        ");
 
         $total = $this->getAllEventsCount('unreaded');
 

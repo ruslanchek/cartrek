@@ -1624,5 +1624,81 @@ footer a:active {
 }
 
 
+/* =Main
+-----------------------------------------------------------------------------*/
+.sections {
+    padding: 20px 0;
+}
+
+.sections .item {
+    position: relative;
+}
+
+.sections .item a.inner {
+    border: 2px solid #eee;
+    display: block;
+    padding: 20px 10px;
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+    color: #3C4E5A;
+}
+
+.sections .item a.inner:hover {
+    border-color: #ddd;
+    color: #5a7485;
+}
+
+.sections .item a.inner:hover .icon {
+    opacity: 0.75;
+}
+
+.sections .item .icon {
+    background-image: url(../img/icons-main-sprite.png);
+    background-repeat: no-repeat;
+    display: block;
+    margin: 0 auto 0.5em;
+    height: 32px;
+    width: 32px;
+}
+
+.sections .item .count {
+    -webkit-border-radius: 20px;
+    border-radius: 20px;
+    background: #920000;
+    color: #fff;
+    position: absolute;
+    top: -5px;
+    right: -6px;
+    height: 20px;
+    min-width: 16px;
+    padding: 0 2px;
+    display: block;
+}
+
+.sections .item .icon.watch {
+    background-position: 0 0;
+}
+
+.sections .item .icon.events-active {
+    background-position: -32px 0;
+}
+
+.sections .item .icon.events-unactive {
+    background-position: -64px 0;
+}
+
+.sections .item .icon.dispatcher {
+    background-position: 0 0;
+}
+
+.sections .item .icon.geozones {
+    background-position: 0 0;
+}
+
+.sections .item .icon.config {
+    background-position: 0 0;
+}
+
 /* =Geozones
 -----------------------------------------------------------------------------*/
