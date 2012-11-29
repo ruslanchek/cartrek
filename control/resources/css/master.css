@@ -717,7 +717,7 @@ footer a:active {
     left: 50%;
     top: 50%;
     text-indent: -99999px;
-    background: url(../img/sprite.png) -130px 0;
+    background: url(../img/sprite.png) -130px 0 no-repeat;
     width: 128px;
     height: 32px;
     margin: -16px 0 0 -64px;
@@ -1497,12 +1497,13 @@ footer a:active {
 }
 
 .marker-with-info .icon {
-    width: 16px;
-    height: 16px;
+    background-image: url(/control/map/img/markers/heading/heading-sprite.png);
+    width: 40px;
+    height: 40px;
     position: absolute;
     z-index: 2;
-    top: -8px;
-    left: -8px;
+    top: -20px;
+    left: -20px;
 }
 
 .marker-with-info .shadow {
@@ -1543,12 +1544,12 @@ footer a:active {
 
 .marker-with-info .info-block i.arm {
     display: block;
-    height: 9px;
-    width: 9px;
+    height: 16px;
+    width: 16px;
     position: absolute;
     top: -7px;
     left: -7px;
-    background: url(/control/map/img/markers/car-label-arm.png);
+    background: url(/control/map/img/markers/car-label-arm.png) no-repeat;
 }
 
 .marker-with-info .info-block .name {

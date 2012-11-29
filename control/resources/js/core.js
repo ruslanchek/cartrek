@@ -943,6 +943,20 @@ core.map_tools = {
         return '/control/map/img/markers/heading/'+degrees_zone+'.png';
     },
 
+    getHeadingIconSpriteOffset: function(heading){
+        var degrees_zone = Math.round(parseInt(heading)/15) * 1;
+
+        if(isNaN(degrees_zone)){
+            degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
+        };
+
+        if(degrees_zone == 360){
+            degrees_zone = 0;
+        };
+
+        return degrees_zone * 40;
+    },
+
     getGeoposition: function(callback){
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(position){

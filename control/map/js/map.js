@@ -8,23 +8,24 @@ var leaflet_ctrl = {
     max_speed_popup_opened          : false,
     path_points_length              : 0,
 
+    path_color                      : 'black',
+
     icons: {
         heading: function(heading){
-            return L.icon({
-                iconUrl     : core.map_tools.getHeadingIcon(heading),
-                shadowUrl   : '/control/map/img/markers/heading/flat_shadow.png',
+            var html =  '<div class="marker-with-info">' +
+                            '<div class="icon" style="background-position: -'+core.map_tools.getHeadingIconSpriteOffset(heading)+'px 0px"></div>' +
+                        '</div>';
 
-                iconSize    : [16, 16], // size of the icon
-                shadowSize  : [30, 30], // size of the shadow
-                iconAnchor  : [8, 8], // point of the icon which will correspond to marker's location
-                shadowAnchor: [15, 12],  // the same for the shadow
-                popupAnchor : [0, -8]
+            return new L.HtmlIcon({
+                html        : html,
+                iconSize    : [40, 40], // size of the icon
+                iconAnchor  : [20, 20], // point of the icon which will correspond to marker's location
+                popupAnchor : [0, -20]
             });
         },
         heading_with_info: function(car, point){
             var html =  '<div class="marker-with-info">' +
-                            '<div class="icon" style="background: url('+core.map_tools.getHeadingIcon(point.heading)+')"></div>' +
-                            '<div class="shadow"></div>' +
+                            '<div class="icon" style="background-position: -'+core.map_tools.getHeadingIconSpriteOffset(point.heading)+'px 0px"></div>' +
                             '<div class="info-block">' +
                                 '<i class="arm"></i>' +
                                 '<div class="name">'+car.name+'</div>' +
@@ -35,8 +36,8 @@ var leaflet_ctrl = {
             return new L.HtmlIcon({
                 html        : html,
                 iconSize    : [16, 16], // size of the icon
-                iconAnchor  : [8, 8], // point of the icon which will correspond to marker's location
-                popupAnchor : [0, -8]
+                iconAnchor  : [20, 20], // point of the icon which will correspond to marker's location
+                popupAnchor : [0, -20]
             });
         },
         stop: function(){
@@ -396,12 +397,12 @@ var leaflet_ctrl = {
                 path_points.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
 
                 //Объявляем переменные маркера и его типа (по умолчанию - run, движение)
-                var marker,
-                    type = 'run';
+                /*var marker,
+                    type = 'run';*/
 
                 //Если точка не последняя, создаем маркер
                 // (иначе будет рисоваться еще и маркер поверх маркера текущего положения)
-                if(i < car.path_points.length-1){
+                /*if(i < car.path_points.length-1){
                     //Приводим скорость к плавающему типу
                     car.path_points[i].speed = parseFloat(car.path_points[i].speed);
 
@@ -422,12 +423,12 @@ var leaflet_ctrl = {
                     //Если создался маркер id точки отличается от id точки текущего положения, добавляем маркер в массив
                     if(marker && car.last_point_id != car.path_points[i].id){
                         if(type == 'stop' || type == 'start'){
-                            stop_markers.push(marker);
+                            //stop_markers.push(marker);
                         }else{
                             //run_markers.push(marker);
                         };
                     };
-                };
+                };*/
 
                 //Переопределяем переменные максимальной скорости и маркера максимальной скорости
                 if(car.path_points[i] && car.path_points[i].speed && car.path_points[i].speed > max_speed){
@@ -446,13 +447,13 @@ var leaflet_ctrl = {
 
             this.drawMaxSpeedMarker(map_instance, car);
 
-            if(stop_markers.length > 0){
+            /*if(stop_markers.length > 0){
                 this.stop_markers_group = L.layerGroup(stop_markers).addTo(map_instance);
             };
 
             if(run_markers.length > 0){
                 this.run_markers_group = L.layerGroup(run_markers).addTo(map_instance);
-            };
+            };*/
 
             //Если путь уже отрисован, то удаляем его
             if(this.path){
@@ -462,7 +463,7 @@ var leaflet_ctrl = {
             //Рисуем путь
             if(path_points && path_points.length > 0){
                 this.path = L.polyline(path_points, {
-                    color: car.color,
+                    color: this.path_color,
                     smoothFactor: 2,
                     weight: 3,
                     opacity: 0.5
@@ -473,7 +474,7 @@ var leaflet_ctrl = {
                     this.path.addTo(map_instance)
                 };
 
-                car.path_length = this.path.length_in_meters();
+                car.path_length = Math.ceil(this.path.length_in_meters() / 1000);
             };
         };
 
@@ -667,7 +668,7 @@ var data_ctrl = {
             success: function(data){
                 //Если запрос был на обновление данных, а не на первечную загрузку -
                 // включаем автообновление, если оно, конечно не отключено в куках
-                if(!options.renew && $.cookie('auto-renew') != '0'){
+                if(!options.renew && $.cookie('auto-renew') != '0' && !core.ui.getHashData().timemachine){
                     map.auto_renew = true;
                 };
 
@@ -678,7 +679,7 @@ var data_ctrl = {
                 callback(data);
             },
             error: function(){
-                if(!options.renew && $.cookie('auto-renew') != '0'){
+                if(!options.renew && $.cookie('auto-renew') != '0' && !core.ui.getHashData().timemachine){
                     map.auto_renew = true;
                 };
 
@@ -1173,7 +1174,6 @@ var map = {
             show_car_path = true;
         };
 
-
         if(auto_renew === false){
             $('#auto-renew').fadeOut(100);
         }else{
@@ -1351,7 +1351,7 @@ var map = {
 
                                     '<tr>' +
                                         '<th>Пройдено пути</th>' +
-                                        '<td>'+ this.current_car.path_length / 1000 + ' км</td>' +
+                                        '<td><span style="margin-left: -1.6ex">~</span> '+ this.current_car.path_length + ' км</td>' +
                                     '</tr>' +
                                '</table>';
             };
