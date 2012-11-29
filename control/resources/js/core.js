@@ -1170,7 +1170,7 @@ $(function(){
 
     //core.effects.breathe($('#global_events_counter'));
 
-    $('input[type=checkbox]').tzCheckbox();
+    $('input.tzCB').tzCheckbox();
 
     $('.core-ui-select').coreUISelect({
         jScrollPane: true

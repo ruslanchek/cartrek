@@ -120,13 +120,13 @@ var leaflet_ctrl = {
                 }
             );
 
-            marker.setZIndexOffset(data.id);
+            marker.setZIndexOffset(data.id * 11);
 
             /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
             map_instance.addLayer(m);*/
 
             marker.on("mouseover", function() {
-                this.setZIndexOffset(1000000);
+                this.setZIndexOffset(data.id * 11 * 10);
                 $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
             });
 
@@ -142,15 +142,17 @@ var leaflet_ctrl = {
 
             car.cp_marker       = marker;
             car.last_point_id   = data.point_id;
+
             car.last_point      = {
-                altitude: data.altitude,
-                date    : data.date,
-                heading : data.heading,
-                id      : data.point_id,
-                lat     : data.lat,
-                lon     : data.lon,
-                speed   : data.speed
+                altitude    : data.altitude,
+                date        : data.date,
+                heading     : data.heading,
+                id          : data.point_id,
+                lat         : data.lat,
+                lon         : data.lon,
+                speed       : data.speed
             };
+
             car.last_point_date = data.last_point_date;
             car.last_update     = data.last_update;
 
@@ -215,13 +217,13 @@ var leaflet_ctrl = {
                     map.current_car.path_points[map.current_car.path_points.length-1].id != data.point_id
                 ){
                     map.current_car.path_points.push({
-                        altitude: data.altitude,
-                        date    : data.date,
-                        heading : data.heading,
-                        id      : data.point_id,
-                        lat     : data.lat,
-                        lon     : data.lon,
-                        speed   : data.speed
+                        altitude    : data.altitude,
+                        date        : data.date,
+                        heading     : data.heading,
+                        id          : data.point_id,
+                        lat         : data.lat,
+                        lon         : data.lon,
+                        speed       : data.speed
                     });
                 };
 
@@ -258,14 +260,14 @@ var leaflet_ctrl = {
             case 'start' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon: this.icons.stop(),
-                        id: point.id,
-                        car_id: car.id
+                        icon    : this.icons.stop(),
+                        id      : point.id,
+                        car_id  : car.id
                     }
                 );
 
                 marker.on("mouseover", function() {
-                    this.setZIndexOffset(300000 + car.id + 10);
+                    this.setZIndexOffset(car.id * 10);
                 });
 
                 marker.on("mouseout", function() {
@@ -285,9 +287,9 @@ var leaflet_ctrl = {
             case 'stop' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon: this.icons.stop(),
-                        id: point.id,
-                        car_id: car.id
+                        icon    : this.icons.stop(),
+                        id      : point.id,
+                        car_id  : car.id
                     }
                 );
 
@@ -312,9 +314,9 @@ var leaflet_ctrl = {
             case 'run' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon: this.icons.waypoint(),
-                        id: point.id,
-                        car_id: car.id
+                        icon    : this.icons.waypoint(),
+                        id      : point.id,
+                        car_id  : car.id
                     }
                 );
 
@@ -335,9 +337,9 @@ var leaflet_ctrl = {
             case 'max_speed' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon: this.icons.waypoint(),
-                        id: point.id,
-                        car_id: car.id
+                        icon    : this.icons.waypoint(),
+                        id      : point.id,
+                        car_id  : car.id
                     }
                 );
 
@@ -366,10 +368,10 @@ var leaflet_ctrl = {
     },
 
     drawAllThePath: function(map_instance, car_id){
-        var path_points = [],
-            stop_markers = [],
-            run_markers = [],
-            car = map.cars_list[map.getCarIndexById(car_id)];
+        var path_points     = [],
+            stop_markers    = [],
+            run_markers     = [],
+            car             = map.cars_list[map.getCarIndexById(car_id)];
 
         if(car && car.path_points){
             if(car.path_points.length > this.path_points_length || !this.path){
@@ -463,11 +465,11 @@ var leaflet_ctrl = {
             //Рисуем путь
             if(path_points && path_points.length > 0){
                 this.path = L.polyline(path_points, {
-                    color: this.path_color,
-                    smoothFactor: 2,
-                    weight: 3,
-                    opacity: 0.5
-                    //dashArray: '1, 5'
+                    color           : this.path_color,
+                    smoothFactor    : 2,
+                    weight          : 3,
+                    opacity         : 0.5
+                    //dashArray     : '1, 5'
                 });
 
                 if(this.path){
@@ -546,6 +548,7 @@ var leaflet_ctrl = {
             this.removeMaxSpeedMarker();
             this.max_markers_group = L.layerGroup([car.max_speed_marker]).addTo(map_instance);
             this.max_speed_marker = true;
+
         }else if(car.max_speed_marker){
             car.max_speed_marker.update();
         };
@@ -640,13 +643,13 @@ var data_ctrl = {
     //Загружаем динамические данные тачек (координаты, скорость, HDOP и пр.)
     getDynamicCarsData: function(cars, options, callback){
         this.loading_process = $.ajax({
-            url : '/control/map/?ajax&action=getDynamicDevicesData&date='+map.date,
-            data : {
-                cars    : JSON.stringify(cars)
+            url         : '/control/map/?ajax&action=getDynamicDevicesData&date='+map.date,
+            data        : {
+                cars : JSON.stringify(cars)
             },
-            dataType : 'json',
-            type : 'post',
-            beforeSend: function(){
+            dataType    : 'json',
+            type        : 'post',
+            beforeSend  : function(){
                 //Если запрос был на обновление данных, а не на первечную загрузку -
                 // отключем на время загрузки данных автообновление,
                 // чтобы не было ситуации, когда маркеров на карте нет,
@@ -743,7 +746,7 @@ var map = {
                 });
 
                 $('.map-bottom-panel').css({
-                    minHeight: ui.size.height + 16
+                    minHeight: ui.size.height + 1
                 });
 
                 if(map.map){
@@ -760,7 +763,7 @@ var map = {
             });
 
             $('.map-bottom-panel').css({
-                minHeight: $('.map-container').height() + 16
+                minHeight: $('.map-container').height() + 1
             });
 
             if(map.map){
@@ -769,7 +772,7 @@ var map = {
         });
 
         $('.map-bottom-panel').css({
-            minHeight: $('.map-container').height() + 16
+            minHeight: $('.map-container').height() + 1
         });
     },
 
@@ -796,10 +799,10 @@ var map = {
                 var tm_hash = '';
 
                 if(map.checkTimemachineMode()){
-                    tm_hash = '&timemachine='+core.ui.getHashData().timemachine;
+                    tm_hash = '&timemachine=' + core.ui.getHashData().timemachine;
                 };
 
-                document.location.hash = '#fleet='+fleet_id+'&car='+val+tm_hash;
+                document.location.hash = '#fleet=' + fleet_id + '&car=' + val + tm_hash;
             }
         });
     },
@@ -896,9 +899,9 @@ var map = {
             $.extend(this.hash, new_hash);
         }else{
             this.hash = {
-                fleet: 'all',
-                car: 'all',
-                timemachine:this.date
+                fleet       : 'all',
+                car         : 'all',
+                timemachine : this.date
             };
         };
 
@@ -931,6 +934,7 @@ var map = {
     addParamsToCars: function(data){
         for(var i = 0, l = data.length; i < l; i++){
             var car;
+
             if(car = this.cars_list[this.getCarIndexById(data[i].id)]){
                 car.csq       = data[i].csq;
                 car.hdop      = data[i].hdop;
@@ -1228,11 +1232,11 @@ var map = {
     },
 
     createTimeMachine: function(){
-        var html = '',
-            i = 30,
-            date = new Date(),
-            hash = '',
-            h = core.ui.getHashData(),
+        var html    = '',
+            i       = 30,
+            date    = new Date(),
+            hash    = '',
+            h       = core.ui.getHashData(),
             current;
 
             if(h && h.fleet){

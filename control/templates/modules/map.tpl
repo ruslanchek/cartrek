@@ -1,8 +1,6 @@
-<div class="map-instruments">
+{*<div class="map-instruments">
     <div class="map-top-panel">
-
-
-        <div class="half push-right" id="togglers">
+        <div class="half push-right">
             <button id="auto-renew" class="btn" title="Автообновление"></button>
 
             <button id="show-path" class="btn" title="Показать путь"></button>
@@ -24,7 +22,7 @@
     <div id="time-machine">
         <div class="days"></div>
     </div>
-</div>
+</div>*}
 
 <div class="row">
     <div class="threequarter">
@@ -36,6 +34,38 @@
     </div>
     <div class="quarter">
         <div class="map-bottom-panel">
+            <div class="bottom-panel">
+                <div class="panel-content" id="togglers">
+                    <label class="third">
+                        <input type="checkbox" class="slickswitch" id="switch1" />
+                        Авто
+                    </label>
+
+                    <label class="third">
+                        <input type="checkbox" class="slickswitch" id="switch2" />
+                        Путь
+                    </label>
+
+                    <label class="third">
+                        <input type="checkbox" class="slickswitch" id="switch3" />
+                        Фокус
+                    </label>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+            <link rel="stylesheet" href="/control/resources/plugins/slickswitch/css/slickswitch.css" type="text/css" />
+            <script src="/control/resources/plugins/slickswitch/js/jquery.slickswitch.js" type="text/javascript"></script>
+
+            <script>
+                $(function() {
+                	$('#switch1').slickswitch();
+                	$('#switch2').slickswitch();
+                    $('#switch3').slickswitch();
+                });
+            </script>
+
             <div class="bottom-panel">
                 <div class="panel-content">
                     <div id="fleets-menu"></div>

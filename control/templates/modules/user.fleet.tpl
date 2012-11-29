@@ -21,7 +21,8 @@
                     <td><span class="g_id">{$item.g_id}</span></td>
                     <td>{$item.fleet_name}</td>
                     <td>
-                        <label for="item_active_{$item.id}"></label><input type="checkbox" {if $item.active}checked="checked"{/if} id="item_active_{$item.id}" name="item_active" />
+                        <label for="item_active_{$item.id}"></label>
+                        <input class="tzCB" type="checkbox" {if $item.active}checked="checked"{/if} id="item_active_{$item.id}" name="item_active" />
                     </td>
                 </tr>
                 {/foreach}
