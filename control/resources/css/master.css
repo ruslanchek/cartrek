@@ -1542,8 +1542,8 @@ footer a:active {
     height: 16px;
     width: 16px;
     position: absolute;
-    top: -7px;
-    left: -7px;
+    top: -14px;
+    left: -14px;
     background: url(/control/map/img/markers/car-label-arm.png) no-repeat;
 }
 
@@ -1593,7 +1593,7 @@ footer a:active {
 }
 
 .bottom-panel .panel-content {
-    padding: 10px 10px;
+    padding: 12px;
 }
 
 .bottom-panel table {
@@ -1686,15 +1686,15 @@ footer a:active {
 }
 
 .sections .item .icon.dispatcher {
-    background-position: 0 0;
+    background-position: -155px 0;
 }
 
 .sections .item .icon.geozones {
-    background-position: 0 0;
+    background-position: -185px 0;
 }
 
 .sections .item .icon.config {
-    background-position: 0 0;
+    background-position: -124px 0;
 }
 
 /* =Geozones

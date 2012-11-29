@@ -1342,18 +1342,20 @@ var map = {
             panel3_html = '';
 
         if(this.current_car){
-            panel1_html +=  '<h3>Обновления данных</h3>' +
-                            '<table>' +
-                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQLTIME')+'">' +
-                                    '<th>Координаты</th>' +
-                                    '<td>'+core.utilities.dateRange(this.current_car.last_point_date, new Date())+'</td>' +
-                                '</tr>' +
+            if(this.current_car.hdop || this.current_car.csq){
+                panel1_html +=  '<h3>Статус трекера</h3>' +
+                                '<table>' +
+                                    '<tr>' +
+                                        '<th>Сигнал GPS</th>' +
+                                        '<td>'+core.utilities.getHDOPIndicator(this.current_car.hdop)+'</td>' +
+                                    '</tr>' +
 
-                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_update, 'MYSQLTIME')+'">' +
-                                    '<th>Статус</th>' +
-                                    '<td>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</td>' +
-                                '</tr>' +
-                            '</table>';
+                                    '<tr>' +
+                                        '<th>Сигнал GSM</th>' +
+                                        '<td>'+core.utilities.getCSQIndicator(this.current_car.csq)+'</td>' +
+                                    '</tr>' +
+                               '</table>';
+            };
 
             if(this.current_car.stop_points || this.current_car.max_speed){
                 panel2_html +=  '<h3>Метрика</h3>' +
@@ -1375,20 +1377,18 @@ var map = {
                                '</table>';
             };
 
-            if(this.current_car.hdop || this.current_car.csq){
-                panel3_html +=  '<h3>Статус трекера</h3>' +
-                                '<table>' +
-                                    '<tr>' +
-                                        '<th>Сигнал GPS</th>' +
-                                        '<td>'+core.utilities.getHDOPIndicator(this.current_car.hdop)+'</td>' +
-                                    '</tr>' +
+            panel3_html +=  '<h3>Обновления данных</h3>' +
+                            '<table>' +
+                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQLTIME')+'">' +
+                                    '<th>Координаты</th>' +
+                                    '<td>'+core.utilities.dateRange(this.current_car.last_point_date, new Date())+'</td>' +
+                                '</tr>' +
 
-                                    '<tr>' +
-                                        '<th>Сигнал GSM</th>' +
-                                        '<td>'+core.utilities.getCSQIndicator(this.current_car.csq)+'</td>' +
-                                    '</tr>' +
-                               '</table>';
-            };
+                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_update, 'MYSQLTIME')+'">' +
+                                    '<th>Статус</th>' +
+                                    '<td>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</td>' +
+                                '</tr>' +
+                            '</table>';
         };
 
         if(panel1_html && !map.checkTimemachineMode()){
