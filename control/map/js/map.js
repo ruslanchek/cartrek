@@ -668,7 +668,7 @@ var data_ctrl = {
             success: function(data){
                 //Если запрос был на обновление данных, а не на первечную загрузку -
                 // включаем автообновление, если оно, конечно не отключено в куках
-                if(!options.renew && $.cookie('auto-renew') != '0' && !core.ui.getHashData().timemachine){
+                if(!options.renew && $.cookie('auto-renew') != '0' && !map.checkTimemachineMode()){
                     map.auto_renew = true;
                 };
 
@@ -679,7 +679,7 @@ var data_ctrl = {
                 callback(data);
             },
             error: function(){
-                if(!options.renew && $.cookie('auto-renew') != '0' && !core.ui.getHashData().timemachine){
+                if(!options.renew && $.cookie('auto-renew') != '0' && !map.checkTimemachineMode()){
                     map.auto_renew = true;
                 };
 
@@ -739,7 +739,11 @@ var map = {
             resize: function(event, ui){
                 $('#map').css({
                     height: ui.size.height + 2,
-                    width:  ui.size.width - 2
+                    width:  $('.map-container').width() - 2
+                });
+
+                $('.map-bottom-panel').css({
+                    minHeight: ui.size.height + 16
                 });
 
                 if(map.map){
@@ -755,9 +759,17 @@ var map = {
                 width:  $('.map-container').width() - 2
             });
 
+            $('.map-bottom-panel').css({
+                minHeight: $('.map-container').height() + 16
+            });
+
             if(map.map){
                 map.map.invalidateSize();
             };
+        });
+
+        $('.map-bottom-panel').css({
+            minHeight: $('.map-container').height() + 16
         });
     },
 
@@ -783,7 +795,7 @@ var map = {
             onChange    : function(val){
                 var tm_hash = '';
 
-                if(core.ui.getHashData() && core.ui.getHashData().timemachine){
+                if(map.checkTimemachineMode()){
                     tm_hash = '&timemachine='+core.ui.getHashData().timemachine;
                 };
 
@@ -804,7 +816,7 @@ var map = {
             onChange    : function(val){
                 var tm_hash = '';
 
-                if(core.ui.getHashData() && core.ui.getHashData().timemachine){
+                if(map.checkTimemachineMode()){
                     tm_hash = '&timemachine='+core.ui.getHashData().timemachine;
                 };
 
@@ -1159,11 +1171,10 @@ var map = {
     },
 
     drawButtons: function(){
-        var hash = core.ui.getHashData(),
-            auto_renew,
+        var auto_renew,
             show_car_path;
 
-        if(hash && hash.timemachine){
+        if(map.checkTimemachineMode()){
             auto_renew = false;
             show_car_path = false;
             this.auto_renew = false;
@@ -1205,6 +1216,14 @@ var map = {
             $('#auto-focus').attr('class', 'btn btn-part-left toggler toggler-on').html('&nbsp;<i></i>');
         }else{
             $('#auto-focus').attr('class', 'btn btn-part-left toggler toggler-off').html('&nbsp;<i></i>');
+        };
+    },
+
+    checkTimemachineMode: function(){
+        var h = core.ui.getHashData();
+
+        if(h && h.timemachine){
+            return true;
         };
     },
 
@@ -1372,32 +1391,26 @@ var map = {
             };
         };
 
-        if(!panel1_html && !panel2_html && !panel3_html){
-            $('.map-bottom-panel').hide();
+        if(panel1_html && !map.checkTimemachineMode()){
+            $('#bottom-panel-1').show()
+            $('#bottom-panel-1 .panel-content').html(panel1_html);
         }else{
-            $('.map-bottom-panel').show();
+            $('#bottom-panel-1').hide();
+        };
 
-            if(panel1_html){
-                $('#bottom-panel-1').show()
-                $('#bottom-panel-1 .panel-content').html(panel1_html);
-            }else{
-                $('#bottom-panel-1').hide();
-            };
+        if(panel2_html){
+            $('#bottom-panel-2').show()
+            $('#bottom-panel-2 .panel-content').html(panel2_html);
+        }else{
+            $('#bottom-panel-2').hide();
+        };
 
-            if(panel2_html){
-                $('#bottom-panel-2').show()
-                $('#bottom-panel-2 .panel-content').html(panel2_html);
-            }else{
-                $('#bottom-panel-2').hide();
-            };
-
-            if(panel3_html){
-                $('#bottom-panel-3').show()
-                $('#bottom-panel-3 .panel-content').html(panel3_html);
-            }else{
-                $('#bottom-panel-3').hide();
-            };
-        }
+        if(panel3_html && !map.checkTimemachineMode()){
+            $('#bottom-panel-3').show()
+            $('#bottom-panel-3 .panel-content').html(panel3_html);
+        }else{
+            $('#bottom-panel-3').hide();
+        };
     },
 
     setDate: function(date){

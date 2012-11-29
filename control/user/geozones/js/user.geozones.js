@@ -212,7 +212,7 @@ var geozones = {
                 resize: function(event, ui){
                     $('#map').css({
                         height: ui.size.height + 2,
-                        width:  ui.size.width - 2
+                        width:  $('.map-container').width() - 2
                     });
 
                     if(geozones.map){

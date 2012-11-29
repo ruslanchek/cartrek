@@ -1,9 +1,6 @@
 <div class="map-instruments">
     <div class="map-top-panel">
-        <div class="half">
-            <div id="fleets-menu"></div>
-            <div id="cars-menu"></div>
-        </div>
+
 
         <div class="half push-right" id="togglers">
             <button id="auto-renew" class="btn" title="Автообновление"></button>
@@ -29,19 +26,39 @@
     </div>
 </div>
 
-<div class="map-container">
-    <div class="shadow-top"></div>
-    <div class="shadow-bottom"></div>
-    <div id="map"></div>
+<div class="row">
+    <div class="threequarter">
+        <div class="map-container">
+            <div class="shadow-top"></div>
+            <div class="shadow-bottom"></div>
+            <div id="map"></div>
+        </div>
+    </div>
+    <div class="quarter">
+        <div class="map-bottom-panel">
+            <div class="bottom-panel">
+                <div class="panel-content">
+                    <div id="fleets-menu"></div>
+                    <div class="clear"></div>
+                    <div id="cars-menu"></div>
+                </div>
+            </div>
+
+            <div class="bottom-panel" id="bottom-panel-1">
+                <div class="panel-content"></div>
+            </div>
+
+            <div class="bottom-panel" id="bottom-panel-2">
+                <div class="panel-content"></div>
+            </div>
+
+            <div class="bottom-panel" id="bottom-panel-3">
+                <div class="panel-content"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="map-bottom-panel">
-    <div class="quarter bottom-panel" id="bottom-panel-1"><div class="panel-content"></div></div>
-    <div class="quarter bottom-panel" id="bottom-panel-2"><div class="panel-content"></div></div>
-    <div class="quarter bottom-panel" id="bottom-panel-3"><div class="panel-content"></div></div>
-
-    <div class="clear"></div>
-</div>
 
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 <!--[if lte IE 8]>
