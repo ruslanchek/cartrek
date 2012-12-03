@@ -2,6 +2,7 @@ var leaflet_ctrl = {
     current_position_markers_group  : null,
     run_markers_group               : null,
     stop_markers_group              : null,
+    start_markers                   : null,
     max_markers_group               : null,
     path                            : null,
     first_loaded_car_id             : false,
@@ -329,6 +330,33 @@ var leaflet_ctrl = {
                 });
 
                 marker.on('click', function(){
+                    this.bindPopup(
+                        '<div class="tooltip-content"><h3>Начальная точка</h3>'+
+                        core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
+                        '</div>'
+                    );
+                    this.openPopup();
+                });
+            }; break;
+
+            case 'start' : {
+                var marker = L.marker(
+                    [point.lat, point.lon], {
+                        icon    : this.icons.waypoint(),
+                        id      : point.id,
+                        car_id  : car.id
+                    }
+                );
+
+                marker.on("mouseover", function() {
+                    this.setZIndexOffset(300000 + car.id + 10);
+                });
+
+                marker.on("mouseout", function() {
+                    this.setZIndexOffset(1);
+                });
+
+                marker.on('click', function(){
                     this.bindPopup('run');
                     this.openPopup();
                 });
@@ -370,6 +398,7 @@ var leaflet_ctrl = {
     drawAllThePath: function(map_instance, car_id){
         var path_points     = [],
             stop_markers    = [],
+            start_markers   = [],
             run_markers     = [],
             car             = map.cars_list[map.getCarIndexById(car_id)];
 
@@ -399,12 +428,12 @@ var leaflet_ctrl = {
                 path_points.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
 
                 //Объявляем переменные маркера и его типа (по умолчанию - run, движение)
-                /*var marker,
-                    type = 'run';*/
+                var marker,
+                    type = 'run';
 
                 //Если точка не последняя, создаем маркер
                 // (иначе будет рисоваться еще и маркер поверх маркера текущего положения)
-                /*if(i < car.path_points.length-1){
+                if(i < car.path_points.length-1){
                     //Приводим скорость к плавающему типу
                     car.path_points[i].speed = parseFloat(car.path_points[i].speed);
 
@@ -430,7 +459,7 @@ var leaflet_ctrl = {
                             //run_markers.push(marker);
                         };
                     };
-                };*/
+                };
 
                 //Переопределяем переменные максимальной скорости и маркера максимальной скорости
                 if(car.path_points[i] && car.path_points[i].speed && car.path_points[i].speed > max_speed){
@@ -448,6 +477,11 @@ var leaflet_ctrl = {
             car.max_speed = max_speed;
 
             this.drawMaxSpeedMarker(map_instance, car);
+
+            if(car.path_points[0]){
+                var start_marker = this.createPathMarker(map_instance, car, car.path_points[0], type);
+                this.start_markers_group = L.layerGroup([start_marker]).addTo(map_instance);
+            };
 
             /*if(stop_markers.length > 0){
                 this.stop_markers_group = L.layerGroup(stop_markers).addTo(map_instance);
@@ -498,8 +532,12 @@ var leaflet_ctrl = {
             this.run_markers_group.clearLayers();
         };*/
 
-        if(this.stop_markers_group){
+        /*if(this.stop_markers_group){
             this.stop_markers_group.clearLayers();
+        };*/
+
+        if(this.start_markers_group){
+            this.start_markers_group.clearLayers();
         };
 
         this.path_points_length = 0;
