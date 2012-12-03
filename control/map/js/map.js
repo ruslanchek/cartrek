@@ -1178,6 +1178,7 @@ var map = {
         var auto_renew,
             show_car_path;
 
+
         if(map.checkTimemachineMode()){
             auto_renew = false;
             show_car_path = false;
@@ -1189,37 +1190,37 @@ var map = {
             show_car_path = true;
         };
 
+
         if(auto_renew === false){
-            $('#auto-renew').fadeOut(100);
+            $('#auto-renew').parent().addClass('unactive').removeClass('active');
         }else{
-            $('#auto-renew').fadeIn(100);
+            $('#auto-renew').parent().addClass('active').removeClass('unactive');
         };
 
         if(this.auto_renew === true){
-            $('#auto-renew').attr('class', 'btn toggler toggler-on').html('Авто<i></i>');
+            $('#auto-renew').slickswitch('tOn');
         }else{
-            $('#auto-renew').attr('class', 'btn toggler toggler-off').html('Авто<i></i>');
+            $('#auto-renew').slickswitch('tOff');
         };
 
 
         if(show_car_path === false){
-            $('#show-path').fadeOut(100);
+            $('#show-path').parent().addClass('unactive').removeClass('active');
         }else{
-            $('#show-path').fadeIn(100);
+            $('#show-path').parent().addClass('active').removeClass('unactive');
         };
 
         if(this.show_car_path === true){
-            $('#show-path').attr('class', 'btn toggler toggler-on').html('Путь<i></i>');
+            $('#show-path').slickswitch('tOn');
         }else{
-            $('#show-path').attr('class', 'btn toggler toggler-off').html('Путь<i></i>');
+            $('#show-path').slickswitch('tOff');
         };
 
 
-
         if(this.auto_focus === true){
-            $('#auto-focus').attr('class', 'btn btn-part-left toggler toggler-on').html('&nbsp;<i></i>');
+            $('#auto-focus').slickswitch('tOn');
         }else{
-            $('#auto-focus').attr('class', 'btn btn-part-left toggler toggler-off').html('&nbsp;<i></i>');
+            $('#auto-focus').slickswitch('tOff');
         };
     },
 
@@ -1351,12 +1352,12 @@ var map = {
                                 '<table>' +
                                     '<tr>' +
                                         '<th>Сигнал GPS</th>' +
-                                        '<td>'+core.utilities.getHDOPIndicator(this.current_car.hdop)+'</td>' +
+                                        '<th>Сигнал GSM</th>' +
                                     '</tr>' +
 
                                     '<tr>' +
-                                        '<th>Сигнал GSM</th>' +
-                                        '<td>'+core.utilities.getCSQIndicator(this.current_car.csq)+'</td>' +
+                                        '<td style="padding-left: 0 !important;">'+core.utilities.getHDOPIndicator(this.current_car.hdop)+'</td>' +
+                                        '<td style="padding-left: 0 !important;">'+core.utilities.getCSQIndicator(this.current_car.csq)+'</td>' +
                                     '</tr>' +
                                '</table>';
             };
@@ -1473,16 +1474,22 @@ var map = {
             });
         });
 
-        $('#auto-renew').live('click', function(){
-            map.toggleAutoRenew();
+        $('#auto-renew').slickswitch({
+            toggled: function(){
+                map.toggleAutoRenew();
+            }
         });
 
-        $('#show-path').live('click', function(){
-            map.toggleCarPath();
+        $('#show-path').slickswitch({
+            toggled: function(){
+                map.toggleCarPath();
+            }
         });
 
-        $('#auto-focus').live('click', function(){
-            map.toggleAutoFocus();
+        $('#auto-focus').slickswitch({
+            toggled: function(){
+                map.toggleAutoFocus();
+            }
         });
 
         $('#max-speed-marker').live('click', function(){

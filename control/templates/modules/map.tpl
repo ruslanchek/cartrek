@@ -36,35 +36,24 @@
         <div class="map-bottom-panel">
             <div class="bottom-panel">
                 <div class="panel-content" id="togglers">
-                    <label class="third">
-                        <input type="checkbox" class="slickswitch" id="switch1" />
+                    <label class="third" title="Автообновление данных">
+                        <input type="checkbox" class="slickswitch" id="auto-renew" />
                         Авто
                     </label>
 
                     <label class="third">
-                        <input type="checkbox" class="slickswitch" id="switch2" />
-                        Путь
+                        <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
+                        <a href="javascript:void(0)" id="focus" class="black-link" title="Показать текущее положение">Фокус</a>
                     </label>
 
-                    <label class="third">
-                        <input type="checkbox" class="slickswitch" id="switch3" />
-                        Фокус
+                    <label class="third" title="Показывать пройденный путь">
+                        <input type="checkbox" class="slickswitch" id="show-path" />
+                        Путь
                     </label>
 
                     <div class="clear"></div>
                 </div>
             </div>
-
-            <link rel="stylesheet" href="/control/resources/plugins/slickswitch/css/slickswitch.css" type="text/css" />
-            <script src="/control/resources/plugins/slickswitch/js/jquery.slickswitch.js" type="text/javascript"></script>
-
-            <script>
-                $(function() {
-                	$('#switch1').slickswitch();
-                	$('#switch2').slickswitch();
-                    $('#switch3').slickswitch();
-                });
-            </script>
 
             <div class="bottom-panel">
                 <div class="panel-content">
@@ -89,6 +78,8 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="/control/resources/plugins/slickswitch/css/slickswitch.css" type="text/css" />
+<script src="/control/resources/plugins/slickswitch/js/jquery.slickswitch.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 <!--[if lte IE 8]>

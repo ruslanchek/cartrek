@@ -183,6 +183,7 @@
 .b-core-ui-select__dropdown__item.selected:HOVER {
     background: #999;
     color: #fff;
+    text-shadow: 0 1px 0 #666;
 }
 
 .b-core-ui-select__dropdown__item:HOVER {

@@ -57,6 +57,8 @@
                 });
 
                 self.bind('ss-update', function (o, disableAnimation) {
+                    div.attr('title', self.attr('title'));
+
                     if (self.is(':checked')) {
                         $('span:eq(0)', div).show(settings.useAnimation && !disableAnimation ? 100 : 0);
                         $('span:eq(1)', div).animate({ left: div.width() - $('span:eq(1)', div).outerWidth(true) + 'px' }, settings.useAnimation && !disableAnimation ? 100 : 0);
@@ -88,6 +90,14 @@
         },
         toggleOff: function () {
             $(this).trigger('ss-toggleOff');
+        },
+        tOff: function () {
+            $(this).removeAttr('checked');
+            $(this).trigger('ss-update');
+        },
+        tOn: function () {
+            $(this).attr('checked', 'checked');
+            $(this).trigger('ss-update');
         }
     };
 
