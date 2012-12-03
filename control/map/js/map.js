@@ -978,6 +978,7 @@ var map = {
                 car.hdop      = data[i].hdop;
                 car.speed     = data[i].speed;
                 car.params    = $.parseJSON(data[i].params);
+                car.sat_count = data[i].sat_count;
             };
         };
     },
@@ -1394,7 +1395,7 @@ var map = {
                                     '</tr>' +
 
                                     '<tr>' +
-                                        '<td style="padding-left: 0 !important;">'+core.utilities.getHDOPIndicator(this.current_car.hdop)+'</td>' +
+                                        '<td style="padding-left: 0 !important;">'+core.utilities.getHDOPIndicator(this.current_car.hdop, this.current_car.sat_count)+'</td>' +
                                         '<td style="padding-left: 0 !important;">'+core.utilities.getCSQIndicator(this.current_car.csq)+'</td>' +
                                     '</tr>' +
                                '</table>';

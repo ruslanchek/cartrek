@@ -703,10 +703,15 @@ core.utilities = {
         return '<span class="signal-indicator" title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)"><span class="'+csq.level_class+'" style="width: '+csq.percentage+'%"></span></span>';
     },
 
-    getHDOPIndicator: function(hdop){
-        var hdop = this.parseHDOP(hdop);
+    getHDOPIndicator: function(hdop, sat_count){
+        var hdop = this.parseHDOP(hdop),
+            sats = '';
 
-        return '<span class="signal-indicator" title="GPS: '+hdop.level_name+'"><span class="'+hdop.level_class+'" style="width: '+hdop.percentage+'%"></span></span>';
+        if(sat_count > 0){
+            sats = ' ('+sat_count+' '+core.utilities.plural(sat_count, 'спутник', 'спутника', 'спутников')+')';
+        };
+
+        return '<span class="signal-indicator" title="GPS: '+hdop.level_name + sats + '"><span class="'+hdop.level_class+'" style="width: '+hdop.percentage+'%"></span></span>';
     },
 
     //Google maps utils

@@ -167,6 +167,7 @@
                         `devices`.`journey`,
                         `devices`.`active`,
                         `devices`.`params`,
+                        `devices`.`sat_count`,
                         CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`
                     FROM
                         `devices`
