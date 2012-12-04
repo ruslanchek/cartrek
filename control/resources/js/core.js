@@ -576,9 +576,9 @@ core.utilities = {
         var d_str = str.substring(0, 10).split('-'),
             d = new Date();
 
-        d.setDate(d_str[2] * 1);
-        d.setMonth(d_str[1]);
-        d.setFullYear(d_str[0] * 1);
+        d.setDate(d_str[2]);
+        d.setMonth(d_str[1] - 1);
+        d.setFullYear(d_str[0]);
 
         return d;
     },
@@ -908,7 +908,7 @@ core.utilities = {
         };
 
         var duration = new Date(currDate - startDate),
-            s = (duration.getTime() - duration.getMilliseconds())/1000;
+            s = (duration.getTime() - duration.getMilliseconds()) / 1000;
 
         if(s < 1){
             return 'только что';
@@ -922,9 +922,9 @@ core.utilities = {
         };
 
         var dc = {
-            days: Math.ceil(s / 60 / 60 / 24),
-            hours: Math.ceil(s / 60 / 60),
-            minutes: Math.ceil(s / 60),
+            days: Math.floor(s / 60 / 60 / 24),
+            hours: Math.floor(s / 60 / 60),
+            minutes: Math.floor(s / 60),
             seconds: s
         };
 

@@ -1127,7 +1127,7 @@ var map = {
 
                 var d = core.utilities.parseDateMysqlStrToDateOdject(this.current_car.last_point_date);
 
-                hash = hash + hs + 'timemachine=' + d.getDate() + '-' + d.getMonth() + '-' + d.getFullYear();
+                hash = hash + hs + 'timemachine=' + d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
 
                 message =   '<p>На&nbsp;<b>'+core.utilities.humanizeDate(this.date, 'COMMON')+'</b> ' +
                             'не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины <b>&laquo;'+this.current_car.name+'&raquo;</b>.</p>' +
