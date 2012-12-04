@@ -95,15 +95,24 @@ Class EventsApi extends Core {
 
         $items = $this->db->assocMulti($query);
 
+        $in = "";
+
+        foreach($items as $item){
+            $in .= $item['id'].',';
+        };
+
+        if($in != ''){
+            $in = substr($in, 0, strlen($in) - 1);
+            $in = ' && `id` IN ('.$in.')';
+        };
+
         $this->db->query("
             UPDATE
                 `events`
             SET
                 `showed` = 1
             WHERE
-                `user_id` = ".intval($this->auth->user['data']['id'])."
-            LIMIT
-                5
+                `user_id` = ".intval($this->auth->user['data']['id']).$in."
         ");
 
         $total = $this->getAllEventsCount('unreaded');

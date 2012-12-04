@@ -35,23 +35,25 @@
     <div class="quarter">
         <div class="map-bottom-panel">
             <div class="bottom-panel">
-                <div class="panel-content" id="togglers">
-                    <label class="third" title="Автообновление данных">
-                        <input type="checkbox" class="slickswitch" id="auto-renew" />
-                        Авто
-                    </label>
+                <div class="panel-content">
+                    <div id="togglers">
+                        <label class="third" title="Автообновление данных">
+                            <input type="checkbox" class="slickswitch" id="auto-renew" />
+                            Авто
+                        </label>
 
-                    <label class="third">
-                        <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
-                        <a href="javascript:void(0)" id="focus" class="black-link" title="Показать текущее положение">Фокус</a>
-                    </label>
+                        <label class="third">
+                            <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
+                            <a href="javascript:void(0)" id="focus" class="black-link" title="Показать текущее положение">Фокус</a>
+                        </label>
 
-                    <label class="third" title="Показывать пройденный путь">
-                        <input type="checkbox" class="slickswitch" id="show-path" />
-                        Путь
-                    </label>
+                        <label class="third" title="Показывать пройденный путь">
+                            <input type="checkbox" class="slickswitch" id="show-path" />
+                            Путь
+                        </label>
 
-                    <div class="clear"></div>
+                        <div class="clear"></div>
+                    </div>
                 </div>
             </div>
 
@@ -72,6 +74,10 @@
             </div>
 
             <div class="bottom-panel" id="bottom-panel-3">
+                <div class="panel-content"></div>
+            </div>
+
+            <div class="bottom-panel" id="bottom-panel-4">
                 <div class="panel-content"></div>
             </div>
         </div>

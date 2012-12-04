@@ -714,6 +714,19 @@ core.utilities = {
         return '<span class="signal-indicator" title="GPS: '+hdop.level_name + sats + '"><span class="'+hdop.level_class+'" style="width: '+hdop.percentage+'%"></span></span>';
     },
 
+    getVoltsIndicator: function(v){
+        var t = v.toFixed(2)+' В',
+            html = '';
+
+        if(v > 0){
+            html = '<div class="success">'+t+'</div>';
+        }else{
+            html = '<div class="error">'+t+'</div>';
+        };
+
+        return html;
+    },
+
     //Google maps utils
     getAddressByLatLng: function(lat, lng, fn){
         var geocoder = new google.maps.Geocoder();

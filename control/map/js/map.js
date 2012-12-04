@@ -1383,7 +1383,8 @@ var map = {
     drawBottomPanels: function(){
         var panel1_html = '',
             panel2_html = '',
-            panel3_html = '';
+            panel3_html = '',
+            panel4_html = '';
 
         if(this.current_car){
             if(this.current_car.hdop || this.current_car.csq){
@@ -1433,6 +1434,16 @@ var map = {
                                     '<td>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</td>' +
                                 '</tr>' +
                             '</table>';
+
+            if(this.current_car.params){
+                panel4_html +=  '<h3>Дополнительно</h3>' +
+                                '<table>' +
+                                    '<tr>' +
+                                        '<th>Питание</th>' +
+                                        '<td>'+core.utilities.getVoltsIndicator(this.current_car.params.power_inp)+'</td>' +
+                                    '</tr>' +
+                                '</table>';
+            };
         };
 
         if(panel1_html && !map.checkTimemachineMode()){
@@ -1454,6 +1465,13 @@ var map = {
             $('#bottom-panel-3 .panel-content').html(panel3_html);
         }else{
             $('#bottom-panel-3').hide();
+        };
+
+        if(panel4_html && !map.checkTimemachineMode()){
+            $('#bottom-panel-4').show()
+            $('#bottom-panel-4 .panel-content').html(panel4_html);
+        }else{
+            $('#bottom-panel-4').hide();
         };
     },
 

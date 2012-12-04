@@ -30,6 +30,12 @@ p {
     margin-bottom: 1em;
 }
 
+.error,
+.success {
+    font-size: 1em;
+    margin: 0;
+}
+
 /* =Nav
 -----------------------------------------------------------------------------*/
 .left-nav {
@@ -196,7 +202,7 @@ html, body{
 .container {
 	width: 82%;
     min-width: 1000px;
-    max-width: 1200px;
+    max-width: 1250px;
 	margin: 0 auto;
 }
 
@@ -214,7 +220,7 @@ html, body{
 footer {
 	margin-top: -60px;
 	height: 40px;
-    min-width: 1000px;
+    min-width: 1250px;
     padding: 20px 0 0 0;
 }
 
@@ -467,6 +473,8 @@ footer {
     padding: 20px 0;
     border: 1px solid #ddd;
     border-bottom: 3px solid #ccc;
+    -webkit-border-radius: 5px;
+            border-radius: 5px;
 }
 
 
@@ -687,11 +695,11 @@ a.badge:hover {
 }
 
 .table-small tr td:first-child {
-    width: 55%;
+    width: 50%;
 }
 
 .table-small tr td:last-child {
-    width: 45%;
+    width: 50%;
 }
 
 
@@ -1353,11 +1361,10 @@ footer a:active {
 }
 
 #togglers {
-    padding-bottom: 5px;
+    padding: 10px 0 5px;
     border: 1px solid #cecece;
     -webkit-border-radius: 4px;
             border-radius: 4px;
-    margin: 0 12px;
 
     background: #dbdddf;
     background: -moz-linear-gradient(top,  #e9ebed 0%, #dbdddf 100%); /* FF3.6+ */
@@ -1585,12 +1592,17 @@ footer a:active {
     font-size: 0.85em;
     background: #eee;
     text-shadow: 0 1px 0 #fff;
-    padding-top: 12px;
     border: 1px solid #ddd;
 }
 
 .bottom-panel .panel-content {
     padding: 12px;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #fefefe;
+}
+
+.bottom-panel {
+    margin-bottom: 2px;
 }
 
 .bottom-panel table {
@@ -1603,14 +1615,14 @@ footer a:active {
     text-align: left;
     font-weight: bold;
     white-space: nowrap;
-    width: 55%;
+    width: 120px;
 }
 
 .bottom-panel table td {
     padding: 1px 10px !important;
     text-align: left;
     white-space: nowrap;
-    width: 45%;
+
 }
 
 .bottom-panel table .badge {
