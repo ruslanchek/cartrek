@@ -127,7 +127,7 @@ var leaflet_ctrl = {
             map_instance.addLayer(m);*/
 
             marker.on("mouseover", function() {
-                this.setZIndexOffset(data.id * 11 * 10);
+                this.setZIndexOffset(data.id * 11 * 10000);
                 $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
             });
 
@@ -1422,7 +1422,17 @@ var map = {
                                '</table>';
             };
 
-            panel3_html +=  '<h3>Обновления данных</h3>' +
+            if(this.current_car.params){
+                panel3_html +=  '<h3>Дополнительно</h3>' +
+                                '<table>' +
+                                    '<tr>' +
+                                        '<th>Питание</th>' +
+                                        '<td>'+core.utilities.getVoltsIndicator(this.current_car.params.power_inp)+'</td>' +
+                                    '</tr>' +
+                                '</table>';
+            };
+
+            panel4_html +=  '<h3>Обновления данных</h3>' +
                             '<table>' +
                                 '<tr title="'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQLTIME')+'">' +
                                     '<th>Координаты</th>' +
@@ -1434,16 +1444,6 @@ var map = {
                                     '<td>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</td>' +
                                 '</tr>' +
                             '</table>';
-
-            if(this.current_car.params){
-                panel4_html +=  '<h3>Дополнительно</h3>' +
-                                '<table>' +
-                                    '<tr>' +
-                                        '<th>Питание</th>' +
-                                        '<td>'+core.utilities.getVoltsIndicator(this.current_car.params.power_inp)+'</td>' +
-                                    '</tr>' +
-                                '</table>';
-            };
         };
 
         if(panel1_html && !map.checkTimemachineMode()){

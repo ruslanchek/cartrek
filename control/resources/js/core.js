@@ -1132,8 +1132,14 @@ core.events_api = {
                 core.loading.hideTopIndicator();
 
                 if(data && data.items){
-                    for(var i = 0, l = data.items.length; i < l; i++){
-                        core.events_api.showEventsMeow(data.items[i]);
+                    if(data.items.length > 3){
+                        core.events_api.showEventsMeow({
+                            message: 'У вас '+data.items.length+' новых '+core.utilities.plural(data.items.length, 'уведомление', 'уведомления', 'уведомлений')
+                        });
+                    }else{
+                        for(var i = 0, l = data.items.length; i < l; i++){
+                            core.events_api.showEventsMeow(data.items[i]);
+                        };
                     };
                 };
 
