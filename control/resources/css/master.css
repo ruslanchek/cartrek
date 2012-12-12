@@ -528,13 +528,27 @@ footer {
 }
 
 .badge {
-    background: #3C4E5A;
-    -webkit-border-radius: 0.4em;
-    border-radius: 0.4em;
-    padding: 2px 0.7ex;
-    color: #fff;
-    text-shadow: none;
-    font-weight: normal !important;
+    border: 1px solid #415561;
+    background: #506877;
+    background: -webkit-gradient(linear, left top, left bottom, from(#6a8ca1), to(#506877));
+    background: -webkit-linear-gradient(top, #6a8ca1, #506877);
+    background: -moz-linear-gradient(top, #6a8ca1, #506877);
+    background: -ms-linear-gradient(top, #6a8ca1, #506877);
+    background: -o-linear-gradient(top, #6a8ca1, #506877);
+    background-image: -ms-linear-gradient(top, #6a8ca1 0%, #506877 100%);
+    padding: 2px 3px 1px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+    -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+    box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+    text-shadow: #314754 0 -1px 0;
+    color: #ffffff;
+    font-size: 12px;
+    font-family: helvetica, serif;
+    text-decoration: none;
+    vertical-align: middle;
 }
 
 a.badge {
@@ -542,7 +556,28 @@ a.badge {
 }
 
 a.badge:hover {
-    background: #506877;
+    border: 1px solid #4b6270;
+    text-shadow: #3a5361 0 -1px 0;
+    background: #567080;
+    background: -webkit-gradient(linear, left top, left bottom, from(#7399b0), to(#567080));
+    background: -webkit-linear-gradient(top, #7399b0, #567080);
+    background: -moz-linear-gradient(top, #7399b0, #567080);
+    background: -ms-linear-gradient(top, #7399b0, #567080);
+    background: -o-linear-gradient(top, #7399b0, #567080);
+    background-image: -ms-linear-gradient(top, #7399b0 0%, #567080 100%);
+    color: #fff;
+}
+
+a.badge:active {
+    text-shadow: #3a5361 0 -1px 0;
+    border: 1px solid #4b6270;
+    background: #7399b0;
+    background: -webkit-gradient(linear, left top, left bottom, from(#567080), to(#567080));
+    background: -webkit-linear-gradient(top, #567080, #7399b0);
+    background: -moz-linear-gradient(top, #567080, #7399b0);
+    background: -ms-linear-gradient(top, #567080, #7399b0);
+    background: -o-linear-gradient(top, #567080, #7399b0);
+    background-image: -ms-linear-gradient(top, #567080 0%, #7399b0 100%);
     color: #fff;
 }
 
@@ -551,6 +586,7 @@ a.badge:hover {
     background: #fff;
     box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
 }
+
 
 
 

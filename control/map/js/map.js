@@ -1412,7 +1412,7 @@ var map = {
 
                                     '<tr>' +
                                         '<th>Макс. скорость</th>' +
-                                        '<td><a id="max-speed-marker" class="badge" href="javascript:void(0)">'+core.utilities.convertKnotsToKms(this.current_car.max_speed) + ' км/ч</a></td>' +
+                                        '<td><a id="max-speed-marker" class="badge" href="javascript:void(0)" title="Показать точку максимальной скорости">'+core.utilities.convertKnotsToKms(this.current_car.max_speed) + ' км/ч</a></td>' +
                                     '</tr>' +
 
                                     '<tr>' +
