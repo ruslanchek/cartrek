@@ -536,19 +536,19 @@ footer {
     background: -ms-linear-gradient(top, #6a8ca1, #506877);
     background: -o-linear-gradient(top, #6a8ca1, #506877);
     background-image: -ms-linear-gradient(top, #6a8ca1 0%, #506877 100%);
-    padding: 2px 3px 1px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    padding: 0.06em 0.7ex 0.07em;
+    -webkit-border-radius: 0.5ex;
+    -moz-border-radius: 0.5ex;
+    border-radius: 0.5ex;
+    font-weight: 100 !important;
     -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
     -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
     box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
     text-shadow: #314754 0 -1px 0;
     color: #ffffff;
-    font-size: 12px;
-    font-family: helvetica, serif;
+    font-size: 1em;
+    font-family: inherit;
     text-decoration: none;
-    vertical-align: middle;
 }
 
 a.badge {
