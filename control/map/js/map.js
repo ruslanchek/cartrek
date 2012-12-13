@@ -501,7 +501,7 @@ var leaflet_ctrl = {
                 this.path = L.polyline(path_points, {
                     color           : this.path_color,
                     smoothFactor    : 2,
-                    weight          : 3,
+                    weight          : 5,
                     opacity         : 0.5
                     //dashArray     : '1, 5'
                 });
