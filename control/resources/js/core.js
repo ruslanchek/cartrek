@@ -972,6 +972,18 @@ core.map_tools = {
 
             mbx: [
                 new L.TileLayer('http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+            ],
+
+            ggl: [
+                new L.Google()
+            ],
+
+            ynd: [
+                new L.Yandex()
+            ],
+
+            yndt: [
+                new L.Yandex("null", {traffic:true, opacity:0.8, overlay:true})
             ]
         }
     },
