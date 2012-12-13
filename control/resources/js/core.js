@@ -947,6 +947,49 @@ core.utilities = {
 };
 
 core.map_tools = {
+    layersList: function(){
+        return {
+            osm: [
+                new L.TileLayer('http://{s}.tile.osmosnimki.ru/kosmo/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+            ],
+
+            mpn: [
+                new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+            ],
+
+            qst: [
+                new L.TileLayer('http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {attribution : 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">', maxZoom : 17})
+            ],
+
+            hyb: [
+                new L.TileLayer('http://tile.osmosnimki.ru/basesat/{z}/{x}/{y}.jpg', {attribution : '', maxZoom : 17}),
+                new L.TileLayer('http://{s}.tile.osmosnimki.ru/hyb/{z}/{x}/{y}.png', {attribution : '', maxZoom : 16})
+            ],
+
+            clm: [
+                new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {attribution : '', maxZoom : 18})
+            ],
+
+            mbx: [
+                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+            ]
+        }
+    },
+
+    getLayers: function(){
+        var layer,
+            map_layer = $.cookie('map-layer'),
+            layers_list = this.layersList();
+
+        if(map_layer && map_layer != ''){
+            layer = layers_list[map_layer];
+        }else{
+            layer = layers_list.mbx;
+        };
+
+        return layer;
+    },
+
     getHeadingIcon: function(heading){
         var degrees_zone = Math.round(parseInt(heading)/15) * 15;
 

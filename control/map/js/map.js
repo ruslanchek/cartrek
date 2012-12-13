@@ -62,32 +62,8 @@ var leaflet_ctrl = {
     },
 
     createMap: function(m_options, callback){
-        var layer, map_layer = $.cookie('map-layer');
-
-        switch(map_layer){
-            case 'cloudmade' : {
-                layer = new L.TileLayer(
-                    'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
-                    {
-                        attribution : '',
-                        maxZoom     : 18
-                    }
-                );
-            }; break;
-
-            default: {
-                layer = new L.TileLayer(
-                    'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
-                    {
-                        attribution : '',
-                        maxZoom     : 17
-                    }
-                );
-            }; break;
-        };
-
         var map = new L.Map('map', {
-            layers      : [layer],
+            layers      : core.map_tools.getLayers(),
             center      : new L.LatLng(m_options.coordinates.lat, m_options.coordinates.lon),
             zoom        : m_options.zoom
         });
@@ -784,7 +760,7 @@ var map = {
                 });
 
                 $('.map-bottom-panel').css({
-                    minHeight: ui.size.height + 1
+                    minHeight: ui.size.height + 14
                 });
 
                 if(map.map){
@@ -801,7 +777,7 @@ var map = {
             });
 
             $('.map-bottom-panel').css({
-                minHeight: $('.map-container').height() + 1
+                minHeight: $('.map-container').height() + 14
             });
 
             if(map.map){
@@ -810,7 +786,7 @@ var map = {
         });
 
         $('.map-bottom-panel').css({
-            minHeight: $('.map-container').height() + 1
+            minHeight: $('.map-container').height() + 14
         });
     },
 

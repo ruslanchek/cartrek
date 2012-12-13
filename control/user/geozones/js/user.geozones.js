@@ -81,32 +81,8 @@ var geozones = {
     },
 
     createMap: function(callback){
-        var layer, map_layer = $.cookie('map-layer');
-
-        switch(map_layer){
-            case 'cloudmade' : {
-                layer = new L.TileLayer(
-                    'http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png',
-                    {
-                        attribution : '',
-                        maxZoom     : 18
-                    }
-                );
-            }; break;
-
-            default: {
-                layer = new L.TileLayer(
-                    'http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png',
-                    {
-                        attribution : '',
-                        maxZoom     : 17
-                    }
-                );
-            }; break;
-        };
-
         var map = new L.Map('map', {
-            layers      : [layer],
+            layers      : core.map_tools.getLayers(),
             center      : new L.LatLng(geozones.m_options.coordinates.lat, geozones.m_options.coordinates.lon),
             zoom        : geozones.m_options.zoom
         });
