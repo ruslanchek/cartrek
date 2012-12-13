@@ -974,16 +974,24 @@ core.map_tools = {
                 new L.TileLayer('http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
             ],
 
-            ggl: [
-                new L.Google()
+            gglsat: [
+                new L.Google('SATELLITE')
             ],
 
-            ynd: [
-                new L.Yandex()
+            gglroad: [
+                new L.Google('ROADMAP')
             ],
 
-            yndt: [
-                new L.Yandex("null", {traffic:true, opacity:0.8, overlay:true})
+            gglterr: [
+                new L.Google('TERRAIN')
+            ],
+
+            gglhyb: [
+                new L.Google('HYBRID')
+            ],
+
+            wms: [
+                new L.TileLayer.WMS('http://wms.latlon.org/', {layers:'irs', crs: L.CRS.EPSG4326})
             ]
         }
     },

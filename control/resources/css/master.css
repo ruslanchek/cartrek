@@ -1411,7 +1411,6 @@ footer a:active {
     background: linear-gradient(to bottom,  #e9ebed 0%,#dbdddf 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9ebed', endColorstr='#dbdddf',GradientType=0 ); /* IE6-9 */
 
-
     -webkit-box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.5), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.35);
             box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.5), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.35);
 }
@@ -1419,6 +1418,10 @@ footer a:active {
 #togglers label {
     text-align: center;
     font-weight: bold;
+}
+
+#togglers label.unactive {
+    opacity: 0.55;
 }
 
 
@@ -1744,3 +1747,38 @@ footer a:active {
 
 /* =Geozones
 -----------------------------------------------------------------------------*/
+
+
+
+
+
+/* =Map types
+-----------------------------------------------------------------------------*/
+.map-types {
+
+}
+
+.map-types .item {
+    height: 35px;
+    margin: 0 0 1em;
+    text-decoration: none;
+}
+
+.map-types .item span {
+    position: relative;
+    padding-left: 50px;
+    vertical-align: middle;
+    text-decoration: underline;
+}
+
+.map-types .item i {
+    display: block;
+    background: red;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+}
+
+.map-types .item sup {
+    text-decoration: none;
+}

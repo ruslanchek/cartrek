@@ -68,7 +68,6 @@ var leaflet_ctrl = {
             zoom        : m_options.zoom
         });
 
-        map.addControl(new L.Control.Layers(core.map_tools.layersList()));
         map.addControl(new L.Control.FullScreen());
 
         $('.leaflet-control-attribution').html('О наших <a href="/control/about#maps">картах</a>');
@@ -1193,7 +1192,6 @@ var map = {
     drawButtons: function(){
         var auto_renew,
             show_car_path;
-
 
         if(map.checkTimemachineMode()){
             auto_renew = false;

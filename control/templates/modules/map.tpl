@@ -98,7 +98,5 @@
 <script src="/control/resources/mapping-tools/leaflet/plugins/leaflet-fullscreen/Control.FullScreen.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/html-icon/Html.icon.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
-<script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Yandex.js"></script>
-<script src="http://api-maps.yandex.ru/2.0/?load=package.map&lang=ru-RU" type="text/javascript"></script>
 
 <script>map.init();</script>
