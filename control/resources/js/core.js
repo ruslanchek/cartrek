@@ -962,7 +962,7 @@ core.map_tools = {
             ],
 
             hyb: [
-                new L.TileLayer('http://tile.osmosnimki.ru/basesat/{z}/{x}/{y}.jpg', {attribution : '', maxZoom : 17}),
+                new L.TileLayer('http://tile.osmosnimki.ru/basesat/{z}/{x}/{y}.jpg', {attribution : '', maxZoom : 16}),
                 new L.TileLayer('http://{s}.tile.osmosnimki.ru/hyb/{z}/{x}/{y}.png', {attribution : '', maxZoom : 16})
             ],
 
@@ -972,6 +972,15 @@ core.map_tools = {
 
             mbx: [
                 new L.TileLayer('http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+            ],
+
+            wms: [
+                new L.TileLayer.WMS('http://wms.latlon.org/', {layers:'irs', crs: L.CRS.EPSG4326})
+            ],
+
+            wmsb: [
+                new L.TileLayer('http://tile.osmosnimki.ru/basesat/{z}/{x}/{y}.jpg', {attribution : '', maxZoom : 17}),
+                new L.TileLayer.WMS('http://wms.latlon.org/', {layers:'bing', crs: L.CRS.EPSG4326})
             ],
 
             gglsat: [
@@ -988,10 +997,6 @@ core.map_tools = {
 
             gglhyb: [
                 new L.Google('HYBRID')
-            ],
-
-            wms: [
-                new L.TileLayer.WMS('http://wms.latlon.org/', {layers:'irs', crs: L.CRS.EPSG4326})
             ]
         }
     },

@@ -1758,27 +1758,60 @@ footer a:active {
 
 }
 
-.map-types .item {
-    height: 35px;
-    margin: 0 0 1em;
-    text-decoration: none;
+.map-types a.item * {
+    text-decoration: none !important;
 }
 
-.map-types .item span {
+.map-types .item {
+    margin: 0 10px 5px -5px;
+    padding: 5px;
+    text-decoration: none;
+    color: #3C4E5A;
+    min-height: 40px;
+}
+
+.map-types .item:hover {
+    background: #eee;
+}
+
+.map-types .item.active {
+    background: #3887B3;
+    color: white;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    cursor: default;
+}
+
+.map-types .item .name {
     position: relative;
-    padding-left: 50px;
+    padding-left: 55px;
     vertical-align: middle;
     text-decoration: underline;
+    display: block;
+    margin: 0;
 }
 
 .map-types .item i {
     display: block;
-    background: red;
-    width: 35px;
-    height: 35px;
+    background: #eee;
+    width: 40px;
+    height: 40px;
     position: absolute;
+    -webkit-border-radius: 2px;
+            border-radius: 2px;
+}
+
+.map-types .item .sup {
+    text-decoration: none;
+    display: block;
+    vertical-align: middle;
+    text-decoration: none;
+    font-size: 0.8em;
+    opacity: 0.8;
+    line-height: 1.2em;
 }
 
 .map-types .item sup {
-    text-decoration: none;
+    font-style: italic;
+    font-family: Georgia, Times, Serif;
+    font-weight: normal;
 }
