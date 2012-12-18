@@ -1,5 +1,6 @@
 <div class="threequarter">
-    <h3>Выбрать тип карты</h3>
+    <h2>Слои карты</h2>
+    <p>Выберите слой карты, который будет испозьзоваться Картреком во всех разделах с картографической системой.</p>
 
     <div class="map-types">
         <div class="row">
@@ -24,6 +25,10 @@
             <a class="third item" href="#" rel="gglhyb"><i></i><span class="name">Карты Гугла <sup>бета</sup> <span class="sup">спутник-гибрид</span></span></a>
         </div>
     </div>
+
+    <hr>
+
+    <h2>Выбрать тип карты</h2>
 </div>
 
 <div class="quarter">

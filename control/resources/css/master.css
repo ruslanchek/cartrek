@@ -20,6 +20,7 @@ h1 span {
 
 h2 {
     font-size: 1.5em;
+    font-weight: normal;
 }
 
 h3 {
@@ -197,11 +198,11 @@ a.black-link:hover {
 -----------------------------------------------------------------------------*/
 html, body{
     height: 100%;
-    min-width: 1000px;
+    min-width: 1080px;
 }
 
 .container {
-	width: 82%;
+	width: 96%;
     min-width: 1000px;
     max-width: 1250px;
 	margin: 0 auto;
