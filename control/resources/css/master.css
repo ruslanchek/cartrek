@@ -696,14 +696,15 @@ a.badge:active {
     width: 320px;
     margin: 0 0 1.3em;
     display: block;
-    padding: 0 3px;
+    padding: 2px 5px;
+    font-size: 1.03em;
 }
 
 .forms select {
     width: 328px;
     margin: 0 0 1.3em;
     display: block;
-    padding: 2px 3px;
+    padding: 1px 3px;
 }
 
 .forms input.btn {
