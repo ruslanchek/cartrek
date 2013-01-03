@@ -970,8 +970,16 @@ core.map_tools = {
                 new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {attribution : '', maxZoom : 18})
             ],
 
-            mbx: [
-                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/mapbox.mapbox-streets/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+            mbx1: [
+                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-8k9drgq5/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+            ],
+
+            mbx2: [
+                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-e89iu6uu/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+            ],
+
+            mbx3: [
+                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-jgqvxlts/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
             ],
 
             wms: [
@@ -1009,7 +1017,7 @@ core.map_tools = {
         if(map_layer && map_layer != ''){
             layer = layers_list[map_layer];
         }else{
-            layer = layers_list.mbx;
+            layer = layers_list.mbx1;
         };
 
         return layer;
@@ -1047,7 +1055,25 @@ core.map_tools = {
         if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition(function(position){
                 callback(position);
+            },
+            function (error){
+                switch(error.code){
+                    case error.TIMEOUT:
+                        callback(false);
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        callback(false);
+                        break;
+                    case error.PERMISSION_DENIED:
+                        callback(false);
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        callback(false);
+                        break;
+                };
             });
+        }else{
+            callback(false);
         };
     }
 };

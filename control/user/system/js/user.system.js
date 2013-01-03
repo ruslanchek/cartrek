@@ -1,7 +1,7 @@
 var user_system = {
     init: function(){
         if(!$.cookie('map-layer')){
-            $('.map-types .item[rel="mbx"]').addClass('active');
+            $('.map-types .item[rel="mbx1"]').addClass('active');
         }else{
             $('.map-types .item[rel="'+$.cookie('map-layer')+'"]').addClass('active');
         };

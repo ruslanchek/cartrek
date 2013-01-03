@@ -25,7 +25,8 @@ class Auth extends Core{
             'online',
             'vk_id',
             'fb_id',
-            'balance'
+            'balance',
+            'user_timezone'
         );
 
         $this->password_length = 6;

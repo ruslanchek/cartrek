@@ -62,21 +62,35 @@ var leaflet_ctrl = {
     },
 
     createMap: function(m_options, callback){
-        var map = new L.Map('map', {
-            layers      : core.map_tools.getLayers(),
-            center      : new L.LatLng(m_options.coordinates.lat, m_options.coordinates.lon),
-            zoom        : m_options.zoom
+        core.map_tools.getGeoposition(function(position){
+            var lat, lon, zoom;
+
+            if(position){
+                lat = position.coords.latitude;
+                lon = position.coords.longitude;
+                zoom = 15;
+            }else{
+                lat = m_options.coordinates.lat;
+                lon = m_options.coordinates.lon;
+                zoom = m_options.zoom;
+            };
+
+            var map = new L.Map('map', {
+                layers      : core.map_tools.getLayers(),
+                center      : new L.LatLng(lat, lon),
+                zoom        : zoom
+            });
+
+            map.addControl(new L.Control.FullScreen());
+
+            $('.leaflet-control-attribution').html('О наших <a href="/control/about#maps">картах</a>');
+
+            setTimeout(function(){
+                $('.leaflet-control-attribution').fadeOut(3000);
+            }, 10000);
+
+            callback(map);
         });
-
-        map.addControl(new L.Control.FullScreen());
-
-        $('.leaflet-control-attribution').html('О наших <a href="/control/about#maps">картах</a>');
-
-        setTimeout(function(){
-            $('.leaflet-control-attribution').fadeOut(3000);
-        }, 10000);
-
-        callback(map);
     },
 
     createCurrentPositionMarker: function(map_instance, data){
@@ -161,7 +175,22 @@ var leaflet_ctrl = {
                 map.unsetNoPointsInfo();
             }else{
                 map.setNoPointsInfo();
-                map_instance.setView(new L.LatLng(map.m_options.coordinates.lat, map.m_options.coordinates.lon), map.m_options.zoom);
+
+                core.map_tools.getGeoposition(function(position){
+                    var lat, lon, zoom = map.m_options.zoom;
+
+                    if(position !== false){
+                        lat     = position.coords.latitude;
+                        lon     = position.coords.longitude;
+                        zoom    = 15;
+                    }else{
+                        lat     = map.m_options.coordinates.lat;
+                        lon     = map.m_options.coordinates.lon;
+                        zoom    = map.m_options.zoom;
+                    };
+
+                    map_instance.setView(new L.LatLng(lat, lon), zoom);
+                });
             };
         };
     },
@@ -883,8 +912,6 @@ var map = {
             html += ' <span class="badge">'+this.cars_in_fleet+' ' + core.utilities.plural(this.cars_in_fleet, 'машина', 'машины', 'машин') + '</span>';
         };
 
-
-
         $('#current-fleet-and-car').html(html);
     },
 
@@ -1247,32 +1274,36 @@ var map = {
     },
 
     createTimeMachine: function(){
-        var html    = '',
-            i       = 30,
+        var hash    = '',
             date    = new Date(),
-            hash    = '',
             h       = core.ui.getHashData(),
-            current;
+            hs      = '';
 
-            if(h && h.fleet){
-                hash += 'fleet='+h.fleet;
-            };
+        if(h && h.fleet){
+            hash += 'fleet='+h.fleet;
+        };
 
-            if(h && h.car && h.fleet){
-                hash += '&car='+h.car;
-            }else if(h && h.car && !h.fleet){
-                hash += 'car='+h.car;
-            };
+        if(h && h.car && h.fleet){
+            hash += '&car='+h.car;
+        }else if(h && h.car && !h.fleet){
+            hash += 'car='+h.car;
+        };
 
-            hash = '#' + hash;
+        console.log(document.location.hash)
 
-            var hs = '';
+        console.log(core.ui.getHashData().car)
 
-            if(hash != '#'){
-                hs = hs+'&';
-            };
+        console.log(hash)
+
+        hash = '#' + hash;
+
+        if(hash != '#'){
+            hs = hs+'&';
+        };
 
         if(h && h.timemachine){
+            /*
+
             current = h.timemachine;
 
             while(i > 0){
@@ -1306,14 +1337,33 @@ var map = {
                 $('#time-machine .days .day').removeClass('hover');
             });
 
-            $('#timemachine-button').attr('href', hash).addClass('active');
+            */
 
-            $('#time-machine .days').slideDown(100);
+            $('#time-machine .days').datepicker({
+                dateFormat      : "d-m-yy",
+                minDate         : '-30d',
+                maxDate         : 0,
+                firstDay        : 1,
+                prevText        : "Назад",
+                nextText        : "Вперед",
+                monthNames      : [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+                monthNamesShort : [ "Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек" ],
+                dayNames        : [ "Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" ],
+                dayNamesMin     : [ "Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб" ],
+                dayNamesShort   : [ "Вос", "Пон", "Вто", "Сре", "Чет", "Пят", "Суб" ],
+                onSelect        : function(date){
+                    document.location.href = hash + hs + 'timemachine=' + date
+                }
+            });
+
+            $('#timemachine-button').attr('href', hash).addClass('active').find('i').addClass('rotate-z').removeClass('rotate-z-rev');
+            $('#time-machine .days').slideDown(300);
 
         }else{
-            $('#timemachine-button').attr('href', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear()).removeClass('active');
-
-            $('#time-machine .days').slideUp(100);
+            $('#timemachine-button').attr('href', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear()).removeClass('active').find('i').removeClass('rotate-z').addClass('rotate-z-rev');
+            $('#time-machine .days').slideUp(300, function(){
+                $('#time-machine .days').datepicker('destroy');
+            });
         };
     },
 

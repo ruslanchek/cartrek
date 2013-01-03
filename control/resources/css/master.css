@@ -693,7 +693,6 @@ a.badge:active {
 }
 
 .forms input.text {
-    width: 320px;
     margin: 0 0 1.3em;
     display: block;
     padding: 2px 5px;
@@ -1366,13 +1365,13 @@ footer a:active {
     position: absolute;
     z-index: 10;
     background: #fff;
-    padding: 20px;
+    padding: 20px 3%;
     -webkit-box-shadow:  0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     box-shadow:  0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     top: 50%;
     left: 50%;
-    width: 40%;
-    margin-left: -20%;
+    width: 42%;
+    margin-left: -25%;
 }
 
 
@@ -1428,103 +1427,37 @@ footer a:active {
 
 
 /* Time machine */
-#timemachine-button {
-    float: left;
-    line-height: 26px;
-    height: 26px;
-    font-size: 0.95em;
-    border: 1px solid #ddd;
-    -webkit-border-radius: 4px;
-            border-radius: 4px;
-    padding: 0 10px;
-    text-decoration: none;
-    color: #222;
-}
-
-#timemachine-button:hover {
-    border-color: #999;
-    color: #111;
-}
-
-#timemachine-button.active {
-    border-color: #ccc;
-    background: #ddd;
-    color: #000;
-}
-
-#timemachine-button.active:hover {
-    border-color: #888;
-    color: #000;
-}
-
-#time-machine .days {
+.time-machine-button {
     position: relative;
-    height: 20px;
-    line-height: 20px;
-    -webkit-border-radius: 4px;
-            border-radius: 4px;
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top,  #ffffff 0%, #dfe1e3 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#dfe1e3)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #ffffff 0%,#dfe1e3 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dfe1e3',GradientType=0 ); /* IE6-9 */
-    text-shadow: 0 1px 0px #ffffff;
-    color: #5e5f63;
-    border: 1px solid #bfc0c2;
-    border-left: 1px solid #b9babc;
-    border-right: 1px solid #b9babc;
-    border-bottom-color: #8f9194;
-    padding: 1px;
-    display: none;
-}
-
-#time-machine .days .day {
-    display: block;
-    width: 3.33333333%;
-    max-width: 3.33333333%;
-    padding: 0px;
-    float: right;
     text-align: center;
-    height: 20px;
-    line-height: 22px;
-    font-size: 0.9em;
-    text-decoration: none;
-    -webkit-border-radius: 4px;
-            border-radius: 4px;
-    color: #5e5f63;
-    text-shadow: 0 1px 0 #fff;
+    display: block;
+    height: 32px;
+    line-height: 32px;
+    margin-left: 32px;
 }
 
-#time-machine .days .day:hover {
-    background: #ccc;
+.time-machine-button i {
+    display: inline-block;
+    background: url(../img/time-machine.png);
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -17px 0 0 -14ex;
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    -webkit-transform: rotateY(-180deg);
 }
 
-#time-machine .days .day.active {
-    background: #999;
-    color: #fff;
-    text-shadow: 0 1px 0 #777;
-    background: #dee0e2; /* Old browsers */
-    background: -moz-linear-gradient(top,  #dee0e2 0%, #dee0e2 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dee0e2), color-stop(100%,#dee0e2)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #dee0e2 0%,#dee0e2 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #dee0e2 0%,#dee0e2 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #dee0e2 0%,#dee0e2 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #dee0e2 0%,#dee0e2 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dee0e2', endColorstr='#dee0e2',GradientType=0 ); /* IE6-9 */
-    color: #5e5f63;
-    box-shadow: inset 0 1px 1px 0 rgba(0, 0, 0, 0.3);
-    text-shadow: 0 1px 0px #fff;
-}
-
-#time-machine .days .day.hover {
-
-}
-
-#time-machine .days .day.active {
-
+.time-machine-button.active i {
+    -webkit-filter: grayscale(0%);
+    -moz-filter: grayscale(0%);
+    -ms-filter: grayscale(0%);
+    -o-filter: grayscale(0%);
+    -webkit-transform: rotateY(0deg);
 }
 
 
@@ -1816,4 +1749,85 @@ footer a:active {
     font-style: italic;
     font-family: Georgia, Times, Serif;
     font-weight: normal;
+}
+
+.map-types .item .beta {
+    background: #0483a4;
+    color: #fff;
+    -webkit-border-radius: 10px;
+            border-radius: 10px;
+    padding: 1px 4px 1px 4px;
+}
+
+.map-types .item.active .beta {
+    color: #0483a4;
+    background: #fff;
+    text-shadow: none;
+}
+
+.map-types .item .std {
+    background: #418252;
+    color: #fff;
+    -webkit-border-radius: 10px;
+            border-radius: 10px;
+    padding: 1px 4px 1px 2px;
+}
+
+.map-types .item.active .std {
+    color: #0483a4;
+    background: #fff;
+    text-shadow: none;
+}
+
+
+/* =Animations
+-----------------------------------------------------------------------------*/
+@-webkit-keyframes rotate-z {
+    from {
+        -webkit-transform: rotateY(-180deg);
+        -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+    }
+    to {
+        -webkit-transform: rotateY(0deg);
+        -webkit-filter: grayscale(0%);
+        -moz-filter: grayscale(0%);
+        -ms-filter: grayscale(0%);
+        -o-filter: grayscale(0%);
+    }
+}
+
+.rotate-z {
+	-webkit-animation-name: rotate-z;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-duration: 400ms;
+	-webkit-transform-style: preserve-3d;
+}
+
+@-webkit-keyframes rotate-z-rev {
+    from {
+        -webkit-transform: rotateY(0deg);
+        -webkit-filter: grayscale(0%);
+        -moz-filter: grayscale(0%);
+        -ms-filter: grayscale(0%);
+        -o-filter: grayscale(0%);
+    }
+    to {
+        -webkit-transform: rotateY(-180deg);
+        -webkit-filter: grayscale(100%);
+        -moz-filter: grayscale(100%);
+        -ms-filter: grayscale(100%);
+        -o-filter: grayscale(100%);
+    }
+}
+
+.rotate-z-rev {
+	-webkit-animation-name: rotate-z-rev;
+	-webkit-animation-timing-function: ease;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-duration: 400ms;
+	-webkit-transform-style: preserve-3d;
 }

@@ -11,17 +11,17 @@
             <div class="half">
                 <div class="form-item">
                     <label for="login" class="bold">Логин</label>
-                    <input class="text" type="text" name="login" id="login" {*autofocus="autofocus"*} value="{$core->auth->user.data.login}" />
+                    <input class="text width-100" type="text" name="login" id="login" {*autofocus="autofocus"*} value="{$core->auth->user.data.login}" />
                 </div>
 
                 <div class="form-item">
                     <label for="email" class="bold">Электонная почта</label>
-                    <input class="text" type="email" name="email" id="email" value="{$core->auth->user.data.email}" />
+                    <input class="text width-100" type="email" name="email" id="email" value="{$core->auth->user.data.email}" />
                 </div>
 
                 <div class="form-item">
                     <label for="name" class="bold">Имя</label>
-                    <input class="text" type="text" name="name" id="name" value="{$core->auth->user.data.name}" />
+                    <input class="text width-100" type="text" name="name" id="name" value="{$core->auth->user.data.name}" />
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                     <label for="timezone" class="bold">Часовой пояс</label>
                     <select class="core-ui-select" name="timezone" id="timezone">
                     {foreach $core->utils->generateTimeZonesList() as $key => $val}
-                        <option value="{$key}">{$val}</option>
+                        <option value="{$key}" {if $key == $core->auth->user.data.user_timezone}selected{/if}>{$val}</option>
                     {/foreach}
                     </select>
                 </div>

@@ -34,6 +34,8 @@
     </div>
     <div class="quarter">
         <div class="map-bottom-panel">
+
+            {* Map data triggers block *}
             <div class="bottom-panel">
                 <div class="panel-content">
                     <div id="togglers">
@@ -44,7 +46,7 @@
 
                         <label class="third">
                             <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
-                            <a href="javascript:void(0)" id="focus" class="black-link" title="Показать текущее положение">Фокус</a>
+                            <a href="javascript:void(0)" id="focus" title="Показать текущее положение">Фокус</a>
                         </label>
 
                         <label class="third" title="Показывать пройденный путь">
@@ -57,6 +59,7 @@
                 </div>
             </div>
 
+            {* Fleet and car selection block *}
             <div class="bottom-panel">
                 <div class="panel-content">
                     <div id="fleets-menu"></div>
@@ -65,6 +68,18 @@
                 </div>
             </div>
 
+            {* Time machine block *}
+            <div class="bottom-panel">
+                <div class="panel-content">
+                    <a class="time-machine-button" id="timemachine-button" href="#"><i></i>Машина времени</a>
+
+                    <div id="time-machine">
+                        <div class="days"></div>
+                    </div>
+                </div>
+            </div>
+
+            {* Other data panel blocks *}
             <div class="bottom-panel" id="bottom-panel-1">
                 <div class="panel-content"></div>
             </div>
