@@ -1289,12 +1289,6 @@ var map = {
             hash += 'car='+h.car;
         };
 
-        console.log(document.location.hash)
-
-        console.log(core.ui.getHashData().car)
-
-        console.log(hash)
-
         hash = '#' + hash;
 
         if(hash != '#'){
