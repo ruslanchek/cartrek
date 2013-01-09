@@ -39,7 +39,7 @@
 
                         case 'getDynamicDevicesData' : {
                             header('Content-type: application/json');
-                            print json_encode($this->devices->getDynamicDevicesData(json_decode($_POST['cars'])));
+                            print json_encode($this->devices->getDynamicDevicesData(json_decode($_POST['cars']), $_POST['tm_flag']));
                         }; break;
                     };
 

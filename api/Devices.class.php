@@ -142,7 +142,8 @@
             return $devices;
         }
 
-        public function getDynamicDevicesData($cars){
+        // TM flag - флоаг тайммашины, который указывает на то, что нужно грузить startpoint вместо endpoint в качестве текущего положения тачки
+        public function getDynamicDevicesData($cars, $tm_flag){
             if($cars && count($cars) > 0){
                 $in = '';
 
@@ -180,6 +181,12 @@
 
                 $devices = $this->db->assocMulti($query);
 
+                if($tm_flag == '1'){
+                    $order = 'ASC';
+                }else{
+                    $order = 'DESC';
+                };
+
                 for($i = 0, $l = count($devices); $i < $l; $i++){
                     $query = "
                         SELECT
@@ -197,7 +204,7 @@
                         	`tracks`.`datetime` >= CONVERT_TZ('".$date_start."', '+04:00', 'Europe/Moscow') &&
                         	`tracks`.`datetime` <= CONVERT_TZ('".$date_end."', '+04:00', 'Europe/Moscow')
                         ORDER BY
-                        	`tracks`.`datetime` DESC
+                        	`tracks`.`datetime` ".$order."
                         LIMIT 1
                     ";
 
