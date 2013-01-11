@@ -6,10 +6,10 @@ date_default_timezone_set('Europe/Moscow');
 
 Class Config{
     public $db_vars = array(
-        'host'  => 'localhost',
+        'host'  => 'server.cartrek.ru',
         'db'    => 'cartrek',
-        'user'  => 'fortyfour',
-        'pass'  => 'W8zXGYPa'
+        'user'  => 'cartrek',
+        'pass'  => 'Loopusinfabula'
     );
 
     //public $yandex_maps_api_key = 'AGZOc08BAAAA7AGgVQMAN-Zv3AH9T_SickfIRKaGBWPt6lUAAAAAAAAAAABfuEjMQhwWcAaQkE4J-qk7YcdyBQ==';
