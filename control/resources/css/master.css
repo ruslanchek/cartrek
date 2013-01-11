@@ -1841,3 +1841,15 @@ footer a:active {
 	-webkit-animation-duration: 400ms;
 	-webkit-transform-style: preserve-3d;
 }
+
+/* Calendar */
+.ui-datepicker-calendar th {
+    text-align: center !important;
+    width: 14.28% !important;
+    padding: 0 !important;
+}
+
+.ui-datepicker-calendar td {
+    text-align: center !important;
+    padding: 0 !important;
+}
