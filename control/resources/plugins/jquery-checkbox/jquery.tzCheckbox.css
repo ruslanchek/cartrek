@@ -1,7 +1,7 @@
 .tzCheckBox{
 	background:url('background-small.png') no-repeat right bottom;
 	display:inline-block;
-	min-width:49px;
+	min-width:51px;
 	height:22px;
 	white-space:nowrap;
 	position:relative;
