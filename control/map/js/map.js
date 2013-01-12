@@ -1545,7 +1545,7 @@ var map = {
         speed       : 250,
 
         init: function(){
-            $('#player').show();
+            $('#player').slideDown();
 
             this.getCarWayPoints();
 
@@ -1568,7 +1568,7 @@ var map = {
         },
 
         close: function(){
-            $('#player').hide();
+            $('#player').slideUp();
         },
 
         play: function(){
