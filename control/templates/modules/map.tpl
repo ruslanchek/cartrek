@@ -26,6 +26,15 @@
 
 <div class="row">
     <div class="threequarter">
+        <div id="player" style="display: none">
+            <a id="player-rev" href="javascript:void(0)">Rev</a>
+            <a id="player-play-pause" href="javascript:void(0)">Play</a>
+            <a id="player-reset" href="javascript:void(0)">Reset</a>
+            <a id="player-ff" href="javascript:void(0)">Ff</a>
+            <span id="player-status">Stopped</span>
+            <div id="player-timeline-slider"></div>
+        </div>
+
         <div class="map-container">
             <div class="shadow-top"></div>
             <div class="shadow-bottom"></div>

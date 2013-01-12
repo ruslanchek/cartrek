@@ -212,6 +212,7 @@ var leaflet_ctrl = {
 
             marker.setIcon(this.icons.heading(data.heading));
             marker.update();
+            marker._popup.setContent(map.getCurrentPositionPopupHtml(data.id));
 
             if(map.current_car && map.show_car_path){
                 //Если у текущей тачки нет ни одной точки пути,
@@ -1075,6 +1076,8 @@ var map = {
     },
 
     renewOptions: function(){
+        this.player.close();
+
         //Читаем параметры из адресной строки (хеш)
         var new_hash = core.ui.getHashData();
 
@@ -1478,7 +1481,6 @@ var map = {
 
             $('#timemachine-button').attr('href', hash).addClass('active').find('i').addClass('rotate-z').removeClass('rotate-z-rev');
             $('#time-machine .days').slideDown(300);
-
         }else{
             $('#timemachine-button').attr('href', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear()).removeClass('active').find('i').removeClass('rotate-z').addClass('rotate-z-rev');
             $('#time-machine .days').slideUp(300, function(){
@@ -1506,8 +1508,11 @@ var map = {
 
                     if(h && h.timemachine){
                         map.m_ctrl.drawTimeMachineGhostPath(map.map, map.current_car.id);
+                        map.player.init();
+
                     }else{
                         map.m_ctrl.drawAllThePath(map.map, map.current_car.id);
+                        map.player.close();
                     };
 
                     map.drawBottomPanels();
@@ -1536,26 +1541,64 @@ var map = {
         interval    : null,
         frame       : 0,
         waypoints   : null,
+        playing     : false,
+        speed       : 250,
 
         init: function(){
+            $('#player').show();
+
             this.getCarWayPoints();
-            this.reset();
+
+            if(this.waypoints && this.waypoints.length > 0){
+                $('#player').removeClass('disabled');
+
+                $('#player-timeline-slider').slider({
+                    animate: 'fast',
+                    min: 0,
+                    max: this.waypoints.length - 1,
+                    slide: function(event, ui){
+                        map.player.moveMarker(ui.value);
+                    }
+                });
+
+                this.reset();
+            }else{
+                $('#player').addClass('disabled');
+            };
+        },
+
+        close: function(){
+            $('#player').hide();
         },
 
         play: function(){
             this.interval = setInterval(function(){
                 map.player.tick();
-            }, 50);
+            }, this.speed);
+
+            $('#player #player-play-pause').text('Pause');
+            $('#player #player-status').text('Playing...');
+
+            this.playing = true;
         },
 
         pause: function(){
             clearInterval(this.interval);
+
+            $('#player #player-play-pause').text('Play');
+            $('#player #player-status').text('Paused');
+
+            this.playing = false;
         },
 
-        rew: function(){
+        rev: function(){
             this.frame--;
 
-            if(this.waypoints[this.frame]){
+            if(!this.waypoints){
+                this.init();
+            };
+
+            if(this.frame > 0 && this.waypoints[this.frame]){
                 this.moveMarker(this.frame);
             }else{
                 this.frame++;
@@ -1565,10 +1608,18 @@ var map = {
         ff: function(){
             this.frame++;
 
+            if(!this.waypoints){
+                this.init();
+            };
+
             if(this.waypoints[this.frame]){
                 this.moveMarker(this.frame);
             }else{
                 this.frame--;
+
+                if(this.frame < 0){
+                    this.frame = 0;
+                };
             };
         },
 
@@ -1576,10 +1627,16 @@ var map = {
             this.pause();
             this.frame = 0;
             this.moveMarker(this.frame);
+
+            $('#player #player-status').text('Stopped');
         },
 
         tick: function(){
             console.log('TICK: ' + new Date());
+
+            if(!this.waypoints){
+                this.init();
+            };
 
             if(this.waypoints[this.frame]){
                 this.frame++;
@@ -1605,11 +1662,15 @@ var map = {
                 data.lat                 = p.lat;
                 data.lon                 = p.lon;
 
+                map.current_car.last_point = p;
+
                 map.m_ctrl.updateCurrentPositionMarker(map.current_car.cp_marker, data);
 
                 if(map.auto_focus){
                     map.m_ctrl.focusToMarker(map.map, map.current_car.cp_marker);
                 };
+
+                $('#player-timeline-slider').slider('value', index);
             };
         },
 
@@ -1791,6 +1852,26 @@ var map = {
 
         $('#max-speed-marker').live('click', function(){
             map.m_ctrl.topSpeedMarker();
+        });
+
+        $('#player-play-pause').live('click', function(){
+            if(map.player.playing === true){
+                map.player.pause();
+            }else{
+                map.player.play();
+            };
+        });
+
+        $('#player-reset').live('click', function(){
+            map.player.reset();
+        });
+
+        $('#player-rev').live('click', function(){
+            map.player.rev();
+        });
+
+        $('#player-ff').live('click', function(){
+            map.player.ff();
         });
     },
 

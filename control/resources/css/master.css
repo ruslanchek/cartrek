@@ -1853,3 +1853,17 @@ footer a:active {
     text-align: center !important;
     padding: 0 !important;
 }
+
+/* Slider */
+#player-timeline-slider {
+    background: #ccc;
+    height: 5px;
+    position: relative;
+}
+
+.ui-slider-handle {
+    height: 5px;
+    width: 5px;
+    background: #444;
+    position: absolute;
+}
