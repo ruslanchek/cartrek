@@ -212,7 +212,10 @@ var leaflet_ctrl = {
 
             marker.setIcon(this.icons.heading(data.heading));
             marker.update();
-            marker._popup.setContent(map.getCurrentPositionPopupHtml(data.id));
+
+            if(marker._popup){
+                marker._popup.setContent(map.getCurrentPositionPopupHtml(data.id));
+            };
 
             if(map.current_car && map.show_car_path){
                 //Если у текущей тачки нет ни одной точки пути,
@@ -948,8 +951,14 @@ var map = {
                     width:  $('.map-container').width() - 2
                 });
 
+                var player_height = 0;
+
+                if($('#player').is(':visible')){
+                    player_height = $('#player').height() + 20;
+                };
+
                 $('.map-bottom-panel').css({
-                    minHeight: ui.size.height + 14
+                    minHeight: ui.size.height + 14 + player_height
                 });
 
                 if(map.map){
@@ -965,8 +974,14 @@ var map = {
                 width:  $('.map-container').width() - 2
             });
 
+            var player_height = 0;
+
+            if($('#player').is(':visible')){
+                player_height = $('#player').height() + 20;
+            };
+
             $('.map-bottom-panel').css({
-                minHeight: $('.map-container').height() + 14
+                minHeight: $('.map-container').height() + 14 + player_height
             });
 
             if(map.map){
@@ -974,8 +989,14 @@ var map = {
             };
         });
 
+        var player_height = 0;
+
+        if($('#player').is(':visible')){
+            player_height = $('#player').height() + 20;
+        };
+
         $('.map-bottom-panel').css({
-            minHeight: $('.map-container').height() + 14
+            minHeight: $('.map-container').height() + 14 + player_height
         });
     },
 
@@ -1538,14 +1559,17 @@ var map = {
     },
 
     player: {
-        interval    : null,
-        frame       : 0,
-        waypoints   : null,
-        playing     : false,
-        speed       : 250,
+        interval        : null,
+        frame           : 0,
+        waypoints       : null,
+        playing         : false,
+        speed           : 1000,
+        first_wp_time   : null,
+        last_wp_time    : null,
+        curr_time       : null,
 
         init: function(){
-            $('#player').slideDown();
+            $('#player').slideDown(250);
 
             this.getCarWayPoints();
 
@@ -1557,9 +1581,25 @@ var map = {
                     min: 0,
                     max: this.waypoints.length - 1,
                     slide: function(event, ui){
+                        map.player.pause();
+                        map.player.frame = ui.value;
                         map.player.moveMarker(ui.value);
                     }
                 });
+
+                if(this.waypoints[0] && this.waypoints[0].date){
+                    var d = this.waypoints[0].date.split(/[- :]/);
+                    this.first_wp_time = new Date(d[0], d[1]-1, d[2], d[3], d[4], d[5]);
+
+                    this.curr_time = new Date(this.first_wp_time);
+
+                    $('#player-current-time').text(this.curr_time);
+                };
+
+                if(this.waypoints[this.waypoints.length - 1] && this.waypoints[this.waypoints.length - 1].date){
+                    var d = this.waypoints[this.waypoints.length - 1].date.split(/[- :]/);
+                    this.last_wp_time = new Date(d[0], d[1]-1, d[2], d[3], d[4], d[5]);
+                };
 
                 this.reset();
             }else{
@@ -1568,7 +1608,7 @@ var map = {
         },
 
         close: function(){
-            $('#player').slideUp();
+            $('#player').slideUp(250);
         },
 
         play: function(){
@@ -1598,7 +1638,7 @@ var map = {
                 this.init();
             };
 
-            if(this.frame > 0 && this.waypoints[this.frame]){
+            if(this.frame >= 0 && this.waypoints[this.frame]){
                 this.moveMarker(this.frame);
             }else{
                 this.frame++;
@@ -1632,21 +1672,34 @@ var map = {
         },
 
         tick: function(){
-            console.log('TICK: ' + new Date());
+            this.curr_time.setSeconds(this.curr_time.getSeconds() + 1);
+
+            $('#player-current-time').text(this.curr_time);
 
             if(!this.waypoints){
                 this.init();
             };
 
-            if(this.waypoints[this.frame]){
-                this.frame++;
-                this.moveMarker(this.frame);
-            }else{
-                this.pause();
+            if(this.waypoints[(this.frame + 1)] && this.waypoints[(this.frame + 1)].date){
+                var cd =    this.curr_time.getFullYear() + '-' +
+                            core.utilities.leadingZero(this.curr_time.getMonth() + 1, 2) + '-' +
+                            core.utilities.leadingZero(this.curr_time.getDate(), 2) + ' ' +
+                            core.utilities.leadingZero(this.curr_time.getHours(), 2) + ':' +
+                            core.utilities.leadingZero(this.curr_time.getMinutes(), 2) + ':' +
+                            core.utilities.leadingZero(this.curr_time.getSeconds(), 2);
+
+                if(this.waypoints[(this.frame + 1)].date == cd){
+                    if(this.waypoints[this.frame]){
+                        this.frame++;
+                        this.moveMarker(this.frame, true);
+                    }else{
+                        this.pause();
+                    };
+                };
             };
         },
 
-        moveMarker: function(index){
+        moveMarker: function(index, from_tick){
             if(this.waypoints && this.waypoints[index]){
                 var p = this.waypoints[index],
                     data = {};
@@ -1671,6 +1724,12 @@ var map = {
                 };
 
                 $('#player-timeline-slider').slider('value', index);
+
+                if(!from_tick && p.date){
+                    var d = p.date.split(/[- :]/);
+                    this.curr_time = new Date(d[0], d[1]-1, d[2], d[3], d[4], d[5]);
+                    $('#player-current-time').text(this.curr_time);
+                };
             };
         },
 

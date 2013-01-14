@@ -32,7 +32,11 @@
             <a id="player-reset" href="javascript:void(0)">Reset</a>
             <a id="player-ff" href="javascript:void(0)">Ff</a>
             <span id="player-status">Stopped</span>
-            <div id="player-timeline-slider"></div>
+            <span id="player-current-time"></span>
+
+            <div class="player-timeline">
+                <div id="player-timeline-slider"></div>
+            </div>
         </div>
 
         <div class="map-container">

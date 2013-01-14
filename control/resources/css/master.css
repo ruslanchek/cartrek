@@ -1299,6 +1299,8 @@ footer a:active {
 -----------------------------------------------------------------------------*/
 #map {
     border: 1px solid #ccc;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
 }
 
 #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
@@ -1344,6 +1346,8 @@ footer a:active {
     cursor: ns-resize;
     position: absolute;
     bottom: -1px;
+    -webkit-border-radius: 0px 0px 2px 2px;
+            border-radius: 0px 0px 2px 2px;
 }
 
 
@@ -1567,6 +1571,8 @@ footer a:active {
     background: #eee;
     text-shadow: 0 1px 0 #fff;
     border: 1px solid #ddd;
+    -webkit-border-radius: 2px;
+            border-radius: 2px;
 }
 
 .bottom-panel .panel-content {
@@ -1854,16 +1860,39 @@ footer a:active {
     padding: 0 !important;
 }
 
-/* Slider */
-#player-timeline-slider {
+/* Player */
+#player {
+    padding: 10px 12px;
+    background: #eee;
+    font-size: 0.85em;
+    background: #eee;
+    text-shadow: 0 1px 0 #fff;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    -webkit-border-radius: 2px 2px 0px 0px;
+            border-radius: 2px 2px 0px 0px;
+}
+
+.player-timeline {
+    height: 5px;
     background: #ccc;
+    -webkit-border-radius: 5px;
+            border-radius: 5px;
+    border-bottom: 1px solid #fff;
+    border-top: 1px solid #999;
+    padding-right: 15px;
+}
+
+#player-timeline-slider {
     height: 5px;
     position: relative;
 }
 
 .ui-slider-handle {
-    height: 5px;
-    width: 5px;
-    background: #444;
+    height: 16px;
+    width: 16px;
+    top: 50%;
+    margin: -8px 0 0 0;
     position: absolute;
+    background: url(../plugins/slickswitch/images/switch.png) no-repeat -60px 0;
 }
