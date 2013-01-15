@@ -33,7 +33,7 @@
             <a id="player-ff" href="javascript:void(0)">Ff</a>
             <span id="player-status">Stopped</span>
             <span id="player-current-time"></span>
-
+            <a id="player-time-factor" href="javascript:void(0)">x1</a>
             <div class="player-timeline">
                 <div id="player-timeline-slider"></div>
             </div>

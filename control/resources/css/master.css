@@ -1881,6 +1881,7 @@ footer a:active {
     border-bottom: 1px solid #fff;
     border-top: 1px solid #999;
     padding-right: 15px;
+    position: relative;
 }
 
 #player-timeline-slider {
@@ -1888,11 +1889,19 @@ footer a:active {
     position: relative;
 }
 
+.player-timeline .time-line-monitor {
+    height: 5px;
+    background: #2bd0ff;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
 .ui-slider-handle {
     height: 16px;
     width: 16px;
     top: 50%;
-    margin: -8px 0 0 0;
+    margin: -9px 0 0 0;
     position: absolute;
     background: url(../plugins/slickswitch/images/switch.png) no-repeat -60px 0;
 }

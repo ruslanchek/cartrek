@@ -1567,6 +1567,8 @@ var map = {
         first_wp_time   : null,
         last_wp_time    : null,
         curr_time       : null,
+        time_factor     : 1,
+        curr_second     : 0,
 
         init: function(){
             $('#player').slideDown(250);
@@ -1576,24 +1578,16 @@ var map = {
             if(this.waypoints && this.waypoints.length > 0){
                 $('#player').removeClass('disabled');
 
-                $('#player-timeline-slider').slider({
-                    animate: 'fast',
-                    min: 0,
-                    max: this.waypoints.length - 1,
-                    slide: function(event, ui){
-                        map.player.pause();
-                        map.player.frame = ui.value;
-                        map.player.moveMarker(ui.value);
-                    }
-                });
-
                 if(this.waypoints[0] && this.waypoints[0].date){
                     var d = this.waypoints[0].date.split(/[- :]/);
                     this.first_wp_time = new Date(d[0], d[1]-1, d[2], d[3], d[4], d[5]);
 
                     this.curr_time = new Date(this.first_wp_time);
+                    this.curr_time.setHours(0);
+                    this.curr_time.setMinutes(0);
+                    this.curr_time.setSeconds(0);
 
-                    $('#player-current-time').text(this.curr_time);
+                    this.renewTimeMonitor();
                 };
 
                 if(this.waypoints[this.waypoints.length - 1] && this.waypoints[this.waypoints.length - 1].date){
@@ -1601,10 +1595,65 @@ var map = {
                     this.last_wp_time = new Date(d[0], d[1]-1, d[2], d[3], d[4], d[5]);
                 };
 
+                $('#player-timeline-slider').slider({
+                    animate: 'fast',
+                    min: 0,
+                    max: this.waypoints.length - 1,
+                    slide: function(event, ui){
+                        map.player.pause();
+
+                        /*map.player.curr_second = parseInt(ui.value);
+
+                        map.player.curr_time.setHours(0);
+                        map.player.curr_time.setMinutes(0);
+                        map.player.curr_time.setSeconds(0);
+
+                        map.player.curr_time.setSeconds(ui.value);
+
+                        */
+
+                        map.player.frame = ui.value;
+
+                        map.player.renewTimeByFrame(ui.value);
+
+                        map.player.checkFrameByTime();
+                        map.player.moveMarker(ui.value);
+                    }
+                });
+
+                $('.player-timeline .time-line-monitor').remove();
+                $('.player-timeline').append('<div class="time-line-monitor"></div>');
+
                 this.reset();
             }else{
                 $('#player').addClass('disabled');
             };
+        },
+
+        renewTimeByFrame: function(frame){
+            var d = this.waypoints[frame].date.split(/[- :]/);
+            this.curr_time = new Date(d[0], d[1]-1, d[2], d[3], d[4], d[5]);
+            this.curr_second = (this.curr_time.getHours() * 60 * 60) + (this.curr_time.getMinutes() * 60) + this.curr_time.getSeconds();
+
+            this.renewTimeMonitor();
+        },
+
+        setTimeFactor: function(){
+            this.time_factor = this.time_factor * 2;
+
+            if(this.time_factor > 256){
+                this.time_factor = 1;
+            };
+
+            clearInterval(this.interval);
+
+            if(this.playing){
+                this.interval = setInterval(function(){
+                    map.player.tick();
+                }, this.speed / this.time_factor);
+            };
+
+            $('#player-time-factor').text('x'+this.time_factor);
         },
 
         close: function(){
@@ -1614,7 +1663,7 @@ var map = {
         play: function(){
             this.interval = setInterval(function(){
                 map.player.tick();
-            }, this.speed);
+            }, this.speed / this.time_factor);
 
             $('#player #player-play-pause').text('Pause');
             $('#player #player-status').text('Playing...');
@@ -1640,6 +1689,7 @@ var map = {
 
             if(this.frame >= 0 && this.waypoints[this.frame]){
                 this.moveMarker(this.frame);
+                this.renewTimeByFrame(this.frame);
             }else{
                 this.frame++;
             };
@@ -1654,6 +1704,7 @@ var map = {
 
             if(this.waypoints[this.frame]){
                 this.moveMarker(this.frame);
+                this.renewTimeByFrame(this.frame);
             }else{
                 this.frame--;
 
@@ -1668,14 +1719,35 @@ var map = {
             this.frame = 0;
             this.moveMarker(this.frame);
 
+            this.curr_time.setHours(0);
+            this.curr_time.setMinutes(0);
+            this.curr_time.setSeconds(0);
+
+            this.curr_second = 0;
+
+            this.renewTimeMonitor();
+
             $('#player #player-status').text('Stopped');
         },
 
+        renewTimeMonitor: function(){
+            $('#player-current-time').text(core.utilities.leadingZero(this.curr_time.getHours(), 2) + ':' + core.utilities.leadingZero(this.curr_time.getMinutes(), 2) + ':' + core.utilities.leadingZero(this.curr_time.getSeconds(), 2));
+        },
+
         tick: function(){
-            this.curr_time.setSeconds(this.curr_time.getSeconds() + 1);
+            this.curr_second = this.curr_second + 1;
 
-            $('#player-current-time').text(this.curr_time);
+            this.curr_time.setHours(0);
+            this.curr_time.setMinutes(0);
+            this.curr_time.setSeconds(0);
 
+            this.curr_time.setSeconds(this.curr_second);
+
+            this.renewTimeMonitor();
+            this.checkFrameByTime();
+        },
+
+        checkFrameByTime: function(){
             if(!this.waypoints){
                 this.init();
             };
@@ -1689,17 +1761,14 @@ var map = {
                             core.utilities.leadingZero(this.curr_time.getSeconds(), 2);
 
                 if(this.waypoints[(this.frame + 1)].date == cd){
-                    if(this.waypoints[this.frame]){
-                        this.frame++;
-                        this.moveMarker(this.frame, true);
-                    }else{
-                        this.pause();
-                    };
+                    this.frame++;
+                    $('#player-timeline-slider').slider('value', this.frame);
+                    this.moveMarker(this.frame);
                 };
             };
         },
 
-        moveMarker: function(index, from_tick){
+        moveMarker: function(index){
             if(this.waypoints && this.waypoints[index]){
                 var p = this.waypoints[index],
                     data = {};
@@ -1724,12 +1793,6 @@ var map = {
                 };
 
                 $('#player-timeline-slider').slider('value', index);
-
-                if(!from_tick && p.date){
-                    var d = p.date.split(/[- :]/);
-                    this.curr_time = new Date(d[0], d[1]-1, d[2], d[3], d[4], d[5]);
-                    $('#player-current-time').text(this.curr_time);
-                };
             };
         },
 
@@ -1931,6 +1994,10 @@ var map = {
 
         $('#player-ff').live('click', function(){
             map.player.ff();
+        });
+
+        $('#player-time-factor').live('click', function(){
+            map.player.setTimeFactor();
         });
     },
 
