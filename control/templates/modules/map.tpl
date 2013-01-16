@@ -84,7 +84,18 @@
             {* Time machine block *}
             <div class="bottom-panel">
                 <div class="panel-content">
-                    <a class="time-machine-button" id="timemachine-button" href="#"><i></i>Машина времени</a>
+                    <div class="row">
+                        <div class="twothird">
+                            <h3>Машина времени</h3>
+                        </div>
+
+                        <div class="third">
+                            <input type="checkbox" class="slickswitch" id="timemachine-button" />
+                        </div>
+                    </div>
+
+                    {*<h3>Машина времени</h3>
+                    <a class="time-machine-button" id="timemachine-button" href="#"><i></i>Машина времени</a>*}
 
                     <div id="time-machine">
                         <div class="days"></div>

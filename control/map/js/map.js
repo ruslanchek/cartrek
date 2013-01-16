@@ -1500,10 +1500,10 @@ var map = {
                 }
             });
 
-            $('#timemachine-button').attr('href', hash).addClass('active').find('i').addClass('rotate-z').removeClass('rotate-z-rev');
+            $('#timemachine-button').data('url', hash).attr('checked', 'checked');
             $('#time-machine .days').slideDown(300);
         }else{
-            $('#timemachine-button').attr('href', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear()).removeClass('active').find('i').removeClass('rotate-z').addClass('rotate-z-rev');
+            $('#timemachine-button').data('url', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear()).removeAttr('checked');
             $('#time-machine .days').slideUp(300, function(){
                 $('#time-machine .days').datepicker('destroy');
             });
@@ -1969,6 +1969,12 @@ var map = {
         $('#auto-focus').slickswitch({
             toggled: function(){
                 map.toggleAutoFocus();
+            }
+        });
+
+        $('#timemachine-button').slickswitch({
+            toggled: function(){
+                document.location.href = $('#timemachine-button').data('url');
             }
         });
 
