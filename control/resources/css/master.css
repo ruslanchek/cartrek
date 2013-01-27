@@ -1,4 +1,5 @@
 @import url(http://fonts.googleapis.com/css?family=Cuprum:400,700&subset=latin,cyrillic);
+@import url(http://fonts.googleapis.com/css?family=Gruppo);
 
 /* =Typography
 -----------------------------------------------------------------------------*/
@@ -1905,3 +1906,86 @@ footer a:active {
     position: absolute;
     background: url(../plugins/slickswitch/images/switch.png) no-repeat -60px 0;
 }
+
+
+#player .player-controls-block .btn {
+    width: 45px;
+    height: 45px;
+    padding: 0;
+}
+
+
+#player .time-display {
+    color: #45d1ec;
+
+	background-color: #2EC0FE;
+	-moz-box-shadow:inset 0px 1px 3px rgba(0,0,0,1);
+	-webkit-box-shadow:inset 0px 1px 3px rgba(0,0,0,1);
+	box-shadow:inset 0px 1px 3px rgba(0,0,0,1);
+	background-image: -o-linear-gradient(90deg , rgb(51,57,65) 0%, rgb(67,75,86) 100%);
+	background-image: -moz-linear-gradient(90deg , rgb(51,57,65) 0%, rgb(67,75,86) 100%);
+	background-image: -webkit-linear-gradient(90deg , rgb(51,57,65) 0%, rgb(67,75,86) 100%);
+	background-image: -ms-linear-gradient(90deg , rgb(51,57,65) 0%, rgb(67,75,86) 100%);
+	background-image: linear-gradient(90deg , rgb(51,57,65) 0%, rgb(67,75,86) 100%);
+
+    padding: 5px 15px 8px 15px;
+    -webkit-border-radius: 3px;
+            border-radius: 3px;
+    text-shadow: 0 1px 2px rgba(30, 111, 127, 0.75);
+    position: relative;
+
+    margin: 0 0 10px;
+}
+
+#player .time-block {
+    position: relative;
+}
+
+#player .info-block {
+    display: block;
+    position: relative;
+}
+
+#player .info-block.info-block-left {
+    float: left;
+}
+
+#player .info-block.info-block-right {
+    float: right;
+    text-align: right;
+}
+
+#player .info-block .ib-header {
+    display: block;
+    white-space: nowrap;
+    font-size: 0.75em;
+    line-height: 1.5em;
+}
+
+#player .info-block .ib-content {
+    font-family: 'Gruppo', cursive;
+    font-size: 26px;
+    display: block;
+}
+
+/*#player .time-display #player-current-time {
+    font-family: 'Gruppo', cursive;
+    font-size: 20px;
+    display: block;
+}
+
+#player .time-factor {
+    position: absolute;
+    right: 15px;
+    top: 0;
+}
+
+#player .time-display #player-time-factor {
+    font-family: 'Gruppo', cursive;
+    font-size: 20px;
+    display: block;
+}
+
+#player .player-control-row {
+    padding: 0 0 10px;
+}*/

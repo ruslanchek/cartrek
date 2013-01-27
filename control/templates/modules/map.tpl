@@ -27,13 +27,40 @@
 <div class="row">
     <div class="threequarter">
         <div id="player" style="display: none">
-            <a id="player-rev" href="javascript:void(0)">Rev</a>
-            <a id="player-play-pause" href="javascript:void(0)">Play</a>
-            <a id="player-reset" href="javascript:void(0)">Reset</a>
-            <a id="player-ff" href="javascript:void(0)">Ff</a>
-            <span id="player-status">Stopped</span>
-            <span id="player-current-time"></span>
-            <a id="player-time-factor" href="javascript:void(0)">x1</a>
+
+            <div class="player-control-row row">
+                <div class="quarter">
+                    <div class="player-controls-block">
+                        <a class="btn btn-big" id="player-rev" href="javascript:void(0)">Rev</a>
+                        <a class="btn btn-big" id="player-play-pause" href="javascript:void(0)">&#9654;</a>
+                        <a class="btn btn-big" id="player-reset" href="javascript:void(0)">Reset</a>
+                        <a class="btn btn-big" id="player-ff" href="javascript:void(0)">Ff</a>
+                    </div>
+                </div>
+
+                <div class="half">
+                    <div class="time-display">
+                        <div class="info-block info-block-left">
+                            <span class="ib-header">Текущее время</span>
+                            <span class="ib-content">
+                                <span id="player-current-time">00:00:00</span>
+                            </span>
+                        </div>
+
+                        <div class="info-block info-block-right">
+                            <span class="ib-header">Ускорение времени</span>
+                            <span class="ib-content">
+                                <span id="player-time-factor">x1</span>
+                            </span>
+                        </div>
+
+                        <div class="clear"></div>
+                    </div>
+                </div>
+
+                <div class="quarter"></div>
+            </div>
+
             <div class="player-timeline">
                 <div id="player-timeline-slider"></div>
             </div>

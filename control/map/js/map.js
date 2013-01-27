@@ -6,6 +6,7 @@ var leaflet_ctrl = {
     finish_markers_group            : null,
     max_markers_group               : null,
     path                            : null,
+    ghost_path                      : null,
     first_loaded_car_id             : false,
     max_speed_popup_opened          : false,
     path_points_length              : 0,
@@ -115,8 +116,8 @@ var leaflet_ctrl = {
 
             marker.setZIndexOffset(data.id * 11);
 
-            /*var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
-            map_instance.addLayer(m);*/
+            /* var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
+            map_instance.addLayer(m); */
 
             marker.on("mouseover", function() {
                 this.setZIndexOffset(data.id * 11 * 10000);
@@ -218,7 +219,7 @@ var leaflet_ctrl = {
             };
 
             if(map.current_car && map.show_car_path){
-                //Если у текущей тачки нет ни одной точки пути,
+                // Если у текущей тачки нет ни одной точки пути,
                 // то создаем точку, чтобы отрисовать путь
                 if(!map.current_car.path_points){
                     map.current_car.path_points = [];
@@ -250,12 +251,12 @@ var leaflet_ctrl = {
                 if(data[i].lat && data[i].lon){
                     var car = map.cars_list[map.getCarIndexById(data[i].id)];
 
-                    //Если тачка уже имеет маркер текущего положения,
+                    // Если тачка уже имеет маркер текущего положения,
                     // то обновляем положение
                     if(car && car.cp_marker){
                         this.updateCurrentPositionMarker(car.cp_marker, data[i], options);
 
-                    //Если нет, то создаем маркер текущего положения.
+                    // Если нет, то создаем маркер текущего положения.
                     // Это нужно тогда, когда машина выбрана,
                     // а данных в базе еще нет, вдруг трекер отправляет точку,
                     // и машина появляется на карте.
@@ -272,9 +273,10 @@ var leaflet_ctrl = {
             case 'stop' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon    : this.icons.stop(),
-                        id      : point.id,
-                        car_id  : car.id
+                        icon        : this.icons.stop(),
+                        id          : point.id,
+                        car_id      : car.id,
+                        point_data  : point
                     }
                 );
 
@@ -288,8 +290,9 @@ var leaflet_ctrl = {
 
                 marker.on('click', function(){
                     this.bindPopup(
-                        '<div class="tooltip-content"><h3>Остановка</h3>'+
-                        core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
+                        '<div class="tooltip-content">' +
+                            '<h3>Остановка</h3>'+
+                            core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
                         '</div>'
                     );
                     this.openPopup();
@@ -299,9 +302,10 @@ var leaflet_ctrl = {
             case 'start' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon    : this.icons.waypoint(),
-                        id      : point.id,
-                        car_id  : car.id
+                        icon        : this.icons.waypoint(),
+                        id          : point.id,
+                        car_id      : car.id,
+                        point_data  : point
                     }
                 );
 
@@ -315,8 +319,9 @@ var leaflet_ctrl = {
 
                 marker.on('click', function(){
                     this.bindPopup(
-                        '<div class="tooltip-content"><h3>Начальная точка</h3>'+
-                        core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
+                        '<div class="tooltip-content">' +
+                            '<h3>Начальная точка</h3>'+
+                            core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
                         '</div>'
                     );
                     this.openPopup();
@@ -326,9 +331,10 @@ var leaflet_ctrl = {
             case 'finish' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon    : this.icons.waypoint(),
-                        id      : point.id,
-                        car_id  : car.id
+                        icon        : this.icons.waypoint(),
+                        id          : point.id,
+                        car_id      : car.id,
+                        point_data  : point
                     }
                 );
 
@@ -342,8 +348,9 @@ var leaflet_ctrl = {
 
                 marker.on('click', function(){
                     this.bindPopup(
-                        '<div class="tooltip-content"><h3>Конечная точка</h3>'+
-                        core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
+                        '<div class="tooltip-content">' +
+                            '<h3>Конечная точка</h3>'+
+                            core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
                         '</div>'
                     );
                     this.openPopup();
@@ -353,9 +360,10 @@ var leaflet_ctrl = {
             case 'run' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon    : this.icons.waypoint(),
-                        id      : point.id,
-                        car_id  : car.id
+                        icon        : this.icons.waypoint(),
+                        id          : point.id,
+                        car_id      : car.id,
+                        point_data  : point
                     }
                 );
 
@@ -376,9 +384,10 @@ var leaflet_ctrl = {
             case 'max_speed' : {
                 var marker = L.marker(
                     [point.lat, point.lon], {
-                        icon    : this.icons.waypoint(),
-                        id      : point.id,
-                        car_id  : car.id
+                        icon        : this.icons.waypoint(),
+                        id          : point.id,
+                        car_id      : car.id,
+                        point_data  : point
                     }
                 );
 
@@ -392,8 +401,9 @@ var leaflet_ctrl = {
 
                 marker.on('click', function(){
                     this.bindPopup(
-                        '<div class="tooltip-content"><h3>Максимальная скорость &mdash; ' + core.utilities.convertKnotsToKms(point.speed) + ' км/ч</h3>'+
-                        core.utilities.humanizeDate(point.date, 'MYSQLTIME') +
+                        '<div class="tooltip-content">' +
+                            '<h3>Максимальная скорость &mdash; ' + core.utilities.convertKnotsToKms(map.current_car.max_speed_marker.options.point_data.speed) + ' км/ч</h3>'+
+                            core.utilities.humanizeDate(map.current_car.max_speed_marker.options.point_data.date, 'MYSQLTIME') +
                         '</div>'
                     );
                     map.m_ctrl.max_speed_popup_opened = this.openPopup();
@@ -409,126 +419,34 @@ var leaflet_ctrl = {
     //TODO: Объединить - не нужно плодить методы!!!
     drawTimeMachineGhostPath: function(map_instance, car_id){
         var path_points     = [],
-            stop_markers    = [],
-            start_markers   = [],
-            finish_markers  = [],
-            run_markers     = [],
             car             = map.cars_list[map.getCarIndexById(car_id)];
 
         if(car && car.path_points){
-            if(car.path_points.length > this.path_points_length || !this.path){
-                //Запоминаем количество путевых точек
-                this.path_points_length = car.path_points.length;
-            }else{
-
-                //Если количество новых точек не больше предыдущего,
-                // не рисуем путь заново
-                return false;
-            };
-
-            //Если путевые маркеры уже отрисованы, то удаляем их
-            this.removeAllThePath(map_instance);
-        };
-
-        if(car && car.path_points){
-            car.stop_points             = 0;
-
-            var max_speed               = 0,
-                max_speed_marker        = null;
-
             for(var i = 0, l = car.path_points.length; i < l; i++){
                 //Добавляем координаты для следующей точки отрисовки путевой линии
                 path_points.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
-
-                //Объявляем переменные маркера и его типа (по умолчанию - run, движение)
-                var marker,
-                    type = 'run';
-
-                //Если точка не последняя, создаем маркер
-                // (иначе будет рисоваться еще и маркер поверх маркера текущего положения)
-                if(i < car.path_points.length-1){
-                    //Приводим скорость к плавающему типу
-                    car.path_points[i].speed = parseFloat(car.path_points[i].speed);
-
-                    //Если скорость 0, добавляем +1 счетчику остановок
-                    // и переопределяем тип - stop, остановка
-                    if(car.path_points[i].speed <= 0){
-                        car.stop_points++;
-                        type = 'stop';
-                    };
-
-                    if(i == 0){
-                        type = 'start';
-                    };
-
-                    //Создаем маркер-объект
-                    marker = this.createPathMarker(map_instance, car, car.path_points[i], type);
-
-                    //Если создался маркер id точки отличается от id точки текущего положения, добавляем маркер в массив
-                    if(marker && car.last_point_id != car.path_points[i].id){
-                        if(type == 'stop' || type == 'start'){
-                            //stop_markers.push(marker);
-                        }else{
-                            //run_markers.push(marker);
-                        };
-                    };
-                };
-
-                //Переопределяем переменные максимальной скорости и маркера максимальной скорости
-                if(car.path_points[i] && car.path_points[i].speed && car.path_points[i].speed > max_speed){
-                    max_speed           = car.path_points[i].speed;
-                    max_speed_marker    = this.createPathMarker(map_instance, car, car.path_points[i], 'max_speed');
-                };
             };
-
-            if(!car.max_speed_marker){
-                car.max_speed_marker = max_speed_marker;
-            }else{
-                car.max_speed_marker.setLatLng(max_speed_marker.getLatLng());
-            };
-
-            car.max_speed = max_speed;
-
-            this.drawMaxSpeedMarker(map_instance, car);
-
-            if(car.path_points[0]){
-                var start_marker = this.createPathMarker(map_instance, car, car.path_points[0], 'start');
-                this.start_markers_group = L.layerGroup([start_marker]).addTo(map_instance);
-            };
-
-            if(car.path_points[car.path_points.length - 1]){
-                var finish_marker = this.createPathMarker(map_instance, car, car.path_points[car.path_points.length - 1], 'finish');
-                this.finish_markers_group = L.layerGroup([finish_marker]).addTo(map_instance);
-            };
-
-            /*if(stop_markers.length > 0){
-                this.stop_markers_group = L.layerGroup(stop_markers).addTo(map_instance);
-            };
-
-            if(run_markers.length > 0){
-                this.run_markers_group = L.layerGroup(run_markers).addTo(map_instance);
-            };*/
 
             //Если путь уже отрисован, то удаляем его
-            if(this.path){
-                map_instance.removeLayer(this.path);
+            if(this.ghost_path){
+                map_instance.removeLayer(this.ghost_path);
             };
 
             //Рисуем путь
             if(path_points && path_points.length > 0){
-                this.path = L.polyline(path_points, {
+                console.log('DRAWE')
+
+                this.ghost_path = L.polyline(path_points, {
                     color           : this.ghost_path_color,
                     smoothFactor    : 2,
                     weight          : 5,
-                    opacity         : 0.55,
-                    dashArray       : '1, 8'
+                    opacity         : 0.3
+                    //dashArray       : '1, 8'
                 });
 
-                if(this.path){
-                    this.path.addTo(map_instance)
+                if(this.ghost_path){
+                    this.ghost_path.addTo(map_instance);
                 };
-
-                car.path_length = Math.ceil(this.path.length_in_meters() / 1000);
             };
         };
 
@@ -540,7 +458,7 @@ var leaflet_ctrl = {
         };
     },
 
-    drawAllThePath: function(map_instance, car_id){
+    drawAllThePath: function(map_instance, car_id, limit_point_id){
         var path_points     = [],
             stop_markers    = [],
             start_markers   = [],
@@ -612,12 +530,31 @@ var leaflet_ctrl = {
                     max_speed           = car.path_points[i].speed;
                     max_speed_marker    = this.createPathMarker(map_instance, car, car.path_points[i], 'max_speed');
                 };
+
+                if(limit_point_id && limit_point_id == car.path_points[i].id){
+                    break;
+                };
             };
 
             if(!car.max_speed_marker){
                 car.max_speed_marker = max_speed_marker;
             }else{
-                car.max_speed_marker.setLatLng(max_speed_marker.getLatLng());
+                if(max_speed_marker){
+                    car.max_speed_marker.options.point_data = max_speed_marker.options.point_data;
+                    car.max_speed_marker.setLatLng(max_speed_marker.getLatLng());
+                    car.max_speed = max_speed_marker.options.point_data.speed;
+
+                    if(car.max_speed_marker._popup){
+                        car.max_speed_marker._popup.setContent(
+                            '<div class="tooltip-content">' +
+                                '<h3>Максимальная скорость &mdash; ' + core.utilities.convertKnotsToKms(max_speed_marker.options.point_data.speed) + ' км/ч</h3>'+
+                                core.utilities.humanizeDate(max_speed_marker.options.point_data.date, 'MYSQLTIME') +
+                            '</div>'
+                        );
+                    };
+                }else{
+                    car.max_speed_marker.closePopup();
+                };
             };
 
             car.max_speed = max_speed;
@@ -765,7 +702,7 @@ var leaflet_ctrl = {
         if(map.current_car && map.current_car.max_speed_marker){
             map.current_car.max_speed_marker.fireEvent('click');
             map.map.panTo(map.current_car.max_speed_marker.getLatLng());
-            map.map.setZoom(13);
+            //map.map.setZoom(13);
         };
     }
 };
@@ -1569,6 +1506,7 @@ var map = {
         curr_time       : null,
         time_factor     : 1,
         curr_second     : 0,
+        path_layers     : {},
 
         init: function(){
             $('#player').slideDown(250);
@@ -1583,9 +1521,7 @@ var map = {
                     this.first_wp_time = new Date(d[0], d[1]-1, d[2], d[3], d[4], d[5]);
 
                     this.curr_time = new Date(this.first_wp_time);
-                    this.curr_time.setHours(0);
-                    this.curr_time.setMinutes(0);
-                    this.curr_time.setSeconds(0);
+                    this.curr_second = (this.curr_time.getHours() * 60 * 60) + (this.curr_time.getMinutes() * 60) + this.curr_time.getSeconds();
 
                     this.renewTimeMonitor();
                 };
@@ -1602,14 +1538,14 @@ var map = {
                     slide: function(event, ui){
                         map.player.pause();
 
-                        /*map.player.curr_second = parseInt(ui.value);
+                        /*
+                        map.player.curr_second = parseInt(ui.value);
 
                         map.player.curr_time.setHours(0);
                         map.player.curr_time.setMinutes(0);
                         map.player.curr_time.setSeconds(0);
 
                         map.player.curr_time.setSeconds(ui.value);
-
                         */
 
                         map.player.frame = ui.value;
@@ -1665,7 +1601,7 @@ var map = {
                 map.player.tick();
             }, this.speed / this.time_factor);
 
-            $('#player #player-play-pause').text('Pause');
+            $('#player #player-play-pause').html('Pause');
             $('#player #player-status').text('Playing...');
 
             this.playing = true;
@@ -1674,7 +1610,7 @@ var map = {
         pause: function(){
             clearInterval(this.interval);
 
-            $('#player #player-play-pause').text('Play');
+            $('#player #player-play-pause').html('&#9654;');
             $('#player #player-status').text('Paused');
 
             this.playing = false;
@@ -1754,10 +1690,10 @@ var map = {
 
             if(this.waypoints[(this.frame + 1)] && this.waypoints[(this.frame + 1)].date){
                 var cd =    this.curr_time.getFullYear() + '-' +
-                            core.utilities.leadingZero(this.curr_time.getMonth() + 1, 2) + '-' +
-                            core.utilities.leadingZero(this.curr_time.getDate(), 2) + ' ' +
-                            core.utilities.leadingZero(this.curr_time.getHours(), 2) + ':' +
-                            core.utilities.leadingZero(this.curr_time.getMinutes(), 2) + ':' +
+                            core.utilities.leadingZero(this.curr_time.getMonth() + 1, 2)    + '-' +
+                            core.utilities.leadingZero(this.curr_time.getDate(), 2)         + ' ' +
+                            core.utilities.leadingZero(this.curr_time.getHours(), 2)        + ':' +
+                            core.utilities.leadingZero(this.curr_time.getMinutes(), 2)      + ':' +
                             core.utilities.leadingZero(this.curr_time.getSeconds(), 2);
 
                 if(this.waypoints[(this.frame + 1)].date == cd){
@@ -1793,6 +1729,8 @@ var map = {
                 };
 
                 $('#player-timeline-slider').slider('value', index);
+
+                map.m_ctrl.drawAllThePath(map.map, map.current_car.id, p.id);
             };
         },
 
@@ -1899,11 +1837,13 @@ var map = {
     },
 
     setDate: function(date){
-        this.date = core.utilities.pad(date.getDate(), 2) + '-' + core.utilities.pad(date.getMonth() + 1, 2) + '-' + date.getFullYear();
+        this.date = core.utilities.pad(date.getDate(), 2)       + '-' +
+                    core.utilities.pad(date.getMonth() + 1, 2)  + '-' +
+                    date.getFullYear();
     },
 
     updateAllCarsData: function(){
-        //this.m_ctrl.removeAllThePath(this.map);
+        // this.m_ctrl.removeAllThePath(this.map);
 
         if(this.current_car){
             this.current_car.cp_marker = false;
@@ -1938,7 +1878,7 @@ var map = {
     },
 
     bindControls: function(){
-        //Отлеживаем событие изменения хеша
+        // Отлеживаем событие изменения хеша
         $(window).on('hashchange', function() {
             map.renewOptions();
             map.setDateByHash();
@@ -2008,7 +1948,7 @@ var map = {
     },
 
     readOptionsFromCookies: function(){
-        //Проверяем на наличие отключенного автообновления в куках
+        // Проверяем на наличие отключенного автообновления в куках
         if($.cookie('auto-renew') == '0'){
             this.auto_renew = false;
         }else{
@@ -2035,7 +1975,7 @@ var map = {
         this.readOptionsFromCookies();
         this.drawButtons();
 
-        //Готовим карту (контроллер карт может иметь синхронный вызов,
+        // Готовим карту (контроллер карт может иметь синхронный вызов,
         // поэтому, дальнейшие действия вызываются через коллбэк)
         this.prepareMap(function(map_instance){
             map.map = map_instance;
