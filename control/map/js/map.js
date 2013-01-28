@@ -1598,16 +1598,16 @@ var map = {
                 if(this.time_factor > 256){
                     this.time_factor = 256;
 
-                    $('#player-time-factor').animate({
+                    $('#player-time-factor').stop(true).animate({
                         color: "#FF0000"
                     }, 50, function(){
-                        $( "#player-time-factor" ).animate({
+                        $( "#player-time-factor" ).stop(true).animate({
                             color: "#45d1ec"
                         }, 150 );
                     });
 
                 }else{
-                    $('#player-time-factor').effect('bounce');
+                    $('#player-time-factor').stop(true).effect('bounce');
                 };
             }else{
                 this.time_factor = this.time_factor / 2;
@@ -1615,15 +1615,15 @@ var map = {
                 if(this.time_factor < 1){
                     this.time_factor = 1;
 
-                    $('#player-time-factor').animate({
+                    $('#player-time-factor').stop(true).animate({
                         color: "#FF0000"
                     }, 50, function(){
-                        $( "#player-time-factor" ).animate({
+                        $( "#player-time-factor" ).stop(true).animate({
                             color: "#45d1ec"
                         }, 150 );
                     });
                 }else{
-                    $('#player-time-factor').effect('bounce');
+                    $('#player-time-factor').stop(true).effect('bounce');
                 };
             };
 
