@@ -1657,7 +1657,7 @@ var map = {
             clearInterval(this.interval);
 
             $('#player #player-play-pause').html('&#9654;').removeClass('pause-button-text').attr('title', 'Запуск проигрывателя');
-            $('#player #player-status').html('&#9646;&#9646;').css({fontSize: '22px', textIndent: '-0.4ex', letterSpacing: '-0.4ex'});
+            $('#player #player-status').html('&#9646;&#9646;').css({fontSize: '22px', textIndent: '-0.4ex', letterSpacing: '-0.2ex'});
 
             this.playing = false;
         },

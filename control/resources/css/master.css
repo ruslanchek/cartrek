@@ -505,9 +505,7 @@ footer {
 /* =Misc
 -----------------------------------------------------------------------------*/
 .pause-button-text {
-    font-size: 2.1em;
-    letter-spacing: -6px;
-    text-indent: -0.3ex;
+    font-size: 1.7em;
 }
 
 .reset-button-text {
@@ -1998,6 +1996,7 @@ footer a:active {
     height: 35px;
     line-height: 35px;
     width: 40px;
+    font-family: Arial;
 }
 
 #player .player-time-factor-block .btn-group {
