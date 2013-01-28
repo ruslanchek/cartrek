@@ -1533,6 +1533,7 @@ var map = {
 
                 $('#player-timeline-slider').slider({
                     animate: 'fast',
+                    range: 'min',
                     min: 0,
                     max: this.waypoints.length - 1,
                     slide: function(event, ui){
@@ -1549,11 +1550,27 @@ var map = {
                         */
 
                         map.player.frame = ui.value;
-
                         map.player.renewTimeByFrame(ui.value);
-
                         map.player.checkFrameByTime();
                         map.player.moveMarker(ui.value);
+                    }
+                });
+
+                $('#day-time-slider .slider .slider-instance').slider({
+                    animate: 'fast',
+                    range: 'min',
+                    min: 0,
+                    max: 86399,
+                    slide: function(event, ui){
+                        map.player.curr_second = parseInt(ui.value);
+
+                        map.player.curr_time.setHours(0);
+                        map.player.curr_time.setMinutes(0);
+                        map.player.curr_time.setSeconds(0);
+                        map.player.curr_time.setSeconds(ui.value);
+
+                        //map.player.checkFrameByTime();
+                        map.player.renewTimeMonitor();
                     }
                 });
 
@@ -1574,11 +1591,40 @@ var map = {
             this.renewTimeMonitor();
         },
 
-        setTimeFactor: function(){
-            this.time_factor = this.time_factor * 2;
+        setTimeFactor: function(dir){
+            if(dir == 'up'){
+                this.time_factor = this.time_factor * 2;
 
-            if(this.time_factor > 256){
-                this.time_factor = 1;
+                if(this.time_factor > 256){
+                    this.time_factor = 256;
+
+                    $('#player-time-factor').animate({
+                        color: "#FF0000"
+                    }, 50, function(){
+                        $( "#player-time-factor" ).animate({
+                            color: "#45d1ec"
+                        }, 150 );
+                    });
+
+                }else{
+                    $('#player-time-factor').effect('bounce');
+                };
+            }else{
+                this.time_factor = this.time_factor / 2;
+
+                if(this.time_factor < 1){
+                    this.time_factor = 1;
+
+                    $('#player-time-factor').animate({
+                        color: "#FF0000"
+                    }, 50, function(){
+                        $( "#player-time-factor" ).animate({
+                            color: "#45d1ec"
+                        }, 150 );
+                    });
+                }else{
+                    $('#player-time-factor').effect('bounce');
+                };
             };
 
             clearInterval(this.interval);
@@ -1601,8 +1647,8 @@ var map = {
                 map.player.tick();
             }, this.speed / this.time_factor);
 
-            $('#player #player-play-pause').html('Pause');
-            $('#player #player-status').text('Playing...');
+            $('#player #player-play-pause').html('&#9646;&#9646;').addClass('pause-button-text').attr('title', 'Приостановка проигрывателя');
+            $('#player #player-status').html('&#9654;').css({fontSize: '22px', textIndent: '0', letterSpacing: '0'});
 
             this.playing = true;
         },
@@ -1610,8 +1656,8 @@ var map = {
         pause: function(){
             clearInterval(this.interval);
 
-            $('#player #player-play-pause').html('&#9654;');
-            $('#player #player-status').text('Paused');
+            $('#player #player-play-pause').html('&#9654;').removeClass('pause-button-text').attr('title', 'Запуск проигрывателя');
+            $('#player #player-status').html('&#9646;&#9646;').css({fontSize: '22px', textIndent: '-0.4ex', letterSpacing: '-0.4ex'});
 
             this.playing = false;
         },
@@ -1663,11 +1709,15 @@ var map = {
 
             this.renewTimeMonitor();
 
-            $('#player #player-status').text('Stopped');
+            $('#player #player-status').html('&#9724;').css({fontSize: '22px', textIndent: '0', letterSpacing: '0'});
         },
 
         renewTimeMonitor: function(){
             $('#player-current-time').text(core.utilities.leadingZero(this.curr_time.getHours(), 2) + ':' + core.utilities.leadingZero(this.curr_time.getMinutes(), 2) + ':' + core.utilities.leadingZero(this.curr_time.getSeconds(), 2));
+
+            if($('#day-time-slider .slider .slider-instance').data('slider')){
+                $('#day-time-slider .slider .slider-instance').slider('value', (this.curr_time.getHours() * 60 * 60 + this.curr_time.getMinutes() * 60 + this.curr_time.getSeconds()));
+            };
         },
 
         tick: function(){
@@ -1696,11 +1746,13 @@ var map = {
                             core.utilities.leadingZero(this.curr_time.getMinutes(), 2)      + ':' +
                             core.utilities.leadingZero(this.curr_time.getSeconds(), 2);
 
-                if(this.waypoints[(this.frame + 1)].date == cd){
-                    this.frame++;
-                    $('#player-timeline-slider').slider('value', this.frame);
-                    this.moveMarker(this.frame);
-                };
+                $.grep(this.waypoints, function(a, i){
+                    if(a.date == cd){
+                        $('#player-timeline-slider').slider('value', i);
+                        map.player.moveMarker(i);
+                        map.player.frame = i;
+                    };
+                });
             };
         },
 
@@ -1942,8 +1994,12 @@ var map = {
             map.player.ff();
         });
 
-        $('#player-time-factor').live('click', function(){
-            map.player.setTimeFactor();
+        $('#player-time-factor-up').live('click', function(){
+            map.player.setTimeFactor('up');
+        });
+
+        $('#player-time-factor-down').live('click', function(){
+            map.player.setTimeFactor('down');
         });
     },
 

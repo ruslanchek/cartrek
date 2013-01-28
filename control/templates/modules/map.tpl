@@ -31,10 +31,13 @@
             <div class="player-control-row row">
                 <div class="quarter">
                     <div class="player-controls-block">
-                        <a class="btn btn-big" id="player-rev" href="javascript:void(0)">Rev</a>
-                        <a class="btn btn-big" id="player-play-pause" href="javascript:void(0)">&#9654;</a>
-                        <a class="btn btn-big" id="player-reset" href="javascript:void(0)">Reset</a>
-                        <a class="btn btn-big" id="player-ff" href="javascript:void(0)">Ff</a>
+                        <div class="btn-group">
+                            <a title="Следующая точка" class="btn" id="player-rev" href="javascript:void(0)">&#9664;&#9664;</a>
+                            <a title="Запуск проигрывателя" class="btn" id="player-play-pause" href="javascript:void(0)">&#9654;</a>
+                            <a title="Следующая точка" class="btn" id="player-ff" href="javascript:void(0)">&#9654;&#9654;</a>
+                        </div>
+
+                        <a title="Сброс" class="btn reset-button-text" id="player-reset" href="javascript:void(0)">⟲</a>
                     </div>
                 </div>
 
@@ -54,11 +57,30 @@
                             </span>
                         </div>
 
+                        <div class="info-block ib-status">
+                              <span class="ib-content">
+                                <span id="player-status">&#9646;&#9646;</span>
+                            </span>
+                        </div>
+
                         <div class="clear"></div>
+
+                        <div id="day-time-slider">
+                            <div class="slider">
+                                <div class="slider-instance"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="quarter"></div>
+                <div class="quarter">
+                    <div class="player-time-factor-block">
+                        <div class="btn-group">
+                            <a title="Уменьшить фактор ускорения времени" class="btn" id="player-time-factor-down" href="javascript:void(0)">&minus;</a>
+                            <a title="Увеличить фактор ускорения времени" class="btn" id="player-time-factor-up" href="javascript:void(0)">&plus;</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="player-timeline">
