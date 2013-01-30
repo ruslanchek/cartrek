@@ -1814,7 +1814,7 @@ var map = {
                     status = '<span class="gray">Офлайн</span>';
                 };
 
-                panel1_html +=  '<h3>Статус трекера</h3>' +
+                panel1_html +=  '<h3>Статус терминала</h3>' +
                                 '<div class="row">' +
                                     '<div class="half"><strong>Соединение</strong></div>' +
                                     '<div class="half">'+status+'</div>' +
