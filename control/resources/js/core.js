@@ -715,16 +715,20 @@ core.utilities = {
     },
 
     getVoltsIndicator: function(v){
-        var t = v.toFixed(2)+' В',
-            html = '';
+        if(v || parseFloat(v) === 0){
+            var t = v.toFixed(2)+' В',
+                html = '';
 
-        if(v > 0){
-            html = '<div class="success">'+t+'</div>';
+            if(v > 0){
+                html = '<div class="success">'+t+'</div>';
+            }else{
+                html = '<div class="error">0 В</div>';
+            };
+
+            return html;
         }else{
-            html = '<div class="error">'+t+'</div>';
+            return '<div class="gray">&mdash;</div>';
         };
-
-        return html;
     },
 
     //Google maps utils
@@ -899,6 +903,10 @@ core.utilities = {
     },
 
     dateRange: function(startDate, currDate){
+        if(!startDate || !currDate){
+            return '&mdash;';
+        };
+
         if(!(startDate instanceof Date)){
             startDate = this.timestampToDate(startDate);
         };

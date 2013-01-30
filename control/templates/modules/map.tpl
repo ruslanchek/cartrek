@@ -132,7 +132,7 @@
 
             {* Time machine block *}
             <div class="bottom-panel">
-                <div class="panel-content">
+                <div class="panel-content time-machine">
                     <div class="row">
                         <div class="twothird">
                             <h3>Машина времени</h3>

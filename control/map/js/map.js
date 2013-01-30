@@ -1099,6 +1099,7 @@ var map = {
             if(car = this.cars_list[this.getCarIndexById(data[i].id)]){
                 car.csq       = data[i].csq;
                 car.hdop      = data[i].hdop;
+                car.online    = data[i].online;
                 car.speed     = data[i].speed;
                 car.params    = $.parseJSON(data[i].params);
                 car.sat_count = data[i].sat_count;
@@ -1436,6 +1437,10 @@ var map = {
                     document.location.href = hash + hs + 'timemachine=' + date
                 }
             });
+
+            if(h && h.timemachine){
+                $('#time-machine .days').datepicker('setDate', h.timemachine);
+            };
 
             $('#timemachine-button').data('url', hash).attr('checked', 'checked');
             $('#time-machine .days').slideDown(300);
@@ -1800,64 +1805,80 @@ var map = {
             panel4_html = '';
 
         if(this.current_car){
-            if(this.current_car.hdop || this.current_car.csq){
-                panel1_html +=  '<h3>Статус трекера</h3>' +
-                                '<table>' +
-                                    '<tr>' +
-                                        '<th>Сигнал GPS</th>' +
-                                        '<th>Сигнал GSM</th>' +
-                                    '</tr>' +
+            if((this.current_car.hdop || this.current_car.csq) && !map.checkTimemachineMode()){
+                var status = '';
 
-                                    '<tr>' +
-                                        '<td style="padding-left: 0 !important;">'+core.utilities.getHDOPIndicator(this.current_car.hdop, this.current_car.sat_count)+'</td>' +
-                                        '<td style="padding-left: 0 !important;">'+core.utilities.getCSQIndicator(this.current_car.csq)+'</td>' +
-                                    '</tr>' +
-                               '</table>';
+                if(this.current_car.online == 1){
+                    status = '<span class="success">Онлайн</span>';
+                }else{
+                    status = '<span class="gray">Офлайн</span>';
+                };
+
+                panel1_html +=  '<h3>Статус трекера</h3>' +
+                                '<div class="row">' +
+                                    '<div class="half"><strong>Соединение</strong></div>' +
+                                    '<div class="half">'+status+'</div>' +
+                                '</div>';
+
+                if(this.current_car.online == 1){
+                    panel1_html +=  '<div class="row">' +
+                                        '<div class="half"><strong>Сигнал GPS</strong></div>' +
+                                        '<div class="half">'+core.utilities.getHDOPIndicator(this.current_car.hdop, this.current_car.sat_count)+'</div>' +
+                                    '</div>' +
+                                    '<div class="row">' +
+                                        '<div class="half"><strong>Сигнал GSM</strong></div>' +
+                                        '<div class="half">'+core.utilities.getCSQIndicator(this.current_car.csq)+'</div>' +
+                                    '</div>';
+                };
             };
 
             if(this.current_car.stop_points || this.current_car.max_speed){
                 panel2_html +=  '<h3>Метрика</h3>' +
-                                '<table>' +
-                                    /*'<tr>' +
-                                        '<th>Остановок</th>' +
-                                        '<td>'+this.current_car.stop_points+'</td>' +
-                                    '</tr>' +*/
-
-                                    '<tr>' +
-                                        '<th>Макс. скорость</th>' +
-                                        '<td><a id="max-speed-marker" class="badge" href="javascript:void(0)" title="Показать точку максимальной скорости">'+core.utilities.convertKnotsToKms(this.current_car.max_speed) + ' км/ч</a></td>' +
-                                    '</tr>' +
-
-                                    '<tr>' +
-                                        '<th>Пройдено пути</th>' +
-                                        '<td><span style="margin-left: -1.6ex">~</span> '+ this.current_car.path_length + ' км</td>' +
-                                    '</tr>' +
-                               '</table>';
+                                '<div class="row">' +
+                                    '<div class="half"><strong>Макс. скорость</strong></div>' +
+                                    '<div class="half"><a id="max-speed-marker" class="badge" href="javascript:void(0)" title="Показать точку максимальной скорости">'+core.utilities.convertKnotsToKms(this.current_car.max_speed) + ' км/ч</a></div>' +
+                                '</div>' +
+                                '<div class="row">' +
+                                    '<div class="half"><strong>Пройдено пути</strong></div>' +
+                                    '<div class="half"><span>~</span>'+ this.current_car.path_length + ' км</div>' +
+                                '</div>';
             };
 
-            if(this.current_car.params){
+            if(this.current_car.params && !map.checkTimemachineMode() && this.current_car.online == 1){
                 panel3_html +=  '<h3>Дополнительно</h3>' +
-                                '<table>' +
-                                    '<tr>' +
-                                        '<th>Питание</th>' +
-                                        '<td>'+core.utilities.getVoltsIndicator(this.current_car.params.power_inp)+'</td>' +
-                                    '</tr>' +
-                                '</table>';
+                                '<div class="row">' +
+                                    '<div class="half"><strong>Внеш. питание</strong></div>' +
+                                    '<div class="half">' + core.utilities.getVoltsIndicator(this.current_car.params.power_inp) + '</div>' +
+                                '</div>';
+
+                                if(this.current_car.params.power_bat){
+                                    panel3_html += '<div class="row">' +
+                                                        '<div class="half"><strong>Батарея</strong></div>' +
+                                                        '<div class="half">' + core.utilities.getVoltsIndicator(this.current_car.params.power_bat) + '</div>' +
+                                                    '</div>';
+                                };
+
+                                if(this.current_car.params.dev_temp){
+                                    panel3_html += '<div class="row">' +
+                                                        '<div class="half"><strong>Темп. терминала</strong></div>' +
+                                                        '<div class="half">' + this.current_car.params.dev_temp + '&deg; C</div>' +
+                                                    '</div>';
+                                };
             };
 
-            panel4_html +=  '<h3>Обновления данных</h3>' +
-                            '<table>' +
-                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQLTIME')+'">' +
-                                    '<th>Координаты</th>' +
-                                    '<td>'+core.utilities.dateRange(this.current_car.last_point_date, new Date())+'</td>' +
-                                '</tr>' +
-
-                                '<tr title="'+core.utilities.humanizeDate(this.current_car.last_update, 'MYSQLTIME')+'">' +
-                                    '<th>Статус</th>' +
-                                    '<td>'+core.utilities.dateRange(this.current_car.last_update, new Date())+'</td>' +
-                                '</tr>' +
-                            '</table>';
+            if(!map.checkTimemachineMode()){
+                panel4_html +=  '<h3>Обновление данных</h3>' +
+                                '<div class="row">' +
+                                    '<div class="half"><strong>Координаты</strong></div>' +
+                                    '<div class="half" title="'+core.utilities.humanizeDate(this.current_car.last_point_date, 'MYSQLTIME')+'">' + core.utilities.dateRange(this.current_car.last_point_date, new Date())   + '</div>' +
+                                '</div>' +
+                                '<div class="row">' +
+                                    '<div class="half"><strong>Статус</strong></div>' +
+                                    '<div class="half" title="'+core.utilities.humanizeDate(this.current_car.last_update, 'MYSQLTIME')+'">' + core.utilities.dateRange(this.current_car.last_update, new Date()) + '</div>' +
+                                '</div>';
+            };
         };
+
 
         if(panel1_html && !map.checkTimemachineMode()){
             $('#bottom-panel-1').show()

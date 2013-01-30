@@ -100,6 +100,7 @@
                 	`devices`.`name`,
                 	`devices`.`model`,
                 	`devices`.`make`,
+                	`devices`.`online`,
                 	`devices`.`g_id`,
                 	`devices`.`color`,
                 	`devices`.`active`,
@@ -167,6 +168,7 @@
                         `devices`.`csq`,
                         `devices`.`journey`,
                         `devices`.`active`,
+                        `devices`.`online`,
                         `devices`.`params`,
                         `devices`.`sat_count`,
                         CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`
@@ -244,6 +246,7 @@
                     `csq`,
                     `journey`,
                     `active`,
+                    `online`,
                     CONVERT_TZ(`last_update`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `last_update`
                 FROM
                     `devices`
