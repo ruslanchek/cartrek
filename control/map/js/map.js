@@ -110,17 +110,16 @@ var leaflet_ctrl = {
             var marker = L.marker(
                 [data.lat, data.lon], {
                     icon: icon,
-                    id: data.id
+                    id: data.id,
+                    zIndexOffset: (data.id * 1 + 10) * 1000
                 }
             );
-
-            marker.setZIndexOffset(data.id * 11);
 
             /* var m = new R.Marker(new L.LatLng(data.lat, data.lon), {'fill': '#fff', 'stroke': '#000'});
             map_instance.addLayer(m); */
 
             marker.on("mouseover", function() {
-                this.setZIndexOffset(data.id * 11 * 10000);
+                this.setZIndexOffset((data.id * 1 + 11) * 1000);
                 $('.leaflet-clickable.leaflet-zoom-animated').css({position: 'absolute'});
             });
 
@@ -276,16 +275,17 @@ var leaflet_ctrl = {
                         icon        : this.icons.stop(),
                         id          : point.id,
                         car_id      : car.id,
-                        point_data  : point
+                        point_data  : point,
+                        zIndexOffset: car.id * 1 + 10
                     }
                 );
 
                 marker.on("mouseover", function() {
-                    this.setZIndexOffset(300000 + car.id + 10);
+                    this.setZIndexOffset(car.id * 1 + 11);
                 });
 
                 marker.on("mouseout", function() {
-                    this.setZIndexOffset(1);
+                    this.setZIndexOffset(car.id * 1 + 10);
                 });
 
                 marker.on('click', function(){
@@ -305,16 +305,17 @@ var leaflet_ctrl = {
                         icon        : this.icons.waypoint(),
                         id          : point.id,
                         car_id      : car.id,
-                        point_data  : point
+                        point_data  : point,
+                        zIndexOffset: car.id * 1 + 10
                     }
                 );
 
                 marker.on("mouseover", function() {
-                    this.setZIndexOffset(1 + car.id + 10);
+                    this.setZIndexOffset(car.id * 1 + 11);
                 });
 
                 marker.on("mouseout", function() {
-                    this.setZIndexOffset(1);
+                    this.setZIndexOffset(car.id * 1 + 10);
                 });
 
                 marker.on('click', function(){
@@ -334,16 +335,17 @@ var leaflet_ctrl = {
                         icon        : this.icons.waypoint(),
                         id          : point.id,
                         car_id      : car.id,
-                        point_data  : point
+                        point_data  : point,
+                        zIndexOffset: car.id * 1 + 10
                     }
                 );
 
                 marker.on("mouseover", function() {
-                    this.setZIndexOffset(1 + car.id + 11);
+                    this.setZIndexOffset(car.id * 1 + 11);
                 });
 
                 marker.on("mouseout", function() {
-                    this.setZIndexOffset(1);
+                    this.setZIndexOffset(car.id * 1 + 10);
                 });
 
                 marker.on('click', function(){
@@ -363,16 +365,17 @@ var leaflet_ctrl = {
                         icon        : this.icons.waypoint(),
                         id          : point.id,
                         car_id      : car.id,
-                        point_data  : point
+                        point_data  : point,
+                        zIndexOffset: car.id * 1 + 10
                     }
                 );
 
                 marker.on("mouseover", function() {
-                    this.setZIndexOffset(1 + car.id + 10);
+                    this.setZIndexOffset(car.id * 1 + 11);
                 });
 
                 marker.on("mouseout", function() {
-                    this.setZIndexOffset(1);
+                    this.setZIndexOffset(car.id * 1 + 10);
                 });
 
                 marker.on('click', function(){
@@ -387,16 +390,17 @@ var leaflet_ctrl = {
                         icon        : this.icons.waypoint(),
                         id          : point.id,
                         car_id      : car.id,
-                        point_data  : point
+                        point_data  : point,
+                        zIndexOffset: car.id * 1 + 10
                     }
                 );
 
                 marker.on("mouseover", function() {
-                    this.setZIndexOffset(300000 + car.id + 10);
+                    this.setZIndexOffset(car.id * 1 + 11);
                 });
 
                 marker.on("mouseout", function() {
-                    this.setZIndexOffset(1);
+                    this.setZIndexOffset(car.id * 1 + 10);
                 });
 
                 marker.on('click', function(){
@@ -460,10 +464,6 @@ var leaflet_ctrl = {
 
     drawAllThePath: function(map_instance, car_id, limit_point_id){
         var path_points     = [],
-            stop_markers    = [],
-            start_markers   = [],
-            finish_markers  = [],
-            run_markers     = [],
             car             = map.cars_list[map.getCarIndexById(car_id)];
 
         if(car && car.path_points){
@@ -481,7 +481,7 @@ var leaflet_ctrl = {
             this.removeAllThePath(map_instance);
         };
 
-        if(car && car.path_points){
+        if(car && car.path_points && car.path_points.length > 1){
             car.stop_points             = 0;
 
             var max_speed               = 0,
@@ -645,17 +645,29 @@ var leaflet_ctrl = {
 
     focus: function(map_instance){
         if(map.current_car && map.show_car_path && this.path){
-            map_instance.fitBounds(this.path.getBounds());
+
+            if(this.path._originalPoints && this.path._latlngs.length > 1){
+                map_instance.fitBounds(this.path.getBounds());
+            }else{
+                map_instance.panTo(this.path._latlngs[0]);
+            };
+
+        }else if(map.current_car && !map.show_car_path){
+            map_instance.panTo(map.current_car.cp_marker.getLatLng());
         }else{
             if(this.current_position_markers_group){
-                var bounds = [];
+                var bounds      = [],
+                    last_marker = null;
 
                 this.current_position_markers_group.eachLayer(function(marker){
                     bounds.push(marker.getLatLng());
+                    last_marker = marker;
                 });
 
-                if(bounds.length > 0){
+                if(bounds.length > 1){
                     map_instance.fitBounds(bounds);
+                }else if(bounds.length == 1 && last_marker !== null){
+                    map_instance.panTo(last_marker.getLatLng());
                 };
             };
         };
@@ -2046,7 +2058,7 @@ var map = {
     },
 
     init: function(){
-        core.ticker.delay = 5000;
+        core.ticker.delay = 1000;
 
         this.setDateByHash();
         this.readOptionsFromCookies();

@@ -1466,14 +1466,14 @@ footer a:active {
     -webkit-border-radius: 4px;
             border-radius: 4px;
 
-    background: #dbdddf;
-    background: -moz-linear-gradient(top,  #e9ebed 0%, #dbdddf 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dbdddf), color-stop(100%,#dbdddf)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #e9ebed 0%,#dbdddf 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #e9ebed 0%,#dbdddf 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #e9ebed 0%,#dbdddf 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #e9ebed 0%,#dbdddf 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e9ebed', endColorstr='#dbdddf',GradientType=0 ); /* IE6-9 */
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top,  #ffffff 0%, #dfe1e3 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#dfe1e3)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #ffffff 0%,#dfe1e3 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dfe1e3',GradientType=0 ); /* IE6-9 */
 
     -webkit-box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.5), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.35);
             box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.5), inset 0px -1px 0px 0px rgba(0, 0, 0, 0.35);
@@ -1494,12 +1494,27 @@ footer a:active {
     margin: 0;
 }
 
-.time-machine .ui-datepicker-header {
+#time-machine {
 
 }
 
-.time-machine .ui-datepicker-prev {
+.time-machine .ui-datepicker-header {
+    position: relative;
+    padding: 10px 0 5px;
+}
 
+.time-machine .ui-datepicker-prev {
+    position: absolute;
+    left: 0;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.time-machine .ui-datepicker-next {
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .ui-datepicker-title {
@@ -1507,25 +1522,32 @@ footer a:active {
     font-style: italic;
 }
 
-.time-machine .ui-datepicker-next {
-
+.time-machine .ui-datepicker-prev.ui-state-disabled,
+.time-machine .ui-datepicker-next.ui-state-disabled {
+    opacity: 0.5;
+    text-decoration: none;
+    color: inherit;
+    cursor: default;
 }
 
 .time-machine .ui-datepicker-calendar {
     width: 100%;
     margin: 0;
+    background: url(../img/calendar-bg.png) repeat-x top center;
+    border: 1px solid #ddd;
+    -webkit-box-shadow:  0px 0 2px 0px rgba(0, 0, 0, 0.08);
+            box-shadow:  0px 0 2px 0px rgba(0, 0, 0, 0.08);
 }
 
 .time-machine .ui-datepicker-calendar th {
-
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .time-machine .ui-datepicker-calendar td {
-
-}
-
-.time-machine .ui-datepicker-calendar .ui-state-disabled {
-
+    border: none;
+    padding: 4px 0 !important;
 }
 
 .time-machine .ui-datepicker-calendar span,
@@ -1539,8 +1561,8 @@ footer a:active {
 }
 
 .time-machine .ui-datepicker-calendar a:hover {
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
     background: #dbdbdb;
     border-color: #d3d3d3;
 }
@@ -1578,8 +1600,6 @@ footer a:active {
 	background-image: -ms-linear-gradient(90deg , rgb(97,162,208) 0%, rgb(24,105,141) 100%) !important;
 	background-image: linear-gradient(90deg , rgb(97,162,208) 0%, rgb(24,105,141) 100%) !important;
 }
-
-
 
 .time-machine-button {
     position: relative;
