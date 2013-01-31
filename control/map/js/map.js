@@ -652,7 +652,7 @@ var leaflet_ctrl = {
                 map_instance.panTo(this.path._latlngs[0]);
             };
 
-        }else if(map.current_car && !map.show_car_path){
+        }else if(map.current_car && map.current_car.cp_marker && !map.show_car_path){
             map_instance.panTo(map.current_car.cp_marker.getLatLng());
         }else{
             if(this.current_position_markers_group){
