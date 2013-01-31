@@ -610,6 +610,12 @@ var leaflet_ctrl = {
         };
     },
 
+    removeGhostPath: function(map_instance){
+        if(this.ghost_path){
+            map_instance.removeLayer(this.ghost_path);
+        };
+    },
+
     removeAllThePath: function(map_instance){
         if(this.path){
             map_instance.removeLayer(this.path);
@@ -1263,9 +1269,9 @@ var map = {
                     hs = hs+'&';
                 };
 
-                var d = core.utilities.parseDateMysqlStrToDateOdject(this.current_car.last_point_date);
+                var d = this.current_car.last_point_date.split(/[- :]/);
 
-                hash = hash + hs + 'timemachine=' + d.getDate() + '-' + (d.getMonth() + 1) + '-' + d.getFullYear();
+                hash = hash + hs + 'timemachine=' + d[2] + '-' + parseInt(d[1]) + '-' + d[0];
 
                 message =   '<p>На&nbsp;<b>'+core.utilities.humanizeDate(this.date, 'COMMON')+'</b> ' +
                             'не&nbsp;зарегистрированно ни&nbsp;одной отметки для&nbsp;машины <b>&laquo;'+this.current_car.name+'&raquo;</b>.</p>' +
@@ -1315,7 +1321,7 @@ var map = {
             this.show_car_path = false;
             $.cookie('car-path', '0', core.options.cookie_options);
 
-            this.m_ctrl.removeAllThePath(this.map, false);
+            this.m_ctrl.removeAllThePath(this.map);
             //this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
             //this.m_ctrl.focus(this.map);
         };
@@ -1461,6 +1467,8 @@ var map = {
             $('#time-machine .days').slideUp(300, function(){
                 $('#time-machine .days').datepicker('destroy');
             });
+
+            this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
         };
     },
 
@@ -1480,6 +1488,8 @@ var map = {
                     ){
                         map.current_car.path_points.push(map.current_car.last_point);
                     };
+
+                    map.m_ctrl.removeGhostPath(map.map);
 
                     if(h && h.timemachine){
                         map.m_ctrl.drawTimeMachineGhostPath(map.map, map.current_car.id);
