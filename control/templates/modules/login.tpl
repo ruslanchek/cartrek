@@ -1,11 +1,11 @@
-<div class="hero-unit hero_login">
+<div class="hero-login">
     <h1>{$core->module.title}</h1>
 
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="/control/auth/login">Войти</a></li>
-        <li><a href="/control/auth/register">Зарегистрироваться</a></li>
-        <li><a href="/control/auth/remember_pass">Напомнить пароль</a></li>
-    </ul>
+    <div class="nav nav-tabs">
+        <a href="/control/auth/login">Войти</a>
+        <a href="/control/auth/register">Зарегистрироваться</a>
+        <a href="/control/auth/remember_pass">Напомнить пароль</a>
+    </div>
 
     {if !$core->auth->user.status}
     <form id="login_form" class="form-horizontal" action="" method="POST">

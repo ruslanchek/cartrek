@@ -1567,16 +1567,16 @@ footer a:active {
     border-color: #d3d3d3;
 }
 
-.ui-datepicker-week-end span,
-.ui-datepicker-week-end a {
+.time-machine .ui-datepicker-calendar .ui-datepicker-week-end span,
+.time-machine .ui-datepicker-calendar .ui-datepicker-week-end a {
     color: #c63232;
 }
 
-.ui-datepicker-week-end a:hover {
+.time-machine .ui-datepicker-calendar .ui-datepicker-week-end a:hover {
     color: #8f1d1d;
 }
 
-.ui-state-highlight {
+.time-machine .ui-datepicker-calendar .ui-state-highlight {
     border-color: #d3d3d3 !important;
     -webkit-border-radius: 3px;
         border-radius: 3px;
@@ -1584,7 +1584,7 @@ footer a:active {
     font-weight: bold;
 }
 
-.ui-state-active {
+.time-machine .ui-datepicker-calendar .ui-state-active {
     -webkit-border-radius: 3px;
             border-radius: 3px;
     color: #fff !important;
@@ -2248,3 +2248,60 @@ footer a:active {
 #player .player-control-row {
     padding: 0 0 10px;
 }*/
+
+
+/* Login */
+.login-body {
+    background: #0e1c31 url(../img/login/bg2.jpg) top center no-repeat !important;
+    min-height: 500px;
+}
+
+.login-body .window {
+    background: url(../img/login/window.png);
+    width: 800px;
+    height: 638px;
+    position: absolute;
+    left: 50%;
+    margin-left: -400px;
+    top: 50%;
+    margin-top: -305px;
+    opacity: 0.25;
+    z-index: 2;
+}
+
+.hero-login {
+    background: #eee;
+    position: absolute;
+    width: 320px;
+    padding: 20px;
+    top: 50%;
+    margin-top: -175px;
+    left: 50%;
+    margin-left: -180px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow:  0px 5px 30px 0px rgba(0, 0, 0, 0.5);
+    box-shadow:  0px 5px 30px 0px rgba(0, 0, 0, 0.5);
+    border-top: 1px solid #fff;
+    text-align: center;
+    text-shadow: 0 1px 0 #fff;
+    z-index: 4;
+}
+
+.hero-login * {
+    text-align: center;
+}
+
+.auth-logo {
+    position: absolute;
+    background: url(../img/login/logo.png);
+    width: 354px;
+    height: 206px;
+    display: block;
+    top: 50%;
+    margin-top: -345px;
+    left: 50%;
+    margin-left: -219px;
+    z-index: 3;
+    text-indent: -99999px;
+}

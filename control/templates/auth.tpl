@@ -3,16 +3,11 @@
     <head>
         {include file="common/head.tpl"}
     </head>
-    <body>
-        <div class="navbar navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <a class="brand logo" href="/control" title="Картек"></a>
-                </div>
-            </div>
-        </div>
 
-        <div class="container-fluid main_content">
+    <body class="login-body">
+        <div class="login-content">
+            <a href="http://cartrek.ru" class="auth-logo">Картрек</a>
+            <div class="window"></div>
             {include file="modules/`$core->module.name`.tpl"}
         </div>
     </body>

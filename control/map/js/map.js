@@ -460,6 +460,8 @@ var leaflet_ctrl = {
             this.focus(map_instance);
             this.first_loaded_car_id = car_id;
         };
+
+        this.focusToPath(map_instance, this.ghost_path);
     },
 
     drawAllThePath: function(map_instance, car_id, limit_point_id){
@@ -676,6 +678,14 @@ var leaflet_ctrl = {
                     map_instance.panTo(last_marker.getLatLng());
                 };
             };
+        };
+    },
+
+    focusToPath: function(map_instance, path){
+        if(path._originalPoints && path._latlngs.length > 1){
+            map_instance.fitBounds(path.getBounds());
+        }else{
+            map_instance.panTo(path._latlngs[0]);
         };
     },
 
@@ -1462,6 +1472,9 @@ var map = {
 
             $('#timemachine-button').data('url', hash).attr('checked', 'checked');
             $('#time-machine .days').slideDown(300);
+
+            $('#timemachine-button').slickswitch('tOn');
+
         }else{
             $('#timemachine-button').data('url', hash + hs + 'timemachine='+date.getDate() + '-' + (date.getMonth() + 1)  + '-' + date.getFullYear()).removeAttr('checked');
             $('#time-machine .days').slideUp(300, function(){
@@ -1469,10 +1482,13 @@ var map = {
             });
 
             this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
+            this.m_ctrl.removeGhostPath(this.map);
         };
     },
 
     drawCarPath: function(forced){
+        map.m_ctrl.removeGhostPath(map.map);
+
         var h = core.ui.getHashData();
 
         if(this.current_car && this.current_car.cp_marker && (this.show_car_path || (h && h.timemachine))){
@@ -1504,6 +1520,7 @@ var map = {
                     map.m_ctrl.focus(map.map);
                 });
             }else{
+
                 if(this.current_car && this.current_car.path_points){
                     if(this.current_car.path_points.length > 0 && this.current_car.last_point){
                         if(!this.current_car.path_points){
@@ -1578,8 +1595,13 @@ var map = {
 
                         map.player.frame = ui.value;
                         map.player.renewTimeByFrame(ui.value);
-                        map.player.checkFrameByTime();
-                        map.player.moveMarker(ui.value);
+                        map.player.checkFrameByTime(true);
+                        //map.player.moveMarker(ui.value, true);
+                    },
+                    stop: function(){
+                        if(map.auto_focus){
+                            map.m_ctrl.focusToMarker(map.map, map.current_car.cp_marker);
+                        };
                     }
                 });
 
@@ -1760,7 +1782,7 @@ var map = {
             this.checkFrameByTime();
         },
 
-        checkFrameByTime: function(){
+        checkFrameByTime: function(no_focus){
             if(!this.waypoints){
                 this.init();
             };
@@ -1776,14 +1798,14 @@ var map = {
                 $.grep(this.waypoints, function(a, i){
                     if(a.date == cd){
                         $('#player-timeline-slider').slider('value', i);
-                        map.player.moveMarker(i);
+                        map.player.moveMarker(i, no_focus);
                         map.player.frame = i;
                     };
                 });
             };
         },
 
-        moveMarker: function(index){
+        moveMarker: function(index, no_focus){
             if(this.waypoints && this.waypoints[index]){
                 var p = this.waypoints[index],
                     data = {};
@@ -1803,7 +1825,7 @@ var map = {
 
                 map.m_ctrl.updateCurrentPositionMarker(map.current_car.cp_marker, data);
 
-                if(map.auto_focus){
+                if(map.auto_focus && no_focus !== true){
                     map.m_ctrl.focusToMarker(map.map, map.current_car.cp_marker);
                 };
 

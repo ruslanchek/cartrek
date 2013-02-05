@@ -1,4 +1,4 @@
-<div class="hero-unit hero_login">
+<div class="hero-login">
     <h1>{$core->module.title}</h1>
 
     <ul class="nav nav-tabs">
