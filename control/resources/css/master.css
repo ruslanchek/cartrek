@@ -2305,3 +2305,29 @@ footer a:active {
     z-index: 3;
     text-indent: -99999px;
 }
+
+.login-body .socials {
+    width: 153px;
+    margin: 0 auto;
+}
+
+.login-body .socials a {
+    display: block;
+    width: 41px;
+    height: 41px;
+    margin: 0 5px;
+    float: left;
+}
+
+.login-body .socials a.vk {
+    background: url(../img/login/vkontakte.png);
+}
+
+.login-body .socials a.fb {
+    background: url(../img/login/facebook.png);
+}
+
+.login-body .socials a.tw {
+    background: url(../img/login/twitter.png);
+}
+
