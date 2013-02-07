@@ -2273,8 +2273,8 @@ footer a:active {
     background: #eee;
     position: absolute;
     width: 320px;
-    padding: 20px;
     top: 50%;
+    padding-top: 20px;
     margin-top: -175px;
     left: 50%;
     margin-left: -180px;
@@ -2286,6 +2286,26 @@ footer a:active {
     text-align: center;
     text-shadow: 0 1px 0 #fff;
     z-index: 4;
+}
+
+.hero-login form {
+    margin: 0;
+}
+
+.auth-block-padding {
+    padding: 20px;
+}
+
+.auth-block-padding.black-bg {
+    background: #ccc;
+    -webkit-box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 0px 0px 10px 10px;
+            border-radius: 0px 0px 10px 10px;
+}
+
+.hero-login .nav {
+    font-size: 12px;
 }
 
 .hero-login * {
@@ -2306,28 +2326,105 @@ footer a:active {
     text-indent: -99999px;
 }
 
-.login-body .socials {
-    width: 153px;
-    margin: 0 auto;
+.socials {
+    position: relative;
+    height: 54px;
+    -webkit-border-radius: 3px;
+            border-radius: 3px;
+    -webkit-box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
+            box-shadow: 0px 2px 6px 0px rgba(0, 0, 0, 0.3);
 }
 
-.login-body .socials a {
+.socials .part_l {
     display: block;
-    width: 41px;
-    height: 41px;
-    margin: 0 5px;
-    float: left;
+    padding: 10px 0;
+    width: 50%;
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: 32px;
+    border: 1px solid transparent;
+    border-right: 0;
+    -webkit-border-radius: 3px 0px 0px 3px;
+    border-radius: 3px 0px 0px 3px;
 }
 
-.login-body .socials a.vk {
-    background: url(../img/login/vkontakte.png);
+.socials .part_r {
+    display: block;
+    padding: 10px 0;
+    width: 50%;
+    top: 0;
+    right: 0;
+    position: absolute;
+    height: 32px;
+    border: 1px solid transparent;
+    border-left: 0;
+    -webkit-border-radius: 0 3px 3px 0px;
+    border-radius: 0 3px 3px 0px;
 }
 
-.login-body .socials a.fb {
-    background: url(../img/login/facebook.png);
+.socials a {
+    text-decoration: none;
+
 }
 
-.login-body .socials a.tw {
-    background: url(../img/login/twitter.png);
+.socials a img {
+    width: 32px;
+    position: absolute;
+    left: 50%;
+    margin-left: -16px;
 }
 
+.socials a:hover {
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.socials a:hover img {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.socials a span.inner {
+    padding: 0 10px;
+    display: block;
+}
+
+.socials a span.inner .label {
+    position: absolute;
+    display: none;
+    left: 55px;
+    width: 63%;
+    top: 10px;
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    text-decoration: none;
+    font-size: 11px;
+    line-height: 1.3em;
+    text-align: left;
+    overflow: hidden;
+}
+
+.socials a:hover .label {
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5), 0 4px 0 rgba(255, 255, 255, 0.6);
+}
+
+.socials img {
+    display: block;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.socials .facebook {
+    background: #304c8b url(../img/login/facebook_bg.png) repeat-x top;
+    border-color: #304c8b;
+}
+
+.socials .vkontakte {
+    background: #3e6690 url(../img/login/vkontakte_bg.png) repeat-x top;
+    border-color: #3e6690;
+}
+
+.socials a.twitter span.inner .label *,
+.socials a.twitter span.inner .label,
+.socials a.twitter span.inner .label:hover {
+    color: #004d58 !important;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
