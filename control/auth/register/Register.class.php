@@ -6,7 +6,7 @@
             $this->template = 'auth.tpl';
 
             $this->init(array(
-                'name'      => 'register',
+                'name'      => 'auth.register',
                 'title'     => 'Регистрация',
                 'dir'       => '/control/auth/register',
                 'bgclass'   => 'city'

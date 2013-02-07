@@ -6,7 +6,7 @@
             $this->template = 'auth.tpl';
 
             $this->init(array(
-                'name'      => 'remember_pass',
+                'name'      => 'auth.remember_pass',
                 'title'     => 'Восстановление пароля',
                 'dir'       => '/control/auth/remember_pass',
                 'bgclass'   => 'city'

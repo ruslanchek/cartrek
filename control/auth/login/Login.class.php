@@ -19,7 +19,7 @@
             };
 
             $this->init(array(
-                'name'      => 'login',
+                'name'      => 'auth.login',
                 'title'     => 'Вход',
                 'dir'       => '/control/auth/login',
                 'bgclass'   => 'city'
