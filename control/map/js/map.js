@@ -153,6 +153,10 @@ var leaflet_ctrl = {
         };
     },
 
+    removeMarker: function(map_instance, marker){
+        map_instance.removeLayer(marker);
+    },
+
     drawCurrentPositionMarkersGroup: function(map_instance, data){
         if(this.current_position_markers_group){
             this.current_position_markers_group.clearLayers();
@@ -1062,6 +1066,11 @@ var map = {
     },
 
     renewOptions: function(){
+        if(this.current_car && (this.current_car.stop_points || this.current_car.max_speed)){
+            this.current_car.stop_points = null;
+            this.current_car.max_speed = null;
+        };
+
         this.player.close();
 
         //Читаем параметры из адресной строки (хеш)
@@ -1480,9 +1489,6 @@ var map = {
             $('#time-machine .days').slideUp(300, function(){
                 $('#time-machine .days').datepicker('destroy');
             });
-
-            this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
-            this.m_ctrl.removeGhostPath(this.map);
         };
     },
 
@@ -1963,16 +1969,24 @@ var map = {
         // this.m_ctrl.removeAllThePath(this.map);
 
         if(this.current_car){
-            this.current_car.cp_marker = false;
-            this.current_car.path_points = false;
-            this.current_car.last_point_id = false;
+            if(this.current_car.cp_marker){
+                this.m_ctrl.removeMarker(this.map, this.current_car.cp_marker);
+            };
+
+            this.current_car.cp_marker = null;
+            this.current_car.path_points = null;
+            this.current_car.last_point_id = null;
         };
 
         if(this.cars_list){
             for(var i = 0, l = this.cars_list; i < l; i++){
-                this.cars_list[i].cp_marker = false;
-                this.cars_list[i].path_points = false;
-                this.cars_list[i].last_point_id = false;
+                if(this.cars_list[i].cp_marker){
+                    this.m_ctrl.removeMarker(this.map, this.cars_list[i].cp_marker);
+                };
+
+                this.cars_list[i].cp_marker = null;
+                this.cars_list[i].path_points = null;
+                this.cars_list[i].last_point_id = null;
             };
         };
 
