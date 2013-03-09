@@ -1356,10 +1356,23 @@ footer a:active {
 
 /* =Map
 -----------------------------------------------------------------------------*/
+.map-full-sized-frame {
+    position: relative;
+    height: 100%;
+}
+
+.map-full-sized-frame .h1 {
+    position: absolute;
+    top: 0;
+    left: 20px;
+}
+
+.map-container {
+
+}
+
 #map {
-    border: 1px solid #ccc;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
+
 }
 
 #map:-webkit-full-screen { width: 100% !important; height: 100% !important; }
@@ -1370,10 +1383,16 @@ footer a:active {
 .leaflet-control-zoom-fullscreen.last { margin-top: 5px }
 
 .map-container {
-    position: relative;
-    padding-bottom: 15px;
-    height: 400px;
-    width: 100% !important;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.map-bottom-panel {
+    width: 260px;
+    position: absolute;
+    height: 100%;
+    right: 0;
 }
 
 
@@ -1740,13 +1759,11 @@ footer a:active {
     font-size: 0.85em;
     background: #eee;
     text-shadow: 0 1px 0 #fff;
-    border: 1px solid #ddd;
-    -webkit-border-radius: 2px;
-            border-radius: 2px;
+    overflow-y: auto;
 }
 
 .bottom-panel .panel-content {
-    padding: 12px;
+    padding: 12px 20px;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #fefefe;
 }
@@ -2008,6 +2025,7 @@ footer a:active {
 
 /* Player */
 #player {
+    position: absolute;
     margin-bottom: -2px;
     padding: 10px 12px;
     background: #eee;

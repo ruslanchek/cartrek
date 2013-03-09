@@ -902,15 +902,15 @@ var map = {
     hash: {},
 
     prepareMap: function(callback){
-        if($.cookie('map-height') && $.cookie('map-height') > this.m_options.minHeight){
-            $('#map, .map-container').css({height: parseInt($.cookie('map-height'))});
-        }else{
-            $('#map, .map-container').css({height: this.m_options.height});
-        };
+        $('#map, .map-container').css({
+            height: $('body').height() - $('.top-panel').height() - $('footer').height(),
+            width: $('body').width() - $('.map-bottom-panel').width()
+        });
 
         this.m_ctrl = leaflet_ctrl;
         this.m_ctrl.createMap(this.m_options, callback);
 
+        /*
         $('.map-container').resizable({
             handles: 's',
             minHeight: this.m_options.minHeight + 1,
@@ -938,16 +938,13 @@ var map = {
             }
         });
 
+        */
+
         $(window).on('resize', function(){
-            $('#map').css({
-                width:  $('.map-container').width() - 2
+            $('#map, .map-container').css({
+                height: $('body').height() - $('.top-panel').height() - $('footer').height(),
+                width: $('body').width() - $('.map-bottom-panel').width()
             });
-
-            var player_height = 0;
-
-            if($('#player').is(':visible')){
-                player_height = $('#player').height() + 20;
-            };
 
             $('.map-bottom-panel').css({
                 minHeight: $('.map-container').height() + 14 + player_height
@@ -957,6 +954,7 @@ var map = {
                 map.map.invalidateSize();
             };
         });
+
 
         var player_height = 0;
 

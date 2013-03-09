@@ -7,19 +7,9 @@
     <body>
         <div id="wrapper">
             <div class="limiter">
-                {include file="common/top.tpl"}
+                {include file="common/top.tpl" map=true}
 
-                <div class="container h1">
-                    <div class="container-padding">
-                        <h1>{$core->module.title}<span id="current-fleet-and-car"></span></h1>
-                    </div>
-                </div>
-
-                <div class="container main-content">
-                    <div class="row container-padding">
-                        {include file="modules/`$core->module.name`.tpl"}
-                    </div>
-                </div>
+                {include file="modules/`$core->module.name`.tpl"}
             </div>
         </div>
 
