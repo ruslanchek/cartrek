@@ -889,6 +889,8 @@ var map = {
     auto_focus      : true,
     show_car_path   : false,
 
+    tools_opened    : true,
+
     m_options: {
         zoom: 4,
         coordinates: {
@@ -901,53 +903,59 @@ var map = {
 
     hash: {},
 
+    closeTools: function(){
+        $('.map-bottom-panel').animate({
+            width: 15
+        }, 250);
+
+        $('#map, .map-container').animate({
+            width: $('body').width() - 15
+        }, 250);
+
+        if(this.map){
+            this.map.invalidateSize();
+        };
+    },
+
+    openTools: function(){
+        $('.map-bottom-panel').animate({
+            width: 260
+        }, 250);
+
+        $('#map, .map-container').animate({
+            width: $('body').width() - 260
+        }, 250);
+
+        if(this.map){
+            this.map.invalidateSize();
+        };
+    },
+
     prepareMap: function(callback){
         $('#map, .map-container').css({
-            height: $('body').height() - $('.top-panel').height() - $('footer').height(),
+            height: $('body').height() - $('.top-panel').height() - $('footer').height() - 60,
+            width: $('body').width() - $('.map-bottom-panel').width()
+        });
+
+        $('.map-full-sized-frame .h1').css({
             width: $('body').width() - $('.map-bottom-panel').width()
         });
 
         this.m_ctrl = leaflet_ctrl;
         this.m_ctrl.createMap(this.m_options, callback);
 
-        /*
-        $('.map-container').resizable({
-            handles: 's',
-            minHeight: this.m_options.minHeight + 1,
-            resize: function(event, ui){
-                $('#map').css({
-                    height: ui.size.height + 2,
-                    width:  $('.map-container').width() - 2
-                });
-
-                var player_height = 0;
-
-                if($('#player').is(':visible')){
-                    player_height = $('#player').height() + 20;
-                };
-
-                $('.map-bottom-panel').css({
-                    minHeight: ui.size.height + 14 + player_height
-                });
-
-                if(map.map){
-                    map.map.invalidateSize();
-                };
-
-                $.cookie('map-height', ui.size.height, core.options.cookie_options);
-            }
-        });
-
-        */
-
         $(window).on('resize', function(){
             $('#map, .map-container').css({
-                height: $('body').height() - $('.top-panel').height() - $('footer').height(),
+                height: $('body').height() - $('.top-panel').height() - $('footer').height() - 20,
+                width: $('body').width() - $('.map-bottom-panel').width()
+            });
+
+            $('.map-full-sized-frame .h1').css({
                 width: $('body').width() - $('.map-bottom-panel').width()
             });
 
             $('.map-bottom-panel').css({
-                minHeight: $('.map-container').height() + 14 + player_height
+                minHeight: $('.map-container').height()
             });
 
             if(map.map){
@@ -955,15 +963,8 @@ var map = {
             };
         });
 
-
-        var player_height = 0;
-
-        if($('#player').is(':visible')){
-            player_height = $('#player').height() + 20;
-        };
-
         $('.map-bottom-panel').css({
-            minHeight: $('.map-container').height() + 14 + player_height
+            minHeight: $('.map-container').height()
         });
     },
 
