@@ -14,7 +14,7 @@
         </div>
 
         <footer>
-            {include file="common/footer.tpl"}
+            {include file="common/footer.tpl" map=true}
         </footer>
     </body>
 </html>

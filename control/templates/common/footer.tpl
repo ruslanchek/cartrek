@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container {if $map == true}wide{/if}">
     <div class="container-padding">
         <div class="third">
             &copy; 2012, ГИС &laquo;Картрек&raquo;.

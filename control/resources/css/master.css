@@ -527,6 +527,10 @@ footer {
     padding: 0 20px;
 }
 
+.wide .container-padding {
+    padding: 0;
+}
+
 .global-loading-bar {
     position: absolute;
     top: 46px;
@@ -1399,7 +1403,7 @@ footer a:active {
 .leaflet-control-zoom-fullscreen { background-image: url(../mapping-tools/leaflet/plugins/leaflet-fullscreen/icon-fullscreen.png); }
 .leaflet-control-zoom-fullscreen.last { margin-top: 5px }
 
-.map-container {
+.map-full-sized-frame .map-container {
     position: absolute;
     left: 0;
     top: 0;
@@ -1467,13 +1471,15 @@ footer a:active {
     position: absolute;
     z-index: 10;
     background: #fff;
-    padding: 20px 3%;
+    padding: 20px;
     -webkit-box-shadow:  0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     box-shadow:  0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     top: 50%;
     left: 50%;
     width: 42%;
     margin-left: -25%;
+    -webkit-border-radius: 5px;
+            border-radius: 5px;
 }
 
 
