@@ -149,14 +149,6 @@ Class EventsApi extends Core {
         );
     }
 
-    /**
-     * @param @integer $user_id Id of user, whom to push event.
-     * @param @integer $status Status marker from 1 to 4 (1 - warning, 2 - attention, 3 - notify, 4 - success)
-     * @param @integer $type Type of event (use for marking events with his caller: 1 - system, 2 - devices alerts, 3 - device statuses, 4 - finnances, 5 - social, 6 - geolocation)
-     * @param @string $message Event message
-     *
-     * @return void add a event to user.
-     */
     public function pushEvent($status, $type, $message, $showed = 0){
         $query = "
             INSERT INTO `events` (
