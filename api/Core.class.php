@@ -22,6 +22,7 @@ Class Core{
         'db'                    => 'Database',
         'auth'                  => 'Auth',
         'mail'                  => 'Mail',
+        'form'                  => 'Form',
         'devices'               => 'Devices',
         'eventsApi'             => 'EventsApi'
     );

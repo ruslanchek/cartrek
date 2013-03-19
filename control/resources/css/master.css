@@ -747,18 +747,25 @@ a.badge:active {
 }
 
 .forms label {
-    display: inline-block;
+    display: block;
 }
 
 .forms .form-item {
     position: relative;
 }
 
+/*
 .forms .form-item span.error {
     position: absolute;
     left: 335px;
     top: 2.1em;
     width: 220px;
+}
+*/
+
+.forms .form-item span.error {
+    float: right;
+    font-size: 0.9em;
 }
 
 .forms input.text {

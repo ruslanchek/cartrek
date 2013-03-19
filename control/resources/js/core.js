@@ -1264,8 +1264,6 @@ core.events_api = {
             }
         });
     }
-
-    //TODO: Сделать чекер ивентов и вообще отображение новых ивентов в рилтайме
 };
 
 //Common functions
@@ -1301,5 +1299,7 @@ $(function(){
     $('.core-ui-select').coreUISelect({
         jScrollPane: true
     });
+
+
 });
 

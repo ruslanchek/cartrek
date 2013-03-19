@@ -375,13 +375,13 @@ class Auth extends Core{
 
     /* REGISTER */
     //Check user existance by email (true if present)
-    public function checkAlreadyByEmail($email){
-        return $this->db->checkRowExistance('public_users', 'email', mb_strtolower($email, "UTF-8"));
+    public function checkAlreadyByEmail($email, $not_id = false){
+        return $this->db->checkRowExistance('public_users', 'email', mb_strtolower($email, "UTF-8"), $not_id);
     }
 
     //Check user existance by login (true if present)
-    public function checkAlreadyByLogin($login){
-        return $this->db->checkRowExistance('public_users', 'login', mb_strtolower($login, "UTF-8"));
+    public function checkAlreadyByLogin($login, $not_id = false){
+        return $this->db->checkRowExistance('public_users', 'login', mb_strtolower($login, "UTF-8"), $not_id);
     }
 
     //Generate another login

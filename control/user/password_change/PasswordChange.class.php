@@ -1,5 +1,5 @@
 <?php
-    Class User extends Core {
+    Class PasswordChange extends Core {
         public function __construct(){
             parent::__construct();
 
@@ -11,8 +11,8 @@
 
             $this->init(array(
                 'name'  => 'user',
-                'title' => 'Учетные данные',
-                'dir'   => '/control/user'
+                'title' => 'Изменение пароля учетной записи',
+                'dir'   => '/control/user/password_change'
             ));
 
             if(isset($_GET['exit'])){
