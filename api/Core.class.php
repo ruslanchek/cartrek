@@ -83,6 +83,11 @@ Class Core{
         $this->smarty->debugging        = false;
         $this->smarty->caching          = false;
         $this->smarty->cache_lifetime   = 120;
+
+        //Ставим пользовательскую таймзону
+        if(isset($this->auth->user['data']['user_timezone'])){
+            date_default_timezone_set($this->auth->user['data']['user_timezone']);
+        };
     }
 
     //Функция окончания работы приложения

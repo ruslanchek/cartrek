@@ -107,7 +107,6 @@
                         (object) array('key' => 'user_timezone',     'val' => $form_data->user_timezone)
                     ));
 
-                    setcookie("ok", "1", '0');
                     header('location: /control/user/');
                 };
             };

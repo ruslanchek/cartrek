@@ -1,50 +1,41 @@
 <div class="threequarter">
-    <form class="forms" action="/control/user/" method="POST">
+    <form class="forms" action="/control/user/password_change/" method="POST">
         <div class="row">
-            <div class="half">
+            <div class="twothird">
                 <div class="form-item">
-                    <label for="login" class="bold">Логин{if $form_errors->login} <span class="error">{$form_errors->login}</span>{/if}</label>
+                    <label for="old_password" class="bold">Старый пароль{if $form_errors->old_password} <span class="error">{$form_errors->old_password}</span>{/if}</label>
                     <input
-                            class="{if $form_errors->login}input-error {/if}text width-100"
-                            type="text"
-                            name="login"
-                            id="login"
+                            class="{if $form_errors->old_password}input-error {/if}text width-100"
+                            type="password"
+                            name="old_password"
+                            id="old_password"
                             {*autofocus="autofocus"*}
-                            value="{$form_data->login}"
+                            value=""
+                    />
+                </div>
+
+                <hr>
+
+                <div class="form-item">
+                    <label for="new_password" class="bold">Новый пароль{if $form_errors->new_password} <span class="error">{$form_errors->new_password}</span>{/if}</label>
+                    <input
+                            class="{if $form_errors->new_password}input-error {/if}text width-100"
+                            type="password"
+                            name="new_password"
+                            id="new_password"
+                            value=""
                     />
                 </div>
 
                 <div class="form-item">
-                    <label for="email" class="bold">Электонная почта{if $form_errors->email} <span class="error">{$form_errors->email}</span>{/if}</label>
+                    <label for="new_password_again" class="bold">Повторите новый пароль{if $form_errors->new_password_again} <span class="error">{$form_errors->new_password_again}</span>{/if}</label>
                     <input
-                            class="{if $form_errors->email}input-error {/if}text width-100"
-                            type="email"
-                            name="email"
-                            id="email"
-                            value="{$form_data->email}"
-                    />
-                </div>
-
-                <div class="form-item">
-                    <label for="name" class="bold">Имя{if $form_errors->name} <span class="error">{$form_errors->name}</span>{/if}</label>
-                    <input
-                            class="{if $form_errors->name}input-error {/if}text width-100"
-                            type="text"
-                            name="name"
+                            class="{if $form_errors->new_password_again}input-error {/if}text width-100"
+                            type="password"
+                            name="new_password_again"
                             id="name"
-                            value="{$form_data->name}"
+                            value=""
                     />
-                </div>
-            </div>
-
-            <div class="half">
-                <div class="form-item">
-                    <label for="user_timezone" class="bold">Часовой пояс</label>
-                    <select class="core-ui-select" name="user_timezone" id="user_timezone">
-                    {foreach $core->utils->generateTimeZonesList() as $key => $val}
-                        <option value="{$key}" {if $key == $core->auth->user.data.user_timezone}selected{/if}>{$val}</option>
-                    {/foreach}
-                    </select>
                 </div>
             </div>
         </div>

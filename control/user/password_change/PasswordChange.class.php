@@ -10,7 +10,7 @@
             $this->template = 'user.tpl';
 
             $this->init(array(
-                'name'  => 'user',
+                'name'  => 'user.password_change',
                 'title' => 'Изменение пароля учетной записи',
                 'dir'   => '/control/user/password_change'
             ));
@@ -27,88 +27,89 @@
             $this->deInit();
         }
 
-        private function setUserData($data){
-            $cols = "";
-
-            if(is_array($data) && !empty($data)){
-                foreach($data as $item){
-                    $cols .= "`".$item->key."` = '".$this->db->quote($item->val)."',";
-                };
-
-                $cols = substr($cols, 0, strlen($cols) - 1);
-
-                $query = "
-                    UPDATE
-                        `public_users`
-                    SET
-                        ".$cols."
-                    WHERE
-                        `id` = ".intval($this->auth->user['data']['id']);
-
-                $this->db->query($query);
-            };
-        }
-
         private function formListener(){
-            $form_data                  = new stdClass();
-            $form_data->login           = $this->auth->user['data']['login'];
-            $form_data->email           = $this->auth->user['data']['email'];
-            $form_data->name            = $this->auth->user['data']['name'];
-            $form_data->user_timezone   = $this->auth->user['data']['user_timezone'];
+            $form_data                      = new stdClass();
+            $form_data->old_password        = false;
+            $form_data->new_password        = false;
+            $form_data->new_password_again  = false;
 
-            $form_errors                = new stdClass();
-            $form_errors->login         = false;
-            $form_errors->email         = false;
-            $form_errors->name          = false;
+            $form_errors                        = new stdClass();
+            $form_errors->old_password          = false;
+            $form_errors->new_password          = false;
+            $form_errors->new_password_again    = false;
 
             if(isset($_POST) && strtolower($_SERVER['REQUEST_METHOD']) == 'post'){
-                $form_data->login           = $_POST['login'];
-                $form_data->email           = $_POST['email'];
-                $form_data->name            = $_POST['name'];
-                $form_data->user_timezone   = $_POST['user_timezone'];
+                $form_data->old_password            = $_POST['old_password'];
+                $form_data->new_password            = $_POST['new_password'];
+                $form_data->new_password_again      = $_POST['new_password_again'];
 
                 $no_errors = true;
 
-                if(!$form_data->login){
-                    $form_errors->login = 'Введите логин';
-                    $no_errors = false;
-                };
+                if($form_data->old_password){
+                    $query = "
+                        SELECT
+                            `password`
+                        FROM
+                            `public_users`
+                        WHERE
+                            `id` = ".intval($this->auth->user['data']['id'])."
+                        LIMIT 1
+                    ";
 
-                if($this->auth->checkAlreadyByLogin($form_data->login, array($this->auth->user['data']['id']))){
-                    $form_errors->login = 'Такой логин уже используется';
-                    $no_errors = false;
-                };
+                    $data = $this->db->assocItem($query);
 
-                if(!$form_data->email){
-                    $form_errors->email = 'Введите адрес почты';
-                    $no_errors = false;
-                };
+                    if($data['password'] != md5(md5(trim($form_data->old_password)))){
+                        $form_errors->old_password = 'Старый пароль не подходит';
+                        $no_errors = false;
+                    };
 
-                if(!$this->utils->matchPattern($form_data->email, 'email')){
-                    $form_errors->email = 'Адрес почты неправильный';
-                    $no_errors = false;
-                };
+                    if(!$form_data->new_password){
+                        $form_errors->new_password = 'Введите новый пароль';
+                        $no_errors = false;
+                    };
 
-                if($this->auth->checkAlreadyByEmail($form_data->email, array($this->auth->user['data']['id']))){
-                    $form_errors->email = 'Такой адрес почты уже используется';
-                    $no_errors = false;
-                };
+                    if($form_data->new_password && strlen($form_data->new_password) < 5){
+                        $form_errors->new_password = 'Пароль не может быть короче 5 символов';
+                        $no_errors = false;
+                    };
 
-                if(!$form_data->name){
-                    $form_errors->name = 'Введите имя';
+                    if(!$form_data->new_password_again){
+                        $form_errors->new_password_again = 'Введите новый пароль еще раз';
+                        $no_errors = false;
+                    };
+
+                    if($form_data->new_password != $form_data->new_password_again){
+                        $form_errors->new_password_again = 'Новый пароль не совпадает';
+                        $no_errors = false;
+                    };
+                }else{
+                    $form_errors->old_password = 'Введите старый пароль';
                     $no_errors = false;
                 };
 
                 if($no_errors === true){
-                    $this->setUserData(array(
-                        (object) array('key' => 'login',             'val' => $form_data->login),
-                        (object) array('key' => 'email',             'val' => $form_data->email),
-                        (object) array('key' => 'name',              'val' => $form_data->name),
-                        (object) array('key' => 'user_timezone',     'val' => $form_data->user_timezone)
-                    ));
+                    $this->db->query("
+                        UPDATE
+                            `public_users`
+                        SET
+                            `password` = '".$this->db->quote(md5(md5(trim($form_errors->new_password))))."'
+                        WHERE
+                            `id` = ".intval($this->auth->user['data']['id'])."
+                    ");
 
-                    setcookie("ok", "1", '0');
-                    header('location: /control/user/');
+                    $this->mail->send(
+                        'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
+                        'account_manager@'.$_SERVER['SERVER_NAME'],
+                        $this->auth->user['data']['email'],
+                        'Пароль изменен',
+                        'mailing/password_changed.tpl',
+                        array(
+                            'user_data' => $this->auth->user['data'],
+                            'password' => $form_errors->new_password
+                        )
+                    );
+
+                    header('location: /control/user/password_change/');
                 };
             };
 

@@ -6,5 +6,5 @@
     require_once('PasswordChange.class.php');
 
     //Запуск модуля
-    $core = new User();
+    $core = new PasswordChange();
 ?>

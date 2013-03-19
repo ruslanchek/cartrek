@@ -83,7 +83,9 @@ class Auth extends Core{
         $this->user['status'] = true;
         $this->user['message'] = 'Вы успешно авторизовались';
         $this->user['data'] = $data;
+
         $this->getUserSharedAccountStatus();
+
         header('Location: /control');
     }
 
@@ -429,11 +431,12 @@ class Auth extends Core{
                     $this->mail->send(
                         'Менеджер аккаунтов '.$_SERVER['SERVER_NAME'],
                         'account_manager@'.$_SERVER['SERVER_NAME'],
-                        $this->user['data']['email'],
-                        'Ваш пароль изменен',
+                        $this->auth->user['data']['email'],
+                        'Пароль изменен',
                         'mailing/password_changed.tpl',
                         array(
-                             'password' => $p_new
+                            'user_data' => $this->user['data'],
+                            'password' => $p_new
                         )
                     );
 
