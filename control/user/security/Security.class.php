@@ -93,12 +93,12 @@
                         };
 
                         if($form_data->new_password && strlen($form_data->new_password) < 5){
-                            $form_errors->new_password = 'Пароль не может быть короче 5 символов';
+                            $form_errors->new_password = 'Не менее 5 символов';
                             $no_errors = false;
                         };
 
                         if(!$form_data->new_password_again){
-                            $form_errors->new_password_again = 'Введите новый пароль еще раз';
+                            $form_errors->new_password_again = 'Повторите новый пароль';
                             $no_errors = false;
                         };
 

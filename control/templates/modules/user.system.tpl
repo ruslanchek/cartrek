@@ -1,7 +1,6 @@
 <div class="threequarter">
-    <div class="forms">
-        <h2>Выберите слой карты</h2>
-        <p>Выбранный слой карты, будет испозьзоваться Картреком во всех разделах с картографической системой.</p>
+        <h2>Стиль карты</h2>
+        <p>Выбранный стиль карты, будет испозьзоваться Картреком во всех разделах с картографической системой.</p>
 
         <div class="map-types">
             <div class="row">
@@ -28,7 +27,6 @@
                 <a class="third item" href="#" rel="gglhyb"><i><img src="/control/resources/img/map-previews/gglhyb.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">спутник-гибрид</span></span></a>
             </div>
         </div>
-    </div>
 </div>
 
 <div class="quarter">

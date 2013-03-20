@@ -802,10 +802,16 @@ class Auth extends Core{
         };
     }
 
-    private function oauthVK($type = 'auth'){
+    public function oauthVK($type = 'auth'){
         $oauth_client_id      = '3122226';
         $oauth_secure_key     = 'boPWbfhxxPdmbjt6zyp2';
         $oauth_scope          = '';
+
+        if($type == 'auth'){
+            $redirect_uri         = 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/login/?oauth&provider=vk&step=receive_code&';
+        }elseif($type == 'bind'){
+            $redirect_uri         = 'http://'.$_SERVER['HTTP_HOST'].'/control/user/security/?action=bind_oauth&provider=vk&step=receive_code&';
+        };
 
         if(isset($_GET['error'])){
             $this->showOAuthError($_GET['error'], $_GET['error_description']);
@@ -817,7 +823,7 @@ class Auth extends Core{
                         'client_id'     => $oauth_client_id,
                         'scope'         => $oauth_scope,
                         'response_type' => 'code',
-                        'redirect_uri'  => 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/login/?oauth&provider=vk&step=receive_code&'
+                        'redirect_uri'  => $redirect_uri
                     ));
                 }; break;
 
@@ -826,10 +832,10 @@ class Auth extends Core{
                         'client_id'     => $oauth_client_id,
                         'client_secret' => $oauth_secure_key,
                         'code'          => $_GET['code'],
-                        'redirect_uri'  => 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/login/?oauth&provider=vk&step=receive_code&'
+                        'redirect_uri'  => $redirect_uri
                     ));
 
-                    if($response->error){
+                    if(isset($response->error)){
                         $this->showOAuthError($response->error, $response->error_description);
                     }else{
                         $response = $this->readGetRequest('https://api.vk.com/method/getProfiles', array(
@@ -839,7 +845,7 @@ class Auth extends Core{
                         ));
 
                         if($response){
-                            if($response->error->error_code){
+                            if(isset($response->error->error_code)){
                                 $this->showOAuthError($response->error->error_code, $response->error->error_msg);
                             }else{
                                 $data = $response->response[0];
@@ -859,12 +865,7 @@ class Auth extends Core{
 
                                 }elseif($type == 'bind'){
                                     $this->bindOAuth('vk', array(
-                                        'uid'               => $data->uid,
-                                        'first_name'        => $data->first_name,
-                                        'last_name'         => $data->last_name,
-                                        'name'              => $data->nickname,
-                                        'sex'               => $data->sex,
-                                        'bdate'             => date("Y-m-d H:i:s", strtotime($data->bdate))
+                                        'uid'               => $data->uid
                                     ));
 
                                     header("Location: http://".$_SERVER['HTTP_HOST'].'/control/user/security');
@@ -878,11 +879,16 @@ class Auth extends Core{
         };
     }
 
-    private function oauthFB($type = 'auth'){
+    public function oauthFB($type = 'auth'){
         $oauth_client_id      = '410104775715619';
         $oauth_secure_key     = '1bf606af6afd1286aadfd510fca8dd94';
         $oauth_scope          = '';
-        $redirect_uri         = 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=fb';
+
+        if($type == 'auth'){
+            $redirect_uri         = 'http://'.$_SERVER['HTTP_HOST'].'/control/auth/login?oauth&provider=fb';
+        }elseif($type == 'bind'){
+            $redirect_uri         = 'http://'.$_SERVER['HTTP_HOST'].'/control/user/security/?action=bind_oauth&provider=fb';
+        };
 
         if(!isset($_GET["code"])){
             $this->doGetRequest('http://www.facebook.com/dialog/oauth', array(
@@ -921,18 +927,11 @@ class Auth extends Core{
                 header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
             }elseif($type == 'bind'){
                 $this->bindOAuth('fb', array(
-                    'uid'               => $data->id,
-                    'first_name'        => $data->first_name,
-                    'last_name'         => $data->last_name,
-                    'name'              => $data->name,
-                    'sex'               => $sex,
-                    'bdate'             => date("Y-m-d H:i:s", strtotime($data->birthday))
+                    'uid'               => $data->id
                 ));
 
                 header("Location: http://".$_SERVER['HTTP_HOST'].'/control/user/security');
             };
-
-            header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
         };
     }
 
