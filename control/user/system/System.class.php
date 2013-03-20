@@ -11,7 +11,7 @@
 
             $this->init(array(
                 'name'  => 'user.system',
-                'title' => 'Система',
+                'title' => 'Настройка системы',
                 'dir'   => '/control/user/system'
             ));
         }

@@ -773,6 +773,7 @@ a.badge:active {
     display: block;
     padding: 2px 5px;
     font-size: 1.03em;
+    width: 97%;
 }
 
 .forms select {
@@ -845,6 +846,11 @@ a.badge:active {
 
 .form_message {
     display: none;
+}
+
+.socials-table td {
+    padding: 5px 15px 5px 0;
+    vertical-align: middle;
 }
 
 

@@ -12,19 +12,19 @@
 
         <div class="form-item">
             <label for="name" class="bold">Представьтесь</label>
-            <input class="text" type="text" name="name" id="name" autofocus="autofocus" value="" />
+            <input class="text" type="text" name="name" id="name" {*autofocus="autofocus"*} value="{$core->auth->user.data.name}" />
         </div>
 
         <div class="form-item">
             <label for="name" class="bold">Контактный e-mail</label>
-            <input class="text" type="text" name="email" id="email" value="" />
+            <input class="text" type="text" name="email" id="email" value="{$core->auth->user.data.email}" />
         </div>
 
         <div class="form-item">
             <section>
                 <label for="message" class="bold">Ваше сообщение</label>
             </section>
-            <textarea class="width-100" style="height: 15em;" name="message" id="message"></textarea>
+            <textarea autofocus="autofocus" class="width-100" style="height: 15em;" name="message" id="message"></textarea>
         </div>
 
         <input type="submit" name="send" class="btn" value="Отправить" />

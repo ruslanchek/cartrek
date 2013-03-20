@@ -1195,12 +1195,39 @@ core.ticker = {
 core.events_api = {
     events_meow_duration: 10000,
 
+    webkitNotification: function(message){
+        if(window.webkitNotifications){
+            var havePermission = window.webkitNotifications.checkPermission();
+
+            if (havePermission == 0) {
+                // 0 is PERMISSION_ALLOWED
+
+                var notification = window.webkitNotifications.createNotification(
+                    'http://dev.cartrek.ru/control/resources/img/big-logo-icon.png',
+                    'Картрек',
+                    'message'
+                );
+
+                notification.onclick = function () {
+                    window.focus();
+                    notification.close();
+                };
+
+                notification.show();
+            }else{
+                window.webkitNotifications.requestPermission();
+            };
+        };
+    },
+
     showEventsMeow: function(data){
         $.meow({
             title   : '',
             message : data.message,
             duration: this.events_meow_duration
         });
+
+        this.webkitNotification(data.message);
     },
 
     pushEvent: function(data){
@@ -1282,6 +1309,16 @@ core.getRawTitle = function(){
     this.page_title_raw = $('title').html();
 };
 
+core.webkitNotificationsRequest = function(){
+    var havePermission = window.webkitNotifications.checkPermission();
+
+    if (havePermission == 0) {
+
+    }else{
+        window.webkitNotifications.requestPermission();
+    };
+};
+
 //Object starter
 $(function(){
     core.getRawTitle();
@@ -1299,7 +1336,5 @@ $(function(){
     $('.core-ui-select').coreUISelect({
         jScrollPane: true
     });
-
-
 });
 

@@ -1,9 +1,6 @@
 <div class="threequarter">
-    <form id="password-change-form" class="forms" action="/control/user/password_change/" method="POST">
-        <div class="form_message">
-
-        </div>
-
+    <form id="password-change-form" class="forms" action="/control/user/security/" method="POST">
+        <div class="form_message"></div>
         <div class="row">
             <div class="half">
                 <div class="form-item">
@@ -45,14 +42,23 @@
                 <input type="submit" name="send" class="btn" value="Сменить пароль" />
             </div>
 
-            <div class="half">
+            <div class="third">
                 <div class="form-item">
                     <label class="bold">Социальные сети</label>
-                    <label><input type="checkbox" value="1" {if $core->auth->user.data.socials == 1}checked{/if} name="socials"> Позволить вход через соцсети</label>
+
+                    <table class="socials-table">
+                        <tr>
+                            <td>{if !$core->auth->user.data.fb_id}<a href="#">{/if}<img src="/control/resources/img/login/facebook.png" alt="Facebook">{if !$core->auth->user.data.fb_id}</a>{/if}</td>
+                            <td>{if $core->auth->user.data.fb_id > 0}<span class="green">Аккаунт привязан</span>{else}<span class="gray">Аккаунт не привязан</span>{/if}</td>
+                        </tr>
+                        <tr>
+                            <td>{if !$core->auth->user.data.vk_id}<a href="#">{/if}<img src="/control/resources/img/login/vkontakte.png" alt="Vkontakte">{if !$core->auth->user.data.vk_id}</a>{/if}</td>
+                            <td>{if $core->auth->user.data.vk_id > 0}<span class="green">Аккаунт привязан</span>{else}<span class="gray">Аккаунт не привязан</span>{/if}</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
-
     </form>
 </div>
 

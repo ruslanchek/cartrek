@@ -10,9 +10,9 @@
             $this->template = 'user.tpl';
 
             $this->init(array(
-                'name'  => 'user.password_change',
-                'title' => 'Пароль и безопасность',
-                'dir'   => '/control/user/password_change'
+                'name'  => 'user.security',
+                'title' => 'Пароль и авторизация',
+                'dir'   => '/control/user/security'
             ));
 
             if(isset($_GET['exit'])){

@@ -1,8 +1,6 @@
 <div class="threequarter">
     <form id="user-form" class="forms" action="/control/user/" method="POST">
-        <div class="form_message">
-
-        </div>
+        <div class="form_message"></div>
 
         <div class="row">
             <div class="half">
@@ -21,8 +19,6 @@
                             value="{$core->auth->user.data.name|escape}"
                     />
                 </div>
-
-
 
                 <div class="form-item">
                     <label for="user_timezone" class="bold">Часовой пояс</label>
@@ -50,7 +46,7 @@
                     <label for="email" class="bold">Телефоны <span class="error"></span></label>
                     <input
                             class="text width-100"
-                            type="email"
+                            type="text"
                             name="email"
                             id="email"
                             value="{$core->auth->user.data.phones|escape}"

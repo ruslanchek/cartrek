@@ -11,7 +11,7 @@
 
             $this->init(array(
                 'name'  => 'user',
-                'title' => 'Учетные данные',
+                'title' => 'Настройка аккаунта',
                 'dir'   => '/control/user'
             ));
 
@@ -76,6 +76,8 @@
                 $form_data->email           = $_POST['email'];
                 $form_data->name            = $_POST['name'];
                 $form_data->user_timezone   = $_POST['user_timezone'];
+
+                $form_data->login = $this->utils->convertUrl($form_data->login);
 
                 $no_errors = true;
 

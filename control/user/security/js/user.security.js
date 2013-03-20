@@ -20,6 +20,8 @@ var security = {
                 core.loading.setGlobalLoading();
 
                 $('.form_message').hide().html('');
+
+                $('#old_password, #new_password, #new_password_again').removeClass('input-error').prev().find('.error').html('');
             },
             success: function(data){
                 core.loading.unsetGlobalLoading();

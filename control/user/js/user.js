@@ -21,6 +21,8 @@ var user = {
                 core.loading.setGlobalLoading();
 
                 $('.form_message').hide().html('');
+
+                $('#login, #email, #name').removeClass('input-error').prev().find('.error').html('');
             },
             success: function(data){
                 core.loading.unsetGlobalLoading();
@@ -29,6 +31,7 @@ var user = {
                     $('.form_message').html('<div id="ok_message">Данные сохранены <a class="close" href="javascript:void(0)">X</a></div>');
 
                     $('#login-display').html(data.form_data.login);
+                    $('#login').val(data.form_data.login);
                 }else{
                     if(data.form_errors.login){
                         $('#login').addClass('input-error').prev().find('.error').text(data.form_errors.login);
@@ -41,6 +44,8 @@ var user = {
                     if(data.form_errors.name){
                         $('#name').addClass('input-error').prev().find('.error').text(data.form_errors.name);
                     };
+
+                    $('#login').val(data.form_data.login);
                 };
 
                 $('.form_message').slideDown(150);
@@ -52,7 +57,7 @@ var user = {
     },
 
     binds: function(){
-        $('#password-change-form').on('submit', function(e){
+        $('#user-form').on('submit', function(e){
             e.preventDefault();
             user.processForm();
         });

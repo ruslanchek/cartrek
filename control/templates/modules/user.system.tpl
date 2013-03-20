@@ -1,35 +1,34 @@
 <div class="threequarter">
+    <div class="forms">
+        <h2>Выберите слой карты</h2>
+        <p>Выбранный слой карты, будет испозьзоваться Картреком во всех разделах с картографической системой.</p>
 
-    <h2>Выберите слой карты</h2>
-    <p>Выбранный слой карты, будет испозьзоваться Картреком во всех разделах с картографической системой.</p>
+        <div class="map-types">
+            <div class="row">
+                <a class="third item" href="#" rel="mbx1"><i><img src="/control/resources/img/map-previews/mbx1.png" alt=""></i><span class="name">Картрек <span class="sup">дороги</span></span></a>
+                <a class="third item" href="#" rel="mbx2"><i><img src="/control/resources/img/map-previews/mbx2.png" alt=""></i><span class="name">Картрек <span class="sup">рельеф</span></span></a>
+                <a class="third item" href="#" rel="mbx3"><i><img src="/control/resources/img/map-previews/mbx3.png" alt=""></i><span class="name">Картрек <sup class="beta" title="Бета (возможны проблемы с отображением карты)">&beta;</sup> <span class="sup">спутник</span></span></a>
+            </div>
 
-    <div class="map-types">
-        <div class="row">
-            <a class="third item" href="#" rel="mbx1"><i><img src="/control/resources/img/map-previews/mbx1.png" alt=""></i><span class="name">Картрек <span class="sup">дороги</span></span></a>
-            <a class="third item" href="#" rel="mbx2"><i><img src="/control/resources/img/map-previews/mbx2.png" alt=""></i><span class="name">Картрек <span class="sup">рельеф</span></span></a>
-            <a class="third item" href="#" rel="mbx3"><i><img src="/control/resources/img/map-previews/mbx3.png" alt=""></i><span class="name">Картрек <sup class="beta" title="Бета (возможны проблемы с отображением карты)">&beta;</sup> <span class="sup">спутник</span></span></a>
-        </div>
+            <div class="row">
+                <a class="third item" href="#" rel="osm"><i><img src="/control/resources/img/map-previews/osm.png" alt=""></i><span class="name">OpenStreetMap <span class="sup">дороги</span></span></a>
+                <a class="third item" href="#" rel="clm"><i><img src="/control/resources/img/map-previews/clm.png" alt=""></i><span class="name">CloudMade <span class="sup">дороги</span></span></a>
+                <a class="third item" href="#" rel="mpn"><i><img src="/control/resources/img/map-previews/mpn.png" alt=""></i><span class="name">Mapnik <span class="sup">дороги</span></span></a>
+            </div>
 
-        <div class="row">
-            <a class="third item" href="#" rel="osm"><i><img src="/control/resources/img/map-previews/osm.png" alt=""></i><span class="name">OpenStreetMap <span class="sup">дороги</span></span></a>
-            <a class="third item" href="#" rel="clm"><i><img src="/control/resources/img/map-previews/clm.png" alt=""></i><span class="name">CloudMade <span class="sup">дороги</span></span></a>
-            <a class="third item" href="#" rel="mpn"><i><img src="/control/resources/img/map-previews/mpn.png" alt=""></i><span class="name">Mapnik <span class="sup">дороги</span></span></a>
-        </div>
+            <div class="row">
+                <a class="third item" href="#" rel="qst"><i><img src="/control/resources/img/map-previews/qst.png" alt=""></i><span class="name">Mapquest <span class="sup">дороги</span></span></a>
+                <a class="third item" href="#" rel="hyb"><i><img src="/control/resources/img/map-previews/hyb.png" alt=""></i><span class="name">Космоснимки <sup class="beta" title="Бета (возможны проблемы с отображением карты)">&beta;</sup> <span class="sup">спутник-гибрид</span></span></a>
+                <a class="third item" href="#" rel="gglroad"><i><img src="/control/resources/img/map-previews/gglroad.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">дороги</span></span></a>
+            </div>
 
-        <div class="row">
-            <a class="third item" href="#" rel="qst"><i><img src="/control/resources/img/map-previews/qst.png" alt=""></i><span class="name">Mapquest <span class="sup">дороги</span></span></a>
-            <a class="third item" href="#" rel="hyb"><i><img src="/control/resources/img/map-previews/hyb.png" alt=""></i><span class="name">Космоснимки <sup class="beta" title="Бета (возможны проблемы с отображением карты)">&beta;</sup> <span class="sup">спутник-гибрид</span></span></a>
-            <a class="third item" href="#" rel="gglroad"><i><img src="/control/resources/img/map-previews/gglroad.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">дороги</span></span></a>
-        </div>
-
-        <div class="row">
-            <a class="third item" href="#" rel="gglsat"><i><img src="/control/resources/img/map-previews/gglsat.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">спутник</span></span></a>
-            <a class="third item" href="#" rel="gglterr"><i><img src="/control/resources/img/map-previews/gglterr.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">рельеф</span></span></a>
-            <a class="third item" href="#" rel="gglhyb"><i><img src="/control/resources/img/map-previews/gglhyb.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">спутник-гибрид</span></span></a>
+            <div class="row">
+                <a class="third item" href="#" rel="gglsat"><i><img src="/control/resources/img/map-previews/gglsat.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">спутник</span></span></a>
+                <a class="third item" href="#" rel="gglterr"><i><img src="/control/resources/img/map-previews/gglterr.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">рельеф</span></span></a>
+                <a class="third item" href="#" rel="gglhyb"><i><img src="/control/resources/img/map-previews/gglhyb.png" alt=""></i><span class="name">Карты Гугла <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">спутник-гибрид</span></span></a>
+            </div>
         </div>
     </div>
-
-    <hr>
 </div>
 
 <div class="quarter">
