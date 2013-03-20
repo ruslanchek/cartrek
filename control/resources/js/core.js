@@ -1205,7 +1205,7 @@ core.events_api = {
                 var notification = window.webkitNotifications.createNotification(
                     'http://dev.cartrek.ru/control/resources/img/big-logo-icon.png',
                     'Картрек',
-                    'message'
+                    message
                 );
 
                 notification.onclick = function () {
@@ -1336,5 +1336,7 @@ $(function(){
     $('.core-ui-select').coreUISelect({
         jScrollPane: true
     });
+
+    core.webkitNotificationsRequest();
 });
 

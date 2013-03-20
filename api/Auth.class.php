@@ -712,6 +712,21 @@ class Auth extends Core{
         curl_close($curl);
     }
 
+    private function bindOAuth($provider, $fields){
+        if($fields['uid'] > 0 && $this->user['data']['id'] > 0){
+            $id_row = $provider.'_id';
+
+            if(!$this->db->checkRowExistance('public_users', $id_row, $fields['uid'])){
+                $this->db->query("
+                    UPDATE `public_users`
+                    SET `".$this->db->quote($id_row)."` = ".$fields['uid']."
+                    WHERE `id` = ".intval($this->user['data']['id']));
+
+                return true;
+            };
+        };
+    }
+
     private function registerFromOAuth($provider, $fields){
         if($fields['uid'] > 0){
             $id_row = $provider.'_id';
@@ -787,7 +802,7 @@ class Auth extends Core{
         };
     }
 
-    private function oauthVK(){
+    private function oauthVK($type = 'auth'){
         $oauth_client_id      = '3122226';
         $oauth_secure_key     = 'boPWbfhxxPdmbjt6zyp2';
         $oauth_scope          = '';
@@ -829,17 +844,31 @@ class Auth extends Core{
                             }else{
                                 $data = $response->response[0];
 
-                                $this->registerFromOAuth('vk', array(
-                                    'uid'               => $data->uid,
-                                    'first_name'        => $data->first_name,
-                                    'last_name'         => $data->last_name,
-                                    'name'              => $data->nickname,
-                                    'login'             => $data->nickname,
-                                    'sex'               => $data->sex,
-                                    'bdate'             => date("Y-m-d H:i:s", strtotime($data->bdate))
-                                ));
+                                if($type == 'auth'){
+                                    $this->registerFromOAuth('vk', array(
+                                        'uid'               => $data->uid,
+                                        'first_name'        => $data->first_name,
+                                        'last_name'         => $data->last_name,
+                                        'name'              => $data->nickname,
+                                        'login'             => $data->nickname,
+                                        'sex'               => $data->sex,
+                                        'bdate'             => date("Y-m-d H:i:s", strtotime($data->bdate))
+                                    ));
 
-                                header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
+                                    header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
+
+                                }elseif($type == 'bind'){
+                                    $this->bindOAuth('vk', array(
+                                        'uid'               => $data->uid,
+                                        'first_name'        => $data->first_name,
+                                        'last_name'         => $data->last_name,
+                                        'name'              => $data->nickname,
+                                        'sex'               => $data->sex,
+                                        'bdate'             => date("Y-m-d H:i:s", strtotime($data->bdate))
+                                    ));
+
+                                    header("Location: http://".$_SERVER['HTTP_HOST'].'/control/user/security');
+                                };
                             };
                         };
                     };
@@ -849,7 +878,7 @@ class Auth extends Core{
         };
     }
 
-    private function oauthFB(){
+    private function oauthFB($type = 'auth'){
         $oauth_client_id      = '410104775715619';
         $oauth_secure_key     = '1bf606af6afd1286aadfd510fca8dd94';
         $oauth_scope          = '';
@@ -878,15 +907,30 @@ class Auth extends Core{
                 $sex = '1';
             };
 
-            $this->registerFromOAuth('fb', array(
-                'uid'               => $data->id,
-                'first_name'        => $data->first_name,
-                'last_name'         => $data->last_name,
-                'name'              => $data->name,
-                'login'             => $data->username,
-                'sex'               => $sex,
-                'bdate'             => date("Y-m-d H:i:s", strtotime($data->birthday))
-            ));
+            if($type == 'auth'){
+                $this->registerFromOAuth('fb', array(
+                    'uid'               => $data->id,
+                    'first_name'        => $data->first_name,
+                    'last_name'         => $data->last_name,
+                    'name'              => $data->name,
+                    'login'             => $data->username,
+                    'sex'               => $sex,
+                    'bdate'             => date("Y-m-d H:i:s", strtotime($data->birthday))
+                ));
+
+                header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
+            }elseif($type == 'bind'){
+                $this->bindOAuth('fb', array(
+                    'uid'               => $data->id,
+                    'first_name'        => $data->first_name,
+                    'last_name'         => $data->last_name,
+                    'name'              => $data->name,
+                    'sex'               => $sex,
+                    'bdate'             => date("Y-m-d H:i:s", strtotime($data->birthday))
+                ));
+
+                header("Location: http://".$_SERVER['HTTP_HOST'].'/control/user/security');
+            };
 
             header("Location: http://".$_SERVER['HTTP_HOST'].'/control');
         };

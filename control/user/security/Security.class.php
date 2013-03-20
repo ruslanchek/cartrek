@@ -31,6 +31,21 @@
 
                 exit;
             };
+
+            if(isset($_GET['action']) && $_GET['action'] == 'bind_oauth'){
+                if(isset($_GET['provider'])){
+                    switch($_GET['provider']){
+                        case 'vk' : {
+                            $this->auth->oauthVK('bind');
+                        }; break;
+
+                        case 'fb' : {
+                            $this->auth->oauthFB('bind');
+                        }; break;
+                    };
+                };
+
+            };
         }
 
         public function __destruct(){
