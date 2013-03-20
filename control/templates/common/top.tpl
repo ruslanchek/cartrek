@@ -25,9 +25,9 @@
 
         <div class="top-user-menu">
             <a class="menu-exit" href="javascript:void(0)" onclick="core.exitUser()" title="Выход"></a>
-            <a class="menu-button" href="/control/user/system" title="Личные данные и настройка"><i class="r"></i><i class="icon icon-gear"></i> <span class="mb-content">{$core->auth->user.data.login}</span></a>
+            <a class="menu-button" href="/control/user/system" title="Личные данные и настройка"><i class="r"></i><i class="icon icon-gear"></i> <span class="mb-content" id="login-display">{$core->auth->user.data.login}</span></a>
 
-            <div class="user-info"><a href="/control/user/billing" class="balance" title="Состояние счета: 829.07 руб. - хватит еще на 24 дня">{$core->auth->user.data.balance|price} руб.</a></div>
+            <div class="user-info"><a href="/control/user/billing" class="balance" title="Состояние счета: {$core->auth->user.data.balance|price} руб. - хватит еще на {floor($core->auth->user.data.balance / $core->auth->user.data.daily_pay_amount)} дн.">{$core->auth->user.data.balance|price} руб.</a></div>
         </div>
     </div>
 

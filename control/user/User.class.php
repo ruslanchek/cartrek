@@ -85,22 +85,22 @@
                 };
 
                 if($this->auth->checkAlreadyByLogin($form_data->login, array($this->auth->user['data']['id']))){
-                    $form_errors->login = 'Такой логин уже используется';
+                    $form_errors->login = 'Уже используется';
                     $no_errors = false;
                 };
 
                 if(!$form_data->email){
                     $form_errors->email = 'Введите адрес почты';
                     $no_errors = false;
-                };
-
-                if(!$this->utils->matchPattern($form_data->email, 'email')){
-                    $form_errors->email = 'Адрес почты неправильный';
-                    $no_errors = false;
+                }else{
+                    if(!$this->utils->matchPattern($form_data->email, 'email')){
+                        $form_errors->email = 'Адрес почты неправильный';
+                        $no_errors = false;
+                    };
                 };
 
                 if($this->auth->checkAlreadyByEmail($form_data->email, array($this->auth->user['data']['id']))){
-                    $form_errors->email = 'Такой адрес почты уже используется';
+                    $form_errors->email = 'Уже используется';
                     $no_errors = false;
                 };
 

@@ -20,14 +20,24 @@
                 exit;
             };
 
-            $this->formListener();
+            //If user have any actve devices
+            if($this->ajax_mode && isset($_GET['action'])){
+                switch($_GET['action']){
+                    case 'process_form' : {
+                        header('Content-type: application/json');
+                        print json_encode($this->processForm());
+                    }; break;
+                };
+
+                exit;
+            };
         }
 
         public function __destruct(){
             $this->deInit();
         }
 
-        private function formListener(){
+        private function processForm(){
             $form_data                      = new stdClass();
             $form_data->old_password        = false;
             $form_data->new_password        = false;
@@ -61,26 +71,26 @@
                     if($data['password'] != md5(md5(trim($form_data->old_password)))){
                         $form_errors->old_password = 'Старый пароль не подходит';
                         $no_errors = false;
-                    };
+                    }else{
+                        if(!$form_data->new_password){
+                            $form_errors->new_password = 'Введите новый пароль';
+                            $no_errors = false;
+                        };
 
-                    if(!$form_data->new_password){
-                        $form_errors->new_password = 'Введите новый пароль';
-                        $no_errors = false;
-                    };
+                        if($form_data->new_password && strlen($form_data->new_password) < 5){
+                            $form_errors->new_password = 'Пароль не может быть короче 5 символов';
+                            $no_errors = false;
+                        };
 
-                    if($form_data->new_password && strlen($form_data->new_password) < 5){
-                        $form_errors->new_password = 'Пароль не может быть короче 5 символов';
-                        $no_errors = false;
-                    };
+                        if(!$form_data->new_password_again){
+                            $form_errors->new_password_again = 'Введите новый пароль еще раз';
+                            $no_errors = false;
+                        };
 
-                    if(!$form_data->new_password_again){
-                        $form_errors->new_password_again = 'Введите новый пароль еще раз';
-                        $no_errors = false;
-                    };
-
-                    if($form_data->new_password != $form_data->new_password_again){
-                        $form_errors->new_password_again = 'Новый пароль не совпадает';
-                        $no_errors = false;
+                        if($form_data->new_password != $form_data->new_password_again){
+                            $form_errors->new_password_again = 'Новый пароль не совпадает';
+                            $no_errors = false;
+                        };
                     };
                 }else{
                     $form_errors->old_password = 'Введите старый пароль';
@@ -92,7 +102,7 @@
                         UPDATE
                             `public_users`
                         SET
-                            `password` = '".$this->db->quote(md5(md5(trim($form_errors->new_password))))."'
+                            `password` = '".md5(md5(trim($form_data->new_password)))."'
                         WHERE
                             `id` = ".intval($this->auth->user['data']['id'])."
                     ");
@@ -108,13 +118,14 @@
                             'password' => $form_errors->new_password
                         )
                     );
-
-                    header('location: /control/user/password_change/');
                 };
-            };
 
-            $this->smarty->assign('form_data', $form_data);
-            $this->smarty->assign('form_errors', $form_errors);
+                return (object) array(
+                    'form_data'     => $form_data,
+                    'form_errors'   => $form_errors,
+                    'result'        => $no_errors
+                );
+            };
         }
     };
 ?>

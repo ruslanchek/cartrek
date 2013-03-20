@@ -1,11 +1,15 @@
 <div class="threequarter">
-    <form class="forms" action="/control/user/password_change/" method="POST">
+    <form id="password-change-form" class="forms" action="/control/user/password_change/" method="POST">
+        <div class="form_message">
+
+        </div>
+
         <div class="row">
-            <div class="twothird">
+            <div class="half">
                 <div class="form-item">
-                    <label for="old_password" class="bold">Старый пароль{if $form_errors->old_password} <span class="error">{$form_errors->old_password}</span>{/if}</label>
+                    <label for="old_password" class="bold">Старый пароль <span class="error"></span></label>
                     <input
-                            class="{if $form_errors->old_password}input-error {/if}text width-100"
+                            class="text width-100"
                             type="password"
                             name="old_password"
                             id="old_password"
@@ -17,9 +21,9 @@
                 <hr>
 
                 <div class="form-item">
-                    <label for="new_password" class="bold">Новый пароль{if $form_errors->new_password} <span class="error">{$form_errors->new_password}</span>{/if}</label>
+                    <label for="new_password" class="bold">Новый пароль <span class="error"></span></label>
                     <input
-                            class="{if $form_errors->new_password}input-error {/if}text width-100"
+                            class="text width-100"
                             type="password"
                             name="new_password"
                             id="new_password"
@@ -28,12 +32,12 @@
                 </div>
 
                 <div class="form-item">
-                    <label for="new_password_again" class="bold">Повторите новый пароль{if $form_errors->new_password_again} <span class="error">{$form_errors->new_password_again}</span>{/if}</label>
+                    <label for="new_password_again" class="bold">Повторите новый пароль <span class="error"></span></label>
                     <input
-                            class="{if $form_errors->new_password_again}input-error {/if}text width-100"
+                            class="text width-100"
                             type="password"
                             name="new_password_again"
-                            id="name"
+                            id="new_password_again"
                             value=""
                     />
                 </div>

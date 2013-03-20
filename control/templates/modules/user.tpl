@@ -12,6 +12,30 @@
                 </div>
 
                 <div class="form-item">
+                    <label for="name" class="bold">Имя <span class="error"></span></label>
+                    <input
+                            class="text width-100"
+                            type="text"
+                            name="name"
+                            id="name"
+                            value="{$core->auth->user.data.name|escape}"
+                    />
+                </div>
+
+
+
+                <div class="form-item">
+                    <label for="user_timezone" class="bold">Часовой пояс</label>
+                    <select class="core-ui-select" name="user_timezone" id="user_timezone">
+                    {foreach $core->utils->generateTimeZonesList() as $key => $val}
+                        <option value="{$key}" {if $key == $core->auth->user.data.user_timezone}selected{/if}>{$val}</option>
+                    {/foreach}
+                    </select>
+                </div>
+            </div>
+
+            <div class="half">
+                <div class="form-item">
                     <label for="email" class="bold">Электонная почта <span class="error"></span></label>
                     <input
                             class="text width-100"
@@ -23,28 +47,19 @@
                 </div>
 
                 <div class="form-item">
-                    <label for="name" class="bold">Имя <span class="error"></span></label>
+                    <label for="email" class="bold">Телефоны <span class="error"></span></label>
                     <input
                             class="text width-100"
-                            type="text"
-                            name="name"
-                            id="name"
-                            value="{$core->auth->user.data.name|escape}"
+                            type="email"
+                            name="email"
+                            id="email"
+                            value="{$core->auth->user.data.phones|escape}"
                     />
                 </div>
             </div>
-
-            <div class="half">
-                <div class="form-item">
-                    <label for="user_timezone" class="bold">Часовой пояс</label>
-                    <select class="core-ui-select" name="user_timezone" id="user_timezone">
-                    {foreach $core->utils->generateTimeZonesList() as $key => $val}
-                        <option value="{$key}" {if $key == $core->auth->user.data.user_timezone}selected{/if}>{$val}</option>
-                    {/foreach}
-                    </select>
-                </div>
-            </div>
         </div>
+
+        <br>
 
         <input type="submit" name="send" class="btn" value="Сохранить" />
     </form>
