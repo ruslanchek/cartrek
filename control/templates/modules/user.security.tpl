@@ -41,10 +41,18 @@
                             value=""
                     />
                 </div>
+
+                <input type="submit" name="send" class="btn" value="Сменить пароль" />
+            </div>
+
+            <div class="half">
+                <div class="form-item">
+                    <label class="bold">Социальные сети</label>
+                    <label><input type="checkbox" value="1" {if $core->auth->user.data.socials == 1}checked{/if} name="socials"> Позволить вход через соцсети</label>
+                </div>
             </div>
         </div>
 
-        <input type="submit" name="send" class="btn" value="Сохранить" />
     </form>
 </div>
 

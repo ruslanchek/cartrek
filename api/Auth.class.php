@@ -28,7 +28,8 @@ class Auth extends Core{
             'balance',
             'user_timezone',
             'phones',
-            'daily_pay_amount'
+            'daily_pay_amount',
+            'socials'
         );
 
         $this->password_length = 6;

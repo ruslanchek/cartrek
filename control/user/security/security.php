@@ -1,5 +1,5 @@
 <?php
-    Class PasswordChange extends Core {
+    Class Security extends Core {
         public function __construct(){
             parent::__construct();
 
@@ -11,7 +11,7 @@
 
             $this->init(array(
                 'name'  => 'user.password_change',
-                'title' => 'Изменение пароля учетной записи',
+                'title' => 'Пароль и безопасность',
                 'dir'   => '/control/user/password_change'
             ));
 

@@ -1,4 +1,4 @@
-var password_change = {
+var security = {
     processForm: function(){
         var form_data = {
             old_password       : $('#old_password').val(),
@@ -7,13 +7,13 @@ var password_change = {
         };
 
         this.loading_process = $.ajax({
-            url : '/control/user/password_change/?ajax&action=process_form',
+            url : '/control/user/security/?ajax&action=process_form',
             data : form_data,
             dataType : 'json',
             type : 'post',
             beforeSend: function(){
-                if(password_change.loading_process){
-                    password_change.loading_process.abort();
+                if(security.loading_process){
+                    security.loading_process.abort();
                     core.loading.unsetGlobalLoading();
                 };
 
@@ -22,8 +22,6 @@ var password_change = {
                 $('.form_message').hide().html('');
             },
             success: function(data){
-                console.log(data)
-
                 core.loading.unsetGlobalLoading();
 
                 if(data.result === true){
@@ -53,7 +51,7 @@ var password_change = {
     binds: function(){
         $('#password-change-form').on('submit', function(e){
             e.preventDefault();
-            password_change.processForm();
+            security.processForm();
         });
 
         $('.form_message .close').live('click', function(){
@@ -69,5 +67,5 @@ var password_change = {
 };
 
 $(function(){
-    password_change.init();
+    security.init();
 });
