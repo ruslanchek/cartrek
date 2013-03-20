@@ -1,38 +1,35 @@
 <div class="threequarter">
-    <form class="forms" action="/control/user/" method="POST">
+    <form id="user-form" class="forms" action="/control/user/" method="POST">
+        <div class="form_message">
+
+        </div>
+
         <div class="row">
             <div class="half">
                 <div class="form-item">
-                    <label for="login" class="bold">Логин{if $form_errors->login} <span class="error">{$form_errors->login}</span>{/if}</label>
-                    <input
-                            class="{if $form_errors->login}input-error {/if}text width-100"
-                            type="text"
-                            name="login"
-                            id="login"
-                            {*autofocus="autofocus"*}
-                            value="{$form_data->login}"
-                    />
+                    <label for="login" class="bold">Логин <span class="error"></span></label>
+                    <input class="text width-100" type="text" name="login" id="login" {*autofocus="autofocus"*} value="{$core->auth->user.data.login|escape}" />
                 </div>
 
                 <div class="form-item">
-                    <label for="email" class="bold">Электонная почта{if $form_errors->email} <span class="error">{$form_errors->email}</span>{/if}</label>
+                    <label for="email" class="bold">Электонная почта <span class="error"></span></label>
                     <input
-                            class="{if $form_errors->email}input-error {/if}text width-100"
+                            class="text width-100"
                             type="email"
                             name="email"
                             id="email"
-                            value="{$form_data->email}"
+                            value="{$core->auth->user.data.email|escape}"
                     />
                 </div>
 
                 <div class="form-item">
-                    <label for="name" class="bold">Имя{if $form_errors->name} <span class="error">{$form_errors->name}</span>{/if}</label>
+                    <label for="name" class="bold">Имя <span class="error"></span></label>
                     <input
-                            class="{if $form_errors->name}input-error {/if}text width-100"
+                            class="text width-100"
                             type="text"
                             name="name"
                             id="name"
-                            value="{$form_data->name}"
+                            value="{$core->auth->user.data.name|escape}"
                     />
                 </div>
             </div>

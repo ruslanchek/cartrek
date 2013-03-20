@@ -20,7 +20,17 @@
                 exit;
             };
 
-            $this->formListener();
+            //If user have any actve devices
+            if($this->ajax_mode && isset($_GET['action'])){
+                switch($_GET['action']){
+                    case 'process_form' : {
+                        header('Content-type: application/json');
+                        print json_encode($this->processForm());
+                    }; break;
+                };
+
+                exit;
+            };
         }
 
         public function __destruct(){
@@ -49,7 +59,7 @@
             };
         }
 
-        private function formListener(){
+        private function processForm(){
             $form_data                  = new stdClass();
             $form_data->login           = $this->auth->user['data']['login'];
             $form_data->email           = $this->auth->user['data']['email'];
@@ -106,13 +116,14 @@
                         (object) array('key' => 'name',              'val' => $form_data->name),
                         (object) array('key' => 'user_timezone',     'val' => $form_data->user_timezone)
                     ));
-
-                    header('location: /control/user/');
                 };
-            };
 
-            $this->smarty->assign('form_data', $form_data);
-            $this->smarty->assign('form_errors', $form_errors);
+                return (object) array(
+                    'form_data'     => $form_data,
+                    'form_errors'   => $form_errors,
+                    'result'        => $no_errors
+                );
+            };
         }
     };
 ?>
