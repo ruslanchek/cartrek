@@ -1338,5 +1338,11 @@ $(function(){
     });
 
     core.webkitNotificationsRequest();
+
+    $('.form_message .close').live('click', function(){
+        $('.form_message').slideUp(150, function(){
+            $('.form_message').html('');
+        });
+    });
 });
 

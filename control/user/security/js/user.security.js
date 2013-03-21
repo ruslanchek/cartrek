@@ -27,7 +27,7 @@ var security = {
                 core.loading.unsetGlobalLoading();
 
                 if(data.result === true){
-                    $('.form_message').html('<div id="ok_message">Пароль изменен, на ваш адрес выслан ваш новый пароль <a class="close" href="javascript:void(0)">X</a></div>');
+                    $('.form_message').html('<div id="ok_message">Пароль изменен, на ваш адрес выслан ваш новый пароль <a class="close" href="javascript:void(0)">×</a></div>');
                 }else{
                     if(data.form_errors.old_password){
                         $('#old_password').addClass('input-error').prev().find('.error').text(data.form_errors.old_password);
@@ -54,12 +54,6 @@ var security = {
         $('#password-change-form').on('submit', function(e){
             e.preventDefault();
             security.processForm();
-        });
-
-        $('.form_message .close').live('click', function(){
-            $('.form_message').slideUp(150, function(){
-                $('.form_message').html('');
-            });
         });
     },
 

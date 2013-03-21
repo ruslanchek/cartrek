@@ -28,7 +28,7 @@ var user = {
                 core.loading.unsetGlobalLoading();
 
                 if(data.result === true){
-                    $('.form_message').html('<div id="ok_message">Данные сохранены <a class="close" href="javascript:void(0)">X</a></div>');
+                    $('.form_message').html('<div id="ok_message">Данные сохранены <a class="close" href="javascript:void(0)">×</a></div>');
 
                     $('#login-display').html(data.form_data.login);
                     $('#login').val(data.form_data.login);
@@ -60,12 +60,6 @@ var user = {
         $('#user-form').on('submit', function(e){
             e.preventDefault();
             user.processForm();
-        });
-
-        $('.form_message .close').live('click', function(){
-            $('.form_message').slideUp(150, function(){
-                $('.form_message').html('');
-            });
         });
     },
 
