@@ -48,7 +48,7 @@
 
                 $this->template = 'map.tpl';
             }else{
-                $this->template = 'main.tpl';
+                $this->template = 'map-empty.tpl';
             };
         }
 

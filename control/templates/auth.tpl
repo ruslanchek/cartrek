@@ -8,47 +8,46 @@
                 $('.socials a').hover(function(){
                      $(this).find('img').stop().animate({
                          left: 28
-                     }, 50);
+                     }, 120);
 
                     $(this).find('.label').show();
 
                     if($(this).hasClass('part_l')){
                         $('.socials a.part_l').stop().animate({
                             width: '70%'
-                         }, 75);
+                         }, 160);
 
                         $('.socials a.part_r').stop().animate({
                           width: '30%'
-                       }, 75);
+                       }, 160);
                     };
 
                     if($(this).hasClass('part_r')){
                       $('.socials a.part_l').stop().animate({
                           width: '30%'
-                       }, 75);
+                       }, 160);
 
                       $('.socials a.part_r').stop().animate({
                         width: '70%'
-                     }, 75);
+                     }, 160);
                   };
 
                 }, function(){
                     $(this).find('img').stop().animate({
                         left: '50%'
-                    }, 50);
+                    }, 120);
 
                     $(this).find('.label').hide();
 
                     $('.socials a.part_l').stop().animate({
                        width: '50%'
-                    }, 75);
+                    }, 160);
 
                    $('.socials a.part_r').stop().animate({
                      width: '50%'
-                  }, 75);
+                  }, 160);
                 });
-            })
-
+            });
         </script>
     </head>
 
