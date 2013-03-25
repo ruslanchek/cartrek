@@ -1210,6 +1210,7 @@ core.events_api = {
 
                 notification.onclick = function () {
                     window.focus();
+                    document.location.href='/control/events/';
                     notification.close();
                 };
 
