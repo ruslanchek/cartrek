@@ -3,23 +3,24 @@
         <div class="half">
             <h2>Социальные сети</h2>
 
-            <table class="socials-table">
-                <tr>
-                    <td>{if !$core->auth->user.data.fb_id}<a href="/control/user/security/?action=bind_oauth&step=auth&provider=fb">{/if}<img src="/control/resources/img/login/facebook.png" alt="Facebook">{if !$core->auth->user.data.fb_id}</a>{/if}</td>
-                    <td>{if $core->auth->user.data.fb_id > 0}<span class="green">Аккаунт привязан</span>{else}<span class="gray">Аккаунт не привязан</span>{/if}</td>
-                    <td>{if !$core->auth->user.data.vk_id}<a href="/control/user/security/?action=bind_oauth&step=auth&provider=vk">{/if}<img src="/control/resources/img/login/vkontakte.png" alt="Vkontakte">{if !$core->auth->user.data.vk_id}</a>{/if}</td>
-                    <td>{if $core->auth->user.data.vk_id > 0}<span class="green">Аккаунт привязан</span>{else}<span class="gray">Аккаунт не привязан</span>{/if}</td>
-                </tr>
-            </table>
+            <div class="forms" style="min-height: 272px">
+                <table class="socials-table">
+                    <tr>
+                        <td>{if !$core->auth->user.data.fb_id}<a href="/control/user/security/?action=bind_oauth&step=auth&provider=fb">{/if}<img src="/control/resources/img/login/facebook.png" alt="Facebook">{if !$core->auth->user.data.fb_id}</a>{/if}</td>
+                        <td>{if $core->auth->user.data.fb_id > 0}<span class="green">Аккаунт привязан</span>{else}<span class="gray">Аккаунт не привязан</span>{/if}</td>
+                        <td>{if !$core->auth->user.data.vk_id}<a href="/control/user/security/?action=bind_oauth&step=auth&provider=vk">{/if}<img src="/control/resources/img/login/vkontakte.png" alt="Vkontakte">{if !$core->auth->user.data.vk_id}</a>{/if}</td>
+                        <td>{if $core->auth->user.data.vk_id > 0}<span class="green">Аккаунт привязан</span>{else}<span class="gray">Аккаунт не привязан</span>{/if}</td>
+                    </tr>
+                </table>
 
-            <hr>
+                <hr>
 
-            <h4>Привязка социальных сетей к вашему аккаунту</h4>
-            <p>
-                Чтобы привязать сциальную сеть, кликните на&nbsp;соответствующую иконку, подтвердите запрос сервиса в&nbsp;открывшимся окне.
-                После прохождения процедуры привязки, вы&nbsp;сможете авторизовываться на&nbsp;Картреке с&nbsp;помощью социальных сетей.
-            </p>
-
+                <h4>Привязка социальных сетей к вашему аккаунту</h4>
+                <p>
+                    Чтобы привязать сциальную сеть, кликните на&nbsp;соответствующую иконку, подтвердите запрос сервиса в&nbsp;открывшимся окне.
+                    После прохождения процедуры привязки, вы&nbsp;сможете авторизоваться на&nbsp;Картреке с&nbsp;помощью социальных сетей.
+                </p>
+            </div>
         </div>
 
         <div class="half">
@@ -64,7 +65,7 @@
                     />
                 </div>
 
-                <input type="submit" name="send" class="btn" value="Сменить пароль" />
+                <input type="submit" name="send" class="btn blue" value="Сменить пароль" />
             </form>
         </div>
     </div>

@@ -57,7 +57,7 @@
 
         <br>
 
-        <input type="submit" name="send" class="btn" value="Сохранить" />
+        <input type="submit" name="send" class="btn blue" value="Сохранить" />
     </form>
 </div>
 

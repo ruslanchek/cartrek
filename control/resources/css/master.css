@@ -738,6 +738,7 @@ a.badge:active {
     background: #eee;
     padding: 20px;
     border: 1px solid #ddd;
+    text-shadow: 0 1px 0 #fff;
 }
 
 .forms label {
@@ -2441,12 +2442,15 @@ footer a:active {
     background: linear-gradient(top,#89d0f2,#388ee5);
 }
 
-.hero-login form button.blue {
+.hero-login form .btn {
+    margin: 0 auto;
+}
+
+.btn.blue {
     width: 180px;
     padding: 10px 10px;
 
     display: block;
-    margin: 0 auto;
 
     background: #5cb6e7;
     background: -moz-linear-gradient(top,#5cb6e7,#317cd7);
@@ -2462,7 +2466,7 @@ footer a:active {
     font-size: 15px;
 }
 
-.hero-login form button.blue:hover {
+.btn.blue:hover {
     background: #89d0f2;
     background: -moz-linear-gradient(top,#89d0f2,#388ee5);
     background: -webkit-linear-gradient(top,#89d0f2,#388ee5);
