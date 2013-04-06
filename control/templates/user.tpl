@@ -10,8 +10,8 @@
                 {include file="common/top.tpl"}
 
                 <div class="container h1">
-                    <div class="container-padding">
-                        <h1>Настройка{if $core->module.title}<span> / {$core->module.title}</span>{/if}</h1>
+                    <div class="container-padding header-block">
+                        <h1>Настройка{if $core->module.title}<span> / {$core->module.title}</span>{/if}{$core->module.header_additional}</h1>
                     </div>
                 </div>
 

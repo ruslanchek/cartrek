@@ -1,9 +1,6 @@
 <div class="threequarter">
-    <div style="margin-bottom: 1.5em">
-        <a href="/control/user/fleet/add" class="btn blue">Добавить автомобиль</a>
-    </div>
 
-    {if $core->devices->devices_present}
+    {if $devices}
         <table class="width-100 bordered hovered">
             <thead class="thead-gray">
                 <tr>
@@ -14,9 +11,8 @@
                     <th width="1%">Режим</th>
                 </tr>
             </thead>
-
             <tbody>
-                {foreach $core->devices->getUserDevices(true) as $item}
+                {foreach $devices as $item}
                 <tr{if !$item.active} class="unactive_row"{/if}>
                     <td><a href="/control/fleet/{$item.id}"><strong>{$item.name}</strong></a></td>
                     <td>{$item.make} {$item.model}</td>

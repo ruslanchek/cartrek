@@ -1,6 +1,4 @@
 <div class="threequarter">
-    <a href="#" class="btn btn-success add_fleet"><i class="icon-plus icon-white"></i> Добавить группу</a>
-
     {$fleets = $core->devices->getFleetsList()}
 
     {if $fleets}

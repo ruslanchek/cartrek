@@ -31,6 +31,10 @@
                 };
 
                 exit;
+            }else{
+                $this->createAdditionalButton('Добавить автомобиль', '/control/user/fleet/add');
+
+                $this->smarty->assign('devices', $this->devices->getUserDevices(true));
             };
         }
 
@@ -39,7 +43,7 @@
         }
 
         private function toggleDevice($id, $activity){
-            $activity = ($activity == true) ? 1 : 0;
+            $activity = ($activity === '1') ? '1' : '0';
 
             $this->devices->updateDeviceData($id, array((object) array('key' => 'active', 'value' => $activity)));
         }

@@ -1,0 +1,1 @@
+<a href="{$additional_button->href}" class="btn">{$additional_button->name}</a>

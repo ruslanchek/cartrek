@@ -5,7 +5,7 @@ var fleet = {
             data : {
                 action      : 'toggle_device',
                 id          : id,
-                activity    : checked
+                activity    : (checked === true) ? '1' : '0'
             },
             dataType : 'json',
             type : 'get',

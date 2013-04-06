@@ -43,8 +43,8 @@
             if(is_array($data) && !empty($data) && count($data) > 0){
                 $set = "";
 
-                foreach ($data as $item){
-                    $set .= "`".$item->key."` = '".$this->db->query($item->value)."',";
+                foreach($data as $item){
+                    $set .= "`".$item->key."` = '".$this->db->quote($item->value)."',";
                 };
 
                 $set = substr($set, 0, strlen($set) -1);

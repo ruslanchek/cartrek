@@ -8,7 +8,8 @@ Class Core{
     public
         $config,
         $module = array(
-            'form' => false
+            'form' => false, // TODO: Нужен ли этот индекс? Вроде больше нигде не используется
+            'header_additional' => false
         ),
         $main_menu = array(
             array('name' => 'settings'  , 'title' => 'Настройка'),
@@ -96,7 +97,6 @@ Class Core{
         $this->db->mySqlDisconnect();
     }
 
-
     //Отправка переменных в шаблон и отрисовка страницы
     private function renderPage(){
         //Если не включен режим аякса, отрисовываем страницу с помощью Смарти
@@ -106,10 +106,20 @@ Class Core{
         };
     }
 
-    function setUriData(){
+    protected function setUriData(){
         $this->uri = mb_strtolower($_SERVER['REQUEST_URI'], "UTF-8");
         $this->uri = parse_url(preg_replace('/\/+/', "/", $this->uri, PHP_URL_PATH));
         $this->uri = preg_replace('/\/+/', "/", $this->uri['path'].'/');
         $this->uri_chain = explode('/', trim($this->uri, '/'));
+    }
+
+    public function createAdditionalButton($name, $href){
+        $additional_button_data = new stdClass();
+
+        $additional_button_data->name = $name;
+        $additional_button_data->href = $href;
+
+        $this->smarty->assign('additional_button', $additional_button_data);
+        $this->module['header_additional'] = $this->smarty->fetch('common/additional_button.tpl');
     }
 }

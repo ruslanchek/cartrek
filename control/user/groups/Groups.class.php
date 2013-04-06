@@ -24,6 +24,8 @@
                 };
 
                 exit;
+            }else{
+                $this->createAdditionalButton('Добавить группу', '/control/user/fleet/add');
             };
 
             if(isset($_GET['action'])){
