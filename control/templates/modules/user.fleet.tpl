@@ -1,5 +1,7 @@
 <div class="threequarter">
-    <a href="/control/user/fleet/add" class="btn btn-success"><i class="icon-plus icon-white"></i> Добавить автомобиль</a>
+    <div style="margin-bottom: 1.5em">
+        <a href="/control/user/fleet/add" class="btn blue">Добавить автомобиль</a>
+    </div>
 
     {if $core->devices->devices_present}
         <table class="width-100 bordered hovered">
@@ -22,14 +24,14 @@
                     <td>{$item.fleet_name}</td>
                     <td>
                         <label for="item_active_{$item.id}"></label>
-                        <input class="tzCB" type="checkbox" {if $item.active}checked="checked"{/if} id="item_active_{$item.id}" name="item_active" />
+                        <input class="tzCB activity-toggler" type="checkbox" {if $item.active}checked="checked"{/if} data-id="{$item.id}" name="item_active" />
                     </td>
                 </tr>
                 {/foreach}
             </tbody>
         </table>
 
-        <script>core.fleet.init();</script>
+        <script>fleet.init();</script>
     {else}
         <div class="alert alert-block">
             <h4 class="alert-heading">Внимание!</h4>

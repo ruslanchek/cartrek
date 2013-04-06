@@ -39,6 +39,31 @@
             };
         }
 
+        public function updateDeviceData($id, $data){
+            if(is_array($data) && !empty($data) && count($data) > 0){
+                $set = "";
+
+                foreach ($data as $item){
+                    $set .= "`".$item->key."` = '".$this->db->query($item->value)."',";
+                };
+
+                $set = substr($set, 0, strlen($set) -1);
+
+                $query = "
+                    UPDATE
+                        `devices`
+                    SET
+                        ".$set."
+                    WHERE
+                        `user_id`   = ".intval($this->auth->user['data']['id'])." &&
+                        `id`        = ".intval($id);
+
+                print $query;
+
+                $this->db->query($query);
+            };
+        }
+
         public function getMinDate(){
             $query = "
                 SELECT

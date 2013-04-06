@@ -2105,6 +2105,8 @@ var map = {
     init: function(){
         core.ticker.delay = 1000;
 
+        $('input.tzCB').tzCheckbox();
+
         this.setDateByHash();
         this.readOptionsFromCookies();
         this.drawButtons();

@@ -2,7 +2,10 @@
 
 var core = {
     options: {
-        cookie_options: { path: '/', expires: 365 }
+        cookie_options: {
+            path: '/',
+            expires: 365
+        }
     }
 };
 
@@ -1227,7 +1230,7 @@ core.events_api = {
             message : data.message,
             duration: this.events_meow_duration
         });
-
+w
         this.webkitNotification(data.message);
     },
 
@@ -1332,7 +1335,7 @@ $(function(){
 
     //core.effects.breathe($('#global_events_counter'));
 
-    $('input.tzCB').tzCheckbox();
+    //$('input.tzCB').tzCheckbox();
 
     $('.core-ui-select').coreUISelect({
         jScrollPane: true

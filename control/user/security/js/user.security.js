@@ -27,7 +27,9 @@ var security = {
                 core.loading.unsetGlobalLoading();
 
                 if(data.result === true){
-                    $('.form_message').html('<div id="ok_message">Пароль изменен, на ваш адрес выслан ваш новый пароль <a class="close" href="javascript:void(0)">×</a></div>');
+                    $('.form_message').html('<div id="ok_message">Пароль изменен, на ваш адрес выслан новый пароль <a class="close" href="javascript:void(0)">×</a></div>');
+
+                    $('#old_password, #new_password, #new_password_again').val('');
                 }else{
                     if(data.form_errors.old_password){
                         $('#old_password').addClass('input-error').prev().find('.error').text(data.form_errors.old_password);
