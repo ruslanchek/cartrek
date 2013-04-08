@@ -1335,8 +1335,6 @@ $(function(){
 
     //core.effects.breathe($('#global_events_counter'));
 
-    //$('input.tzCB').tzCheckbox();
-
     $('.core-ui-select').coreUISelect({
         jScrollPane: true
     });

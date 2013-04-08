@@ -69,7 +69,6 @@ p {
 }
 
 .left-nav li.active {
-    border-color: transparent;
 }
 
 .left-nav li.active a {
@@ -550,6 +549,15 @@ footer {
 
 /* =Misc
 -----------------------------------------------------------------------------*/
+table td,
+table th {
+    padding: 8px 10px !important;
+}
+
+table.hovered {
+    border: 1px solid #eee;
+}
+
 .pause-button-text {
     font-size: 1.7em;
 }

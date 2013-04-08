@@ -2,7 +2,7 @@
     {$fleets = $core->devices->getFleetsList()}
 
     {if $fleets}
-    <table class="width-100 bordered hovered">
+    <table class="width-100 hovered">
         <thead class="thead-gray">
             <tr>
                 <th width="98%">Название</th>
@@ -15,7 +15,7 @@
             {foreach $fleets as $item}
             <tr>
                 <td>{$item.name}</td>
-                <td class="text-centered">{$item.cars}</td>
+                <td>{$item.cars}</td>
                 <td>
                     <a href="#" class="red" data-id="{$item.id}" data-name="{$item.name|escape}">Удалить</a>
                 </td>

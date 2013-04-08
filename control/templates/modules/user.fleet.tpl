@@ -1,7 +1,7 @@
 <div class="threequarter">
 
     {if $devices}
-        <table class="width-100 bordered hovered">
+        <table class="width-100 hovered">
             <thead class="thead-gray">
                 <tr>
                     <th width="44%">Название</th>
@@ -20,7 +20,7 @@
                     <td>{$item.fleet_name}</td>
                     <td>
                         <label for="item_active_{$item.id}"></label>
-                        <input class="tzCB activity-toggler" type="checkbox" {if $item.active}checked="checked"{/if} data-id="{$item.id}" name="item_active" />
+                        <input class="activity-toggler slickswitch" type="checkbox" {if $item.active}checked="checked"{/if} data-id="{$item.id}" name="item_active" />
                     </td>
                 </tr>
                 {/foreach}

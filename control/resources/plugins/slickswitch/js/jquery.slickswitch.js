@@ -58,6 +58,7 @@
 
                 self.bind('ss-update', function (o, disableAnimation) {
                     div.attr('title', self.attr('title'));
+                    div.data(self.data());
 
                     if (self.is(':checked')) {
                         $('span:eq(0)', div).show(settings.useAnimation && !disableAnimation ? 100 : 0);
@@ -70,6 +71,7 @@
 
                 self.after(
 					div.attr('class', self.attr('class'))
+                        .data(self.data())
 						.append($('<span>').addClass(settings.cssPrefix + 'on'))
 						.append($('<span>').addClass(settings.cssPrefix + 'slider'))
 						.click(function () {

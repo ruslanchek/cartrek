@@ -145,10 +145,6 @@
     </div>
 </div>
 
-
-<link rel="stylesheet" href="/control/resources/plugins/slickswitch/css/slickswitch.css" type="text/css" />
-<script src="/control/resources/plugins/slickswitch/js/jquery.slickswitch.js" type="text/javascript"></script>
-
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 <!--[if lte IE 8]>
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.ie.css" />
