@@ -1,4 +1,4 @@
-core.fleet_add = {
+var fleet_add = {
     makes: [
         'Любая марка',
         'AC',
@@ -136,10 +136,57 @@ core.fleet_add = {
         'Эксклюзив'
     ],
 
-    init: function(){
-        $('#make').typeahead({
-            source: this.makes
+    car_code_form: function(){
+        $('#car-code').on('keyup', function(e){
+            var str = $(this).val();
+
+            str = str.replace(' ', '');
+            str = str.toUpperCase();
+
+            $(this).val(core.utilities.numberFormat(str));
         });
+
+        $('#car-code-form').on('submit', function(e){
+            e.preventDefault();
+
+            fleet_add.loading_process = $.ajax({
+                url : '/control/user/fleet/add?ajax&action=check_device_by_sn',
+                data : {
+                    code: $('#car-code').val()
+                },
+                dataType : 'json',
+                type : 'get',
+                beforeSend: function(){
+                    if(fleet_add.loading_process){
+                        fleet_add.loading_process.abort();
+                        core.loading.unsetGlobalLoading();
+                    };
+
+                    core.loading.setGlobalLoading();
+
+                    $('#car-code').removeClass('error-wrap');
+                },
+                success: function(data){
+                    core.loading.unsetGlobalLoading();
+
+                    if(data.result === true){
+
+                    }else{
+                        $('.form_message').html(data.form_errors.code);
+                        $('#car-code').addClass('error-wrap');
+                    };
+                },
+                error: function(){
+                    core.loading.unsetGlobalLoading();
+                }
+            });
+        });
+    },
+
+    init: function(){
+        /*$('#make').typeahead({
+            source: this.makes
+        });*/
 
         $('#g_id').live('keyup', function(){
             $(this).val(core.utilities.filterGidStr($(this).val()));
@@ -150,7 +197,3 @@ core.fleet_add = {
         });
     }
 };
-
-$(function(){
-    core.fleet_add.init();
-});

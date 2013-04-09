@@ -10,45 +10,47 @@ var core = {
 };
 
 core.forms = {
-    readDataFormSettingsTable: function(id){
+    readDataFormSettingsTable: function (id) {
         var result = {};
 
-        $('.settings_table#'+id).find('input').each(function(){
+        $('.settings_table#' + id).find('input').each(function () {
             result[$(this).attr('id')] = $(this).val();
         });
 
         return result;
     },
 
-    drawSettingsTable: function(id, options){
+    drawSettingsTable: function (id, options) {
         var options_html = new String(),
             on, off;
 
-        for(var i = 0, l = options.length; i < l; i++){
-            if(options[i].value >= 1){
+        for (var i = 0, l = options.length; i < l; i++) {
+            if (options[i].value >= 1) {
                 on = 'active';
                 off = '';
-            }else{
+            } else {
                 on = '';
                 off = 'active';
-            };
+            }
+            ;
 
             options_html += '<tr>' +
-                                '<th>'+options[i].label+'</th>' +
-                                '<td>' +
-                                    '<div class="btn-group" data-toggle="buttons-radio">' +
-                                        '<button data-value="1" class="btn '+on+'">Вкл</button>' +
-                                        '<button data-value="0" class="btn '+off+'">Выкл</button>' +
-                                    '</div>' +
-                                    '<input type="hidden" id="'+options[i].id+'" value="'+options[i].value+'" />' +
-                                '</td>' +
-                            '</tr>';
+                '<th>' + options[i].label + '</th>' +
+                '<td>' +
+                '<div class="btn-group" data-toggle="buttons-radio">' +
+                '<button data-value="1" class="btn ' + on + '">Вкл</button>' +
+                '<button data-value="0" class="btn ' + off + '">Выкл</button>' +
+                '</div>' +
+                '<input type="hidden" id="' + options[i].id + '" value="' + options[i].value + '" />' +
+                '</td>' +
+                '</tr>';
 
-        };
+        }
+        ;
 
-        var $html = $('<table id="'+id+'" class="settings_table">'+options_html+'</table>');
+        var $html = $('<table id="' + id + '" class="settings_table">' + options_html + '</table>');
 
-        $html.find('.btn').on('click', function(){
+        $html.find('.btn').on('click', function () {
             $(this).parent().next('input').val($(this).data('value'));
         });
 
@@ -59,59 +61,60 @@ core.forms = {
 core.modal = {
     modal: null,
 
-    hide: function(){
+    hide: function () {
         this.modal.remove();
     },
 
-    unSetLoading: function(){
+    unSetLoading: function () {
         this.modal.find('.save_modal').button('reset');
     },
 
-    setLoading: function(){
+    setLoading: function () {
         this.modal.find('.save_modal').button('loading');
     },
 
-    setMessage: function(data){
+    setMessage: function (data) {
         $('.modal_message').html(data.message).removeClass('error').removeClass('ok');
 
-        if(data.status){
+        if (data.status) {
             $('.modal_message').addClass('ok');
-        }else{
+        } else {
             $('.modal_message').addClass('error');
-        };
+        }
+        ;
 
         $('.modal_message').slideDown(70);
     },
 
-    unSetMessage: function(){
-        $('.modal_message').slideUp(70, function(){
+    unSetMessage: function () {
+        $('.modal_message').slideUp(70, function () {
             $('.modal_message').removeClass('error').removeClass('ok').html('');
         });
     },
 
-    show: function(options){
+    show: function (options) {
         var $modal_html = $('<div class="modal_overlay"></div>' +
-                            '<div class="modal">' +
-                                '<div class="modal-header">' +
-                                    '<a class="close" data-dismiss="modal">×</a>' +
-                                    '<h3>' + options.header + '</h3>' +
-                                '</div>' +
-                                '<div class="modal_message error"></div>' +
-                                '<div class="modal-body">' + options.body + '</div>' +
-                                '<div class="modal-footer">' +
-                                    '<a href="javascript:void(0)" class="btn btn-primary save_modal pull-left" autocomplete="off">Сохранить</a>' +
-                                    '<a href="javascript:void(0)" class="btn close_modal pull-left">Закрыть</a>' +
-                                '</div>' +
-                            '</div>');
+            '<div class="modal">' +
+            '<div class="modal-header">' +
+            '<a class="close" data-dismiss="modal">×</a>' +
+            '<h3>' + options.header + '</h3>' +
+            '</div>' +
+            '<div class="modal_message error"></div>' +
+            '<div class="modal-body">' + options.body + '</div>' +
+            '<div class="modal-footer">' +
+            '<a href="javascript:void(0)" class="btn btn-primary save_modal pull-left" autocomplete="off">Сохранить</a>' +
+            '<a href="javascript:void(0)" class="btn close_modal pull-left">Закрыть</a>' +
+            '</div>' +
+            '</div>');
 
         $modal_html.hide();
         $modal_html.find('.modal-body').html(options.content);
-        $modal_html.find('a.close, a.close_modal').on('click', function(){
+        $modal_html.find('a.close, a.close_modal').on('click', function () {
             core.modal.hide();
         });
 
         $modal_html.find('a.close, a.save_modal')
-            .on('click', function(){
+            .on('click', function () {
                 options.action();
             })
             .data('loading-text', 'Сохранение...');
@@ -120,249 +123,266 @@ core.modal = {
         $modal_html.fadeIn(100);
         this.modal = $modal_html;
 
-        if(options.width){
+        if (options.width) {
             var w, m;
 
-            if(typeof options.width == 'number'){
+            if (typeof options.width == 'number') {
                 w = options.width;
-                m = -options.width/2;
-            }else if(typeof options.width != 'number' && options.width > 0){
+                m = -options.width / 2;
+            } else if (typeof options.width != 'number' && options.width > 0) {
                 w = options.width;
-                m = -options.width.substring(0, options.width.length - 1) / 2+'%';
-            }else{
+                m = -options.width.substring(0, options.width.length - 1) / 2 + '%';
+            } else {
                 w = 400;
                 m = -200;
-            };
+            }
+            ;
 
             $('.modal').css({
                 width: w,
                 marginLeft: m
             });
-        };
+        }
+        ;
 
-        $('.modal_message').off('click').on('click', function(){
+        $('.modal_message').off('click').on('click', function () {
             core.modal.unSetMessage();
         });
 
-        $('body').off('keyup.modal').on('keyup.modal', function(e){
-            if(e.keyCode == 13){
+        $('body').off('keyup.modal').on('keyup.modal', function (e) {
+            if (e.keyCode == 13) {
                 options.action();
-            };
+            }
+            ;
 
-            if(e.keyCode == 27){
+            if (e.keyCode == 27) {
                 core.modal.hide();
-            };
+            }
+            ;
         });
     }
 };
 
 core.notify = {
-    showNotify: function(content){
+    showNotify: function (content) {
         $('.notify').remove();
-        var html = '<div class="notify">'+content+'</div>';
+        var html = '<div class="notify">' + content + '</div>';
         $('body').prepend(html);
 
         var $notify = $('.notify');
         $notify.css({
-            marginTop: -$notify.height()/2
+            marginTop: -$notify.height() / 2
         });
     },
 
-    hideNotify: function(){
+    hideNotify: function () {
         var $notify = $('.notify');
-        $notify.fadeOut(100, function(){
+        $notify.fadeOut(100, function () {
             $notify.remove();
         });
     }
 };
 
 core.loading = {
-    showTopIndicator: function(){
+    showTopIndicator: function () {
         var $li = $('#loading_indicator');
 
-        if($li.is(':visible')){
+        if ($li.is(':visible')) {
             $li.hide();
             $li.show();
-        }else{
+        } else {
             $li.show();
-        };
+        }
     },
 
-    hideTopIndicator: function(){
+    hideTopIndicator: function () {
         var $li = $('#loading_indicator');
 
-        if($li.is(':visible')){
+        if ($li.is(':visible')) {
             $li.hide();
-        };
+        }
     },
 
-    unsetLoading: function(name, micro){
-        if($('.notify .loading_area').html() != ''){
+    unsetLoading: function (name, micro) {
+        if ($('.notify .loading_area').html() != '') {
             core.notify.hideNotify();
-        };
+        }
 
-        var $loading = $('i.loading[name="'+name+'"]');
+        var $loading = $('i.loading[name="' + name + '"]');
 
-        if(!micro){
+        if (!micro) {
             this.stopAnimation(name);
-        };
+        }
 
         this.stopAnimation(name);
 
         $loading.remove();
     },
 
-    animationIteration: function(name){
-        var $loading = $('i.loading[name="'+name+'"]'),
+    animationIteration: function (name) {
+        var $loading = $('i.loading[name="' + name + '"]'),
             pos = $loading.data('pos');
 
-        if((pos + 42) < (42*12)){
+        if ((pos + 42) < (42 * 12)) {
             pos += 42;
-        }else{
+        } else {
             pos = 0;
-        };
+        }
 
         $loading.data('pos', pos).css({
             backgroundPosition: '0 -' + pos + 'px'
         });
     },
 
-    stopAnimation: function(name){
-        var $loading = $('i.loading[name="'+name+'"]');
+    stopAnimation: function (name) {
+        var $loading = $('i.loading[name="' + name + '"]');
 
         $loading.data('pos', 0);
 
-        if($loading.data('animation_interval') != null){
+        if ($loading.data('animation_interval') != null) {
             clearInterval($loading.data('animation_interval'));
-        };
+        }
+        ;
     },
 
-    startAnimation: function(name){
-        var $loading = $('i.loading[name="'+name+'"]');
+    startAnimation: function (name) {
+        var $loading = $('i.loading[name="' + name + '"]');
         this.stopAnimation(name);
 
-        if(!$loading.data('animation_interval')){
+        if (!$loading.data('animation_interval')) {
             $loading.data(
                 'animation_interval',
-                setInterval(function(){core.loading.animationIteration(name)}, 70)
+                setInterval(function () {
+                    core.loading.animationIteration(name)
+                }, 70)
             );
-        };
+        }
     },
 
-    setLoadingToElementPos: function(name, obj, top, left, zIndex, micro){
+    setLoadingToElementPos: function (name, obj, top, left, zIndex, micro) {
         var micro_class = new String();
 
-        if(micro){
+        if (micro) {
             micro_class += ' micro'
-        };
+        }
+        ;
 
-        if(!zIndex){
+        if (!zIndex) {
             zIndex = 100;
-        };
+        }
+        ;
 
         var obj_offset = obj.offset();
 
-        var $loading = $('<i name="'+name+'" class="loading'+micro_class+'"></i>').css({
-            top     : obj_offset.top + $loading.height()/2 + top,
-            left    : obj_offset.left + $loading.width()/2 + left,
-            zIndex  : zIndex
+        var $loading = $('<i name="' + name + '" class="loading' + micro_class + '"></i>').css({
+            top: obj_offset.top + $loading.height() / 2 + top,
+            left: obj_offset.left + $loading.width() / 2 + left,
+            zIndex: zIndex
         });
 
         $('body').prepend($loading);
 
-        if(!micro){
+        if (!micro) {
             this.startAnimation(name);
-        };
+        }
+        ;
 
         return $loading;
     },
 
-    setLoadingToElementCenter: function(name, obj, zIndex, micro){
+    setLoadingToElementCenter: function (name, obj, zIndex, micro) {
         var micro_class = new String();
 
-        if(micro){
+        if (micro) {
             micro_class += ' micro'
-        };
+        }
+        ;
 
         var obj_offset = obj.offset();
 
-        if(!zIndex){
+        if (!zIndex) {
             zIndex = 100;
-        };
+        }
+        ;
 
-        var $loading = $('<i name="'+name+'" class="loading'+micro_class+'"></i>').css({
-            top     : obj_offset.top + obj.height()/2,
-            left    : obj_offset.left + obj.width()/2,
-            zIndex  : zIndex
+        var $loading = $('<i name="' + name + '" class="loading' + micro_class + '"></i>').css({
+            top: obj_offset.top + obj.height() / 2,
+            left: obj_offset.left + obj.width() / 2,
+            zIndex: zIndex
         });
 
         $('body').prepend($loading);
 
-        $(window).unbind('resize').bind('resize', function(){
+        $(window).unbind('resize').bind('resize', function () {
             var obj_offset = obj.offset();
             $loading.css({
-                top     : obj_offset.top + obj.height()/2,
-                left    : obj_offset.left + obj.width()/2
+                top: obj_offset.top + obj.height() / 2,
+                left: obj_offset.left + obj.width() / 2
             });
         });
 
-        if(!micro){
+        if (!micro) {
             this.startAnimation(name);
-        };
+        }
+        ;
 
         return $loading;
     },
 
-    setLoadingToElementByAppend: function(name, obj, micro){
+    setLoadingToElementByAppend: function (name, obj, micro) {
         var micro_class = new String();
 
-        if(micro){
+        if (micro) {
             micro_class += ' micro'
-        };
+        }
+        ;
 
-        var $loading = $('<i name="'+name+'" class="loading'+micro_class+'"></i>').css({
-            margin  : '0'
+        var $loading = $('<i name="' + name + '" class="loading' + micro_class + '"></i>').css({
+            margin: '0'
         });
 
         obj.append($loading);
 
-        if(!micro){
+        if (!micro) {
             this.startAnimation(name);
-        };
+        }
+        ;
 
         return $loading;
     },
 
-    setLoadingWithNotify: function(name, micro, text){
-        core.notify.showNotify('<h2>'+text+'</h2><div class="loading_area"></div>');
+    setLoadingWithNotify: function (name, micro, text) {
+        core.notify.showNotify('<h2>' + text + '</h2><div class="loading_area"></div>');
         this.setLoadingToElementByAppend(name, $('.notify .loading_area'), micro);
     },
 
-    unsetGlobalLoading: function(){
-        setTimeout(function(){
+    unsetGlobalLoading: function () {
+        setTimeout(function () {
             $('div.global-loading-bar').animate({
                 height: 0,
                 opacity: 0
-            }, 200, 'easeOutQuad', function(){
+            }, 200, 'easeOutQuad', function () {
                 core.loading.c = 0;
 
-                if(core.loading.global_loadin_interval){
+                if (core.loading.global_loadin_interval) {
                     clearInterval(core.loading.global_loadin_interval);
-                };
+                }
+                ;
             });
         }, 650);
     },
 
-    setGlobalLoading: function(){
+    setGlobalLoading: function () {
         this.c = 0;
 
-        if(this.global_loadin_interval){
+        if (this.global_loadin_interval) {
             clearInterval(this.global_loadin_interval);
-        };
+        }
+        ;
 
-        this.global_loadin_interval = setInterval(function(){
+        this.global_loadin_interval = setInterval(function () {
             core.loading.c += 2;
-            $('div.global-loading-bar').css("backgroundPosition", "0 " + core.loading.c+"px");
+            $('div.global-loading-bar').css("backgroundPosition", "0 " + core.loading.c + "px");
         }, 8);
 
         $('div.global-loading-bar').animate({
@@ -373,31 +393,96 @@ core.loading = {
 };
 
 core.utilities = {
-    pad: function(number, length) {
-        var str = '' + number;
+    convertToQWERTY: function (str, reverse) {
+        var out = '',
+            i,
+            k,
+            ok = true,
+            rus = new Array('й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', 'ё', 'Ё'),
+            eng = new Array('q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', "'", 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ':', '"', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '<', '>', '?', '`', '~');
 
-        while (str.length < length) {
-            str = '0' + str;
-        };
+        for (i = 0; i < str.length; i++) {
+            ok = true;
+
+            for (k = 0; k < rus.length; k++) {
+                if (str.charAt(i) == rus[k]) {
+                    ok = false;
+                    out = out + eng[k];
+                    break;
+                }
+                else if (str.charAt(i) == eng[k] && reverse === true) {
+                    ok = false;
+                    out = out + rus[k];
+                    break;
+                }
+            }
+
+            if (ok == true) out = out + str.charAt(i);
+        }
+
+        return out;
+    },
+
+    numberFormat: function (str) {
+        return str;
+    },
+
+    checkString: function (type, str, method) {
+        var pattern;
+
+        switch (type) {
+            case 'number' :
+            {
+                pattern = new RegExp("[^0-9]");
+            }
+                break;
+
+            case 'combined' :
+            {
+                pattern = new RegExp("[^0-9]|[A-Z]");
+            }
+                break;
+        }
+
+        if (method == 'replace') {
+            str = str.replace(pattern, '');
+        } else {
+            str = pattern.test(str);
+        }
 
         return str;
     },
 
-    plural: function(i, str1, str3, str5){
-        function plural (a){
-            if ( a % 10 == 1 && a % 100 != 11 ) return 0
-            else if ( a % 10 >= 2 && a % 10 <= 4 && ( a % 100 < 10 || a % 100 >= 20)) return 1
+    pad: function (number, length) {
+        var str = '' + number;
+
+        while (str.length < length) {
+            str = '0' + str;
+        }
+        ;
+
+        return str;
+    },
+
+    plural: function (i, str1, str3, str5) {
+        function plural(a) {
+            if (a % 10 == 1 && a % 100 != 11) return 0
+            else if (a % 10 >= 2 && a % 10 <= 4 && ( a % 100 < 10 || a % 100 >= 20)) return 1
             else return 2;
         };
 
         switch (plural(i)) {
-            case 0: return str1;
-            case 1: return str3;
-            default: return str5;
-        };
+            case 0:
+                return str1;
+            case 1:
+                return str3;
+            default:
+                return str5;
+        }
+        ;
     },
 
-    explode: function(delimiter, string, limit) {
+    explode: function (delimiter, string, limit) {
         var emptyArray = {
             0: ''
         };
@@ -422,6 +507,7 @@ core.utilities = {
         if (!limit) {
             return string.toString().split(delimiter.toString());
         }
+
         // support for limit argument
         var splitted = string.toString().split(delimiter.toString());
         var partA = splitted.splice(0, limit - 1);
@@ -430,152 +516,176 @@ core.utilities = {
         return partA;
     },
 
-    jsonNullToEmptyString: function(str){
-        if(str === null){
+    jsonNullToEmptyString: function (str) {
+        if (str === null) {
             return '';
-        }else{
+        } else {
             return str;
-        };
+        }
+        ;
     },
 
-    leadingZero: function(value, length){
-        var s = value+"";
+    // TODO: Попробовать заменить везде core.utilities.pad() вместо этого метода (или наоборот лучше даже)
+    leadingZero: function (value, length) {
+        var s = value + "";
         while (s.length < length) s = "0" + s;
         return s;
     },
 
-    parseHDOP: function(hdop){
+    parseHDOP: function (hdop) {
         hdop = parseFloat(hdop);
 
-        if(hdop > 0){
-            if(hdop <= 1 && hdop > 0){
+        if (hdop > 0) {
+            if (hdop <= 1 && hdop > 0) {
                 return {percentage: 100, level_name: 'идеально', level_class: 'info'};
-            };
+            }
+            ;
 
-            if(hdop > 1 && hdop <= 3){
+            if (hdop > 1 && hdop <= 3) {
                 return {percentage: 83.3, level_name: 'отлично', level_class: 'success'};
-            };
+            }
+            ;
 
-            if(hdop > 3 && hdop <= 6){
+            if (hdop > 3 && hdop <= 6) {
                 return {percentage: 66.64, level_name: 'хорошо', level_class: 'success'};
-            };
+            }
+            ;
 
-            if(hdop > 6 && hdop <= 8){
+            if (hdop > 6 && hdop <= 8) {
                 return {percentage: 49.98, level_name: 'средне', level_class: 'warning'};
-            };
+            }
+            ;
 
-            if(hdop > 8 && hdop < 20){
+            if (hdop > 8 && hdop < 20) {
                 return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'warning'};
-            };
+            }
+            ;
 
-            if(hdop >= 20){
+            if (hdop >= 20) {
                 return {percentage: 16.66, level_name: 'плохо', level_class: 'danger'};
-            };
-        }else{
+            }
+            ;
+        } else {
             return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger'};
-        };
+        }
+        ;
     },
 
-    parseCSQ: function(csq){
-        if(csq){
+    parseCSQ: function (csq) {
+        if (csq) {
             csq = parseInt(csq);
 
             var dbm = (-113) + (csq * 2);
 
-            if(dbm >= -77){
+            if (dbm >= -77) {
                 return {percentage: 100, level_name: 'идеально', level_class: 'info', dbm: dbm};
-            };
+            }
+            ;
 
-            if(dbm >= -86 && dbm <= -78){
+            if (dbm >= -86 && dbm <= -78) {
                 return {percentage: 80, level_name: 'отлично', level_class: 'success', dbm: dbm};
-            };
+            }
+            ;
 
-            if(dbm >= -92 && dbm <= -87){
+            if (dbm >= -92 && dbm <= -87) {
                 return {percentage: 60, level_name: 'хорошо', level_class: 'success', dbm: dbm};
-            };
+            }
+            ;
 
-            if(dbm >= -101 && dbm <= -93){
+            if (dbm >= -101 && dbm <= -93) {
                 return {percentage: 40, level_name: 'средне', level_class: 'warning', dbm: dbm};
-            };
+            }
+            ;
 
-            if(dbm <= -102 && dbm > -113){
+            if (dbm <= -102 && dbm > -113) {
                 return {percentage: 20, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
-            };
+            }
+            ;
 
-            if(dbm <= -113){
+            if (dbm <= -113) {
                 return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: dbm};
-            };
+            }
+            ;
 
             return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: '&mdash;'};
-        }else{
+        } else {
             return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: '&mdash;'};
-        };
+        }
+        ;
     },
 
-    convertNMEAtoWGS84: function(value){
+    convertNMEAtoWGS84: function (value) {
         var nTemp = value / 100.0;
-        nTemp = nTemp - (nTemp%1);
+        nTemp = nTemp - (nTemp % 1);
         var flMin = value - 100.0 * nTemp;
         var result = nTemp + flMin / 60.0;
         return result.toFixed(6);
     },
 
-    convertKnotsToKms: function(value){
+    convertKnotsToKms: function (value) {
         return (value * 1.852).toFixed(1);
     },
 
-    convertDateNMEAtoCOMMON: function(value){
+    convertDateNMEAtoCOMMON: function (value) {
         var d = value.substring(0, 2),
             m = value.substring(2, 4),
             y = value.substring(4, 6);
 
-        return d+'-'+m+'-'+y;
+        return d + '-' + m + '-' + y;
     },
 
-    convertDateMYSQLtoCOMMON: function(value){
+    convertDateMYSQLtoCOMMON: function (value) {
         var d = value.substring(8, 10),
             m = value.substring(5, 7),
             y = value.substring(2, 4);
 
-        return d+'-'+m+'-'+y;
+        return d + '-' + m + '-' + y;
     },
 
-    humanizeHeadingDegrees: function(degree){
-        if((degree >= 338 && degree <= 360) || (degree >= 0 && degree <= 25)){
-            return {name:'север', code: 'n'};
-        };
+    humanizeHeadingDegrees: function (degree) {
+        if ((degree >= 338 && degree <= 360) || (degree >= 0 && degree <= 25)) {
+            return {name: 'север', code: 'n'};
+        }
+        ;
 
-        if(degree >= 26 && degree <= 67){
-            return {name:'северо-восток', code: 'ne'};
-        };
+        if (degree >= 26 && degree <= 67) {
+            return {name: 'северо-восток', code: 'ne'};
+        }
+        ;
 
-        if(degree >= 68 && degree <= 112){
-            return {name:'восток', code: 'e'};
-        };
+        if (degree >= 68 && degree <= 112) {
+            return {name: 'восток', code: 'e'};
+        }
+        ;
 
-        if(degree >= 113 && degree <= 157){
-            return {name:'юго-восток', code: 'se'};
-        };
+        if (degree >= 113 && degree <= 157) {
+            return {name: 'юго-восток', code: 'se'};
+        }
+        ;
 
-        if(degree >= 156 && degree <= 202){
-            return {name:'юг', code: 's'};
-        };
+        if (degree >= 156 && degree <= 202) {
+            return {name: 'юг', code: 's'};
+        }
+        ;
 
-        if(degree >= 203 && degree <= 247){
-            return {name:'юго-запад', code: 'sw'};
-        };
+        if (degree >= 203 && degree <= 247) {
+            return {name: 'юго-запад', code: 'sw'};
+        }
+        ;
 
-        if(degree >= 248 && degree <= 292){
-            return {name:'запад', code: 'w'};
-        };
+        if (degree >= 248 && degree <= 292) {
+            return {name: 'запад', code: 'w'};
+        }
+        ;
 
-        if(degree >= 293 && degree <= 337){
-            return {name:'северо-запад', code: 'nw'};
-        };
+        if (degree >= 293 && degree <= 337) {
+            return {name: 'северо-запад', code: 'nw'};
+        }
+        ;
     },
 
     //2012-11-18 16:05:49 => Date()
-    parseDateMysqlStrToDateOdject: function(str){
+    parseDateMysqlStrToDateOdject: function (str) {
         var d_str = str.substring(0, 10).split('-'),
             d = new Date();
 
@@ -587,7 +697,7 @@ core.utilities = {
     },
 
     //22-11-2011 => Date()
-    parseDateStrToDateOdject: function(str){
+    parseDateStrToDateOdject: function (str) {
         var d_str = str.split('-'),
             d = new Date();
 
@@ -598,10 +708,11 @@ core.utilities = {
         return d;
     },
 
-    humanizeDate: function(value, type){
-        if(!value){
+    humanizeDate: function (value, type) {
+        if (!value) {
             return '&mdash;';
-        };
+        }
+        ;
 
         var d, m, y, month_names = [
             'января',
@@ -618,60 +729,73 @@ core.utilities = {
             'декабря'
         ];
 
-        switch(type){
+        switch (type) {
             //TODO Check this type
-            case 'NMEA' : {
+            case 'NMEA' :
+            {
                 d = parseInt(value.substring(0, 2) * 1),
-                m = value.substring(2, 4),
-                y = value.substring(4, 6);
+                    m = value.substring(2, 4),
+                    y = value.substring(4, 6);
 
-                return d+'&nbsp;'+month_names[parseInt(m - 1)]+',&nbsp;20'+y;
-            }; break;
+                return d + '&nbsp;' + month_names[parseInt(m - 1)] + ',&nbsp;20' + y;
+            }
+                ;
+                break;
 
-            case 'COMMON' : {
+            case 'COMMON' :
+            {
                 value = this.explode('-', value);
 
                 d = parseInt(value[0], 10),
-                m = parseInt(value[1], 10),
-                y = parseInt(value[2], 10);
+                    m = parseInt(value[1], 10),
+                    y = parseInt(value[2], 10);
 
-                return d+'&nbsp;'+month_names[parseInt(m - 1)]+',&nbsp;'+y;
-            }; break;
+                return d + '&nbsp;' + month_names[parseInt(m - 1)] + ',&nbsp;' + y;
+            }
+                ;
+                break;
 
-
-            //TODO Check this type
-            case 'MYSQL' : {
-                d = parseInt(value.substring(8, 10) * 1),
-                m = value.substring(5, 7),
-                y = value.substring(0, 4);
-
-                return d+'&nbsp;'+month_names[parseInt(m - 1)]+',&nbsp;'+y;
-            }; break;
 
             //TODO Check this type
-            case 'MYSQLTIME' : {
+            case 'MYSQL' :
+            {
                 d = parseInt(value.substring(8, 10) * 1),
-                m = value.substring(5, 7),
-                y = value.substring(0, 4);
+                    m = value.substring(5, 7),
+                    y = value.substring(0, 4);
 
-                return d+'&nbsp;'+month_names[parseInt(m - 1)]+',&nbsp;'+ y + ', в ' + value.substring(10);
-            }; break;
+                return d + '&nbsp;' + month_names[parseInt(m - 1)] + ',&nbsp;' + y;
+            }
+                ;
+                break;
 
-            default : {
+            //TODO Check this type
+            case 'MYSQLTIME' :
+            {
+                d = parseInt(value.substring(8, 10) * 1),
+                    m = value.substring(5, 7),
+                    y = value.substring(0, 4);
+
+                return d + '&nbsp;' + month_names[parseInt(m - 1)] + ',&nbsp;' + y + ', в ' + value.substring(10);
+            }
+                ;
+                break;
+
+            default :
+            {
 
                 d = value.getDate(),
-                m = value.getMonth(),
-                y = value.getFullYear();
+                    m = value.getMonth(),
+                    y = value.getFullYear();
 
-                return d+' '+month_names[m]+', '+y;
-            };
-        };
+                return d + ' ' + month_names[m] + ', ' + y;
+            }
+        }
     },
 
-    humanizeTime: function(value){
-        if(!value){
+    humanizeTime: function (value) {
+        if (!value) {
             return '&mdash;';
-        };
+        }
 
         var h = value.substring(11, 13),
             m = value.substring(14, 16),
@@ -680,62 +804,63 @@ core.utilities = {
         return h + ':' + m + ':' + s;
     },
 
-    timestampToDate: function(str){
-        if(str){
+    timestampToDate: function (str) {
+        if (str) {
             var t = str.split(/[- :]/);
 
-            return new Date(t[0], t[1]-1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
-        };
+            return new Date(t[0], t[1] - 1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
+        }
     },
 
-    timestampToDateYearLast: function(str){
-        if(str){
+    timestampToDateYearLast: function (str) {
+        if (str) {
             var t = str.split(/[- :]/);
 
-            return new Date(t[2], t[1]-1, t[0], t[3] || 0, t[4] || 0, t[5] || 0);
-        };
+            return new Date(t[2], t[1] - 1, t[0], t[3] || 0, t[4] || 0, t[5] || 0);
+        }
     },
 
-    convertInputToVolts: function(val){
-        return ((val * 4.6 * 11)/4096).toFixed(2);
+    convertInputToVolts: function (val) {
+        return ((val * 4.6 * 11) / 4096).toFixed(2);
     },
 
-    getCSQIndicator: function(csq){
+    getCSQIndicator: function (csq) {
         var csq = this.parseCSQ(csq);
 
-        return '<span class="signal-indicator" title="GSM: '+csq.level_name+' ('+csq.dbm+' dBm)"><span class="'+csq.level_class+'" style="width: '+csq.percentage+'%"></span></span>';
+        return '<span class="signal-indicator" title="GSM: ' + csq.level_name + ' (' + csq.dbm + ' dBm)"><span class="' + csq.level_class + '" style="width: ' + csq.percentage + '%"></span></span>';
     },
 
-    getHDOPIndicator: function(hdop, sat_count){
+    getHDOPIndicator: function (hdop, sat_count) {
         var hdop = this.parseHDOP(hdop),
             sats = '';
 
-        if(sat_count > 0){
-            sats = ' ('+sat_count+' '+core.utilities.plural(sat_count, 'спутник', 'спутника', 'спутников')+')';
-        };
+        if (sat_count > 0) {
+            sats = ' (' + sat_count + ' ' + core.utilities.plural(sat_count, 'спутник', 'спутника', 'спутников') + ')';
+        }
+        ;
 
-        return '<span class="signal-indicator" title="GPS: '+hdop.level_name + sats + '"><span class="'+hdop.level_class+'" style="width: '+hdop.percentage+'%"></span></span>';
+        return '<span class="signal-indicator" title="GPS: ' + hdop.level_name + sats + '"><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
     },
 
-    getVoltsIndicator: function(v){
-        if(v || parseFloat(v) === 0){
-            var t = v.toFixed(2)+' В',
+    getVoltsIndicator: function (v) {
+        if (v || parseFloat(v) === 0) {
+            var t = v.toFixed(2) + ' В',
                 html = '';
 
-            if(v > 0){
-                html = '<div class="success">'+t+'</div>';
-            }else{
+            if (v > 0) {
+                html = '<div class="success">' + t + '</div>';
+            } else {
                 html = '<div class="error">0 В</div>';
-            };
+            }
 
             return html;
-        }else{
+        } else {
             return '<div class="gray">&mdash;</div>';
-        };
+        }
     },
 
     //Google maps utils
-    getAddressByLatLng: function(lat, lng, fn){
+    getAddressByLatLng: function (lat, lng, fn) {
         var geocoder = new google.maps.Geocoder();
 
         geocoder.geocode({
@@ -743,16 +868,16 @@ core.utilities = {
                 core.utilities.convertNMEAtoWGS84(lat),
                 core.utilities.convertNMEAtoWGS84(lng)
             )
-        }, function(results, status){
-            if(status == google.maps.GeocoderStatus.OK){
+        }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
                 fn(results);
-            }else{
+            } else {
                 fn(false);
-            };
+            }
         });
     },
 
-    getGidParams: function(){
+    getGidParams: function () {
         var number = new Array();
 
         number[0] = new Array();
@@ -818,25 +943,27 @@ core.utilities = {
         return number;
     },
 
-    parseGId: function(str){
+    parseGId: function (str) {
         var number = this.getGidParams();
 
-        for(var n in number){
+        for (var n in number) {
             var result = number[n]['expr'].test(str);
 
-            if(result){
+            if (result) {
                 var arr = str.match(number[n]['expr']);
                 return {
-                    status      : true,
-                    id          : arr[1],
-                    region      : arr[2],
-                    type_code   : number[n]['type_code'],
-                    type_name   : number[n]['type'],
-                    country     : 'ru',
-                    original    : str
+                    status: true,
+                    id: arr[1],
+                    region: arr[2],
+                    type_code: number[n]['type_code'],
+                    type_name: number[n]['type'],
+                    country: 'ru',
+                    original: str
                 };
-            };
-        };
+            }
+            ;
+        }
+        ;
 
         return {
             status: false,
@@ -844,7 +971,7 @@ core.utilities = {
         };
     },
 
-    drawGId: function(val, size){
+    drawGId: function (val, size) {
         val = val.toLowerCase();
         val = this.filterGidStr(val);
 
@@ -852,78 +979,85 @@ core.utilities = {
 
         var size_class = '', html = '';
 
-        if(size == 'big'){
+        if (size == 'big') {
             size_class = 'big';
-        }else{
+        } else {
             size_class = 'small';
-        };
+        }
+        ;
 
-        if(data.status){
+        if (data.status) {
             var region = '';
 
-            if(data.region){
+            if (data.region) {
                 region = data.region;
-            };
+            }
+            ;
 
-            html =  '<span class="g_id '+data.type_code+' '+size_class+'" title="'+data.type_name+'"><i class="shade"></i>' +
-                        '<span class="id">'+data.id+'</span>' +
-                        '<span class="region"><b>' + region + '</b><i><label></label><em>RUS</em></i></span>' +
-                    '</span>';
-        }else{
-            html =  '<span class="g_id '+size_class+' default"><i class="shade"></i><span class="id">' + data.original + '</span></span>';
-        };
+            html = '<span class="g_id ' + data.type_code + ' ' + size_class + '" title="' + data.type_name + '"><i class="shade"></i>' +
+                '<span class="id">' + data.id + '</span>' +
+                '<span class="region"><b>' + region + '</b><i><label></label><em>RUS</em></i></span>' +
+                '</span>';
+        } else {
+            html = '<span class="g_id ' + size_class + ' default"><i class="shade"></i><span class="id">' + data.original + '</span></span>';
+        }
+        ;
 
         return html;
     },
 
-    filterGidStr: function(str){
+    filterGidStr: function (str) {
         var r = /[^0-9авекмнорстухcdt]/;
 
         return str.replace(r, '');
     },
 
-    transformToGID: function(o, size){
-        o.each(function(){
+    transformToGID: function (o, size) {
+        o.each(function () {
             $(this).after(core.utilities.drawGId($(this).text(), size));
             $(this).remove();
         });
     },
 
-    dateObjToMYSQL: function(date){
-        return date.getFullYear()+'-'+core.utilities.leadingZero(date.getMonth(), 2)+'-'+core.utilities.leadingZero(date.getDate(), 2)+' '+core.utilities.leadingZero(date.getHours(), 2)+':'+core.utilities.leadingZero(date.getMinutes(), 2)+':'+core.utilities.leadingZero(date.getSeconds(), 2);
+    dateObjToMYSQL: function (date) {
+        return date.getFullYear() + '-' + core.utilities.leadingZero(date.getMonth(), 2) + '-' + core.utilities.leadingZero(date.getDate(), 2) + ' ' + core.utilities.leadingZero(date.getHours(), 2) + ':' + core.utilities.leadingZero(date.getMinutes(), 2) + ':' + core.utilities.leadingZero(date.getSeconds(), 2);
     },
 
-    convertGMTDateTimes: function(date, gmt_offset){
+    convertGMTDateTimes: function (date, gmt_offset) {
         var gmtDate = new Date(date);
         var date = new Date(gmtDate.getFullYear(), gmtDate.getMonth(), gmtDate.getDate(), gmtDate.getHours(), gmtDate.getMinutes(), gmtDate.getSeconds() + parseInt(gmt_offset), 0);
 
-        return  date.getFullYear()+'-'+
-                core.utilities.leadingZero(date.getMonth() + 1, 2)  +'-'+
-                core.utilities.leadingZero(date.getDate(), 2)       +' '+
-                core.utilities.leadingZero(date.getHours(), 2)      +':'+
-                core.utilities.leadingZero(date.getMinutes(), 2)    +':'+
-                core.utilities.leadingZero(date.getSeconds(), 2);
+        return  date.getFullYear() + '-' +
+            core.utilities.leadingZero(date.getMonth() + 1, 2) + '-' +
+            core.utilities.leadingZero(date.getDate(), 2) + ' ' +
+            core.utilities.leadingZero(date.getHours(), 2) + ':' +
+            core.utilities.leadingZero(date.getMinutes(), 2) + ':' +
+            core.utilities.leadingZero(date.getSeconds(), 2);
     },
 
-    dateRange: function(startDate, currDate){
-        if(!startDate || !currDate){
+    dateRange: function (startDate, currDate) {
+        if (!startDate || !currDate) {
             return '&mdash;';
-        };
+        }
+        ;
 
-        if(!(startDate instanceof Date)){
+        if (!(startDate instanceof Date)) {
             startDate = this.timestampToDate(startDate);
-        };
+        }
+        ;
 
-        if(!(currDate instanceof Date)){
+        if (!(currDate instanceof Date)) {
             currDate = this.timestampToDate(currDate);
-        };
+        }
+        ;
 
         var duration = new Date(currDate - startDate),
             s = (duration.getTime() - duration.getMilliseconds()) / 1000;
 
-        if(s < 1){
+        if (s < 1) {
             return 'только что';
-        };
+        }
+        ;
 
         var d = {
             days: Math.floor(s / 60 / 60 / 24),
@@ -939,67 +1073,71 @@ core.utilities = {
             seconds: s
         };
 
-        if(d.days > 0){
+        if (d.days > 0) {
             return dc.days + ' ' + this.plural(dc.days, 'день', 'дня', 'дней') + ' назад';
-        };
+        }
+        ;
 
-        if(d.hours < 24 && d.hours > 0){
+        if (d.hours < 24 && d.hours > 0) {
             return dc.hours + ' ' + this.plural(dc.hours, 'час', 'часа', 'часов') + ' назад';
-        };
+        }
+        ;
 
-        if(d.minutes < 60 && d.minutes > 0 && d.hours === 0 && d.days === 0){
+        if (d.minutes < 60 && d.minutes > 0 && d.hours === 0 && d.days === 0) {
             return dc.minutes + ' ' + this.plural(dc.minutes, 'минуту', 'минуты', 'минут') + ' назад';
-        };
+        }
+        ;
 
-        if(d.seconds < 60 && d.minutes === 0 && d.hours === 0 && d.days === 0){
+        if (d.seconds < 60 && d.minutes === 0 && d.hours === 0 && d.days === 0) {
             return dc.seconds + ' ' + this.plural(dc.seconds, 'секунду', 'секунды', 'секунд') + ' назад';
-        };
+        }
+        ;
     }
 };
 
 core.map_tools = {
-    layersList: function(){
+    layersList: function () {
         return {
             osm: [
-                new L.TileLayer('http://{s}.tile.osmosnimki.ru/kosmo/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+                new L.TileLayer('http://{s}.tile.osmosnimki.ru/kosmo/{z}/{x}/{y}.png', {attribution: '', maxZoom: 17})
             ],
 
             mpn: [
-                new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+                new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '', maxZoom: 17})
             ],
 
             qst: [
-                new L.TileLayer('http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {attribution : 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">', maxZoom : 17})
+                new L.TileLayer('http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">', maxZoom: 17})
             ],
 
             hyb: [
-                new L.TileLayer('http://tile.osmosnimki.ru/basesat/{z}/{x}/{y}.jpg', {attribution : '', maxZoom : 16}),
-                new L.TileLayer('http://{s}.tile.osmosnimki.ru/hyb/{z}/{x}/{y}.png', {attribution : '', maxZoom : 16})
+                new L.TileLayer('http://tile.osmosnimki.ru/basesat/{z}/{x}/{y}.jpg', {attribution: '', maxZoom: 16}),
+                new L.TileLayer('http://{s}.tile.osmosnimki.ru/hyb/{z}/{x}/{y}.png', {attribution: '', maxZoom: 16})
             ],
 
             clm: [
-                new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {attribution : '', maxZoom : 18})
+                new L.TileLayer('http://{s}.tile.cloudmade.com/BC9A493B41014CAABB98F0471D759707/997/256/{z}/{x}/{y}.png', {attribution: '', maxZoom: 18})
             ],
 
             mbx1: [
-                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-8k9drgq5/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-8k9drgq5/{z}/{x}/{y}.png', {attribution: '', maxZoom: 17})
             ],
 
             mbx2: [
-                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-e89iu6uu/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-e89iu6uu/{z}/{x}/{y}.png', {attribution: '', maxZoom: 17})
             ],
 
             mbx3: [
-                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-jgqvxlts/{z}/{x}/{y}.png', {attribution : '', maxZoom : 17})
+                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-jgqvxlts/{z}/{x}/{y}.png', {attribution: '', maxZoom: 17})
             ],
 
             wms: [
-                new L.TileLayer.WMS('http://wms.latlon.org/', {layers:'irs', crs: L.CRS.EPSG4326})
+                new L.TileLayer.WMS('http://wms.latlon.org/', {layers: 'irs', crs: L.CRS.EPSG4326})
             ],
 
             wmsb: [
-                new L.TileLayer('http://tile.osmosnimki.ru/basesat/{z}/{x}/{y}.jpg', {attribution : '', maxZoom : 17}),
-                new L.TileLayer.WMS('http://wms.latlon.org/', {layers:'bing', crs: L.CRS.EPSG4326})
+                new L.TileLayer('http://tile.osmosnimki.ru/basesat/{z}/{x}/{y}.jpg', {attribution: '', maxZoom: 17}),
+                new L.TileLayer.WMS('http://wms.latlon.org/', {layers: 'bing', crs: L.CRS.EPSG4326})
             ],
 
             gglsat: [
@@ -1020,144 +1158,159 @@ core.map_tools = {
         }
     },
 
-    getLayers: function(){
+    getLayers: function () {
         var layer,
             map_layer = $.cookie('map-layer'),
             layers_list = this.layersList();
 
-        if(map_layer && map_layer != ''){
+        if (map_layer && map_layer != '') {
             layer = layers_list[map_layer];
-        }else{
+        } else {
             layer = layers_list.mbx1;
-        };
+        }
+        ;
 
         return layer;
     },
 
-    getHeadingIcon: function(heading){
-        var degrees_zone = Math.round(parseInt(heading)/15) * 15;
+    getHeadingIcon: function (heading) {
+        var degrees_zone = Math.round(parseInt(heading) / 15) * 15;
 
-        if(isNaN(degrees_zone)){
+        if (isNaN(degrees_zone)) {
             degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
-        };
+        }
+        ;
 
-        if(degrees_zone == 360){
+        if (degrees_zone == 360) {
             degrees_zone = 0;
-        };
+        }
+        ;
 
-        return '/control/map/img/markers/heading/'+degrees_zone+'.png';
+        return '/control/map/img/markers/heading/' + degrees_zone + '.png';
     },
 
-    getHeadingIconSpriteOffset: function(heading){
-        var degrees_zone = Math.round(parseInt(heading)/15) * 1;
+    getHeadingIconSpriteOffset: function (heading) {
+        var degrees_zone = Math.round(parseInt(heading) / 15) * 1;
 
-        if(isNaN(degrees_zone)){
+        if (isNaN(degrees_zone)) {
             degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
-        };
+        }
+        ;
 
-        if(degrees_zone == 360){
+        if (degrees_zone == 360) {
             degrees_zone = 0;
-        };
+        }
+        ;
 
         return degrees_zone * 40;
     },
 
-    getGeoposition: function(callback){
-        if(navigator.geolocation){
-            navigator.geolocation.getCurrentPosition(function(position){
-                callback(position);
-            },
-            function (error){
-                switch(error.code){
-                    case error.TIMEOUT:
-                        callback(false);
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        callback(false);
-                        break;
-                    case error.PERMISSION_DENIED:
-                        callback(false);
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        callback(false);
-                        break;
-                };
-            });
-        }else{
+    getGeoposition: function (callback) {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                    callback(position);
+                },
+                function (error) {
+                    switch (error.code) {
+                        case error.TIMEOUT:
+                            callback(false);
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            callback(false);
+                            break;
+                        case error.PERMISSION_DENIED:
+                            callback(false);
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            callback(false);
+                            break;
+                    }
+                    ;
+                });
+        } else {
             callback(false);
-        };
+        }
+        ;
     }
 };
 
 core.ui = {
-    getHashData: function(){
+    getHashData: function () {
         var h = document.location.hash;
 
-        if(h != ''){
+        if (h != '') {
             h = h.substr(1, h.length);
             h = h.split('&');
 
             var result = {};
 
-            for(var i = 0, l = h.length; i < l; i++){
+            for (var i = 0, l = h.length; i < l; i++) {
                 var part = h[i].split('=', 2);
                 result[part[0]] = part[1];
-            };
+            }
+            ;
 
             return result;
-        };
+        }
+        ;
     },
 
-    createSelect: function(selector, opts){
+    createSelect: function (selector, opts) {
         var options = {
-            id          : null,
-            items       : [],
-            key_name    : 'id',
-            value_name  : 'name',
-            default_opt : false,
-            default     : null,
-            exclude     : null,
-            onChange    : function(){}
+            id: null,
+            items: [],
+            key_name: 'id',
+            value_name: 'name',
+            default_opt: false,
+            default: null,
+            exclude: null,
+            onChange: function () {
+            }
         };
 
         $.extend(options, opts);
 
-        var html = '<select id="'+options.id+'">';
+        var html = '<select id="' + options.id + '">';
 
-        if(options.default_opt){
-            html += '<option '+((options.default == options.default_opt.val) ? 'selected' : '') +' value="'+options.default_opt.val+'">'+options.default_opt.name+'</option>';
-        };
+        if (options.default_opt) {
+            html += '<option ' + ((options.default == options.default_opt.val) ? 'selected' : '') + ' value="' + options.default_opt.val + '">' + options.default_opt.name + '</option>';
+        }
+        ;
 
-        if(options.items){
-            for(var i = 0, l = options.items.length; i < l; i++){
-                if(!(options.exclude && options.items[i][options.exclude.param_name] != options.exclude.param_value)){
-                    html += '<option '+((options.default == options.items[i][options.key_name]) ? 'selected' : '') +' value="'+options.items[i][options.key_name]+'">'+options.items[i][options.value_name]+'</option>';
-                };
-            };
-        };
+        if (options.items) {
+            for (var i = 0, l = options.items.length; i < l; i++) {
+                if (!(options.exclude && options.items[i][options.exclude.param_name] != options.exclude.param_value)) {
+                    html += '<option ' + ((options.default == options.items[i][options.key_name]) ? 'selected' : '') + ' value="' + options.items[i][options.key_name] + '">' + options.items[i][options.value_name] + '</option>';
+                }
+                ;
+            }
+            ;
+        }
+        ;
 
         html += '</select>';
 
         $(selector).html(html);
 
-        $('select#'+options.id).off('change').on('change', function(){
+        $('select#' + options.id).off('change').on('change', function () {
             options.onChange($(this).val());
         });
 
-        $('select#'+options.id).coreUISelect({
+        $('select#' + options.id).coreUISelect({
             jScrollPane: true
         });
     }
 };
 
 core.effects = {
-    breathe: function(obj){
-        if(obj.is(':visible')){
+    breathe: function (obj) {
+        if (obj.is(':visible')) {
             obj.delay(800).fadeTo(2000, 0.3);
-            obj.fadeTo(1000, 1.0, function(){
+            obj.fadeTo(1000, 1.0, function () {
                 core.effects.breathe(obj);
             });
-        };
+        }
+        ;
     }
 };
 
@@ -1166,30 +1319,31 @@ core.ticker = {
     delay: 2000,
     interval_methods: [],
 
-    processSystemInterval: function(){
+    processSystemInterval: function () {
         //console.log('GLOBAL SYSTEM INTERVAL: TICK...');
         this.callIntervalMethods();
     },
 
-    startSystemInterval: function(){
+    startSystemInterval: function () {
         this.interval = setInterval('core.ticker.processSystemInterval()', this.delay);
     },
 
-    stopSystemInterval: function(){
+    stopSystemInterval: function () {
         clearInterval(this.interval);
     },
 
-    callIntervalMethods: function(){
-        for(var i = 0, l = this.interval_methods.length; i < l; i++){
+    callIntervalMethods: function () {
+        for (var i = 0, l = this.interval_methods.length; i < l; i++) {
             this.interval_methods[i].call();
-        };
+        }
+        ;
     },
 
-    addIntervalMethod: function(fn){
+    addIntervalMethod: function (fn) {
         this.interval_methods.push(fn);
     },
 
-    restartSystemInterval: function(){
+    restartSystemInterval: function () {
         this.stopSystemInterval();
         this.startSystemInterval();
     }
@@ -1198,8 +1352,8 @@ core.ticker = {
 core.events_api = {
     events_meow_duration: 10000,
 
-    webkitNotification: function(message){
-        if(window.webkitNotifications){
+    webkitNotification: function (message) {
+        if (window.webkitNotifications) {
             var havePermission = window.webkitNotifications.checkPermission();
 
             if (havePermission == 0) {
@@ -1213,28 +1367,30 @@ core.events_api = {
 
                 notification.onclick = function () {
                     window.focus();
-                    document.location.href='/control/events/';
+                    document.location.href = '/control/events/';
                     notification.close();
                 };
 
                 notification.show();
-            }else{
+            } else {
                 window.webkitNotifications.requestPermission();
-            };
-        };
+            }
+            ;
+        }
+        ;
     },
 
-    showEventsMeow: function(data){
+    showEventsMeow: function (data) {
         $.meow({
-            title   : '',
-            message : data.message,
+            title: '',
+            message: data.message,
             duration: this.events_meow_duration
         });
-w
+        w
         this.webkitNotification(data.message);
     },
 
-    pushEvent: function(data){
+    pushEvent: function (data) {
         core.events_api.showEventsMeow(data);
 
         $.ajax({
@@ -1242,55 +1398,60 @@ w
             type: 'post',
             dataType: 'json',
             data: {
-                status      : data.status,
-                type        : data.type,
-                message     : data.message,
-                showed      : 1
+                status: data.status,
+                type: data.type,
+                message: data.message,
+                showed: 1
             }
         });
     },
 
-    checkNewEvents: function(){
+    checkNewEvents: function () {
         $.ajax({
             url: '/control/events/?ajax',
             type: 'get',
             dataType: 'json',
             data: {
-                action  : 'checkForNewEvents'
+                action: 'checkForNewEvents'
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 core.loading.showTopIndicator();
             },
-            success: function(data){
+            success: function (data) {
                 core.loading.hideTopIndicator();
 
-                if(data && data.items){
-                    if(data.items.length > 3){
+                if (data && data.items) {
+                    if (data.items.length > 3) {
                         core.events_api.showEventsMeow({
-                            message: 'У вас '+data.items.length+' новых '+core.utilities.plural(data.items.length, 'уведомление', 'уведомления', 'уведомлений')
+                            message: 'У вас ' + data.items.length + ' новых ' + core.utilities.plural(data.items.length, 'уведомление', 'уведомления', 'уведомлений')
                         });
-                    }else{
-                        for(var i = 0, l = data.items.length; i < l; i++){
+                    } else {
+                        for (var i = 0, l = data.items.length; i < l; i++) {
                             core.events_api.showEventsMeow(data.items[i]);
-                        };
-                    };
-                };
+                        }
+                        ;
+                    }
+                    ;
+                }
+                ;
 
-                if(data.total > 0){
+                if (data.total > 0) {
                     $('#global_events_counter, #icon-events-main-counter-bubble').show().html(data.total);
-                    $('title').html(core.page_title_raw + ' ('+data.total+')');
+                    $('title').html(core.page_title_raw + ' (' + data.total + ')');
                     $('#icon-events-main').addClass('events-active').removeClass('events-unactive');
-                }else{
+                } else {
                     $('#global_events_counter, #icon-events-main-counter-bubble').hide().html('');
                     $('title').html(core.page_title_raw);
                     $('#icon-events-main').addClass('events-unactive').removeClass('events-active');
-                };
+                }
+                ;
 
-                if(core.events && data && data.items && data.items.length > 0){
+                if (core.events && data && data.items && data.items.length > 0) {
                     core.events.drawItems(data, 'prepend');
-                };
+                }
+                ;
             },
-            error: function(){
+            error: function () {
                 core.loading.hideTopIndicator();
             }
         });
@@ -1298,38 +1459,40 @@ w
 };
 
 //Common functions
-core.exitUser = function(){
-    if(confirm('Выйти?')){
+core.exitUser = function () {
+    if (confirm('Выйти?')) {
         $.get(
             '/control/user?exit',
-            function(){
+            function () {
                 window.location.reload();
             }
         );
-    };
+    }
+    ;
 };
 
-core.getRawTitle = function(){
+core.getRawTitle = function () {
     this.page_title_raw = $('title').html();
 };
 
-core.webkitNotificationsRequest = function(){
+core.webkitNotificationsRequest = function () {
     var havePermission = window.webkitNotifications.checkPermission();
 
     if (havePermission == 0) {
 
-    }else{
+    } else {
         window.webkitNotifications.requestPermission();
-    };
+    }
+    ;
 };
 
 //Object starter
-$(function(){
+$(function () {
     core.getRawTitle();
 
     core.ticker.startSystemInterval();
 
-    core.ticker.addIntervalMethod(function(){
+    core.ticker.addIntervalMethod(function () {
         core.events_api.checkNewEvents();
     });
 
@@ -1341,8 +1504,8 @@ $(function(){
 
     core.webkitNotificationsRequest();
 
-    $('.form_message .close').live('click', function(){
-        $('.form_message').slideUp(150, function(){
+    $('.form_message .close').live('click', function () {
+        $('.form_message').slideUp(150, function () {
             $('.form_message').html('');
         });
     });

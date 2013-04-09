@@ -7,21 +7,24 @@
                 header('Location: /control/auth/login');
             };
 
-            $form = array();
-            $form['step'] = 1;
-
-            if(isset($_POST['action']) && $_POST['action'] == 'add_car'){
-                $form = $this->addDevice();
-            };
-
             $this->template = 'user.tpl';
 
             $this->init(array(
                 'name'  => 'user.fleet.add',
                 'title' => 'Добавление устройства',
-                'dir'   => '/control/user/fleet/add',
-                'form'  => $form
+                'dir'   => '/control/user/fleet/add'
             ));
+
+            if($this->ajax_mode && isset($_GET['action'])){
+                switch($_GET['action']){
+                    case 'check_device_by_sn' : {
+                        header('Content-type: application/json');
+                        print json_encode($this->checkDeviceBySN($_GET['code']));
+                    }; break;
+                };
+
+                exit;
+            };
         }
 
         public function __destruct(){
@@ -29,22 +32,47 @@
         }
 
         public function checkDeviceBySN($code){
-            $query = "
-                SELECT
-                    COUNT(*) AS `count`
-                FROM
-                    `devices`
-                WHERE
-                    `user_id`   != 1 &&
-                    `active`    != 1 &&
-                    `code`      = '".$this->db->quote($code)."'
-            ";
+            $form_data          = new stdClass();
+            $form_data->code    = false;
 
-            $result = $this->db->assocItem($query);
+            $form_errors        = new stdClass();
+            $form_errors->code  = false;
 
-            if($result['count'] >= 1){
-                return true;
+            $no_errors          = true;
+            $form_data->code    = $code;
+
+            if(strlen($code) < 12 && strlen($code) > 0){
+                $form_errors->code  = 'Ошибка, код должен состоять не менее, чем из 12 цифр';
+                $no_errors          = false;
+            }elseif(strlen($code) <= 0 && !$code){
+                $form_errors->code  = 'Ошибка, введите код';
+                $no_errors          = false;
+            }else{
+                $query = "
+                    SELECT
+                        COUNT(*) AS `count`
+                    FROM
+                        `devices`
+                    WHERE
+                        `user_id`   != ".intval($this->auth->user['data']['id'])." &&
+                        `active`    != 1 &&
+                        `activated` != 1 &&
+                        `code`      = '".$this->db->quote(strtoupper($form_data->code))."'
+                ";
+
+                $result = $this->db->assocItem($query);
+
+                if($result['count'] < 1){
+                    $form_errors->code  = 'Ошибка, несуществующий код';
+                    $no_errors          = false;
+                };
             };
+
+            return (object) array(
+                'form_data'     => $form_data,
+                'form_errors'   => $form_errors,
+                'result'        => $no_errors
+            );
         }
 
         public function bindNewDevice($code){
@@ -54,6 +82,7 @@
                 SET
                     `user_id`   = ".intval($this->auth->user['data']['id']).",
                     `active`    = 1,
+                    `activated` = 1,
                     `name`      = '".$this->db->quote($_POST['name'])."',
                     `make`      = '".$this->db->quote($_POST['make'])."',
                     `model`     = '".$this->db->quote($_POST['model'])."',

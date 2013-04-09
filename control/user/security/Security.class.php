@@ -15,12 +15,6 @@
                 'dir'   => '/control/user/security'
             ));
 
-            if(isset($_GET['exit'])){
-                $this->auth->exitUser();
-                exit;
-            };
-
-            //If user have any actve devices
             if($this->ajax_mode && isset($_GET['action'])){
                 switch($_GET['action']){
                     case 'process_form' : {
@@ -44,7 +38,6 @@
                         }; break;
                     };
                 };
-
             };
         }
 

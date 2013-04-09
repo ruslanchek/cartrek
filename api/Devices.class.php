@@ -29,7 +29,8 @@
                     `devices`
                 WHERE
                     `user_id`   = ".intval($this->auth->user['data']['id'])." &&
-                    `active`    = 1
+                    `active`    = 1 &&
+                    `activated` = 1
             ";
 
             $result = $this->db->assocItem($query);
@@ -72,7 +73,8 @@
                     `devices`
                 WHERE
                     `user_id`   = ".intval($this->auth->user['data']['id'])." &&
-                    `active`    = 1
+                    `active`    = 1 &&
+                    `activated` = 1
             ";
 
             $devices = $this->db->assocMulti($query);
@@ -109,9 +111,9 @@
         //Get complete list of user's cars with last points
         public function getUserDevices($include_unactive = false){
             if($include_unactive){
-                $addition = "";
+                $addition = " && `devices`.`activated` = 1";
             }else{
-                $addition = " && `devices`.`active` = 1";
+                $addition = " && `devices`.`active` = 1 && `devices`.`activated` = 1";
             };
 
             if(isset($_GET['fleet']) && $_GET['fleet'] >= 1){
@@ -201,7 +203,8 @@
                         `devices`
                     WHERE
                         `devices`.`user_id` = ".intval($this->auth->user['data']['id'])." &&
-                        `devices`.`id` IN (".$in.")
+                        `devices`.`id` IN (".$in.") &&
+                        `devices`.`activated` = 1
                     GROUP BY
                         `devices`.`id`
                 ";
@@ -278,6 +281,7 @@
                 WHERE
                     `user_id`   = ".intval($this->auth->user['data']['id'])." &&
                     `active`    = 1 &&
+                    `activated` = 1 &&
                     `id`        = ".intval($id)."
             ";
 

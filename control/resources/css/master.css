@@ -893,6 +893,7 @@ a.badge:active {
     background: rgba(255, 255, 255, 0.5);
 }
 
+/* TODO: Изменить везде _ на -  */
 .form_message {
 
 }
@@ -2678,4 +2679,78 @@ footer a:active {
 .socials a.twitter span.inner .label:hover {
     color: #004d58 !important;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* New car */
+.new-car-container {
+    position: relative;
+}
+
+.new-car-container .card {
+    background: url(../img/card-empty.png);
+    width: 468px;
+    height: 233px;
+    margin: 25px 0;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+    position: relative;
+}
+
+.new-car-container .card .card-inner {
+    width: 300px;
+    height: 200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.new-car-container * {
+    text-align: center;
+}
+
+.new-car-container .card h2 {
+    position: absolute;
+    font-size: 16px;
+    width: 300px;
+    line-height: 1.4em;
+    top: 10px;
+}
+
+.new-car-container .card .input-number {
+    position: absolute;
+    width: 266px;
+    margin-left: -137px;
+    display: block;
+    top: 79px;
+    background: none;
+    border: none;
+    left: 50%;
+    height: 37px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    font-size: 20px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.3ex;
+    border: 2px solid transparent;
+}
+
+.new-car-container .card .input-number.error-wrap {
+    border-color: #cf3600;
+    box-shadow: 0 0 4px 1px rgba(207, 54, 0, 0.4);
+}
+
+.new-car-container .card .btn {
+    position: absolute;
+    top: 151px;
+    padding: 8px 15px;
+    left: 50%;
+    margin-left: -50px;
+    width: 100px;
+    display: block;
+}
+
+.new-car-container .card .form_message {
+    position: absolute;
+    width: 300px;
+    color: #a70002;
+    left: 50%;
+    margin: 20px 0 0 -150px;
 }
