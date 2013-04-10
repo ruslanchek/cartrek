@@ -6,7 +6,13 @@
             <div class="half">
                 <div class="form-item">
                     <label for="login" class="bold">Логин <span class="error"></span></label>
-                    <input class="text width-100" type="text" name="login" id="login" {*autofocus="autofocus"*} value="{$core->auth->user.data.login|escape}" />
+                    <input
+                        class="text width-100"
+                        type="text"
+                        name="login"
+                        id="login"
+                        {*autofocus="autofocus"*}
+                        value="{$core->auth->user.data.login|escape}" />
                 </div>
 
                 <div class="form-item">

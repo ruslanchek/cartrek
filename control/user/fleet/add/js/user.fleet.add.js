@@ -170,7 +170,7 @@ var fleet_add = {
                     core.loading.unsetGlobalLoading();
 
                     if(data.result === true){
-
+                        document.location.href = '?action=set_device';
                     }else{
                         $('.form_message').html(data.form_errors.code);
                         $('#car-code').addClass('error-wrap');
@@ -183,17 +183,25 @@ var fleet_add = {
         });
     },
 
-    init: function(){
-        /*$('#make').typeahead({
-            source: this.makes
-        });*/
-
-        $('#g_id').live('keyup', function(){
+    set_device_form: function(){
+        $('#g_id').on('keyup', function(){
             $(this).val(core.utilities.filterGidStr($(this).val()));
             var html = core.utilities.drawGId($(this).val(), 'big');
 
             $('#g_id_preview').html('');
             $('#g_id_preview').html(html);
         });
+
+        core.ui.createSelect('#make', {
+
+        });
+    },
+
+    init: function(){
+        /*$('#make').typeahead({
+            source: this.makes
+        });*/
+
+
     }
 };

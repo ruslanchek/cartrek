@@ -25,6 +25,14 @@
 
                 exit;
             };
+
+            if(!$this->ajax_mode && isset($_GET['action'])){
+                switch($_GET['action']){
+                    case 'set_device' : {
+
+                    }; break;
+                };
+            };
         }
 
         public function __destruct(){
@@ -42,7 +50,7 @@
             $form_data->code    = $code;
 
             if(strlen($code) < 12 && strlen($code) > 0){
-                $form_errors->code  = 'Ошибка, код должен состоять не менее, чем из 12 цифр';
+                $form_errors->code  = 'Ошибка, код должен состоять не менее, чем из 12 символов';
                 $no_errors          = false;
             }elseif(strlen($code) <= 0 && !$code){
                 $form_errors->code  = 'Ошибка, введите код';
@@ -65,6 +73,10 @@
                 if($result['count'] < 1){
                     $form_errors->code  = 'Ошибка, несуществующий код';
                     $no_errors          = false;
+                };
+
+                if($no_errors === true){
+                    $_SESSION['code_approved'] = $form_data->code;
                 };
             };
 

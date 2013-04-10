@@ -459,7 +459,6 @@ core.utilities = {
         while (str.length < length) {
             str = '0' + str;
         }
-        ;
 
         return str;
     },
@@ -479,7 +478,6 @@ core.utilities = {
             default:
                 return str5;
         }
-        ;
     },
 
     explode: function (delimiter, string, limit) {
@@ -522,7 +520,6 @@ core.utilities = {
         } else {
             return str;
         }
-        ;
     },
 
     // TODO: Попробовать заменить везде core.utilities.pad() вместо этого метода (или наоборот лучше даже)
@@ -539,36 +536,29 @@ core.utilities = {
             if (hdop <= 1 && hdop > 0) {
                 return {percentage: 100, level_name: 'идеально', level_class: 'info'};
             }
-            ;
 
             if (hdop > 1 && hdop <= 3) {
                 return {percentage: 83.3, level_name: 'отлично', level_class: 'success'};
             }
-            ;
 
             if (hdop > 3 && hdop <= 6) {
                 return {percentage: 66.64, level_name: 'хорошо', level_class: 'success'};
             }
-            ;
 
             if (hdop > 6 && hdop <= 8) {
                 return {percentage: 49.98, level_name: 'средне', level_class: 'warning'};
             }
-            ;
 
             if (hdop > 8 && hdop < 20) {
                 return {percentage: 33.32, level_name: 'ниже среднего', level_class: 'warning'};
             }
-            ;
 
             if (hdop >= 20) {
                 return {percentage: 16.66, level_name: 'плохо', level_class: 'danger'};
             }
-            ;
         } else {
             return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger'};
         }
-        ;
     },
 
     parseCSQ: function (csq) {
@@ -580,38 +570,31 @@ core.utilities = {
             if (dbm >= -77) {
                 return {percentage: 100, level_name: 'идеально', level_class: 'info', dbm: dbm};
             }
-            ;
 
             if (dbm >= -86 && dbm <= -78) {
                 return {percentage: 80, level_name: 'отлично', level_class: 'success', dbm: dbm};
             }
-            ;
 
             if (dbm >= -92 && dbm <= -87) {
                 return {percentage: 60, level_name: 'хорошо', level_class: 'success', dbm: dbm};
             }
-            ;
 
             if (dbm >= -101 && dbm <= -93) {
                 return {percentage: 40, level_name: 'средне', level_class: 'warning', dbm: dbm};
             }
-            ;
 
             if (dbm <= -102 && dbm > -113) {
                 return {percentage: 20, level_name: 'ниже среднего', level_class: 'danger', dbm: dbm};
             }
-            ;
 
             if (dbm <= -113) {
                 return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: dbm};
             }
-            ;
 
             return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: '&mdash;'};
         } else {
             return {percentage: 0, level_name: 'нет сигнала', level_class: 'danger', dbm: '&mdash;'};
         }
-        ;
     },
 
     convertNMEAtoWGS84: function (value) {
@@ -646,42 +629,34 @@ core.utilities = {
         if ((degree >= 338 && degree <= 360) || (degree >= 0 && degree <= 25)) {
             return {name: 'север', code: 'n'};
         }
-        ;
 
         if (degree >= 26 && degree <= 67) {
             return {name: 'северо-восток', code: 'ne'};
         }
-        ;
 
         if (degree >= 68 && degree <= 112) {
             return {name: 'восток', code: 'e'};
         }
-        ;
 
         if (degree >= 113 && degree <= 157) {
             return {name: 'юго-восток', code: 'se'};
         }
-        ;
 
         if (degree >= 156 && degree <= 202) {
             return {name: 'юг', code: 's'};
         }
-        ;
 
         if (degree >= 203 && degree <= 247) {
             return {name: 'юго-запад', code: 'sw'};
         }
-        ;
 
         if (degree >= 248 && degree <= 292) {
             return {name: 'запад', code: 'w'};
         }
-        ;
 
         if (degree >= 293 && degree <= 337) {
             return {name: 'северо-запад', code: 'nw'};
         }
-        ;
     },
 
     //2012-11-18 16:05:49 => Date()
@@ -712,7 +687,6 @@ core.utilities = {
         if (!value) {
             return '&mdash;';
         }
-        ;
 
         var d, m, y, month_names = [
             'января',
@@ -739,7 +713,6 @@ core.utilities = {
 
                 return d + '&nbsp;' + month_names[parseInt(m - 1)] + ',&nbsp;20' + y;
             }
-                ;
                 break;
 
             case 'COMMON' :
@@ -752,7 +725,6 @@ core.utilities = {
 
                 return d + '&nbsp;' + month_names[parseInt(m - 1)] + ',&nbsp;' + y;
             }
-                ;
                 break;
 
 
@@ -765,7 +737,6 @@ core.utilities = {
 
                 return d + '&nbsp;' + month_names[parseInt(m - 1)] + ',&nbsp;' + y;
             }
-                ;
                 break;
 
             //TODO Check this type
@@ -777,7 +748,6 @@ core.utilities = {
 
                 return d + '&nbsp;' + month_names[parseInt(m - 1)] + ',&nbsp;' + y + ', в ' + value.substring(10);
             }
-                ;
                 break;
 
             default :
@@ -961,9 +931,7 @@ core.utilities = {
                     original: str
                 };
             }
-            ;
         }
-        ;
 
         return {
             status: false,
@@ -984,7 +952,6 @@ core.utilities = {
         } else {
             size_class = 'small';
         }
-        ;
 
         if (data.status) {
             var region = '';
@@ -992,7 +959,6 @@ core.utilities = {
             if (data.region) {
                 region = data.region;
             }
-            ;
 
             html = '<span class="g_id ' + data.type_code + ' ' + size_class + '" title="' + data.type_name + '"><i class="shade"></i>' +
                 '<span class="id">' + data.id + '</span>' +
@@ -1001,7 +967,6 @@ core.utilities = {
         } else {
             html = '<span class="g_id ' + size_class + ' default"><i class="shade"></i><span class="id">' + data.original + '</span></span>';
         }
-        ;
 
         return html;
     },
@@ -1039,17 +1004,14 @@ core.utilities = {
         if (!startDate || !currDate) {
             return '&mdash;';
         }
-        ;
 
         if (!(startDate instanceof Date)) {
             startDate = this.timestampToDate(startDate);
         }
-        ;
 
         if (!(currDate instanceof Date)) {
             currDate = this.timestampToDate(currDate);
         }
-        ;
 
         var duration = new Date(currDate - startDate),
             s = (duration.getTime() - duration.getMilliseconds()) / 1000;
@@ -1057,7 +1019,6 @@ core.utilities = {
         if (s < 1) {
             return 'только что';
         }
-        ;
 
         var d = {
             days: Math.floor(s / 60 / 60 / 24),
@@ -1076,22 +1037,18 @@ core.utilities = {
         if (d.days > 0) {
             return dc.days + ' ' + this.plural(dc.days, 'день', 'дня', 'дней') + ' назад';
         }
-        ;
 
         if (d.hours < 24 && d.hours > 0) {
             return dc.hours + ' ' + this.plural(dc.hours, 'час', 'часа', 'часов') + ' назад';
         }
-        ;
 
         if (d.minutes < 60 && d.minutes > 0 && d.hours === 0 && d.days === 0) {
             return dc.minutes + ' ' + this.plural(dc.minutes, 'минуту', 'минуты', 'минут') + ' назад';
         }
-        ;
 
         if (d.seconds < 60 && d.minutes === 0 && d.hours === 0 && d.days === 0) {
             return dc.seconds + ' ' + this.plural(dc.seconds, 'секунду', 'секунды', 'секунд') + ' назад';
         }
-        ;
     }
 };
 
@@ -1168,7 +1125,6 @@ core.map_tools = {
         } else {
             layer = layers_list.mbx1;
         }
-        ;
 
         return layer;
     },
@@ -1179,12 +1135,10 @@ core.map_tools = {
         if (isNaN(degrees_zone)) {
             degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
         }
-        ;
 
         if (degrees_zone == 360) {
             degrees_zone = 0;
         }
-        ;
 
         return '/control/map/img/markers/heading/' + degrees_zone + '.png';
     },
@@ -1195,12 +1149,10 @@ core.map_tools = {
         if (isNaN(degrees_zone)) {
             degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
         }
-        ;
 
         if (degrees_zone == 360) {
             degrees_zone = 0;
         }
-        ;
 
         return degrees_zone * 40;
     },
@@ -1275,18 +1227,14 @@ core.ui = {
         if (options.default_opt) {
             html += '<option ' + ((options.default == options.default_opt.val) ? 'selected' : '') + ' value="' + options.default_opt.val + '">' + options.default_opt.name + '</option>';
         }
-        ;
 
         if (options.items) {
             for (var i = 0, l = options.items.length; i < l; i++) {
                 if (!(options.exclude && options.items[i][options.exclude.param_name] != options.exclude.param_value)) {
                     html += '<option ' + ((options.default == options.items[i][options.key_name]) ? 'selected' : '') + ' value="' + options.items[i][options.key_name] + '">' + options.items[i][options.value_name] + '</option>';
                 }
-                ;
             }
-            ;
         }
-        ;
 
         html += '</select>';
 
@@ -1310,7 +1258,6 @@ core.effects = {
                 core.effects.breathe(obj);
             });
         }
-        ;
     }
 };
 
@@ -1336,7 +1283,6 @@ core.ticker = {
         for (var i = 0, l = this.interval_methods.length; i < l; i++) {
             this.interval_methods[i].call();
         }
-        ;
     },
 
     addIntervalMethod: function (fn) {
@@ -1429,11 +1375,8 @@ core.events_api = {
                         for (var i = 0, l = data.items.length; i < l; i++) {
                             core.events_api.showEventsMeow(data.items[i]);
                         }
-                        ;
                     }
-                    ;
                 }
-                ;
 
                 if (data.total > 0) {
                     $('#global_events_counter, #icon-events-main-counter-bubble').show().html(data.total);
@@ -1444,12 +1387,10 @@ core.events_api = {
                     $('title').html(core.page_title_raw);
                     $('#icon-events-main').addClass('events-unactive').removeClass('events-active');
                 }
-                ;
 
                 if (core.events && data && data.items && data.items.length > 0) {
                     core.events.drawItems(data, 'prepend');
                 }
-                ;
             },
             error: function () {
                 core.loading.hideTopIndicator();
@@ -1468,7 +1409,6 @@ core.exitUser = function () {
             }
         );
     }
-    ;
 };
 
 core.getRawTitle = function () {
@@ -1483,7 +1423,6 @@ core.webkitNotificationsRequest = function () {
     } else {
         window.webkitNotifications.requestPermission();
     }
-    ;
 };
 
 //Object starter

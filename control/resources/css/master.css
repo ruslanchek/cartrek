@@ -47,6 +47,7 @@ p {
 .left-nav {
     margin: 0 0 1em 0;
     list-style: none;
+    border-top: 1px solid #E5E5E5;
 }
 
 .left-nav li {
@@ -791,6 +792,8 @@ a.badge:active {
     padding: 20px;
     border: 1px solid #ddd;
     text-shadow: 0 1px 0 #fff;
+    -webkit-border-radius: 2px;
+            border-radius: 2px;
 }
 
 .forms label {
@@ -1302,9 +1305,7 @@ footer a:active {
 }
 
 #g_id_preview {
-    position: absolute;
-    top: -7px;
-    left: 26px;
+
 }
 
 /* =Heading
@@ -1991,7 +1992,7 @@ footer a:active {
 /* =Map types
 -----------------------------------------------------------------------------*/
 .map-types {
-
+    padding-bottom: 15px;
 }
 
 .map-types a.item * {
@@ -2007,7 +2008,7 @@ footer a:active {
 }
 
 .map-types .item:hover {
-    background: #eee;
+    background: #fff;
 }
 
 .map-types .item.active {
@@ -2690,7 +2691,7 @@ footer a:active {
     background: url(../img/card-empty.png);
     width: 468px;
     height: 233px;
-    margin: 25px 0;
+    margin: 30px auto 25px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
     position: relative;
 }
