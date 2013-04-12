@@ -50,7 +50,7 @@
             $form_data->code    = $code;
 
             if(strlen($code) < 12 && strlen($code) > 0){
-                $form_errors->code  = 'Ошибка, код должен состоять не менее, чем из 12 символов';
+                $form_errors->code  = 'Ошибка, код 12 символов';
                 $no_errors          = false;
             }elseif(strlen($code) <= 0 && !$code){
                 $form_errors->code  = 'Ошибка, введите код';

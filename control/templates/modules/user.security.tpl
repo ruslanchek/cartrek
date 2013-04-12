@@ -1,9 +1,10 @@
 <div class="threequarter">
     <div class="row">
         <div class="half">
-            <h2>Социальные сети</h2>
 
-            <div class="forms" style="min-height: 272px">
+
+            <div class="forms" style="min-height: 306px">
+                <h2>Социальные сети</h2>
                 <table class="socials-table">
                     <tr>
                         <td>{if !$core->auth->user.data.fb_id}<a href="/control/user/security/?action=bind_oauth&step=auth&provider=fb">{/if}<img src="/control/resources/img/login/facebook.png" alt="Facebook">{if !$core->auth->user.data.fb_id}</a>{/if}</td>
@@ -24,9 +25,8 @@
         </div>
 
         <div class="half">
-            <h2>Изменение пароля</h2>
-
             <form id="password-change-form" class="forms" action="/control/user/security/" method="POST">
+                <h2>Изменение пароля</h2>
 
                 <div class="form_message"></div>
                 <div class="form-item">

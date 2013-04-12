@@ -32,7 +32,6 @@ core.forms = {
                 on = '';
                 off = 'active';
             }
-            ;
 
             options_html += '<tr>' +
                 '<th>' + options[i].label + '</th>' +

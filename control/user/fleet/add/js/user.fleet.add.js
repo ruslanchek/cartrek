@@ -137,7 +137,7 @@ var fleet_add = {
     ],
 
     car_code_form: function(){
-        $('#car-code').on('keyup', function(e){
+        $('#code').on('keyup', function(e){
             var str = $(this).val();
 
             str = str.replace(' ', '');
@@ -152,7 +152,7 @@ var fleet_add = {
             fleet_add.loading_process = $.ajax({
                 url : '/control/user/fleet/add?ajax&action=check_device_by_sn',
                 data : {
-                    code: $('#car-code').val()
+                    code: $('#code').val()
                 },
                 dataType : 'json',
                 type : 'get',
@@ -164,17 +164,22 @@ var fleet_add = {
 
                     core.loading.setGlobalLoading();
 
-                    $('#car-code').removeClass('error-wrap');
+                    $('.form_message').hide().html('');
+                    $('#code').removeClass('input-error').prev().find('.error').html('');
                 },
                 success: function(data){
                     core.loading.unsetGlobalLoading();
 
                     if(data.result === true){
-                        document.location.href = '?action=set_device';
+                        document.location.href = '/control/user/fleet/add/?action=set_device';
+
                     }else{
-                        $('.form_message').html(data.form_errors.code);
-                        $('#car-code').addClass('error-wrap');
+                        if(data.form_errors.code){
+                            $('#code').addClass('input-error').prev().find('.error').text(data.form_errors.code);
+                        };
                     };
+
+                    $('.form_message').slideDown(150);
                 },
                 error: function(){
                     core.loading.unsetGlobalLoading();
@@ -184,6 +189,8 @@ var fleet_add = {
     },
 
     set_device_form: function(){
+        $('#g_id_preview').html(core.utilities.drawGId('а777аа77', 'big'));
+
         $('#g_id').on('keyup', function(){
             $(this).val(core.utilities.filterGidStr($(this).val()));
             var html = core.utilities.drawGId($(this).val(), 'big');
@@ -192,8 +199,16 @@ var fleet_add = {
             $('#g_id_preview').html(html);
         });
 
-        core.ui.createSelect('#make', {
+        var html = '<option value="">&nbsp;</option>';
 
+        for (var i = 0, l = this.makes.length; i < l; i++) {
+            html += '<option value="'+this.makes[i]+'">'+this.makes[i]+'</option>';
+        }
+
+        $('#make').html(html);
+
+        $('#make').coreUISelect({
+            jScrollPane: true
         });
     },
 
