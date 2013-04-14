@@ -1,30 +1,35 @@
 <?php
-    Class Feedback extends Core {
-        public function __construct(){
-            parent::__construct();
 
-            if(!$this->auth->user['status']){
-                header('Location: /control/auth/login');
-            };
+Class Feedback extends Core
+{
+    public function __construct()
+    {
+        parent::__construct();
 
-            $this->init(array(
-                'name'  => 'about.feedback',
-                'title' => 'Обратная связь',
-                'dir'   => '/control/about/feedback',
-                'static_content' => $this->getStaticContent()
-            ));
+        if (!$this->auth->user['status']) {
+            header('Location: /control/auth/login');
         }
+        ;
 
-        public function __destruct(){
-            $this->deInit();
-        }
+        $this->init(array(
+            'name' => 'about.feedback',
+            'title' => 'Обратная связь',
+            'dir' => '/control/about/feedback',
+            'static_content' => $this->getStaticContent()
+        ));
+    }
 
-        private function getStaticContent(){
-$html = <<<EOF
+    public function __destruct()
+    {
+        $this->deInit();
+    }
+
+    private function getStaticContent()
+    {
+        $html = <<<EOF
 
 EOF;
 
-            return $html;
-        }
-    };
-?>
+        return $html;
+    }
+}

@@ -1,26 +1,32 @@
 <?php
-    Class About extends Core {
-        public function __construct(){
-            parent::__construct();
 
-            if(!$this->auth->user['status']){
-                header('Location: /control/auth/login');
-            };
+Class About extends Core
+{
+    public function __construct()
+    {
+        parent::__construct();
 
-            $this->init(array(
-                'name'  => 'about',
-                'title' => 'О Картреке',
-                'dir'   => '/control/about',
-                'static_content' => $this->getStaticContent()
-            ));
+        if (!$this->auth->user['status']) {
+            header('Location: /control/auth/login');
         }
+        ;
 
-        public function __destruct(){
-            $this->deInit();
-        }
+        $this->init(array(
+            'name' => 'about',
+            'title' => 'О Картреке',
+            'dir' => '/control/about',
+            'static_content' => $this->getStaticContent()
+        ));
+    }
 
-        private function getStaticContent(){
-$html = <<<EOF
+    public function __destruct()
+    {
+        $this->deInit();
+    }
+
+    private function getStaticContent()
+    {
+        $html = <<<EOF
     <a name="maps"></a>
     <H2>О наших картах</h2>
     <p>
@@ -35,7 +41,6 @@ $html = <<<EOF
     </p>
 EOF;
 
-            return $html;
-        }
-    };
-?>
+        return $html;
+    }
+}

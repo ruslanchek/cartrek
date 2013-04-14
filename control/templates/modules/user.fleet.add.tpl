@@ -31,7 +31,11 @@
                                name="g_id" id="g_id" {*autofocus="autofocus"*} value=""/>
                     </div>
 
-                    <input type="submit" name="send" class="btn blue" value="Далее"/>
+                    <input type="button" onclick="document.location.href='/control/user/fleet/add/'" name="send"
+                           class="btn gray float-left" value="Назад"/>
+                    <input type="submit" name="send" class="btn blue float-left" value="Далее"/>
+
+                    <div class="clear"></div>
                 </form>
             </div>
 
@@ -72,7 +76,7 @@
                     <div class="form-item">
                         <label for="code" class="bold">Код активации <span class="error"></span></label>
                         <input class="text width-100" max="12" maxlength="12" type="text" name="code" id="code"
-                               value=""/>
+                               value="{if isset($smarty.session.code_approved)}{$smarty.session.code_approved|escape}{/if}"/>
                     </div>
 
                     <input type="submit" name="send" class="btn blue" value="Далее"/>

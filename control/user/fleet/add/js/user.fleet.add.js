@@ -136,8 +136,8 @@ var fleet_add = {
         'Эксклюзив'
     ],
 
-    car_code_form: function(){
-        $('#code').on('keyup', function(e){
+    car_code_form: function () {
+        $('#code').on('keyup', function (e) {
             var str = $(this).val();
 
             str = str.replace(' ', '');
@@ -146,52 +146,52 @@ var fleet_add = {
             $(this).val(core.utilities.numberFormat(str));
         });
 
-        $('#car-code-form').on('submit', function(e){
+        $('#car-code-form').on('submit', function (e) {
             e.preventDefault();
 
             fleet_add.loading_process = $.ajax({
-                url : '/control/user/fleet/add?ajax&action=check_device_by_sn',
-                data : {
+                url: '/control/user/fleet/add/?ajax&action=check_device_by_sn',
+                data: {
                     code: $('#code').val()
                 },
-                dataType : 'json',
-                type : 'get',
-                beforeSend: function(){
-                    if(fleet_add.loading_process){
+                dataType: 'json',
+                type: 'get',
+                beforeSend: function () {
+                    if (fleet_add.loading_process) {
                         fleet_add.loading_process.abort();
                         core.loading.unsetGlobalLoading();
-                    };
+                    }
 
                     core.loading.setGlobalLoading();
 
                     $('.form_message').hide().html('');
                     $('#code').removeClass('input-error').prev().find('.error').html('');
                 },
-                success: function(data){
+                success: function (data) {
                     core.loading.unsetGlobalLoading();
 
-                    if(data.result === true){
+                    if (data.result === true) {
                         document.location.href = '/control/user/fleet/add/?action=set_device';
 
-                    }else{
-                        if(data.form_errors.code){
+                    } else {
+                        if (data.form_errors.code) {
                             $('#code').addClass('input-error').prev().find('.error').text(data.form_errors.code);
-                        };
-                    };
+                        }
+                    }
 
                     $('.form_message').slideDown(150);
                 },
-                error: function(){
+                error: function () {
                     core.loading.unsetGlobalLoading();
                 }
             });
         });
     },
 
-    set_device_form: function(){
+    set_device_form: function () {
         $('#g_id_preview').html(core.utilities.drawGId('а777аа77', 'big'));
 
-        $('#g_id').on('keyup', function(){
+        $('#g_id').on('keyup', function () {
             $(this).val(core.utilities.filterGidStr($(this).val()));
             var html = core.utilities.drawGId($(this).val(), 'big');
 
@@ -202,7 +202,7 @@ var fleet_add = {
         var html = '<option value="">&nbsp;</option>';
 
         for (var i = 0, l = this.makes.length; i < l; i++) {
-            html += '<option value="'+this.makes[i]+'">'+this.makes[i]+'</option>';
+            html += '<option value="' + this.makes[i] + '">' + this.makes[i] + '</option>';
         }
 
         $('#make').html(html);
@@ -210,12 +210,61 @@ var fleet_add = {
         $('#make').coreUISelect({
             jScrollPane: true
         });
+
+        $('#set-device-form').on('submit', function (e) {
+            e.preventDefault();
+
+            fleet_add.loading_process = $.ajax({
+                url: '/control/user/fleet/add/?ajax&action=set_new_device_data',
+                data: {
+                    name: $('#name').val(),
+                    make: $('#make').val(),
+                    model: $('#model').val(),
+                    g_id: $('#g_id').val()
+                },
+                dataType: 'json',
+                type: 'post',
+                beforeSend: function () {
+                    if (fleet_add.loading_process) {
+                        fleet_add.loading_process.abort();
+                        core.loading.unsetGlobalLoading();
+                    }
+
+                    core.loading.setGlobalLoading();
+
+                    $('.form_message').hide().html('');
+                    $('#code').removeClass('input-error').prev().find('.error').html('');
+                },
+                success: function (data) {
+                    core.loading.unsetGlobalLoading();
+
+                    if (data && data.result === true) {
+
+                    } else {
+                        if(data && data.form_errors){
+                            $.each(data.form_errors, function(){
+                                console.log($(this));
+                            });
+
+                            if (data.form_errors) {
+                                $('#code').addClass('input-error').prev().find('.error').text(data.form_errors.code);
+                            }
+                        };
+                    }
+
+                    $('.form_message').slideDown(150);
+                },
+                error: function () {
+                    core.loading.unsetGlobalLoading();
+                }
+            });
+        });
     },
 
-    init: function(){
+    init: function () {
         /*$('#make').typeahead({
-            source: this.makes
-        });*/
+         source: this.makes
+         });*/
 
 
     }

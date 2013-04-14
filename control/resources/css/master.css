@@ -248,36 +248,36 @@ footer {
     padding: 11px 20px;
 
     background: #fff;
-    background: -moz-linear-gradient(top,#fff,#efefef);
-    background: -webkit-linear-gradient(top,#fff,#efefef);
-    background: linear-gradient(top,#fff,#efefef);
+    background: -moz-linear-gradient(top, #fff, #efefef);
+    background: -webkit-linear-gradient(top, #fff, #efefef);
+    background: linear-gradient(top, #fff, #efefef);
 
     color: #666;
     font-weight: bold;
     font-size: 15px;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 
     border-color: #ccc;
-    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 0 rgba(255,255,255,0.7);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 1px 0 rgba(255,255,255,0.7);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 0 rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 1px 0 rgba(255, 255, 255, 0.7);
     border-radius: 25px;
     -webkit-border-radius: 25px;
 }
 
 .header-block .btn:hover {
     background: #eeeeee;
-    background: -moz-linear-gradient(top,#eee,#ddd);
-    background: -webkit-linear-gradient(top,#eee,#ddd);
-    background: linear-gradient(top,#eee,#ddd);
+    background: -moz-linear-gradient(top, #eee, #ddd);
+    background: -webkit-linear-gradient(top, #eee, #ddd);
+    background: linear-gradient(top, #eee, #ddd);
 }
 
 .header-block .btn:active {
     background: #ddd;
-    background: -moz-linear-gradient(top,#ddd,#eee);
-    background: -webkit-linear-gradient(top,#ddd,#eee);
-    background: linear-gradient(top,#ddd,#eee);
-    box-shadow: inset 0 2px 3px rgba(0,0,0,0.0.05), 0 1px 0 rgba(255,255,255,0.7);
-    -webkit-box-shadow: inset 0 2px 3px rgba(0,0,0,0.05), 0 1px 0 rgba(255,255,255,0.7);
+    background: -moz-linear-gradient(top, #ddd, #eee);
+    background: -webkit-linear-gradient(top, #ddd, #eee);
+    background: linear-gradient(top, #ddd, #eee);
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.0 .05), 0 1px 0 rgba(255, 255, 255, 0.7);
+    -webkit-box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.05), 0 1px 0 rgba(255, 255, 255, 0.7);
 }
 
 .top-panel {
@@ -793,13 +793,20 @@ a.badge:active {
     border: 1px solid #ddd;
     text-shadow: 0 1px 0 #fff;
     -webkit-border-radius: 2px;
-            border-radius: 2px;
+    border-radius: 2px;
 }
 
-.forms .btn.blue {
+.forms .btn.float-left {
+    float: left !important;
+    margin: 0 25px 0 0 !important;
+}
+
+.forms .btn.blue,
+.forms .btn.gray {
     width: auto;
     padding-left: 25px;
     padding-right: 25px;
+    margin: 0;
 }
 
 .forms label {
@@ -1451,6 +1458,60 @@ footer a:active {
 
 /* =Buttons
 -----------------------------------------------------------------------------*/
+.btn.blue {
+    width: 180px;
+    padding: 10px 10px;
+
+    display: block;
+
+    background: #5cb6e7;
+    background: -moz-linear-gradient(top, #5cb6e7, #317cd7);
+    background: -webkit-linear-gradient(top, #5cb6e7, #317cd7);
+    background: linear-gradient(top, #5cb6e7, #317cd7);
+    color: white;
+    font-weight: bold;
+    border-color: #0c67a5;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+    font-size: 15px;
+}
+
+.btn.blue:hover {
+    background: #89d0f2;
+    background: -moz-linear-gradient(top, #89d0f2, #388ee5);
+    background: -webkit-linear-gradient(top, #89d0f2, #388ee5);
+    background: linear-gradient(top, #89d0f2, #388ee5);
+}
+
+.btn.gray {
+    width: 180px;
+    padding: 10px 10px;
+
+    display: block;
+    margin: 0 auto;
+
+    background: #eee;
+    background: -moz-linear-gradient(top, #eee, #ddd);
+    background: -webkit-linear-gradient(top, #eee, #ddd);
+    background: linear-gradient(top, #eee, #ddd);
+    color: #444;
+    font-weight: bold;
+    border-color: #ccc;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+    font-size: 15px;
+}
+
+.btn.gray:hover {
+    background: #efefef;
+    background: -moz-linear-gradient(top, #efefef, #eee);
+    background: -webkit-linear-gradient(top, #efefef, #eee);
+    background: linear-gradient(top, #efefef, #eee);
+}
 
 /* =Buttons separated
 -----------------------------------------------------------------------------*/
@@ -2472,66 +2533,11 @@ footer a:active {
 }
 
 .hero-login form .form-actions {
-    padding: 6px 0  15px;
-}
-
-.hero-login form button {
-    width: 180px;
-    padding: 10px 10px;
-
-    display: block;
-    margin: 0 auto;
-
-    background: #eee;
-    background: -moz-linear-gradient(top,#eee,#ddd);
-    background: -webkit-linear-gradient(top,#eee,#ddd);
-    background: linear-gradient(top,#eee,#ddd);
-    color: white;
-    font-weight: bold;
-    border-color: #ccc;
-    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
-    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
-
-    font-size: 14px;
-}
-
-.hero-login form button:hover {
-    background: #89d0f2;
-    background: -moz-linear-gradient(top,#89d0f2,#388ee5);
-    background: -webkit-linear-gradient(top,#89d0f2,#388ee5);
-    background: linear-gradient(top,#89d0f2,#388ee5);
+    padding: 6px 0 15px;
 }
 
 .hero-login form .btn {
     margin: 0 auto;
-}
-
-.btn.blue {
-    width: 180px;
-    padding: 10px 10px;
-
-    display: block;
-
-    background: #5cb6e7;
-    background: -moz-linear-gradient(top,#5cb6e7,#317cd7);
-    background: -webkit-linear-gradient(top,#5cb6e7,#317cd7);
-    background: linear-gradient(top,#5cb6e7,#317cd7);
-    color: white;
-    font-weight: bold;
-    border-color: #0c67a5;
-    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
-    -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3);
-
-    font-size: 15px;
-}
-
-.btn.blue:hover {
-    background: #89d0f2;
-    background: -moz-linear-gradient(top,#89d0f2,#388ee5);
-    background: -webkit-linear-gradient(top,#89d0f2,#388ee5);
-    background: linear-gradient(top,#89d0f2,#388ee5);
 }
 
 .auth-block-padding {

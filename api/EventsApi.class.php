@@ -1,18 +1,21 @@
 <?php
 
-Class EventsApi extends Core {
-    public function __construct(){
+Class EventsApi extends Core
+{
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public function getNewEventsCount(){
+    public function getNewEventsCount()
+    {
         $query = "
             SELECT
                 COUNT(*) AS `count`
             FROM
                 `events`
             WHERE
-                `user_id` = ".intval($this->auth->user['data']['id'])." &&
+                `user_id` = " . intval($this->auth->user['data']['id']) . " &&
                 `active` = 1
         ";
 
@@ -20,42 +23,66 @@ Class EventsApi extends Core {
         return $result['count'];
     }
 
-    private function getCondWhere($cond){
-        switch($cond){
-            case 'unreaded' : {
+    private function getCondWhere($cond)
+    {
+        switch ($cond) {
+            case 'unreaded' :
+            {
                 $cond_where = ' && `active` = 1';
-            }; break;
+            }
+                ;
+                break;
 
-            case 'readed' : {
+            case 'readed' :
+            {
                 $cond_where = ' && `active` = 0';
-            }; break;
+            }
+                ;
+                break;
 
-            case 'error' : {
+            case 'error' :
+            {
                 $cond_where = ' && `status` = 1';
-            }; break;
+            }
+                ;
+                break;
 
-            case 'notify' : {
+            case 'notify' :
+            {
                 $cond_where = ' && `status` = 3';
-            }; break;
+            }
+                ;
+                break;
 
-            case 'attention' : {
+            case 'attention' :
+            {
                 $cond_where = ' && `status` = 2';
-            }; break;
+            }
+                ;
+                break;
 
-            case 'success' : {
+            case 'success' :
+            {
                 $cond_where = ' && `status` = 4';
-            }; break;
+            }
+                ;
+                break;
 
             case 'all';
-            default : {
+            default :
+                {
                 $cond_where = '';
-            }; break;
-        };
+                }
+                ;
+                break;
+        }
+        ;
 
         return $cond_where;
     }
 
-    public function getAllEventsCount($cond = 'all'){
+    public function getAllEventsCount($cond = 'all')
+    {
         $cond_where = $this->getCondWhere($cond);
 
         $query = "
@@ -64,7 +91,7 @@ Class EventsApi extends Core {
             FROM
                 `events`
             WHERE
-                `user_id` = ".intval($this->auth->user['data']['id']).$cond_where."
+                `user_id` = " . intval($this->auth->user['data']['id']) . $cond_where . "
         ";
 
         $result = $this->db->assocItem($query);
@@ -72,7 +99,8 @@ Class EventsApi extends Core {
         return $result['count'];
     }
 
-    public function getNewEvents(){
+    public function getNewEvents()
+    {
         $query = "
             SELECT
                 `id`,
@@ -80,11 +108,11 @@ Class EventsApi extends Core {
                 `message`,
                 `type`,
                 `active`,
-                CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `datetime`
+                CONVERT_TZ(`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `datetime`
             FROM
                 `events`
             WHERE
-                `user_id` = ".intval($this->auth->user['data']['id'])." &&
+                `user_id` = " . intval($this->auth->user['data']['id']) . " &&
                 `showed` = 0
             ORDER BY
                 `id` DESC,
@@ -99,7 +127,7 @@ Class EventsApi extends Core {
             SET
                 `showed` = 1
             WHERE
-                `user_id` = ".intval($this->auth->user['data']['id']));
+                `user_id` = " . intval($this->auth->user['data']['id']));
 
         $total = $this->getAllEventsCount('unreaded');
 
@@ -109,7 +137,8 @@ Class EventsApi extends Core {
         );
     }
 
-    public function getEvents($step = 0, $per_step = 10, $offset = 0, $cond = 'all'){
+    public function getEvents($step = 0, $per_step = 10, $offset = 0, $cond = 'all')
+    {
         $offset = intval($offset);
         $current_party_from = $step * $per_step;
         $current_party_to = ($step * $per_step) + $per_step;
@@ -124,32 +153,34 @@ Class EventsApi extends Core {
                 `user_id`,
                 `type`,
                 `active`,
-                CONVERT_TZ(`datetime`, 'Europe/Moscow', '".$this->db->quote(date('P'))."') AS `datetime`
+                CONVERT_TZ(`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `datetime`
             FROM
                 `events`
             WHERE
-                `user_id` = ".intval($this->auth->user['data']['id']).$cond_where."
+                `user_id` = " . intval($this->auth->user['data']['id']) . $cond_where . "
             ORDER BY
                 `datetime` DESC
             LIMIT
-                ".intval($current_party_from - $offset).", ".intval($per_step);
+                " . intval($current_party_from - $offset) . ", " . intval($per_step);
 
         $items = $this->db->assocMulti($query);
         $total = $this->getAllEventsCount($cond);
 
-        if($current_party_to < $total){
+        if ($current_party_to < $total) {
             $more_items = true;
-        }else{
+        } else {
             $more_items = false;
-        };
+        }
+        ;
 
         return array(
-            'items'         => $items,
-            'more_items'    => $more_items
+            'items' => $items,
+            'more_items' => $more_items
         );
     }
 
-    public function pushEvent($status, $type, $message, $showed = 0){
+    public function pushEvent($status, $type, $message, $showed = 0)
+    {
         $query = "
             INSERT INTO `events` (
                 `status`,
@@ -160,20 +191,21 @@ Class EventsApi extends Core {
                 `type`,
                 `showed`
             ) VALUES (
-                ".intval($status).",
-                '".$this->db->quote($message)."',
-                ".intval($this->auth->user['data']['id']).",
+                " . intval($status) . ",
+                '" . $this->db->quote($message) . "',
+                " . intval($this->auth->user['data']['id']) . ",
                 CONVERT_TZ(NOW(), 'SYSTEM', 'Europe/Moscow'),
                 1,
-                ".intval($type).",
-                ".intval($showed)."
+                " . intval($type) . ",
+                " . intval($showed) . "
             )
         ";
 
         $this->db->query($query);
     }
 
-    public function hideItem($id, $cond){
+    public function hideItem($id, $cond)
+    {
         $query = "
             UPDATE
                 `events`
@@ -181,14 +213,15 @@ Class EventsApi extends Core {
                 `active`      = 0,
                 `showed`      = 1
             WHERE
-                `id`          = ".intval($id)." &&
-                `user_id`     = ".intval($this->auth->user['data']['id']);
+                `id`          = " . intval($id) . " &&
+                `user_id`     = " . intval($this->auth->user['data']['id']);
 
         $this->db->query($query);
         print $this->getNewEventsCount($cond);
     }
 
-    public function hideAllItems(){
+    public function hideAllItems()
+    {
         $query = "
             UPDATE
                 `events`
@@ -196,32 +229,36 @@ Class EventsApi extends Core {
                 `active`      = 0,
                 `showed`      = 1
             WHERE
-                `user_id`     = ".intval($this->auth->user['data']['id']);
+                `user_id`     = " . intval($this->auth->user['data']['id']);
 
         $this->db->query($query);
     }
 
-    public function delItem($id, $cond){
+    public function delItem($id, $cond)
+    {
         $query = "
             DELETE FROM
                 `events`
             WHERE
-                `id`          = ".intval($id)." &&
-                `user_id`     = ".intval($this->auth->user['data']['id']);
+                `id`          = " . intval($id) . " &&
+                `user_id`     = " . intval($this->auth->user['data']['id']);
 
         $this->db->query($query);
         print $this->getNewEventsCount($cond);
     }
 
-    public function delAllItems(){
+    public function delAllItems()
+    {
         $query = "
             DELETE FROM
                 `events`
             WHERE
-                `user_id`     = ".intval($this->auth->user['data']['id']);
+                `user_id`     = " . intval($this->auth->user['data']['id']);
 
         print $query;
 
         $this->db->query($query);
     }
-};
+}
+
+;

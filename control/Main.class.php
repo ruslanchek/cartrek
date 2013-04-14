@@ -1,21 +1,25 @@
 <?php
-    Class Main extends Core {
-        public function __construct(){
-            parent::__construct();
 
-            if(!$this->auth->user['status']){
-                header('Location: /control/auth/login');
-            };
+Class Main extends Core
+{
+    public function __construct()
+    {
+        parent::__construct();
 
-            $this->init(array(
-                'name'  => 'main',
-                'title' => 'Пользователь',
-                'dir'   => '/control'
-            ));
+        if (!$this->auth->user['status']) {
+            header('Location: /control/auth/login');
         }
+        ;
 
-        public function __destruct(){
-            $this->deInit();
-        }
-    };
-?>
+        $this->init(array(
+            'name' => 'main',
+            'title' => 'Пользователь',
+            'dir' => '/control'
+        ));
+    }
+
+    public function __destruct()
+    {
+        $this->deInit();
+    }
+}

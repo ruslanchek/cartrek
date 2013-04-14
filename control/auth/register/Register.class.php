@@ -1,28 +1,33 @@
 <?php
-    Class Register extends Core {
-        public function __construct(){
-            parent::__construct();
 
-            $this->template = 'auth.tpl';
+Class Register extends Core
+{
+    public function __construct()
+    {
+        parent::__construct();
 
-            $this->init(array(
-                'name'      => 'auth.register',
-                'title'     => 'Регистрация',
-                'dir'       => '/control/auth/register',
-                'bgclass'   => 'city'
-            ));
+        $this->template = 'auth.tpl';
 
-            if(isset($_POST['action'])){
-                switch($_POST['action']){
-                    case 'register' : {
-                        $this->module['form'] = $this->auth->registerNewUser();
-                    }; break;
-                };
-            };
+        $this->init(array(
+            'name' => 'auth.register',
+            'title' => 'Регистрация',
+            'dir' => '/control/auth/register',
+            'bgclass' => 'city'
+        ));
+
+        if (isset($_POST['action'])) {
+            switch ($_POST['action']) {
+                case 'register' :
+                {
+                    $this->module['form'] = $this->auth->registerNewUser();
+                }
+                    break;
+            }
         }
+    }
 
-        public function __destruct(){
-            $this->deInit();
-        }
-    };
-?>
+    public function __destruct()
+    {
+        $this->deInit();
+    }
+}

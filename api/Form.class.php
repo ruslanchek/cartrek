@@ -1,24 +1,28 @@
 <?php
-    Class Form extends Core{
-        private $listener;
 
-        public function __construct(){
-            parent::__construct();
+Class Form extends Core
+{
+    private $listener;
 
-            $this->init(array(
-                'name'  => 'form',
-                'title' => 'Слушатель форм'
-            ));
+    public function __construct()
+    {
+        parent::__construct();
 
-            $this->createListener();
-        }
+        $this->init(array(
+            'name' => 'form',
+            'title' => 'Слушатель форм'
+        ));
 
-        private function createListener(){
-            $this->listener = new stdClass();
-        }
-
-        public function getListener(){
-            return $this->listener();
-        }
+        $this->createListener();
     }
-?>
+
+    private function createListener()
+    {
+        $this->listener = new stdClass();
+    }
+
+    public function getListener()
+    {
+        return $this->listener();
+    }
+}
