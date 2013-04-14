@@ -64,8 +64,6 @@ Class Devices extends Core
                         `user_id`   = " . intval($this->auth->user['data']['id']) . " &&
                         `id`        = " . intval($id);
 
-            print $query;
-
             $this->db->query($query);
         }
     }

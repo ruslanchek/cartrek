@@ -1,8 +1,6 @@
 <div class="threequarter">
     <div class="row">
         <div class="half">
-
-
             <div class="forms" style="min-height: 306px">
                 <h2>Социальные сети</h2>
                 <table class="socials-table">

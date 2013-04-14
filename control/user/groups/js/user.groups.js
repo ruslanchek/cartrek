@@ -56,14 +56,18 @@ var user_groups = {
     },
 
     binds: function(){
-        $('.add_fleet').on('click', function(e){
+        $('#additional-button').on('click', function(e){
             user_groups.addGroupModal();
             e.preventDefault();
         });
 
-        $('.delete_group').on('click', function(e){
-            if(confirm('Удалить группу «'+$(this).data('name')+'»?')){
-                document.location.href = '/control/user/groups?action=delete&id='+$(this).data('id');
+        $('.delete-group').on('click', function(e){
+            if($(this).data('count') > 0){
+                alert('Невозможно удалить группу, пока в ней состоит хотя бы одна машина!');
+            }else{
+                if(confirm('Удалить группу «'+$(this).data('name')+'»?')){
+                    document.location.href = '/control/user/groups?action=delete&id='+$(this).data('id');
+                };
             };
 
             e.preventDefault();

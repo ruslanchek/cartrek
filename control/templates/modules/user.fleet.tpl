@@ -1,5 +1,4 @@
 <div class="threequarter">
-
     {if $devices}
         <table class="width-100 hovered">
             <thead class="thead-gray">
@@ -15,7 +14,7 @@
                 {foreach $devices as $item}
                 <tr{if !$item.active} class="unactive_row"{/if}>
                     <td><a href="/control/fleet/{$item.id}"><strong>{$item.name}</strong></a></td>
-                    <td>{$item.make} {$item.model}</td>
+                    <td><strong>{$item.make}</strong> {$item.model}</td>
                     <td><span class="g_id">{$item.g_id}</span></td>
                     <td>{$item.fleet_name}</td>
                     <td>

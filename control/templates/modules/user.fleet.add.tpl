@@ -1,5 +1,5 @@
 <div class="threequarter">
-    {if isset($smarty.get.action) && $smarty.get.action == 'set_device' && $core->checkDeviceBySN($smarty.session.code_approved)->result == true}
+    {if isset($smarty.get.action) && $smarty.get.action == 'set_device'}
         <div class="row">
             <div class="half">
                 <form id="set-device-form" class="forms" method="POST">
@@ -15,7 +15,6 @@
 
                     <div class="form-item">
                         <label for="make" class="bold">Марка <span class="error"></span></label>
-
                         <p><select name="make" id="make"></select></p>
                     </div>
 
@@ -44,12 +43,15 @@
                     <h2>Заполните данные о машине</h2>
 
                     <p>Это нужно, чтобы вам было легче находить ваши машины на карте.
-                        Эта информация будет выводиться в сокращенном виде на табличках, рядом с маркерами.</p>
+                        Эта информация будет выводиться в сокращенном виде на табличках,
+                        рядом с маркерами, а так же в некоторых других разделах Картрека.</p>
 
-                    <p>Вводите госномер посимвольно, он автоматически будет сконвертирован и отображен в графическом
-                        виде.</p>
+                    <p>Вводите госномер посимвольно, он автоматически будет сконвертирован
+                        и отображен в графическом
+                        виде.
+                    </p>
 
-                    <div style="position: relative;">
+                    <div>
                         <span id="g_id_preview">
                             <span class="g_id big default">
                                 <i class="shade"></i>
@@ -65,6 +67,20 @@
                 fleet_add.set_device_form();
             });
         </script>
+    {elseif isset($smarty.get.action) && $smarty.get.action == 'finish'}
+        <div class="row">
+            <div class="half">
+                <div class="forms">
+                    <h2>Шаг 3 из 3</h2>
+
+                    {$new_device_data|print_r}
+                </div>
+            </div>
+
+            <div class="half">
+
+            </div>
+        </div>
     {else}
         <div class="row">
             <div class="half">

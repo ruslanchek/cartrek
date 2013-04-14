@@ -1,6 +1,6 @@
 var fleet_add = {
     makes: [
-        'Любая марка',
+        //'Любая марка',
         'AC',
         'Acura',
         'Alfa Romeo',
@@ -170,11 +170,11 @@ var fleet_add = {
                 success: function (data) {
                     core.loading.unsetGlobalLoading();
 
-                    if (data.result === true) {
+                    if (data && data.result === true) {
                         document.location.href = '/control/user/fleet/add/?action=set_device';
 
                     } else {
-                        if (data.form_errors.code) {
+                        if (data && data.form_errors.code) {
                             $('#code').addClass('input-error').prev().find('.error').text(data.form_errors.code);
                         }
                     }
@@ -233,23 +233,36 @@ var fleet_add = {
                     core.loading.setGlobalLoading();
 
                     $('.form_message').hide().html('');
-                    $('#code').removeClass('input-error').prev().find('.error').html('');
+                    $('#name, #model, #g_id').removeClass('input-error').prev().find('.error').html('');
+                    $('#make').parents('.form-item').find('.error').html('');
                 },
                 success: function (data) {
                     core.loading.unsetGlobalLoading();
 
                     if (data && data.result === true) {
-
+                        document.location.href = '/control/user/fleet/add/?action=finish';
                     } else {
                         if(data && data.form_errors){
-                            $.each(data.form_errors, function(){
-                                console.log($(this));
-                            });
-
-                            if (data.form_errors) {
-                                $('#code').addClass('input-error').prev().find('.error').text(data.form_errors.code);
+                            if (data.form_errors.global) {
+                                $('.form_message').html('<div id="error_message">'+data.form_errors.global+' <a class="close" href="javascript:void(0)">×</a></div>');
                             }
-                        };
+
+                            if(data.form_errors.name){
+                                $('#name').addClass('input-error').prev().find('.error').text(data.form_errors.name);
+                            }
+
+                            if(data.form_errors.make){
+                                $('#make').parents('.form-item').find('.error').text(data.form_errors.make);
+                            }
+
+                            if(data.form_errors.model){
+                                $('#model').addClass('input-error').prev().find('.error').text(data.form_errors.model);
+                            }
+
+                            if(data.form_errors.g_id){
+                                $('#g_id').addClass('input-error').prev().find('.error').text(data.form_errors.g_id);
+                            }
+                        }
                     }
 
                     $('.form_message').slideDown(150);
@@ -257,15 +270,13 @@ var fleet_add = {
                 error: function () {
                     core.loading.unsetGlobalLoading();
                 }
-            });
-        });
+            })
+        })
     },
 
     init: function () {
         /*$('#make').typeahead({
-         source: this.makes
-         });*/
-
-
+        source: this.makes
+        });*/
     }
 };

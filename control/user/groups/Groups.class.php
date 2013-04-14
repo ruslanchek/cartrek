@@ -31,7 +31,7 @@ Class Groups extends Core
 
             exit;
         } else {
-            $this->createAdditionalButton('Добавить группу', '/control/user/fleet/add');
+            $this->createAdditionalButton('Добавить группу', '#');
         }
 
         if (isset($_GET['action'])) {

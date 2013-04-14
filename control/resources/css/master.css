@@ -796,6 +796,10 @@ a.badge:active {
     border-radius: 2px;
 }
 
+.forms .b-core-ui-select {
+    width: 94%;
+}
+
 .forms .btn.float-left {
     float: left !important;
     margin: 0 25px 0 0 !important;
@@ -881,6 +885,7 @@ a.badge:active {
     border-radius: 2px;
     text-shadow: 0 -1px 0 #89101a;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+    margin-bottom: 1em;
     position: relative;
 }
 
@@ -1511,6 +1516,10 @@ footer a:active {
     background: -moz-linear-gradient(top, #efefef, #eee);
     background: -webkit-linear-gradient(top, #efefef, #eee);
     background: linear-gradient(top, #efefef, #eee);
+}
+
+.delete-btn {
+
 }
 
 /* =Buttons separated
@@ -2695,4 +2704,85 @@ footer a:active {
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-/* New car */
+/* Modal */
+#fs_overlay {
+	background: #000;
+	opacity: 0.5;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1999; }
+
+.window {
+	background: #fff;
+	-webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	z-index: 2000;
+    -webkit-box-shadow: 0px 20px 30px 0px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 0px 20px 30px 0px rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 20px 30px 0px rgba(0, 0, 0, 0.6); }
+
+	.window h1 {
+		font-size: 20px;
+		padding: 10px 35px 10px 15px;
+		background: #dcdcdc url(../img/bg/light.png) top repeat-x;
+		text-shadow: 0px 1px 0px #ffffff;
+		margin: 0 0 15px;
+        line-height: 1.2em;
+        position: relative;
+        font-weight: normal;
+        border-bottom: 1px solid #ccc;
+		-webkit-border-top-left-radius: 5px;
+		-webkit-border-top-right-radius: 5px;
+		-webkit-border-bottom-right-radius: 0px;
+		-webkit-border-bottom-left-radius: 0px;
+		-moz-border-radius-topleft: 5px;
+		-moz-border-radius-topright: 5px;
+		-moz-border-radius-bottomright: 0px;
+		-moz-border-radius-bottomleft: 0px;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		border-bottom-right-radius: 0px;
+		border-bottom-left-radius: 0px; }
+
+    .window .message {
+        display: none;
+        padding: 5px 15px;
+        color: #fff;
+        margin: -15px 0 15px;
+        cursor: pointer;
+    }
+
+    .window .message.ok {
+		background: #1B9750;
+		text-shadow: 0 1px 0 #00542B; }
+
+	.window .message.error {
+		background: #8F0000;
+		text-shadow: 0 1px 0 #660000; }
+
+    .window.loading h1 {
+        background: #dcdcdc url(../img/bg/messages_loading.gif) top;
+    }
+
+	.window .window_content { padding: 0 15px 15px; }
+
+
+#modal_closer {
+	background: url(../img/icons/close.png);
+	height: 20px;
+	width: 20px;
+	position: absolute;
+	right: 15px;
+    z-index: 3;
+	top: 13px; }
+
+.window.loading #modal_closer {
+    display: none;
+}

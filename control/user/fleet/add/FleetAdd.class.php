@@ -14,7 +14,7 @@ Class FleetAdd extends Core
 
         $this->init(array(
             'name' => 'user.fleet.add',
-            'title' => 'Добавление устройства',
+            'title' => 'Добавление машины',
             'dir' => '/control/user/fleet/add'
         ));
 
@@ -45,6 +45,12 @@ Class FleetAdd extends Core
 
                 }
                     break;
+
+                case 'finish' :
+                {
+                    $this->finish();
+                }
+                    break;
             }
         }
     }
@@ -54,25 +60,63 @@ Class FleetAdd extends Core
         $this->deInit();
     }
 
+    private function finish()
+    {
+        $cs = $this->checkSN($_SESSION['code_approved']);
+
+        if ($cs->status === true) {
+            $query = "
+                    UPDATE
+                        `devices`
+                    SET
+                        `user_id`   = " . intval($this->auth->user['data']['id']) . ",
+                        `active`    = 1,
+                        `activated` = 1,
+                        `name`      = '" . $this->db->quote($_SESSION['new_car_data']->name) . "',
+                        `make`      = '" . $this->db->quote($_SESSION['new_car_data']->make) . "',
+                        `model`     = '" . $this->db->quote($_SESSION['new_car_data']->model) . "',
+                        `g_id`      = '" . $this->db->quote($_SESSION['new_car_data']->g_id) . "'
+                    WHERE
+                        `code`      = '" . $this->db->quote($_SESSION['code_approved']) . "'
+                ";
+
+            $this->db->query($query);
+
+            $this->smarty->assign('new_device_data', $this->devices->getUserDevice($cs->id));
+
+        } else {
+            header('Location:/control/user/fleet/add/');
+        }
+    }
+
     private function checkSN($code)
     {
         $query = "
-                SELECT
-                    COUNT(*) AS `count`
-                FROM
-                    `devices`
-                WHERE
-                    `user_id`   != " . intval($this->auth->user['data']['id']) . " &&
-                    `active`    != 1 &&
-                    `activated` != 1 &&
-                    `code`      = '" . $this->db->quote(strtoupper($code)) . "'
-            ";
+            SELECT
+                `id`
+            FROM
+                `devices`
+            WHERE
+                `user_id`   = 0 &&
+                `active`    != 1 &&
+                `activated` != 1 &&
+                `code`      = '" . $this->db->quote(strtoupper($code)) . "'
+        ";
 
         $data = $this->db->assocItem($query);
 
-        if ($data['count'] > 0) {
-            return true;
+        $result = new stdClass();
+
+        $result->id = $data['id'];
+
+        if ($data['id'] > 0) {
+            $result->status = true;
+        } else {
+            $result->status = false;
         }
+        ;
+
+        return $result;
     }
 
     public function checkDeviceBySN($code)
@@ -87,21 +131,28 @@ Class FleetAdd extends Core
         $form_data->code = $code;
 
         if (strlen($code) < 12 && strlen($code) > 0) {
-            $form_errors->code = 'Ошибка, код 12 символов';
+            $form_errors->code = 'Минимум 12 символов';
             $no_errors = false;
+
         } elseif (strlen($code) <= 0 && !$code) {
-            $form_errors->code = 'Ошибка, введите код';
+            $form_errors->code = 'Введите код';
             $no_errors = false;
+
         } else {
-            $result = $this->checkSN($form_data->code);
+            $result = $this->checkSN($form_data->code)->status;
 
             if ($result !== true) {
-                $form_errors->code = 'Ошибка, несуществующий код';
+                $form_errors->code = 'Несуществующий код';
+                $no_errors = false;
+            }
+
+            if (strlen($code) > 12) {
+                $form_errors->code = 'Максимум 12 символов';
                 $no_errors = false;
             }
 
             if ($no_errors === true) {
-                $_SESSION['code_approved'] = $form_data->code;
+                $_SESSION['code_approved'] = $form_data->code; // TODO сделать фильтр значений от вредоносных
             }
         }
 
@@ -131,7 +182,7 @@ Class FleetAdd extends Core
         $no_errors = true;
         $form_data->code = $_SESSION['code_approved'];
 
-        $result = $this->checkSN($form_data->code);
+        $result = $this->checkSN($form_data->code)->status;
 
         if ($result !== true) {
             $form_errors->global = 'Ошибка, несуществующий код, начните процесс активации заново';
@@ -139,8 +190,48 @@ Class FleetAdd extends Core
         }
 
         if (strtolower($_SERVER['REQUEST_METHOD']) == 'post') {
-            foreach ($_POST as $item) {
-                $form_data->$item = $item;
+            $form_data->name = $_POST['name'];
+            $form_data->make = $_POST['make'];
+            $form_data->model = $_POST['model'];
+            $form_data->g_id = $_POST['g_id'];
+
+            if (!$form_data->name) {
+                $form_errors->name = 'Введите название';
+                $no_errors = false;
+            } else if (strlen($form_data->name) < 3) {
+                $form_errors->name = 'Минимум 3 символа';
+                $no_errors = false;
+            } else if (strlen($form_data->name) > 20) {
+                $form_errors->name = 'Максимум 20 символов';
+                $no_errors = false;
+            }
+
+            if (!$form_data->make || $form_data->make == '') {
+                $form_errors->make = 'Выберите прозводителя';
+                $no_errors = false;
+            } else if (strlen($form_data->make) > 20) {
+                $form_errors->make = 'Максимум 20 символов';
+                $no_errors = false;
+            }
+
+            if (!$form_data->model) {
+                $form_errors->model = 'Введите модель';
+                $no_errors = false;
+            } else if (strlen($form_data->model) > 20) {
+                $form_errors->model = 'Максимум 20 символов';
+                $no_errors = false;
+            }
+
+            if (!$form_data->g_id) {
+                $form_errors->g_id = 'Введите госномер';
+                $no_errors = false;
+            } else if (strlen($form_data->g_id) > 20) {
+                $form_errors->g_id = 'Максимум 20 символов';
+                $no_errors = false;
+            }
+
+            if ($no_errors === true) {
+                $_SESSION['new_car_data'] = $form_data;
             }
         }
 
@@ -149,116 +240,5 @@ Class FleetAdd extends Core
             'form_errors' => $form_errors,
             'result' => $no_errors
         );
-    }
-
-    private function bindNewDevice($code)
-    {
-        $query = "
-                UPDATE
-                    `devices`
-                SET
-                    `user_id`   = " . intval($this->auth->user['data']['id']) . ",
-                    `active`    = 1,
-                    `activated` = 1,
-                    `name`      = '" . $this->db->quote($_POST['name']) . "',
-                    `make`      = '" . $this->db->quote($_POST['make']) . "',
-                    `model`     = '" . $this->db->quote($_POST['model']) . "',
-                    `g_id`      = '" . $this->db->quote($_POST['g_id']) . "'
-                WHERE
-                    `code`      = '" . $this->db->quote($code) . "'
-            ";
-
-        $this->db->query($query);
-    }
-
-    public function addDevice()
-    {
-        switch ($_POST['step']) {
-            case '1' :
-            {
-                if (isset($_POST['code']) && $_POST['code']) {
-                    $_SESSION['add_car']['code'] = $_POST['code'];
-
-                    if (!$this->checkDeviceBySN($_POST['code'])) {
-                        return array(
-                            'step' => 1,
-                            'status' => false,
-                            'message' => 'Неверный серийный номер'
-                        );
-                    }
-
-                    return array(
-                        'step' => 2,
-                        'status' => true
-                    );
-                } else {
-                    return array(
-                        'step' => 1,
-                        'status' => false,
-                        'message' => 'Введите серийный номер'
-                    );
-                }
-            }
-                break;
-
-            case '2' :
-            {
-                if (isset($_POST['back'])) {
-                    return array(
-                        'step' => 1,
-                        'status' => true
-                    );
-                }
-
-                if (!$_POST['name']) {
-                    return array(
-                        'step' => 2,
-                        'status' => false,
-                        'message' => 'Введите название'
-                    );
-                } else {
-                    $_SESSION['add_car']['name'] = $_POST['name'];
-                }
-
-                if (!$_POST['make']) {
-                    return array(
-                        'step' => 2,
-                        'status' => false,
-                        'message' => 'Введите название'
-                    );
-                } else {
-                    $_SESSION['add_car']['make'] = $_POST['make'];
-                }
-
-                if (!$_POST['model']) {
-                    return array(
-                        'step' => 2,
-                        'status' => false,
-                        'message' => 'Введите модель автомобиля'
-                    );
-                } else {
-                    $_SESSION['add_car']['model'] = $_POST['model'];
-                }
-
-                if (!$_POST['g_id']) {
-                    return array(
-                        'step' => 2,
-                        'status' => false,
-                        'message' => 'Введите госномер'
-                    );
-                } else {
-                    $_SESSION['add_car']['g_id'] = $_POST['g_id'];
-                }
-
-                $this->bindNewDevice($_SESSION['add_car']['code']);
-
-                return array(
-                    'step' => 3,
-                    'status' => true,
-                    'message' => 'Устройство добавлено успешно!'
-                );
-            }
-                break;
-        }
     }
 }

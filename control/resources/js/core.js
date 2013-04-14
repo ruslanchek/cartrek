@@ -1249,6 +1249,109 @@ core.ui = {
     }
 };
 
+//Modal window class
+core.modal = {
+    prepareCode: function (header, html) {
+        var code = '<div class="window" id="modal_window">' +
+            '<a href="javascript:void(0)" id="modal_closer"></a>' +
+            '<h1>' + header + '</h1>' +
+            '<div class="message" title="Клик закроет это сообщение"></div>' +
+            '<div class="window_content">' + html + '</div>' +
+            '</div>';
+        return code;
+    },
+
+    setModalDimensions: function () {
+        var that = this;
+        $('#modal_window').css({
+            width: that.width,
+            marginLeft: -that.width / 2
+        });
+    },
+
+    setModalPosition: function () {
+        $('#modal_window').css({
+            marginTop: -$('#modal_window').height() / 2
+        });
+    },
+
+    unSetMessage: function () {
+        $('#modal_window .message').html('').hide();
+    },
+
+    setMessage: function (status, message) {
+        this.unSetMessage();
+
+        if (status) {
+            $('#modal_window .message').html(message).addClass('ok').show();
+        } else {
+            $('#modal_window .message').html(message).addClass('error').hide();
+        }
+    },
+
+    setLoading: function () {
+        this.unSetLoading();
+        $('#modal_window').addClass('loading');
+    },
+
+    unSetLoading: function () {
+        $('#modal_window').removeClass('loading');
+    },
+
+    createOverlay: function () {
+        $('body').prepend('<div id="fs_overlay"></div>');
+        $('#fs_overlay').css('background', 'black').show();
+    },
+
+    createModal: function (header, html, width) {
+        var that = this;
+
+        $('#modal_window, #fs_overlay').remove();
+        this.width = width;
+
+        $('body').prepend(this.prepareCode(header, html));
+
+        $('#modal_window .message').live('click', function () {
+            that.unSetMessage();
+        });
+
+        this.setModalDimensions();
+        this.setModalPosition();
+        this.createOverlay();
+
+        $(window).on('resize', function () {
+            that.setModalPosition();
+        });
+
+        $(document).on('scroll', function () {
+            that.setModalPosition();
+        });
+
+        $('body').on('scroll', function () {
+            that.setModalPosition();
+        });
+
+        $('#modal_closer').on('click', function () {
+            that.destroyModal();
+        });
+
+        $('body').on('keyup', function (e) {
+            if(e.keyCode == 27){
+                that.destroyModal();
+            };
+        });
+    },
+
+    destroyModal: function () {
+        $(window).off('resize');
+        $(document).off('scroll');
+        $('#modal_closer').off('click');
+        $('body').off('scroll');
+        $('body').off('keyup');
+        $('#modal_window, #fs_overlay').remove();
+    }
+};
+
 core.effects = {
     breathe: function (obj) {
         if (obj.is(':visible')) {
@@ -1423,6 +1526,7 @@ core.webkitNotificationsRequest = function () {
         window.webkitNotifications.requestPermission();
     }
 };
+
 
 //Object starter
 $(function () {
