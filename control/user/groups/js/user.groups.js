@@ -43,14 +43,11 @@ var user_groups = {
     addGroupModal: function(){
         var html =  '<input type="text" placeholder="Название группы" id="new_fleet_name">';
 
-        core.modal.show({
-            header: 'Создание группы',
-            body: html,
-            width: 400,
-            action: function(){
-                user_groups.addGroup();
-            }
-        });
+        core.modal.createModal(
+            'Создание группы',
+            html,
+            450
+        );
 
         $('#new_fleet_name').focus();
     },

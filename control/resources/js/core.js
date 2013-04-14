@@ -9,159 +9,6 @@ var core = {
     }
 };
 
-core.forms = {
-    readDataFormSettingsTable: function (id) {
-        var result = {};
-
-        $('.settings_table#' + id).find('input').each(function () {
-            result[$(this).attr('id')] = $(this).val();
-        });
-
-        return result;
-    },
-
-    drawSettingsTable: function (id, options) {
-        var options_html = new String(),
-            on, off;
-
-        for (var i = 0, l = options.length; i < l; i++) {
-            if (options[i].value >= 1) {
-                on = 'active';
-                off = '';
-            } else {
-                on = '';
-                off = 'active';
-            }
-
-            options_html += '<tr>' +
-                '<th>' + options[i].label + '</th>' +
-                '<td>' +
-                '<div class="btn-group" data-toggle="buttons-radio">' +
-                '<button data-value="1" class="btn ' + on + '">Вкл</button>' +
-                '<button data-value="0" class="btn ' + off + '">Выкл</button>' +
-                '</div>' +
-                '<input type="hidden" id="' + options[i].id + '" value="' + options[i].value + '" />' +
-                '</td>' +
-                '</tr>';
-
-        }
-        ;
-
-        var $html = $('<table id="' + id + '" class="settings_table">' + options_html + '</table>');
-
-        $html.find('.btn').on('click', function () {
-            $(this).parent().next('input').val($(this).data('value'));
-        });
-
-        return $html;
-    }
-};
-
-core.modal = {
-    modal: null,
-
-    hide: function () {
-        this.modal.remove();
-    },
-
-    unSetLoading: function () {
-        this.modal.find('.save_modal').button('reset');
-    },
-
-    setLoading: function () {
-        this.modal.find('.save_modal').button('loading');
-    },
-
-    setMessage: function (data) {
-        $('.modal_message').html(data.message).removeClass('error').removeClass('ok');
-
-        if (data.status) {
-            $('.modal_message').addClass('ok');
-        } else {
-            $('.modal_message').addClass('error');
-        }
-        ;
-
-        $('.modal_message').slideDown(70);
-    },
-
-    unSetMessage: function () {
-        $('.modal_message').slideUp(70, function () {
-            $('.modal_message').removeClass('error').removeClass('ok').html('');
-        });
-    },
-
-    show: function (options) {
-        var $modal_html = $('<div class="modal_overlay"></div>' +
-            '<div class="modal">' +
-            '<div class="modal-header">' +
-            '<a class="close" data-dismiss="modal">×</a>' +
-            '<h3>' + options.header + '</h3>' +
-            '</div>' +
-            '<div class="modal_message error"></div>' +
-            '<div class="modal-body">' + options.body + '</div>' +
-            '<div class="modal-footer">' +
-            '<a href="javascript:void(0)" class="btn btn-primary save_modal pull-left" autocomplete="off">Сохранить</a>' +
-            '<a href="javascript:void(0)" class="btn close_modal pull-left">Закрыть</a>' +
-            '</div>' +
-            '</div>');
-
-        $modal_html.hide();
-        $modal_html.find('.modal-body').html(options.content);
-        $modal_html.find('a.close, a.close_modal').on('click', function () {
-            core.modal.hide();
-        });
-
-        $modal_html.find('a.close, a.save_modal')
-            .on('click', function () {
-                options.action();
-            })
-            .data('loading-text', 'Сохранение...');
-
-        $('body').prepend($modal_html);
-        $modal_html.fadeIn(100);
-        this.modal = $modal_html;
-
-        if (options.width) {
-            var w, m;
-
-            if (typeof options.width == 'number') {
-                w = options.width;
-                m = -options.width / 2;
-            } else if (typeof options.width != 'number' && options.width > 0) {
-                w = options.width;
-                m = -options.width.substring(0, options.width.length - 1) / 2 + '%';
-            } else {
-                w = 400;
-                m = -200;
-            }
-            ;
-
-            $('.modal').css({
-                width: w,
-                marginLeft: m
-            });
-        }
-        ;
-
-        $('.modal_message').off('click').on('click', function () {
-            core.modal.unSetMessage();
-        });
-
-        $('body').off('keyup.modal').on('keyup.modal', function (e) {
-            if (e.keyCode == 13) {
-                options.action();
-            }
-            ;
-
-            if (e.keyCode == 27) {
-                core.modal.hide();
-            }
-            ;
-        });
-    }
-};
-
 core.notify = {
     showNotify: function (content) {
         $('.notify').remove();
@@ -1258,6 +1105,7 @@ core.modal = {
             '<div class="message" title="Клик закроет это сообщение"></div>' +
             '<div class="window_content">' + html + '</div>' +
             '</div>';
+
         return code;
     },
 
@@ -1345,19 +1193,23 @@ core.modal = {
     destroyModal: function () {
         $(window).off('resize');
         $(document).off('scroll');
+
         $('#modal_closer').off('click');
         $('body').off('scroll');
         $('body').off('keyup');
-        $('#modal_window, #fs_overlay').remove();
+
+        $('#modal_window, #fs_overlay').fadeOut(150, function(){
+            $('#modal_window, #fs_overlay').remove();
+        });
     }
 };
 
 core.effects = {
-    breathe: function (obj) {
+    breathe: function (obj, speed_factor) {
         if (obj.is(':visible')) {
-            obj.delay(800).fadeTo(2000, 0.3);
-            obj.fadeTo(1000, 1.0, function () {
-                core.effects.breathe(obj);
+            obj.delay(800 / speed_factor).fadeTo(2000 / speed_factor, 0.3);
+            obj.fadeTo(1000 / speed_factor, 1.0, function () {
+                core.effects.breathe(obj, speed_factor);
             });
         }
     }
