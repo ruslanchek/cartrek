@@ -1100,11 +1100,11 @@ core.ui = {
 core.modal = {
     prepareCode: function (header, html) {
         var code = '<div class="window" id="modal_window">' +
-            '<a href="javascript:void(0)" id="modal_closer"></a>' +
-            '<h1>' + header + '</h1>' +
-            '<div class="message" title="Клик закроет это сообщение"></div>' +
-            '<div class="window_content">' + html + '</div>' +
-            '</div>';
+                        '<a href="javascript:void(0)" id="modal_closer"></a>' +
+                        '<h1>' + header + '</h1>' +
+                        '<div class="message" title="Клик закроет это сообщение"></div>' +
+                        '<div class="window_content">' + html + '</div>' +
+                    '</div>';
 
         return code;
     },
