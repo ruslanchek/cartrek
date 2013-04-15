@@ -2,7 +2,7 @@
     {$fleets = $core->devices->getFleetsList()}
 
     {if $fleets}
-    <table class="width-100 hovered">
+    <table class="width-100 hovered" id="groups-table">
         <thead class="thead-gray">
             <tr>
                 <th width="98%">Название</th>

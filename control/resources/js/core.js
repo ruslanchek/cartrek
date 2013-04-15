@@ -1098,13 +1098,16 @@ core.ui = {
 
 //Modal window class
 core.modal = {
+    loading_process: null,
+    modal_created: false,
+
     prepareCode: function (header, html) {
         var code = '<div class="window" id="modal_window">' +
-                        '<a href="javascript:void(0)" id="modal_closer"></a>' +
-                        '<h1>' + header + '</h1>' +
-                        '<div class="message" title="Клик закроет это сообщение"></div>' +
-                        '<div class="window_content">' + html + '</div>' +
-                    '</div>';
+            '<a href="javascript:void(0)" id="modal_closer"></a>' +
+            '<h1>' + header + '</h1>' +
+            '<div class="message" title="Клик закроет это сообщение"></div>' +
+            '<div class="window_content">' + html + '</div>' +
+            '</div>';
 
         return code;
     },
@@ -1127,14 +1130,18 @@ core.modal = {
         $('#modal_window .message').html('').hide();
     },
 
-    setMessage: function (status, message) {
+    setMessage: function (data) {
         this.unSetMessage();
 
-        if (status) {
-            $('#modal_window .message').html(message).addClass('ok').show();
+        var classname;
+
+        if (data.status === true) {
+            classname = 'ok';
         } else {
-            $('#modal_window .message').html(message).addClass('error').hide();
+            classname = 'error';
         }
+
+        $('#modal_window .message').addClass(classname).html(data.message).show();
     },
 
     setLoading: function () {
@@ -1152,6 +1159,8 @@ core.modal = {
     },
 
     createModal: function (header, html, width) {
+        this.destroyModal();
+
         var that = this;
 
         $('#modal_window, #fs_overlay').remove();
@@ -1184,23 +1193,33 @@ core.modal = {
         });
 
         $('body').on('keyup', function (e) {
-            if(e.keyCode == 27){
+            if (e.keyCode == 27) {
                 that.destroyModal();
-            };
+            }
         });
+
+        this.modal_created = true;
     },
 
     destroyModal: function () {
-        $(window).off('resize');
-        $(document).off('scroll');
+        if (this.modal_created === true) {
+            $(window).off('resize');
+            $(document).off('scroll');
 
-        $('#modal_closer').off('click');
-        $('body').off('scroll');
-        $('body').off('keyup');
+            $('#modal_closer').off('click');
+            $('body').off('scroll');
+            $('body').off('keyup');
 
-        $('#modal_window, #fs_overlay').fadeOut(150, function(){
-            $('#modal_window, #fs_overlay').remove();
-        });
+            $('#modal_window, #fs_overlay').fadeOut(150, function () {
+                $('#modal_window, #fs_overlay').remove();
+            })
+
+            if (this.loading_process) {
+                this.loading_process.abort();
+            }
+
+            this.modal_created = false;
+        }
     }
 };
 

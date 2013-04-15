@@ -25,7 +25,6 @@ Class Groups extends Core
                     header('Content-type: application/json');
                     print json_encode($this->devices->addNewFleet($_POST['name']));
                 }
-                    ;
                     break;
             }
 

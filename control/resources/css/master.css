@@ -2803,7 +2803,3 @@ footer a:active {
     z-index: 3;
     top: 13px;
 }
-
-.window.loading #modal_closer {
-    display: none;
-}

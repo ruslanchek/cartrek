@@ -7,7 +7,9 @@ Class Devices extends Core
         $devices_present = false;
 
     private
-        $fleets_limit = 20;
+        $fleets_limit = 20,
+        $fleets_name_maxlen = 15,
+        $fleets_name_minlen = 3;
 
     public function __construct()
     {
@@ -416,7 +418,16 @@ Class Devices extends Core
                 'status' => false,
                 'message' => 'Достигнуто максимальное количество групп &mdash; ' . $this->fleets_limit
             );
-
+        } elseif (strlen($name) < $this->fleets_name_minlen) {
+            return array(
+                'status' => false,
+                'message' => 'Название группы должно состоять минимум из '.$this->fleets_name_minlen.' знаков'
+            );
+        } elseif (strlen($name) > $this->fleets_name_maxlen) {
+            return array(
+                'status' => false,
+                'message' => 'Название группы должно состоять максимум из '.$this->fleets_name_maxlen.' знаков'
+            );
         } else {
             $this->db->query("
                     INSERT INTO `fleets` (
@@ -428,9 +439,17 @@ Class Devices extends Core
                     )
                 ");
 
+            $id = $this->db->getMysqlInsertId();
+
+            $name = htmlspecialchars($name, ENT_QUOTES, null, true);
+
             return array(
                 'status' => true,
-                'message' => 'Группа создана!'
+                'data' => (object)array(
+                    'id' => $id,
+                    'name' => $name
+                ),
+                'message' => 'Группа &laquo;' . $name . '&raquo; создана'
             );
         }
     }
