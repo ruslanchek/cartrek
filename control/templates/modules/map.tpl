@@ -5,7 +5,7 @@
         </div>
     </div>
 
-    <div class="map-container">
+    <div class="map-container map-observer">
         <div id="map"></div>
     </div>
 

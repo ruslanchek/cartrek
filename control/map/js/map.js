@@ -647,7 +647,6 @@ var leaflet_ctrl = {
 
                 car.path_length = Math.ceil(this.path.length_in_meters() / 1000);
             }
-
         }
 
 
@@ -657,14 +656,12 @@ var leaflet_ctrl = {
             this.focus(map_instance);
             this.first_loaded_car_id = car_id;
         }
-
     },
 
     removeGhostPath: function (map_instance) {
         if (this.ghost_path) {
             map_instance.removeLayer(this.ghost_path);
         }
-
     },
 
     removeAllThePath: function (map_instance) {
@@ -686,11 +683,9 @@ var leaflet_ctrl = {
             this.start_markers_group.clearLayers();
         }
 
-
         if (this.finish_markers_group) {
             this.finish_markers_group.clearLayers();
         }
-
 
         this.path_points_length = 0;
     },
@@ -1225,25 +1220,21 @@ var map = {
                 car.params = $.parseJSON(data[i].params);
                 car.sat_count = data[i].sat_count;
             }
-
         }
-
     },
 
     drawDynamicCarsData: function (data, options) {
         //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
-        if (data.length > 0) {
+        if (data && data !== null && data.length > 0) {
             if (options.renew === true) {
                 this.m_ctrl.changeCurrentPositionMarkersData(this.map, data, options);
             } else {
                 this.m_ctrl.drawCurrentPositionMarkersGroup(this.map, data);
             }
 
-
             this.addParamsToCars(data);
             this.drawCarPath(false);
         }
-
     },
 
     drawCars: function (options) {

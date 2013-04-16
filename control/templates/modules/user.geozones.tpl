@@ -1,14 +1,20 @@
 <div class="threequarter">
-    <div class="map-instruments">
-        <a href="javascript:void(0)" class="btn btn-icon active"><i class="icon-16x16 cursor"></i></a>
-        <a href="javascript:void(0)" class="btn btn-icon"><i class="icon-16x16 shape"></i></a>
-        <a href="javascript:void(0)" class="btn pull-right">Геозоны</a>
-    </div>
+    <div class="table-wrapper">
+        <div class="geozones">
+            <div class="geozones-left">
+                <div class="map-container map-geozones">
+                    <div id="map"></div>
+                </div>
+            </div>
 
-    <div class="map-container">
-        <div class="shadow-top"></div>
-        <div class="shadow-bottom"></div>
-        <div id="map"></div>
+            <div class="geozones-right">
+                <div class="geozones-menu">
+
+                </div>
+            </div>
+
+            <div class="clear"></div>
+        </div>
     </div>
 </div>
 
