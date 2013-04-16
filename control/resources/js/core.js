@@ -239,6 +239,37 @@ core.loading = {
 };
 
 core.utilities = {
+    getColorChooser: function(default_color){
+        var colors_html = '',
+            colors = [
+                'b81616',
+                '4496de',
+                '9d1b1b',
+                '496b33',
+                '181917',
+                'df4f00',
+                '195b5f',
+                '2c349d',
+                '7a3185',
+                '228867'
+            ],
+            classname;
+
+        for (var i = 0, l = colors.length; i < l; i++) {
+            if(colors[i] == default_color.toLowerCase()){
+                classname = 'active';
+            }else{
+                classname = '';
+            };
+
+            colors_html += '<li><a href="#" class="'+classname+'" data-color="'+colors[i]+'" style="background-color: #'+colors[i]+'"></a></li>';
+        }
+
+        var html = '<div class="color-chooser"><ul>'+colors_html+'</ul><div class="clear"></div></div>';
+
+        return html;
+    },
+
     convertToQWERTY: function (str, reverse) {
         var out = '',
             i,
@@ -1127,7 +1158,7 @@ core.modal = {
     },
 
     unSetMessage: function () {
-        $('#modal_window .message').html('').hide();
+        $('#modal_window .message').removeClass('ok').removeClass('error').html('').hide();
     },
 
     setMessage: function (data) {
@@ -1294,9 +1325,7 @@ core.events_api = {
             } else {
                 window.webkitNotifications.requestPermission();
             }
-            ;
         }
-        ;
     },
 
     showEventsMeow: function (data) {
@@ -1305,7 +1334,7 @@ core.events_api = {
             message: data.message,
             duration: this.events_meow_duration
         });
-        w
+
         this.webkitNotification(data.message);
     },
 

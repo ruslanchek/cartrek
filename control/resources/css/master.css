@@ -565,6 +565,10 @@ table {
             border-radius: 4px;
 }
 
+.table-wrapper table {
+    margin: 0;
+}
+
 table td,
 table th {
     padding: 8px 10px !important;
@@ -835,6 +839,7 @@ a.badge:active {
 }
 
 .forms .btn.blue,
+.forms .btn.red,
 .forms .btn.gray {
     width: auto;
     padding-left: 25px;
@@ -892,6 +897,43 @@ a.badge:active {
     margin: 0;
 }
 
+.forms .color-chooser {
+    margin: 0 0 1em;
+}
+
+.forms .color-chooser ul {
+    margin: 0;
+}
+
+.forms .color-chooser ul li {
+    list-style-type: none;
+    float: left;
+    margin: 0 5px 5px 0;
+}
+
+.forms .color-chooser ul li a {
+    display: block;
+    height: 19px;
+    width: 19px;
+    border: 2px solid #999;
+    background-image: url(../img/white-gradient.png);
+    background-position: top;
+    background-repeat: repeat-x;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+
+    box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4);
+    -webkit-box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.forms .color-chooser ul li a:hover {
+    border-color: #ccc;
+}
+
+.forms .color-chooser ul li a.active {
+    border-color: #a70002;
+}
+
 #ok_message {
     background: #1B9750;
     padding: 6px 42px 6px 10px;
@@ -901,6 +943,7 @@ a.badge:active {
     border-radius: 2px;
     text-shadow: 0 -1px 0 #00542B;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
     margin-bottom: 1em;
     position: relative;
 }
@@ -1545,6 +1588,34 @@ footer a:active {
     background: -moz-linear-gradient(top, #efefef, #eee);
     background: -webkit-linear-gradient(top, #efefef, #eee);
     background: linear-gradient(top, #efefef, #eee);
+}
+
+
+.btn.red {
+    width: 180px;
+    padding: 10px 10px;
+
+    display: block;
+
+    background: #e75b5b;
+    background: -moz-linear-gradient(top, #e75b5b, #d73131);
+    background: -webkit-linear-gradient(top, #e75b5b, #d73131);
+    background: linear-gradient(top, #e75b5b, #d73131);
+    color: white;
+    font-weight: bold;
+    border-color: #a50c0c;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+    font-size: 15px;
+}
+
+.btn.red:hover {
+    background: #f28989;
+    background: -moz-linear-gradient(top, #f28989, #e53838);
+    background: -webkit-linear-gradient(top, #f28989, #e53838);
+    background: linear-gradient(top, #f28989, #e53838);
 }
 
 .delete-btn {
@@ -2775,6 +2846,14 @@ footer a:active {
     right: 15px;
     z-index: 3;
     top: 15px;
+    opacity: 0.6;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#modal_closer:hover {
+    opacity: 1;
 }
 
 /* Geozones */
@@ -2812,6 +2891,10 @@ footer a:active {
     font-size: 0.9em;
     text-decoration: none;
     position: relative;
+}
+
+.geozones .geozones-menu ul li.unactive a {
+    color: #999;
 }
 
 .geozones .geozones-menu ul li a:hover {

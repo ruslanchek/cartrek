@@ -408,7 +408,7 @@ Class Devices extends Core
     {
         $c = $this->db->countRows('fleets', '`user_id` = ' . intval($this->auth->user['data']['id']));
 
-        if ($this->db->checkRowExistance('fleets', 'name', $name)) {
+        if ($this->db->checkRowExistance('fleets', 'name', $name, false, ' && `user_id` = ' . intval($this->auth->user['data']['id']))) {
             return array(
                 'status' => false,
                 'message' => 'Группа с таким названием уже существует'

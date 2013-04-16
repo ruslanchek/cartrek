@@ -33,6 +33,19 @@ Class Geozones extends Core
                     print json_encode($this->addGeozone($_POST['points']));
                 }
                     break;
+
+                case 'editGeozone' :
+                {
+                    header('Content-type: application/json');
+                    print json_encode($this->editGeozone($_POST['id'], $_POST['active'], $_POST['name'], $_POST['notify'], $_POST['color']));
+                }
+                    break;
+
+                case 'deleteGeozone' :
+                {
+                    $this->deleteGeozone($_GET['id']);
+                }
+                    break;
             }
 
             exit;
@@ -44,21 +57,91 @@ Class Geozones extends Core
         $this->deInit();
     }
 
+    private function deleteGeozone($id)
+    {
+        $query = "
+            DELETE FROM
+                `geozones`
+            WHERE
+                `id` = " . intval($id) . " &&
+                `user_id` = " . intval($this->auth->user['data']['id']);
+
+        $this->db->query($query);
+    }
+
     private function getGeozones()
     {
         $query = "
                 SELECT
                     `id`,
                     `name`,
-                    `points`
+                    `points`,
+                    `notify`,
+                    `active`,
+                    `color`
+                FROM
+                    `geozones`
+                WHERE
+                    `user_id` = " . intval($this->auth->user['data']['id']) . "
+                ORDER BY
+                    `id`
+                DESC";
+
+        return $this->db->assocMulti($query);
+    }
+
+    private function getGeozone($id)
+    {
+        $query = "
+                SELECT
+                    `id`,
+                    `name`,
+                    `points`,
+                    `notify`,
+                    `active`,
+                    `color`
                 FROM
                     `geozones`
                 WHERE
                     `user_id` = " . intval($this->auth->user['data']['id']) . " &&
-                    `active` = 1
-            ";
+                    `id` = " . intval($id);
 
-        return $this->db->assocMulti($query);
+        return $this->db->assocItem($query);
+    }
+
+    private function editGeozone($id, $active, $name, $notify, $color)
+    {
+        if ($this->db->checkRowExistance('geozones', 'name', $name, array($id), ' && `user_id` = ' . intval($this->auth->user['data']['id']))) {
+            return array(
+                'status' => false,
+                'message' => 'Геозона с таким названием уже существует'
+            );
+        }
+
+        $query = "
+                UPDATE
+                    `geozones`
+                SET
+                    `active` = " . intval($active) . ",
+                    `name` = '" . $this->db->quote($name) . "',
+                    `color` = '" . $this->db->quote($color) . "',
+                    `notify` = " . intval($notify) . "
+                WHERE
+                    `id` = " . intval($id) . " &&
+                    `user_id` = " . intval($this->auth->user['data']['id']);
+
+        $this->db->query($query);
+
+        return array(
+            'status' => true,
+            'data' => (object)array(
+                'id' => $id,
+                'name' => $name,
+                'active' => $active,
+                'notify' => $notify
+            ),
+            'message' => 'Данные сохранены'
+        );
     }
 
     private function addGeozone($points)
@@ -68,16 +151,28 @@ Class Geozones extends Core
                     `geozones`
                 SET
                     `user_id`   = " . intval($this->auth->user['data']['id']) . ",
-                    `active`    = 1,
-                    `points`    = '" . $this->db->quote($points) . "'
+                    `active`    = 0,
+                    `points`    = '" . $this->db->quote($points) . "',
+                    `notify`    = 0
             ";
 
         $this->db->query($query);
-        $result = new stdClass();
 
-        $result->id = $this->db->getMysqlInsertId();
-        $result->name = 'Geozone ' . $this->db->getMysqlInsertId();
+        $id = $this->db->getMysqlInsertId();
 
-        return $result;
+        $query = "
+                UPDATE
+                    `geozones`
+                SET
+                    `name` = 'Геозона " . intval($id) . "'
+                WHERE
+                    `id` = " . intval($id) . " &&
+                    `user_id` = " . intval($this->auth->user['data']['id']);
+
+        $this->db->query($query);
+
+        $result = $this->getGeozone($id);
+
+        return (object)$result;
     }
 }

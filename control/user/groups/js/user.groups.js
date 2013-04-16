@@ -60,14 +60,18 @@ var user_groups = {
             '<div class="form_message"></div>' +
 
             '<ul>' +
-            '<div class="form-item">' +
+
+            '<li class="form-item">' +
             '<label for="new_fleet_name" class="bold">Название <span class="error"></span></label>' +
             '<input class="text width-50" style="width: 50%" type="text" name="new_fleet_name" id="new_fleet_name" value="" />' +
-            '</div>' +
+            '</li>' +
+
+            '<hr>' +
 
             '<li class="push">' +
             '<input type="submit" name="send" class="btn blue float-left" value="Добавить" />' +
             '</li>' +
+
             '</ul>' +
 
             '<div class="clear"></div>' +

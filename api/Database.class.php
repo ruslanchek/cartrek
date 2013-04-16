@@ -111,7 +111,7 @@ class Database extends Core
     }
 
     //Returns true, if exists
-    public function checkRowExistance($table, $param, $value, $not = false)
+    public function checkRowExistance($table, $param, $value, $not = false, $additional_where = '')
     {
         if (is_numeric($value)) {
             $value = intval($value);
@@ -138,7 +138,7 @@ class Database extends Core
                 FROM
                     `" . $this->quote($table) . "`
                 WHERE
-                    `" . $this->quote($param) . "` = " . $value . $exclude . "
+                    `" . $this->quote($param) . "` = " . $value . $exclude . $additional_where . "
                 LIMIT 1
             ";
 
