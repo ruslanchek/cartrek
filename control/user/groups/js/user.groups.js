@@ -33,7 +33,7 @@ var user_groups = {
                                     '<td>'+data.data.name+'</td>' +
                                     '<td>0</td>' +
                                     '<td>' +
-                                        '<a href="javascript:void(0)" class="red delete-btn delete-group" data-count="0" data-id="'+data.data.id+'" data-name="'+data.data.name+'">Удалить</a>' +
+                                        '<a href="javascript:void(0)" class="btn red delete-btn delete-group" data-count="0" data-id="'+data.data.id+'" data-name="'+data.data.name+'">Удалить</a>' +
                                     '</td>' +
                                 '</tr>';
 

@@ -1612,14 +1612,18 @@ footer a:active {
 }
 
 .btn.red:hover {
+    color: #fff;
     background: #f28989;
     background: -moz-linear-gradient(top, #f28989, #e53838);
     background: -webkit-linear-gradient(top, #f28989, #e53838);
     background: linear-gradient(top, #f28989, #e53838);
 }
 
-.delete-btn {
-
+table .delete-btn {
+    font-size: 12px !important;
+    font-weight: normal !important;
+    width: auto !important;
+    padding: 3px 5px !important;
 }
 
 /* =Buttons separated

@@ -18,7 +18,7 @@
                     <td>{$item.name}</td>
                     <td>{$item.cars}</td>
                     <td>
-                        <a href="javascript:void(0)" class="red delete-btn delete-group" data-count="{$item.cars}" data-id="{$item.id}" data-name="{$item.name|escape}">Удалить</a>
+                        <a href="javascript:void(0)" class="btn red delete-btn delete-group" data-count="{$item.cars}" data-id="{$item.id}" data-name="{$item.name|escape}">Удалить</a>
                     </td>
                 </tr>
                 {/foreach}
