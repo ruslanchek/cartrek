@@ -114,15 +114,15 @@ var geozones = {
             geozones.addGeozone(e.poly.getLatLngs(), function (data) {
                 geozones.addShape(e.poly.getLatLngs(), data);
 
-                geozones.drawData(function(){
+                geozones.drawData(function () {
                     geozones.editGeozone(data.id);
                 });
 
                 /*core.events_api.pushEvent({
-                    status: 4,
-                    type: 1,
-                    message: 'Геозона «' + data.name + '» добавлена'
-                });*/
+                 status: 4,
+                 type: 1,
+                 message: 'Геозона «' + data.name + '» добавлена'
+                 });*/
             });
         });
 
@@ -378,7 +378,7 @@ var geozones = {
             550
         );
 
-        $('.color-chooser a').on('click', function(){
+        $('.color-chooser a').on('click', function () {
             $('.color-chooser a').removeClass('active');
             $('#color').val($(this).data('color'));
             $(this).addClass('active');
@@ -390,13 +390,15 @@ var geozones = {
             geozones.saveGeozoneData(gz);
         });
 
-        $('#delete-geozone').on('click', function(){
+        $('#delete-geozone').on('click', function () {
             geozones.delete(gz.id, gz.name);
         });
+
+        $('#name').focus();
     },
 
-    delete: function(id, name){
-        if(confirm('Удалить геозону «' + name + '»?')){
+    delete: function (id, name) {
+        if (confirm('Удалить геозону «' + name + '»?')) {
             core.modal.loading_process = $.ajax({
                 url: '/control/user/geozones/?ajax&action=deleteGeozone',
                 data: {
@@ -481,7 +483,7 @@ var geozones = {
 
                 geozones.map.addLayer(geozones.zones_layers);
 
-                if(callback){
+                if (callback) {
                     callback();
                 }
 

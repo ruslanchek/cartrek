@@ -2,6 +2,11 @@
 
 Class Geozones extends Core
 {
+    private
+        $geozones_limit = 20,
+        $geozones_name_maxlen = 25,
+        $geozones_name_minlen = 3;
+
     public function __construct()
     {
         parent::__construct();
@@ -111,10 +116,27 @@ Class Geozones extends Core
 
     private function editGeozone($id, $active, $name, $notify, $color)
     {
-        if ($this->db->checkRowExistance('geozones', 'name', $name, array($id), ' && `user_id` = ' . intval($this->auth->user['data']['id']))) {
+        $c = $this->db->countRows('geozones', '`user_id` = ' . intval($this->auth->user['data']['id']));
+
+        if ($c > $this->geozones_limit) {
+            return array(
+                'status' => false,
+                'message' => 'Достигнуто максимальное количество геозон &mdash; ' . $this->geozones_limit
+            );
+        } elseif ($this->db->checkRowExistance('geozones', 'name', $name, array($id), ' && `user_id` = ' . intval($this->auth->user['data']['id']))) {
             return array(
                 'status' => false,
                 'message' => 'Геозона с таким названием уже существует'
+            );
+        } elseif (mb_strlen($name) < $this->geozones_name_minlen) {
+            return array(
+                'status' => false,
+                'message' => 'Название геозоны должно состоять минимум из ' . $this->geozones_name_minlen . ' знаков'
+            );
+        } elseif (mb_strlen($name) > $this->geozones_name_maxlen) {
+            return array(
+                'status' => false,
+                'message' => 'Название геозоны должно состоять максимум из ' . $this->geozones_name_maxlen . ' знаков'
             );
         }
 
@@ -146,33 +168,37 @@ Class Geozones extends Core
 
     private function addGeozone($points)
     {
-        $query = "
-                INSERT INTO
-                    `geozones`
-                SET
-                    `user_id`   = " . intval($this->auth->user['data']['id']) . ",
-                    `active`    = 0,
-                    `points`    = '" . $this->db->quote($points) . "',
-                    `notify`    = 0
-            ";
+        $c = $this->db->countRows('geozones', '`user_id` = ' . intval($this->auth->user['data']['id']));
 
-        $this->db->query($query);
+        if ($c < $this->geozones_limit) {
+            $query = "
+                    INSERT INTO
+                        `geozones`
+                    SET
+                        `user_id`   = " . intval($this->auth->user['data']['id']) . ",
+                        `active`    = 0,
+                        `points`    = '" . $this->db->quote($points) . "',
+                        `notify`    = 0
+                ";
 
-        $id = $this->db->getMysqlInsertId();
+            $this->db->query($query);
 
-        $query = "
-                UPDATE
-                    `geozones`
-                SET
-                    `name` = 'Геозона " . intval($id) . "'
-                WHERE
-                    `id` = " . intval($id) . " &&
-                    `user_id` = " . intval($this->auth->user['data']['id']);
+            $id = $this->db->getMysqlInsertId();
 
-        $this->db->query($query);
+            $query = "
+                    UPDATE
+                        `geozones`
+                    SET
+                        `name` = 'Геозона " . intval($id) . "'
+                    WHERE
+                        `id` = " . intval($id) . " &&
+                        `user_id` = " . intval($this->auth->user['data']['id']);
 
-        $result = $this->getGeozone($id);
+            $this->db->query($query);
 
-        return (object)$result;
+            $result = $this->getGeozone($id);
+
+            return (object) $result;
+        }
     }
 }

@@ -30,16 +30,62 @@ var user_groups = {
                     core.modal.destroyModal();
 
                     var html = '<tr>' +
-                                    '<td>'+data.data.name+'</td>' +
-                                    '<td>0</td>' +
-                                    '<td>' +
-                                        '<a href="javascript:void(0)" class="btn red delete-btn delete-group" data-count="0" data-id="'+data.data.id+'" data-name="'+data.data.name+'">Удалить</a>' +
-                                    '</td>' +
-                                '</tr>';
+                        '<td><a rel="' + data.data.id + '" class="group-edit" href="#" data-id="' + data.data.id + '" data-name="' + data.data.name + '">' + data.data.name + '</a></td>' +
+                        '<td>0</td>' +
+                        '<td>' +
+                        '<a href="javascript:void(0)" class="btn red delete-btn group-delete" data-count="0" data-id="' + data.data.id + '" data-name="' + data.data.name + '">Удалить</a>' +
+                        '</td>' +
+                        '</tr>';
 
                     $('#groups-table tbody').prepend(html);
 
                     user_groups.binds();
+
+                } else {
+                    core.modal.setMessage(data);
+                }
+            },
+            error: function () {
+                core.modal.unSetLoading();
+                core.modal.setMessage({
+                    status: false,
+                    message: 'Ошибка связи с срвером, повторите попытку'
+                });
+            }
+        });
+    },
+
+    editGroup: function (id) {
+        var name = $('#name').val();
+
+        if (!name) {
+            core.modal.setMessage({
+                status: false,
+                message: 'Введите название группы'
+            });
+
+            return false;
+        }
+
+        core.modal.loading_process = $.ajax({
+            url: '/control/user/groups/?ajax&action=editFleet',
+            data: {
+                name: name,
+                id: id
+            },
+            type: 'post',
+            dataType: 'json',
+            beforeSend: function () {
+                core.modal.unSetMessage();
+                core.modal.setLoading();
+            },
+            success: function (data) {
+                core.modal.unSetLoading();
+
+                if (data.status === true) {
+                    core.modal.setMessage(data);
+
+                    $('#groups-table a.group-edit[rel="' + id + '"]').html(name);
 
                 } else {
                     core.modal.setMessage(data);
@@ -92,13 +138,50 @@ var user_groups = {
         $('#new_fleet_name').focus();
     },
 
+    editGroupModal: function (data) {
+        var html = '<form id="edit-group-form" class="forms columnar white" method="POST">' +
+            '<div class="form_message"></div>' +
+
+            '<ul>' +
+
+            '<li class="form-item">' +
+            '<label for="new_fleet_name" class="bold">Название <span class="error"></span></label>' +
+            '<input class="text width-50" style="width: 50%" type="text" name="name" id="name" value="' + data.name + '" />' +
+            '</li>' +
+
+            '<hr>' +
+
+            '<li class="push">' +
+            '<input type="submit" name="send" class="btn blue float-left" value="Сохранить" />' +
+            '</li>' +
+
+            '</ul>' +
+
+            '<div class="clear"></div>' +
+            '</form>';
+
+        core.modal.createModal(
+            'Редактирование группы',
+            html,
+            550
+        );
+
+        $('#edit-group-form').on('submit', function (e) {
+            e.preventDefault();
+
+            user_groups.editGroup(data.id);
+        });
+
+        $('#name').focus();
+    },
+
     binds: function () {
         $('#additional-button').off('click').on('click', function (e) {
             user_groups.addGroupModal();
             e.preventDefault();
         });
 
-        $('.delete-group').off('click').on('click', function (e) {
+        $('.group-edit').off('click').on('click', function (e) {
             if ($(this).data('count') > 0) {
                 alert('Невозможно удалить группу, пока в ней состоит хотя бы одна машина!');
             } else {
@@ -106,6 +189,12 @@ var user_groups = {
                     document.location.href = '/control/user/groups?action=delete&id=' + $(this).data('id');
                 }
             }
+
+            e.preventDefault();
+        });
+
+        $('.group-edit').off('click').on('click', function (e) {
+            user_groups.editGroupModal($(this).data());
 
             e.preventDefault();
         });

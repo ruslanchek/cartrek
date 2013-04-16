@@ -8,7 +8,7 @@ Class Devices extends Core
 
     private
         $fleets_limit = 20,
-        $fleets_name_maxlen = 15,
+        $fleets_name_maxlen = 25,
         $fleets_name_minlen = 3;
 
     public function __construct()
@@ -408,25 +408,25 @@ Class Devices extends Core
     {
         $c = $this->db->countRows('fleets', '`user_id` = ' . intval($this->auth->user['data']['id']));
 
-        if ($this->db->checkRowExistance('fleets', 'name', $name, false, ' && `user_id` = ' . intval($this->auth->user['data']['id']))) {
-            return array(
-                'status' => false,
-                'message' => 'Группа с таким названием уже существует'
-            );
-        } elseif ($c > $this->fleets_limit) {
+        if ($c > $this->fleets_limit) {
             return array(
                 'status' => false,
                 'message' => 'Достигнуто максимальное количество групп &mdash; ' . $this->fleets_limit
             );
-        } elseif (strlen($name) < $this->fleets_name_minlen) {
+        } elseif ($this->db->checkRowExistance('fleets', 'name', $name, false, ' && `user_id` = ' . intval($this->auth->user['data']['id']))) {
             return array(
                 'status' => false,
-                'message' => 'Название группы должно состоять минимум из '.$this->fleets_name_minlen.' знаков'
+                'message' => 'Группа с таким названием уже существует'
             );
-        } elseif (strlen($name) > $this->fleets_name_maxlen) {
+        } elseif (mb_strlen($name) < $this->fleets_name_minlen) {
             return array(
                 'status' => false,
-                'message' => 'Название группы должно состоять максимум из '.$this->fleets_name_maxlen.' знаков'
+                'message' => 'Название группы должно состоять минимум из ' . $this->fleets_name_minlen . ' знаков'
+            );
+        } elseif (mb_strlen($name) > $this->fleets_name_maxlen) {
+            return array(
+                'status' => false,
+                'message' => 'Название группы должно состоять максимум из ' . $this->fleets_name_maxlen . ' знаков'
             );
         } else {
             $this->db->query("
@@ -450,6 +450,46 @@ Class Devices extends Core
                     'name' => $name
                 ),
                 'message' => 'Группа &laquo;' . $name . '&raquo; создана'
+            );
+        }
+    }
+
+    public function editFleetData($id, $name)
+    {
+        if ($this->db->checkRowExistance('fleets', 'name', $name, array($id), ' && `user_id` = ' . intval($this->auth->user['data']['id']))) {
+            return array(
+                'status' => false,
+                'message' => 'Группа с таким названием уже существует'
+            );
+        } elseif (mb_strlen($name) < $this->fleets_name_minlen) {
+            return array(
+                'status' => false,
+                'message' => 'Название группы должно состоять минимум из ' . $this->fleets_name_minlen . ' знаков'
+            );
+        } elseif (mb_strlen($name) > $this->fleets_name_maxlen) {
+            return array(
+                'status' => false,
+                'message' => 'Название группы должно состоять максимум из ' . $this->fleets_name_maxlen . ' знаков'
+            );
+        } else {
+            $query = "
+                UPDATE
+                    `fleets`
+                SET
+                    `name` = '" . $this->db->quote($name) . "'
+                WHERE
+                    `user_id` = " . intval($this->auth->user['data']['id']) . " &&
+                    `id` = " . intval($id);
+
+            $this->db->query($query);
+
+            return array(
+                'status' => true,
+                'data' => (object)array(
+                    'id' => $id,
+                    'name' => $name
+                ),
+                'message' => 'Данные сохранены'
             );
         }
     }

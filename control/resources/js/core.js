@@ -1172,7 +1172,7 @@ core.modal = {
             classname = 'error';
         }
 
-        $('#modal_window .message').addClass(classname).html(data.message).show();
+        $('#modal_window .message').addClass(classname).html(data.message).slideDown(100);
     },
 
     setLoading: function () {

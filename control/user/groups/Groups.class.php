@@ -26,6 +26,13 @@ Class Groups extends Core
                     print json_encode($this->devices->addNewFleet($_POST['name']));
                 }
                     break;
+
+                case 'editFleet' :
+                {
+                    header('Content-type: application/json');
+                    print json_encode($this->devices->editFleetData($_POST['id'], $_POST['name']));
+                }
+                    break;
             }
 
             exit;
