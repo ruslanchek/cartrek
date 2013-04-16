@@ -223,6 +223,13 @@ var geozones = {
         }
 
 
+        /**
+         * 0 - no sms, no email
+         * 1 - sms only
+         * 2 - email only
+         * 3 - both
+         */
+
         if (sms != 'checked' && email != 'checked') {
             notify = '0';
         } else if (sms == 'checked' && email != 'checked') {
