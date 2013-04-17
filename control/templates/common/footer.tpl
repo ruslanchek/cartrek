@@ -1,7 +1,7 @@
 <div class="container {if $map == true}wide{/if}">
     <div class="container-padding">
         <div class="third">
-            &copy; 2012, ГИС &laquo;Картрек&raquo;.
+            &copy; 2012&ndash;{date('Y')}, ГИС &laquo;Картрек&raquo;.
         </div>
 
         <div class="third">

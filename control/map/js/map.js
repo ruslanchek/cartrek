@@ -1326,11 +1326,11 @@ var map = {
 
         html += '<h3>Текущее положение</h3>';
         html += core.utilities.humanizeDate(car.last_point_date, 'MYSQLTIME') + '<br>';
-        html += '<table>';
-        html += '<tr><th>Скорость:</th><td>' + core.utilities.convertKnotsToKms(car.last_point.speed) + ' км/ч</td></tr>';
-        html += '<tr><th>Высота:</th><td>' + car.last_point.altitude + ' м</td></tr>';
-        html += '<tr><th>Координаты Ш/Д:</th><td>' + car.last_point.lat + '&deg; / ' + car.last_point.lon + '&deg;</td></tr>';
-        html += '</table>';
+        html += '<div class="table-wrapper"><table class="bordered hovered">';
+        html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(car.last_point.speed) + ' км/ч</td></tr>';
+        html += '<tr><th>Высота</th><td>' + car.last_point.altitude + ' м</td></tr>';
+        html += '<tr><th>Координаты Ш/Д</th><td>' + car.last_point.lat + '&deg; / ' + car.last_point.lon + '&deg;</td></tr>';
+        html += '</table></div>';
 
         if (!this.current_car) {
             var h = core.ui.getHashData(), hash = '';
@@ -2056,7 +2056,7 @@ var map = {
 
                 if (this.current_car.params.dev_temp) {
                     panel3_html += '<div class="row">' +
-                        '<div class="half"><strong>Темп. терминала</strong></div>' +
+                        '<div class="half"><strong>t терминала</strong></div>' +
                         '<div class="half">' + this.current_car.params.dev_temp + '&deg; C</div>' +
                         '</div>';
                 }
