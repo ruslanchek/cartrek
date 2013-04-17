@@ -1,4 +1,4 @@
-<?php
+
 
 require_once 'MonetaWebService.php';
 
@@ -42,4 +42,3 @@ $service = new MonetaWebService("https://demo.moneta.ru/services.wsdl", "test@mo
         echo $e->getTraceAsString();
     };
 
-?>
