@@ -33,24 +33,16 @@ Class Groups extends Core
                     print json_encode($this->devices->editFleetData($_POST['id'], $_POST['name']));
                 }
                     break;
-            }
 
-            exit;
-        } else {
-            $this->createAdditionalButton('Добавить группу', '#');
-        }
-
-        if (isset($_GET['action'])) {
-            switch ($_GET['action']) {
-                case 'delete' :
-                {
+                case 'deleteFleet' : {
                     $this->devices->deleteFleet($_GET['id']);
-                    header("Location: /control/user/groups");
                 }
                     break;
             }
 
             exit;
+        } else {
+            $this->createAdditionalButton('Добавить группу', '#');
         }
     }
 

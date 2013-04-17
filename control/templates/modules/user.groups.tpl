@@ -14,7 +14,7 @@
 
                 <tbody>
                 {foreach $fleets as $item}
-                    <tr>
+                    <tr class="group-row" rel="{$item.id}">
                         <td>
                             <a rel="{$item.id}" class="group-edit" href="#" data-id="{$item.id}"
                                data-name="{$item.name|escape}">{$item.name}</a>

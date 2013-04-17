@@ -181,12 +181,36 @@ var user_groups = {
             e.preventDefault();
         });
 
-        $('.group-edit').off('click').on('click', function (e) {
+        $('.group-delete').off('click').on('click', function (e) {
             if ($(this).data('count') > 0) {
                 alert('Невозможно удалить группу, пока в ней состоит хотя бы одна машина!');
             } else {
                 if (confirm('Удалить группу «' + $(this).data('name') + '»?')) {
-                    document.location.href = '/control/user/groups?action=delete&id=' + $(this).data('id');
+                    var id = $(this).data('id');
+
+                    user_groups.loading_process = $.ajax({
+                        url: '/control/user/groups?ajax&action=deleteFleet',
+                        data: {
+                            id: id
+                        },
+                        dataType: 'json',
+                        type: 'get',
+                        beforeSend: function () {
+                            if (user_groups.loading_process) {
+                                user_groups.loading_process.abort();
+                                core.loading.unsetGlobalLoading();
+                            }
+
+                            core.loading.setGlobalLoading();
+                        },
+                        success: function () {
+                            core.loading.unsetGlobalLoading();
+                            $('.group-row[rel="' + id + '"]').remove();
+                        },
+                        error: function () {
+                            core.loading.unsetGlobalLoading();
+                        }
+                    });
                 }
             }
 
