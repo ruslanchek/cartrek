@@ -4,7 +4,7 @@
 
         <div class="form_message"></div>
         <div class="form-item">
-            <label for="old_password" class="bold">Старый пароль <span class="error"></span></label>
+            <label for="old_password" class="bold">Сумма платежа <span class="error"></span></label>
             <input
                     class="text width-100"
                     type="text"
@@ -14,14 +14,13 @@
                     />
         </div>
 
-        <input type="submit" name="send" class="btn blue" value="Оплатить"/>
+        <input type="submit" name="send" class="btn blue" value="Оплатить" />
 
-        <input type="hidden" name="MNT_ID" value="41534771"/>
-        <input type="hidden" name="MNT_TRANSACTION_ID" value="1"/>
-        <input type="hidden" name="MNT_CURRENCY_CODE" value="RUR"/>
-        <input type="hidden" name="MNT_TEST_MODE" value="1"/>
-        <input type="hidden" name="MNT_DESCRIPTION" value="Test payment"/>
-
+        <input type="hidden" name="MNT_ID"              value="41534771" />
+        <input type="hidden" name="MNT_TRANSACTION_ID"  value="" />
+        <input type="hidden" name="MNT_CURRENCY_CODE"   value="RUB" />
+        <input type="hidden" name="MNT_TEST_MODE"       value="1" />
+        <input type="hidden" name="MNT_DESCRIPTION"     value="Test payment" />
     </form>
 </div>
 

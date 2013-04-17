@@ -31,5 +31,25 @@ Class Pay extends Core
         $this->deInit();
     }
 
+    private function createTransactionId(){
+        return md5(md5(rand(rand(0, 750000), rand(750001, 9000000))));
+    }
 
+    private function createTransaction(){
+        $transaction_id = $this->createTransaction();
+
+        $query = "
+            INSERT INTO `transactions` (
+                `user_id`,
+                `transaction_id`
+            ) VALUES (
+                " . intval($this->auth->user['data']['id']) . ",
+                " . $this->db->quote($transaction_id) . "
+            )
+        ";
+
+        $this->db->query($query);
+
+
+    }
 }

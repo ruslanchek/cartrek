@@ -1041,6 +1041,7 @@ a.badge:active {
 
 .tooltip-content .table-wrapper {
     margin-top: 15px;
+    margin-bottom: 10px;
 }
 
 .tooltip-content table {

@@ -141,10 +141,14 @@ Class Devices extends Core
                 	`devices`.`active`,
                 	`devices`.`fleet_id`,
                 	CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`,
-                	`fleets`.`name` AS `fleet_name`
+                	`fleets`.`name` AS `fleet_name`,
+                	CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_point_date`
                 FROM
                 	`devices`
-                LEFT JOIN `fleets` ON `devices`.`fleet_id` = `fleets`.`id` && `fleets`.`user_id` = " . intval($this->auth->user['data']['id']) . $addition . "
+                LEFT JOIN
+                    `fleets` ON `devices`.`fleet_id` = `fleets`.`id` && `fleets`.`user_id` = " . intval($this->auth->user['data']['id']) . $addition . "
+                LEFT JOIN
+                    `tracks` ON `tracks`.`device_id` = `devices`.`id`
                 WHERE
                 	`devices`.`user_id` = " . intval($this->auth->user['data']['id']) . $addition . "
                 GROUP BY
@@ -154,26 +158,6 @@ Class Devices extends Core
             ";
 
         $devices = $this->db->assocMulti($query);
-
-        for ($i = 0, $l = count($devices); $i < $l; $i++) {
-            $query = "
-                    SELECT
-                        CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_point_date`
-                    FROM
-                        `tracks`
-                    WHERE
-                        `tracks`.`device_id` = " . intval($devices[$i]['id']) . "
-                    ORDER BY
-                        `tracks`.`datetime` DESC
-                    LIMIT 1
-                ";
-
-            $track = $this->db->assocItem($query);
-
-            if ($track) {
-                $devices[$i] = array_merge($devices[$i], $track);
-            }
-        }
 
         return $devices;
     }
