@@ -6,11 +6,6 @@ Class User extends Core
     {
         parent::__construct();
 
-        if (!$this->auth->user['status']) {
-            header('Location: /control/auth/login');
-        }
-        ;
-
         $this->template = 'user.tpl';
 
         $this->init(array(
@@ -23,7 +18,6 @@ Class User extends Core
             $this->auth->exitUser();
             exit;
         }
-        ;
 
         //If user have any actve devices
         if ($this->ajax_mode && isset($_GET['action'])) {
@@ -33,14 +27,11 @@ Class User extends Core
                     header('Content-type: application/json');
                     print json_encode($this->processForm());
                 }
-                    ;
                     break;
             }
-            ;
 
             exit;
         }
-        ;
     }
 
     public function __destruct()
@@ -56,7 +47,6 @@ Class User extends Core
             foreach ($data as $item) {
                 $cols .= "`" . $item->key . "` = '" . $this->db->quote($item->val) . "',";
             }
-            ;
 
             $cols = substr($cols, 0, strlen($cols) - 1);
 
@@ -70,7 +60,6 @@ Class User extends Core
 
             $this->db->query($query);
         }
-        ;
     }
 
     private function processForm()
@@ -100,13 +89,11 @@ Class User extends Core
                 $form_errors->login = 'Введите логин';
                 $no_errors = false;
             }
-            ;
 
             if ($this->auth->checkAlreadyByLogin($form_data->login, array($this->auth->user['data']['id']))) {
                 $form_errors->login = 'Уже используется';
                 $no_errors = false;
             }
-            ;
 
             if (!$form_data->email) {
                 $form_errors->email = 'Введите адрес почты';
@@ -116,21 +103,17 @@ Class User extends Core
                     $form_errors->email = 'Адрес почты неправильный';
                     $no_errors = false;
                 }
-                ;
             }
-            ;
 
             if ($this->auth->checkAlreadyByEmail($form_data->email, array($this->auth->user['data']['id']))) {
                 $form_errors->email = 'Уже используется';
                 $no_errors = false;
             }
-            ;
 
             if (!$form_data->name) {
                 $form_errors->name = 'Введите имя';
                 $no_errors = false;
             }
-            ;
 
             if ($no_errors === true) {
                 $this->setUserData(array(
@@ -140,7 +123,6 @@ Class User extends Core
                     (object)array('key' => 'user_timezone', 'val' => $form_data->user_timezone)
                 ));
             }
-            ;
 
             return (object)array(
                 'form_data' => $form_data,
@@ -148,6 +130,5 @@ Class User extends Core
                 'result' => $no_errors
             );
         }
-        ;
     }
 }

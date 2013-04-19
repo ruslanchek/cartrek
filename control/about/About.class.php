@@ -6,11 +6,6 @@ Class About extends Core
     {
         parent::__construct();
 
-        if (!$this->auth->user['status']) {
-            header('Location: /control/auth/login');
-        }
-        ;
-
         $this->init(array(
             'name' => 'about',
             'title' => 'О Картреке',

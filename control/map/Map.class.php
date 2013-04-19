@@ -6,11 +6,6 @@ Class Map extends Core
     {
         parent::__construct();
 
-        //If user not logged in
-        if (!$this->auth->user['status']) {
-            header('Location: /control/auth/login');
-        }
-
         $this->init(array(
             'name' => 'map',
             'title' => 'Наблюдение',

@@ -51,7 +51,8 @@
         </div>
     {else}
         <div class="auth-block-padding">
-            Вы уже авторизованы. <a href="/control">Вернуться в панель управления</a>.
+            Вы уже авторизованы.<br>
+            <a href="/control">Вернуться в панель управления</a>.
         </div>
     {/if}
 </div>

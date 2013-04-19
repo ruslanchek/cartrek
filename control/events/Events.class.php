@@ -6,11 +6,6 @@ Class Events extends Core
     {
         parent::__construct();
 
-        if (!$this->auth->user['status']) {
-            header('Location: /control/auth/login');
-        }
-        ;
-
         $this->template = 'events.tpl';
 
         $this->init(array(
@@ -26,21 +21,18 @@ Class Events extends Core
                     header('Content-type: application/json');
                     print json_encode($this->eventsApi->getEvents($_GET['step'], 10, $_GET['offset'], $_GET['cond']));
                 }
-                    ;
                     break;
 
                 case 'delItem' :
                 {
                     $this->eventsApi->delItem($_GET['id'], $_GET['cond']);
                 }
-                    ;
                     break;
 
                 case 'hideItem' :
                 {
                     $this->eventsApi->hideItem($_GET['id'], $_GET['cond']);
                 }
-                    ;
                     break;
 
                 case 'checkForNewEvents' :
@@ -48,7 +40,6 @@ Class Events extends Core
                     header('Content-type: application/json');
                     print json_encode($this->eventsApi->getNewEvents());
                 }
-                    ;
                     break;
 
                 case 'pushEvent' :
@@ -56,28 +47,23 @@ Class Events extends Core
                     $this->eventsApi->pushEvent($_POST['status'], $_POST['type'], $_POST['message'], $_POST['showed']);
 
                 }
-                    ;
                     break;
 
                 case 'delAllItems' :
                 {
                     $this->eventsApi->delAllItems();
                 }
-                    ;
                     break;
 
                 case 'hideAllItems' :
                 {
                     $this->eventsApi->hideAllItems();
                 }
-                    ;
                     break;
             }
-            ;
 
             exit;
         }
-        ;
     }
 
     public function __destruct()

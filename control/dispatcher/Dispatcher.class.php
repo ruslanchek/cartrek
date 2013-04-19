@@ -8,11 +8,6 @@ Class Dispatcher extends Core
     {
         parent::__construct();
 
-        if (!$this->auth->user['status']) {
-            header('Location: /control/auth/login');
-        }
-        ;
-
         $this->init(array(
             'name' => 'dispatcher',
             'title' => 'Диспетчер',
@@ -26,21 +21,17 @@ Class Dispatcher extends Core
                     header('Content-type: application/json');
                     print json_encode($this->devices->getUserDevices()); //TODO: можно оптимизировать!
                 }
-                    ;
                     break;
 
                 case 'setDivicesSorting' :
                 {
                     $this->setDivicesSorting();
                 }
-                    ;
                     break;
             }
-            ;
 
             exit;
         }
-        ;
 
         $this->template = 'dispatcher.tpl';
     }
