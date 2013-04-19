@@ -63,6 +63,17 @@ class Auth extends Core
         return $result;
     }
 
+    public function redirect()
+    {
+        if (isset($_GET['return']) && $_GET['return'] != '') {
+            $location = urldecode($_GET['return']);
+        } else {
+            $location = '/control/';
+        }
+
+        header('Location: ' . $location);
+    }
+
     //User authenticate
     public function forceLogin($data)
     {
@@ -92,13 +103,7 @@ class Auth extends Core
 
         $this->getUserSharedAccountStatus();
 
-        if (isset($_GET['return']) && $_GET['return'] != '') {
-            $location = urldecode($_GET['return']);
-        } else {
-            $location = '/control/';
-        }
-
-        header('Location: ' . $location);
+        $this->redirect();
     }
 
     //Set currently user activity

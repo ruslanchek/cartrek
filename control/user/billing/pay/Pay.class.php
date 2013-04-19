@@ -35,12 +35,11 @@ Class Pay extends Core
 
                 } break;
             }
-
+        }else if($this->auth->user['status']){
+            $this->initView();
+            $this->initTransaction();
         }else{
-            if($this->auth->user['status']){
-                $this->initView();
-                $this->initTransaction();
-            };
+            $this->auth->redirect();
         }
     }
 
@@ -197,6 +196,19 @@ Class Pay extends Core
             $transaction_data->MNT_TEST_MODE.
             $this->data_integrity_code
         );
+
+        /*
+         * 100
+         Ответ содержит сумму заказа для оплаты. Данным кодом следует отвечать, когда в параметрах проверочного запроса не был указан параметр MNT_AMOUNT .
+         200
+         Заказ оплачен. Уведомление об оплате магазину доставлено.
+         302
+         Заказ находится в обработке. Точный статус оплаты заказа определить невозможно.
+         402
+         Заказ создан и готов к оплате. Уведомление об оплате магазину не доставлено.
+         500
+         Заказ не является актуальным в магазине (например, заказ отменен). При получении данного кода MONETA.Assistant не будет больше пытаться отсылать уведомление об оплате, если оно не было доставлено.
+         * */
 
         header ("content-type: text/xml");
         print  '<?xml version="1.0" encoding="UTF-8"?>
