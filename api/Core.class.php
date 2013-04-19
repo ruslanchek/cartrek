@@ -93,6 +93,11 @@ Class Core
         if (isset($this->auth->user['data']['user_timezone'])) {
             date_default_timezone_set($this->auth->user['data']['user_timezone']);
         }
+
+        if (!$this->auth->user['status'] && $this->uri != '/control/auth/login/') {
+            $return = '?return='.urlencode($_SERVER['REQUEST_URI']);
+            header('Location: /control/auth/login' . $return);
+        }
     }
 
     //Функция окончания работы приложения

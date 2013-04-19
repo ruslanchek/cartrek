@@ -92,7 +92,13 @@ class Auth extends Core
 
         $this->getUserSharedAccountStatus();
 
-        header('Location: /control');
+        if (isset($_GET['return']) && $_GET['return'] != '') {
+            $location = urldecode($_GET['return']);
+        } else {
+            $location = '/control/';
+        }
+
+        header('Location: ' . $location);
     }
 
     //Set currently user activity

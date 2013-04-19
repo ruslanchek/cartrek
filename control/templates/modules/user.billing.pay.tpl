@@ -10,17 +10,18 @@
                     type="text"
                     name="MNT_AMOUNT"
                     id="MNT_AMOUNT"
-                    value="1.00"
+                    value="{$transaction_data->MNT_AMOUNT}"
                     />
         </div>
 
         <input type="submit" name="send" class="btn blue" value="Оплатить" />
 
-        <input type="hidden" name="MNT_ID"              value="41534771" />
-        <input type="hidden" name="MNT_TRANSACTION_ID"  value="" />
-        <input type="hidden" name="MNT_CURRENCY_CODE"   value="RUB" />
-        <input type="hidden" name="MNT_TEST_MODE"       value="1" />
-        <input type="hidden" name="MNT_DESCRIPTION"     value="Test payment" />
+        <input type="hidden" name="MNT_ID"              value="{$transaction_data->MNT_ID}" />
+        <input type="hidden" name="MNT_TRANSACTION_ID"  value="{$transaction_data->MNT_TRANSACTION_ID}" />
+        <input type="hidden" name="MNT_CURRENCY_CODE"   value="{$transaction_data->MNT_CURRENCY_CODE}" />
+        <input type="hidden" name="MNT_TEST_MODE"       value="{$transaction_data->MNT_TEST_MODE}" />
+        <input type="hidden" name="MNT_DESCRIPTION"     value="{$transaction_data->MNT_DESCRIPTION}" />
+        <input type="hidden" name="MNT_SIGNATURE"       value="{$transaction_data->MNT_SIGNATURE}" />
     </form>
 </div>
 
