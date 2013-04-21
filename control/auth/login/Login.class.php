@@ -14,7 +14,6 @@ Class Login extends Core
                 {
                     $this->module['form'] = $this->auth->auth($_POST['login'], $_POST['password']);
                 }
-                    ;
                     break;
             }
         }

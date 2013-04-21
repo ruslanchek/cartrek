@@ -260,5 +260,3 @@ Class EventsApi extends Core
         $this->db->query($query);
     }
 }
-
-;

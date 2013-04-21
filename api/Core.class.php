@@ -27,7 +27,7 @@ Class Core
         'form' => 'Form',
         'devices' => 'Devices',
         'eventsApi' => 'EventsApi',
-        'payment' => 'Paymen'
+        'payment' => 'Payment'
     );
 
     // Созданные объекты

@@ -9,7 +9,7 @@ Class Config{
         'host'  => 'server.cartrek.ru',
         'db'    => 'cartrek',
         'user'  => 'cartrek',
-        'pass'  => 'Loopusinfabula'
+        'pass'  => 'Tukzara'
     );
 
     //public $yandex_maps_api_key = 'AGZOc08BAAAA7AGgVQMAN-Zv3AH9T_SickfIRKaGBWPt6lUAAAAAAAAAAABfuEjMQhwWcAaQkE4J-qk7YcdyBQ==';
