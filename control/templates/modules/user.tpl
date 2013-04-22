@@ -5,6 +5,17 @@
         <div class="row">
             <div class="half">
                 <div class="form-item">
+                    <label for="name" class="bold">Имя <span class="error"></span></label>
+                    <input
+                        class="text width-100"
+                        type="text"
+                        name="name"
+                        id="name"
+                        value="{$core->auth->user.data.name|escape}"
+                    />
+                </div>
+
+                <div class="form-item">
                     <label for="login" class="bold">Логин <span class="error"></span></label>
                     <input
                         class="text width-100"
@@ -16,15 +27,16 @@
                 </div>
 
                 <div class="form-item">
-                    <label for="name" class="bold">Имя <span class="error"></span></label>
+                    <label for="email" class="bold">Электонная почта <span class="error"></span></label>
                     <input
-                        class="text width-100"
-                        type="text"
-                        name="name"
-                        id="name"
-                        value="{$core->auth->user.data.name|escape}"
+                            class="text width-100"
+                            type="email"
+                            name="email"
+                            id="email"
+                            value="{$core->auth->user.data.email|escape}"
                     />
                 </div>
+
 
                 <div class="form-item">
                     <label for="user_timezone" class="bold">Часовой пояс</label>
@@ -37,17 +49,6 @@
             </div>
 
             <div class="half">
-                <div class="form-item">
-                    <label for="email" class="bold">Электонная почта <span class="error"></span></label>
-                    <input
-                            class="text width-100"
-                            type="email"
-                            name="email"
-                            id="email"
-                            value="{$core->auth->user.data.email|escape}"
-                    />
-                </div>
-
                 <div class="form-item">
                     <label for="email" class="bold">Телефоны <span class="error"></span></label>
                     <input

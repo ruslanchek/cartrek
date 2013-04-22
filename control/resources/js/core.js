@@ -878,17 +878,24 @@ core.utilities = {
     },
 
     dateRange: function (startDate, currDate) {
-        if (!startDate || !currDate) {
+        if (!startDate) {
             return '&mdash;';
         }
 
-        if (!(startDate instanceof Date)) {
+        if(!currDate){
+            currDate = new Date();
+        }
+
+        if (!(Object.prototype.toString.call(startDate) === "[object Date]")) {
             startDate = this.timestampToDate(startDate);
         }
 
-        if (!(currDate instanceof Date)) {
+        if (!(Object.prototype.toString.call(currDate) === "[object Date]")) {
             currDate = this.timestampToDate(currDate);
         }
+
+        var d = new Date();
+        currDate.setMinutes(currDate.getMinutes() + d.getTimezoneOffset() + global_params.timezone.offset)
 
         var duration = new Date(currDate - startDate),
             s = (duration.getTime() - duration.getMilliseconds()) / 1000;

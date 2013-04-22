@@ -830,11 +830,8 @@ a.badge:active {
     border-radius: 2px;
 }
 
-.forms.white {
+.forms_white {
     background: #fff;
-    border: none;
-    padding: 0;
-    margin: 0;
 }
 
 .forms.white * {
@@ -2158,7 +2155,7 @@ table .delete-btn {
 }
 
 .map-types .item:hover {
-    background: #eee;
+    background: #fff;
 }
 
 .map-types .item.active {

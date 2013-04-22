@@ -8,6 +8,7 @@ Class Core
 
     public
         $config,
+        $params,
         $module = array(
         'form' => false, // TODO: Нужен ли этот индекс? Вроде больше нигде не используется
         'header_additional' => false
@@ -35,6 +36,7 @@ Class Core
 
     public function __construct()
     {
+        $this->params = new stdClass();
         require_once($_SERVER['DOCUMENT_ROOT'] . '/Config.class.php');
         $this->config = new Config();
         $this->setUriData();
@@ -85,7 +87,7 @@ Class Core
         $this->smarty->setConfigDir($_SERVER['DOCUMENT_ROOT'] . '/smarty/configs');
         $this->smarty->setCacheDir($_SERVER['DOCUMENT_ROOT'] . '/cache');
 
-        $this->smarty->force_compile = true; //TODO: снять принудительную компиляцию
+        $this->smarty->force_compile = false; //TODO: снять принудительную компиляцию
         $this->smarty->debugging = false;
         $this->smarty->caching = false;
         $this->smarty->cache_lifetime = 120;
@@ -93,12 +95,21 @@ Class Core
         //Ставим пользовательскую таймзону
         if (isset($this->auth->user['data']['user_timezone'])) {
             date_default_timezone_set($this->auth->user['data']['user_timezone']);
+
+            $this->params->tz_offset = $this->getTzOffset($this->auth->user['data']['user_timezone']);
         }
 
         if (!$this->auth->user['status'] && $this->uri != '/control/auth/login/') {
             $return = '?return='.urlencode($_SERVER['REQUEST_URI']);
             header('Location: /control/auth/login' . $return);
         }
+    }
+
+    private function getTzOffset($tz_name){
+        $tz = new DateTimeZone($tz_name);
+        $date = new DateTime("now", $tz);
+
+        return $date->getOffset();
     }
 
     //Функция окончания работы приложения

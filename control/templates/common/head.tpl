@@ -14,6 +14,8 @@
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-core-ui-select/css/core-ui-select.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/slickswitch/css/slickswitch.css" />
 
+<script src="/control/meta"></script>
+
 <script src="/control/resources/js/jquery-1.8.2.min.js"></script>
 <script src="/control/resources/js/jquery.cookie.js"></script>
 <script src="/control/resources/js/jquery.mousewheel.js"></script>

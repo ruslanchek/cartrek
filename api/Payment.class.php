@@ -15,9 +15,9 @@ Class Payment extends Core
         parent::__construct();
     }
 
-    private function generateTransactionDescription($transaction_id)
+    private function generateTransactionDescription()
     {
-        return 'Оплата лицевого счета №' . $transaction_id . ' пользователя ' . $this->auth->user['data']['login'] . ' в системе Картрек';
+        return 'Оплата лицевого счета пользователя ' . $this->auth->user['data']['login'] . ' в системе Картрек';
     }
 
     public function deleteUnclosedTransactions()
@@ -80,7 +80,7 @@ Class Payment extends Core
         $transaction_data->MNT_TRANSACTION_ID = $transaction_id;
         $transaction_data->MNT_CURRENCY_CODE = $this->currency;
         $transaction_data->MNT_TEST_MODE = $this->test_mode;
-        $transaction_data->MNT_DESCRIPTION = $this->generateTransactionDescription($transaction_id);
+        $transaction_data->MNT_DESCRIPTION = $this->generateTransactionDescription();
         $transaction_data->MNT_AMOUNT = '1.00';
 
         #$transaction_data->MNT_CUSTOM1         = '';

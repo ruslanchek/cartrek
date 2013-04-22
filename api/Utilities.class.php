@@ -30,17 +30,14 @@ class Utilities extends Core
             {
                 $pattern = '/^[a-z0-9&\'\.\-_\+]+@[a-z0-9\-]+\.([a-z0-9\-]+\.)*+[a-z]{2}/is';
             }
-                ;
                 break;
 
             case 'number' :
             {
                 $pattern = '/^(\d+).(\d+)$/';
             }
-                ;
                 break;
         }
-        ;
 
         return preg_match($pattern, $str);
     }

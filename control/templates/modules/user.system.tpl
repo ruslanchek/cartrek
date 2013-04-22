@@ -3,6 +3,7 @@
     <p>Выбранный стиль карты, будет испозьзоваться Картреком во всех разделах с картографической системой.</p>
 
     <div class="map-types">
+
         <div class="row">
             <a class="third item" href="#" rel="mbx1"><i><img src="/control/resources/img/map-previews/mbx1.png" alt=""></i><span class="name">Картрек <span class="sup">дороги</span></span></a>
             <a class="third item" href="#" rel="mbx2"><i><img src="/control/resources/img/map-previews/mbx2.png" alt=""></i><span class="name">Картрек <span class="sup">рельеф</span></span></a>
