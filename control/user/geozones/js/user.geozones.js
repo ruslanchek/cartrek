@@ -450,7 +450,7 @@ var geozones = {
         $('.geozones .geozones-menu ul li a i').on('click', function (e) {
             geozones.focusToGeozone($(this).data('id'));
 
-            e.preventDefault();
+            e.stopPropagation();
         });
 
         $('.geozones .geozones-menu ul li a').on('click', function (e) {
