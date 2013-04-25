@@ -152,9 +152,11 @@ Class Devices extends Core
                 WHERE
                 	`devices`.`user_id` = " . intval($this->auth->user['data']['id']) . $addition . "
                 GROUP BY
-                	`devices`.`id`
+                	`devices`.`id`,
+                	`tracks`.`datetime`
                 ORDER BY
-                	`devices`.`sort` ASC
+                	`devices`.`sort` ASC,
+                	`tracks`.`datetime` DESC
             ";
 
         $devices = $this->db->assocMulti($query);
