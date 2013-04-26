@@ -67,6 +67,7 @@ Class User extends Core
         $form_data = new stdClass();
         $form_data->login = $this->auth->user['data']['login'];
         $form_data->email = $this->auth->user['data']['email'];
+        $form_data->email = $this->auth->user['data']['phones'];
         $form_data->name = $this->auth->user['data']['name'];
         $form_data->user_timezone = $this->auth->user['data']['user_timezone'];
 

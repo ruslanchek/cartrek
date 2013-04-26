@@ -94,18 +94,18 @@ Class Geozones extends Core
     private function getGeozone($id)
     {
         $query = "
-                SELECT
-                    `id`,
-                    `name`,
-                    `points`,
-                    `notify`,
-                    `active`,
-                    `color`
-                FROM
-                    `geozones`
-                WHERE
-                    `user_id` = " . intval($this->auth->user['data']['id']) . " &&
-                    `id` = " . intval($id);
+            SELECT
+                `id`,
+                `name`,
+                `points`,
+                `notify`,
+                `active`,
+                `color`
+            FROM
+                `geozones`
+            WHERE
+                `user_id` = " . intval($this->auth->user['data']['id']) . " &&
+                `id` = " . intval($id);
 
         return $this->db->assocItem($query);
     }
@@ -195,6 +195,11 @@ Class Geozones extends Core
             $result = $this->getGeozone($id);
 
             return (object) $result;
-        }
+        }else{
+            return array(
+                'status' => false,
+                'message' => 'Достигнуто максимальное количество геозон &mdash; ' . $this->geozones_limit
+            );
+        };
     }
 }

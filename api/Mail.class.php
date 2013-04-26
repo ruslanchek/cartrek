@@ -4,6 +4,10 @@ Class Mail extends Core
     public function __construct()
     {
         parent::__construct();
+
+        $this->init(array(
+            'name' => 'mailer'
+        ));
     }
 
     public function send($from_name, $from_mail, $to, $subject, $template, $data)

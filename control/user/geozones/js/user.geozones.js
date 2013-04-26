@@ -49,8 +49,15 @@ var geozones = {
                 },
                 success: function (data) {
                     core.loading.unsetGlobalLoading();
-                    data.edges = edges;
-                    callback(data);
+
+                    if(data.status === false){
+                        core.events_api.showEventsMeow({
+                            message: data.message
+                        }, true);
+                    }else{
+                        data.edges = edges;
+                        callback(data);
+                    }
                 },
                 error: function () {
                     core.loading.unsetGlobalLoading();

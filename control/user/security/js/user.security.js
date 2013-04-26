@@ -27,6 +27,7 @@ var security = {
                 core.loading.unsetGlobalLoading();
 
                 if(data.result === true){
+                    alert('z')
                     $('.form_message').html('<div id="ok_message">Пароль изменен, на ваш адрес выслан новый пароль <a class="close" href="javascript:void(0)">×</a></div>');
 
                     $('#old_password, #new_password, #new_password_again').val('');

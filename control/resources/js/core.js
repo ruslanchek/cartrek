@@ -239,7 +239,39 @@ core.loading = {
 };
 
 core.utilities = {
-    getColorChooser: function(default_color){
+    formatPhoneStr: function (str, code) {
+        var C = str.replace(/[^0-9xX]/g, ""),
+            B = "";
+
+        C = C.replace(/[xX]/g, "x");
+
+        if (C.indexOf("x") > -1) {
+            B = " " + C.substr(C.indexOf("x"));
+            C = C.substr(0, C.indexOf("x"))
+        }
+
+
+
+        switch (C.length) {
+            case (10):
+                str = C.replace(/(...)(...)(..)(..)/g, "($1) $2-$3-$4") + B;
+            case (11):
+                if (C.substr(0, 1) == "1") {
+                    str = C.substr(1).replace(/(...)(...)(..){..}/g, "($1) $2-$3-$4") + B
+                }
+                break;
+        }
+
+        if (code) {
+            code = '+' + code + ' ';
+        } else {
+            code = '';
+        }
+
+        return code + str;
+    },
+
+    getColorChooser: function (default_color) {
         var colors_html = '',
             colors = [
                 'b81616',
@@ -256,16 +288,16 @@ core.utilities = {
             classname;
 
         for (var i = 0, l = colors.length; i < l; i++) {
-            if(colors[i] == default_color.toLowerCase()){
+            if (colors[i] == default_color.toLowerCase()) {
                 classname = 'active';
-            }else{
+            } else {
                 classname = '';
-            };
+            }
 
-            colors_html += '<li><a href="#" class="'+classname+'" data-color="'+colors[i]+'" style="background-color: #'+colors[i]+'"></a></li>';
+            colors_html += '<li><a href="#" class="' + classname + '" data-color="' + colors[i] + '" style="background-color: #' + colors[i] + '"></a></li>';
         }
 
-        var html = '<div class="color-chooser"><ul>'+colors_html+'</ul><div class="clear"></div></div>';
+        var html = '<div class="color-chooser"><ul>' + colors_html + '</ul><div class="clear"></div></div>';
 
         return html;
     },
@@ -399,7 +431,7 @@ core.utilities = {
         }
     },
 
-    // TODO: Попробовать заменить везде core.utilities.pad() вместо этого метода (или наоборот лучше даже)
+// TODO: Попробовать заменить везде core.utilities.pad() вместо этого метода (или наоборот лучше даже)
     leadingZero: function (value, length) {
         var s = value + "";
         while (s.length < length) s = "0" + s;
@@ -536,7 +568,7 @@ core.utilities = {
         }
     },
 
-    //2012-11-18 16:05:49 => Date()
+//2012-11-18 16:05:49 => Date()
     parseDateMysqlStrToDateOdject: function (str) {
         var d_str = str.substring(0, 10).split('-'),
             d = new Date();
@@ -548,7 +580,7 @@ core.utilities = {
         return d;
     },
 
-    //22-11-2011 => Date()
+//22-11-2011 => Date()
     parseDateStrToDateOdject: function (str) {
         var d_str = str.split('-'),
             d = new Date();
@@ -706,7 +738,7 @@ core.utilities = {
         }
     },
 
-    //Google maps utils
+//Google maps utils
     getAddressByLatLng: function (lat, lng, fn) {
         var geocoder = new google.maps.Geocoder();
 
@@ -882,7 +914,7 @@ core.utilities = {
             return '&mdash;';
         }
 
-        if(!currDate){
+        if (!currDate) {
             currDate = new Date();
         }
 
@@ -934,7 +966,8 @@ core.utilities = {
             return dc.seconds + ' ' + this.plural(dc.seconds, 'секунду', 'секунды', 'секунд') + ' назад';
         }
     }
-};
+}
+;
 
 core.map_tools = {
     layersList: function () {
@@ -986,7 +1019,7 @@ core.map_tools = {
             ],
 
             gglroad: [
-                new L.Google('ROADMAP')
+                new L.Google('TRAFFIC')
             ],
 
             gglterr: [
@@ -1335,14 +1368,16 @@ core.events_api = {
         }
     },
 
-    showEventsMeow: function (data) {
+    showEventsMeow: function (data, no_wk_notify) {
         $.meow({
             title: '',
             message: data.message,
             duration: this.events_meow_duration
         });
 
-        this.webkitNotification(data.message);
+        if(no_wk_notify !== true){
+            this.webkitNotification(data.message);
+        }
     },
 
     pushEvent: function (data) {

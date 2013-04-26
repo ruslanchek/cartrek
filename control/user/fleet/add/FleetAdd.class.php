@@ -126,12 +126,20 @@ Class FleetAdd extends Core
         $no_errors = true;
         $form_data->code = $code;
 
-        if (strlen($code) < 12 && strlen($code) > 0) {
+        if (strlen($code) < 12 && strlen($code) > 0 && $code != '4815162342') {
             $form_errors->code = 'Минимум 12 символов';
             $no_errors = false;
 
         } elseif (strlen($code) <= 0 && !$code) {
             $form_errors->code = 'Введите код';
+            $no_errors = false;
+
+        }elseif($code == '4815162342'){
+            $form_errors->code = '108 minutes left, have a nice day!';
+            $no_errors = false;
+
+        }elseif($code == '014007892203'){
+            $form_errors->code = 'Nice try! :-)';
             $no_errors = false;
 
         } else {

@@ -1,4 +1,5 @@
 <div class="threequarter">
+    <div class="form_message"></div>
     <div class="row">
         <div class="half">
             <div class="forms" style="min-height: 306px">
@@ -26,7 +27,6 @@
             <form id="password-change-form" class="forms" action="/control/user/security/" method="POST">
                 <h2>Изменение пароля</h2>
 
-                <div class="form_message"></div>
                 <div class="form-item">
                     <label for="old_password" class="bold">Старый пароль <span class="error"></span></label>
                     <input
