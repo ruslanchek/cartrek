@@ -1239,7 +1239,7 @@ core.modal = {
 
         $('body').prepend(this.prepareCode(header, html));
 
-        $('#modal_window .message').live('click', function () {
+        $('#modal_window .message').on('click', function () {
             that.unSetMessage();
         });
 
@@ -1488,7 +1488,7 @@ $(function () {
 
     core.webkitNotificationsRequest();
 
-    $('.form_message .close').live('click', function () {
+    $('.form_message').on('click', '.close', function(){
         $('.form_message').slideUp(150, function () {
             $('.form_message').html('');
         });

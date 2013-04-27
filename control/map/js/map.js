@@ -2092,12 +2092,10 @@ var map = {
                 this.m_ctrl.removeMarker(this.map, this.current_car.cp_marker);
             }
 
-
             this.current_car.cp_marker = null;
             this.current_car.path_points = null;
             this.current_car.last_point_id = null;
         }
-
 
         if (this.cars_list) {
             for (var i = 0, l = this.cars_list; i < l; i++) {
@@ -2105,14 +2103,11 @@ var map = {
                     this.m_ctrl.removeMarker(this.map, this.cars_list[i].cp_marker);
                 }
 
-
                 this.cars_list[i].cp_marker = null;
                 this.cars_list[i].path_points = null;
                 this.cars_list[i].last_point_id = null;
             }
-
         }
-
 
         this.drawCars({renew: false});
     },
@@ -2184,7 +2179,6 @@ var map = {
             } else {
                 map.player.play();
             }
-
         });
 
         $('#player-reset').live('click', function () {
@@ -2216,20 +2210,17 @@ var map = {
             this.auto_renew = true;
         }
 
-
         if ($.cookie('auto-focus') == '1') {
             this.auto_focus = true;
         } else {
             this.auto_focus = false;
         }
 
-
         if ($.cookie('car-path') == '1') {
             this.show_car_path = true;
         } else {
             this.show_car_path = false;
         }
-
     },
 
     init: function () {

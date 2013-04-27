@@ -19,10 +19,11 @@
         onDestroy    : null
     }
 
-    var allSelects = [];
+    var allSelects = [],
+        browser = {};
 
-    $.browser.mobile = (/iphone|ipad|ipod|android/i.test(navigator.userAgent.toLowerCase()));
-    $.browser.operamini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
+    browser.mobile = (/iphone|ipad|ipod|android/i.test(navigator.userAgent.toLowerCase()));
+    browser.operamini = Object.prototype.toString.call(window.operamini) === "[object OperaMini]";
 
     /**
      * CoreUISelect - stylized standard select
@@ -57,7 +58,7 @@
     }
 
     CoreUISelect.prototype.init = function() {
-        if($.browser.operamini) return this;
+        if(browser.operamini) return this;
         this.buildUI();
         this.hideDomSelect();
         if(this.domSelect.is(':disabled')) {
@@ -135,7 +136,7 @@
         this.domSelect.bind('blur', $.proxy(this, 'onBlur'));
         this.domSelect.bind('change', $.proxy(this, 'onChange'));
 
-        if( $.browser.mobile) this.domSelect.bind('change', $.proxy(this, 'changeDropdownData'));
+        if( browser.mobile) this.domSelect.bind('change', $.proxy(this, 'changeDropdownData'));
         this.select.bind('click', $.proxy(this, 'onSelectClick'));
         this.dropdownItem.bind('click', $.proxy(this, 'onDropdownItemClick'));
     }
@@ -173,7 +174,7 @@
     CoreUISelect.prototype.showDropdown = function() {
         this.domSelect.focus();
         this.settings.onOpen && this.settings.onOpen.apply(this, [this.domSelect, 'open']);
-        if($.browser.mobile) return this;
+        if(browser.mobile) return this;
         if(!this.isSelectShow) {
             this.isSelectShow = true;
             this.select.addClass('open');
@@ -213,7 +214,7 @@
             this.setSelectValue(this.currentItemOfDomSelect.text());
 
         }
-        if($.browser.mobile) this.settings.onChange && this.settings.onChange.apply(this, [this.domSelect, 'change']);
+        if(browser.mobile) this.settings.onChange && this.settings.onChange.apply(this, [this.domSelect, 'change']);
     }
 
     CoreUISelect.prototype.onDomSelectChange = function(_is) {
@@ -420,12 +421,12 @@
 
     $(document).bind('keyup', function(event){
         for(var i=0; i<allSelects.length; i++){
-            if($.browser.safari || $.browser.msie || $.browser.opera) allSelects[i].changeDropdownData(event); // Hack for Safari
+            if(browser.safari || browser.msie || browser.opera) allSelects[i].changeDropdownData(event); // Hack for Safari
             allSelects[i].addListenerByServicesKey(event);
         }
     });
 
-    $(document).bind($.browser.safari ? 'keydown' : 'keypress', function(event){
+    $(document).bind(browser.safari ? 'keydown' : 'keypress', function(event){
         for(var i=0; i<allSelects.length; i++){
             allSelects[i].changeDropdownData(event);
         }

@@ -16,14 +16,14 @@
 
 <script src="/control/meta"></script>
 
-<script src="/control/resources/js/jquery-1.8.2.min.js"></script>
+<script src="/control/resources/js/jquery-2.0.0.min.js"></script>
 <script src="/control/resources/js/jquery.cookie.js"></script>
 <script src="/control/resources/js/jquery.mousewheel.js"></script>
 <script src="/control/resources/js/jquery.scrollpane.js"></script>
 
 {*<script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
 <script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>*}
-<script src="/control/resources/plugins/jquery-ui/jquery-ui-1.10.0.custom.min.js"></script>
+<script src="/control/resources/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js"></script>
 <script src="/control/resources/plugins/meow/jquery.meow.js"></script>
 <script src="/control/resources/plugins/jquery-core-ui-select/js/jquery.core-ui-select.js"></script>
 <script src="/control/resources/plugins/slickswitch/js/jquery.slickswitch.js" type="text/javascript"></script>

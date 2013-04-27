@@ -19,7 +19,7 @@
                         <a title="Следующая точка" class="btn" id="player-ff" href="javascript:void(0)">&#9654;&#9654;</a>
                     </div>
 
-                    <a title="Сброс" class="btn reset-button-text" id="player-reset" href="javascript:void(0)">⟲</a>
+                    <a title="Сброс" class="btn reset-button-text" id="player-reset" href="javascript:void(0)">?</a>
                 </div>
             </div>
 
@@ -159,6 +159,7 @@
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
 
 <script>
-
+    $(function(){
         map.init();
+    });
 </script>
