@@ -621,6 +621,7 @@ table.hovered {
     background: #ccc url(../img/global-loading.png);
     width: 100%;
     opacity: 0;
+    z-index: 10;
 }
 
 .text-right {

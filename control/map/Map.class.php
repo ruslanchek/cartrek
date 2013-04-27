@@ -46,7 +46,7 @@ Class Map extends Core
                     case 'getDynamicDevicesData' :
                     {
                         header('Content-type: application/json');
-                        print json_encode($this->devices->getDynamicDevicesData(json_decode($_POST['cars']), $_POST['tm_flag']));
+                        print json_encode($this->devices->getDynamicDevicesData(json_decode(stripslashes($_POST['cars'])), $_POST['tm_flag']));
                     }
                         break;
                 }

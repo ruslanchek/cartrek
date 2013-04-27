@@ -152,11 +152,9 @@ Class Devices extends Core
                 WHERE
                 	`devices`.`user_id` = " . intval($this->auth->user['data']['id']) . $addition . "
                 GROUP BY
-                	`devices`.`id`,
-                	`tracks`.`datetime`
+                	`devices`.`id`
                 ORDER BY
-                	`devices`.`sort` ASC,
-                	`tracks`.`datetime` DESC
+                	`devices`.`sort` ASC
             ";
 
         $devices = $this->db->assocMulti($query);
@@ -226,8 +224,8 @@ Class Devices extends Core
                         	`tracks`
                         WHERE
                         	`tracks`.`device_id` = " . intval($devices[$i]['id']) . " &&
-                        	`tracks`.`datetime` >= CONVERT_TZ('" . $date_start . "', '+04:00', 'Europe/Moscow') &&
-                        	`tracks`.`datetime` <= CONVERT_TZ('" . $date_end . "', '+04:00', 'Europe/Moscow')
+                        	`tracks`.`datetime` >= CONVERT_TZ('" . $date_start . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') &&
+                        	`tracks`.`datetime` <= CONVERT_TZ('" . $date_end . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')
                         ORDER BY
                         	`tracks`.`datetime` " . $order . "
                         LIMIT 1

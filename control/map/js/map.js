@@ -78,7 +78,6 @@ var leaflet_ctrl = {
                 zoom = m_options.zoom;
             }
 
-
             var map = new L.Map('map', {
                 layers: core.map_tools.getLayers(),
                 center: new L.LatLng(lat, lon),
@@ -107,7 +106,6 @@ var leaflet_ctrl = {
             } else {
                 icon = this.icons.heading_with_info(car, data);
             }
-
 
             var marker = L.marker(
                 [data.lat, data.lon], {
@@ -457,17 +455,13 @@ var leaflet_ctrl = {
                 path_points.push(new L.latLng(car.path_points[i].lat, car.path_points[i].lon));
             }
 
-
             //Если путь уже отрисован, то удаляем его
             if (this.ghost_path) {
                 map_instance.removeLayer(this.ghost_path);
             }
 
-
             //Рисуем путь
             if (path_points && path_points.length > 0) {
-                console.log('DRAWE')
-
                 this.ghost_path = L.polyline(path_points, {
                     color: this.ghost_path_color,
                     smoothFactor: 2,
@@ -507,11 +501,9 @@ var leaflet_ctrl = {
                 return false;
             }
 
-
             //Если путевые маркеры уже отрисованы, то удаляем их
             this.removeAllThePath(map_instance);
         }
-
 
         if (car && car.path_points && car.path_points.length > 1) {
             car.stop_points = 0;
@@ -540,11 +532,9 @@ var leaflet_ctrl = {
                         type = 'stop';
                     }
 
-
                     if (i == 0) {
                         type = 'start';
                     }
-
 
                     //Создаем маркер-объект
                     marker = this.createPathMarker(map_instance, car, car.path_points[i], type);
@@ -556,11 +546,8 @@ var leaflet_ctrl = {
                         } else {
                             //run_markers.push(marker);
                         }
-
                     }
-
                 }
-
 
                 //Переопределяем переменные максимальной скорости и маркера максимальной скорости
                 if (car.path_points[i] && car.path_points[i].speed && car.path_points[i].speed > max_speed) {
@@ -568,13 +555,10 @@ var leaflet_ctrl = {
                     max_speed_marker = this.createPathMarker(map_instance, car, car.path_points[i], 'max_speed');
                 }
 
-
                 if (limit_point_id && limit_point_id == car.path_points[i].id) {
                     break;
                 }
-
             }
-
 
             if (!car.max_speed_marker) {
                 car.max_speed_marker = max_speed_marker;
@@ -598,7 +582,6 @@ var leaflet_ctrl = {
                 }
 
             }
-
 
             car.max_speed = max_speed;
 
@@ -740,7 +723,6 @@ var leaflet_ctrl = {
         } else {
             map_instance.panTo(path._latlngs[0]);
         }
-
     },
 
     focusToMarker: function (map_instance, marker) {
@@ -817,7 +799,6 @@ var data_ctrl = {
                     this.loading_process.abort();
                     core.loading.unsetGlobalLoading();
                 }
-
 
                 core.loading.setGlobalLoading();
             },
@@ -1023,7 +1004,6 @@ var map = {
             if (map.map) {
                 map.map.invalidateSize();
             }
-
         });
 
         $('.map-bottom-panel').css({
@@ -1224,6 +1204,7 @@ var map = {
     },
 
     drawDynamicCarsData: function (data, options) {
+
         //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
         if (data && data !== null && data.length > 0) {
             if (options.renew === true) {
@@ -1252,7 +1233,6 @@ var map = {
         } else {
             var cars = this.cars_list;
         }
-
 
         //Готовим массив с ID тачек
         var cars_ids = [];
@@ -1624,7 +1604,6 @@ var map = {
                         map.current_car.path_points.push(map.current_car.last_point);
                     }
 
-
                     map.m_ctrl.removeGhostPath(map.map);
 
                     if (h && h.timemachine) {
@@ -1635,7 +1614,6 @@ var map = {
                         map.m_ctrl.drawAllThePath(map.map, map.current_car.id);
                         map.player.close();
                     }
-
 
                     map.drawBottomPanels();
                     map.m_ctrl.focus(map.map);
@@ -1697,12 +1675,10 @@ var map = {
                     this.renewTimeMonitor();
                 }
 
-
                 if (this.waypoints[this.waypoints.length - 1] && this.waypoints[this.waypoints.length - 1].date) {
                     var d = this.waypoints[this.waypoints.length - 1].date.split(/[- :]/);
                     this.last_wp_time = new Date(d[0], d[1] - 1, d[2], d[3], d[4], d[5]);
                 }
-
 
                 $('#player-timeline-slider').slider({
                     animate: 'fast',
@@ -1731,7 +1707,6 @@ var map = {
                         if (map.auto_focus) {
                             map.m_ctrl.focusToMarker(map.map, map.current_car.cp_marker);
                         }
-
                     }
                 });
 
@@ -1760,7 +1735,6 @@ var map = {
             } else {
                 $('#player').addClass('disabled');
             }
-
         },
 
         renewTimeByFrame: function (frame) {
@@ -1806,9 +1780,7 @@ var map = {
                 } else {
                     $('#player-time-factor').stop(true).effect('bounce');
                 }
-
             }
-
 
             clearInterval(this.interval);
 
@@ -1853,14 +1825,12 @@ var map = {
                 this.init();
             }
 
-
             if (this.frame >= 0 && this.waypoints[this.frame]) {
                 this.moveMarker(this.frame);
                 this.renewTimeByFrame(this.frame);
             } else {
                 this.frame++;
             }
-
         },
 
         ff: function () {
@@ -1869,7 +1839,6 @@ var map = {
             if (!this.waypoints) {
                 this.init();
             }
-
 
             if (this.waypoints[this.frame]) {
                 this.moveMarker(this.frame);
@@ -1880,9 +1849,7 @@ var map = {
                 if (this.frame < 0) {
                     this.frame = 0;
                 }
-
             }
-
         },
 
         reset: function () {
@@ -1907,7 +1874,6 @@ var map = {
             if ($('#day-time-slider .slider .slider-instance').data('slider')) {
                 $('#day-time-slider .slider .slider-instance').slider('value', (this.curr_time.getHours() * 60 * 60 + this.curr_time.getMinutes() * 60 + this.curr_time.getSeconds()));
             }
-
         },
 
         tick: function () {
