@@ -2135,11 +2135,11 @@ var map = {
             map.setDateByHash();
         });
 
-        $('#focus').live('click', function () {
+        $('#togglers').on('click', '#focus', function () {
             map.m_ctrl.focus(map.map);
         });
 
-        $('#hide-map-notice').live('click', function () {
+        $('#togglers').on('click', '#hide-map-notice', function () {
             $('.map-container .map-notice').fadeOut(150, function () {
                 $('.map-container .map-notice').remove();
             });
@@ -2169,11 +2169,11 @@ var map = {
             }
         });
 
-        $('#max-speed-marker').live('click', function () {
+        $('map-bottom-panel').on('click', '#max-speed-marker', function () {
             map.m_ctrl.topSpeedMarker();
         });
 
-        $('#player-play-pause').live('click', function () {
+        $('#player').on('click', '#player-play-pause', function () {
             if (map.player.playing === true) {
                 map.player.pause();
             } else {
@@ -2181,23 +2181,23 @@ var map = {
             }
         });
 
-        $('#player-reset').live('click', function () {
+        $('#player').on('click', '#player-reset', function () {
             map.player.reset();
         });
 
-        $('#player-rev').live('click', function () {
+        $('#player').on('click', '#player-rev', function () {
             map.player.rev();
         });
 
-        $('#player-ff').live('click', function () {
+        $('#player').on('click', '#player-ff', function () {
             map.player.ff();
         });
 
-        $('#player-time-factor-up').live('click', function () {
+        $('#player').on('click', '#player-time-factor-up', function () {
             map.player.setTimeFactor('up');
         });
 
-        $('#player-time-factor-down').live('click', function () {
+        $('#player').on('click', '#player-time-factor-down', function () {
             map.player.setTimeFactor('down');
         });
     },

@@ -159,7 +159,7 @@
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
 
 <script>
-    $(function(){
+
         map.init();
-    });
+
 </script>

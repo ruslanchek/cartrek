@@ -1,8 +1,9 @@
 /**
  *  Map implementation
  **/
-var Map = function(params){
+var Map = function(){
     this.map = null;
+
     this.params = {
         zoom: 4,
         lat: 55,
@@ -10,8 +11,6 @@ var Map = function(params){
         minHeight: 250,
         height: 400
     };
-
-    $.extend(this.params, params);
 
     this.mapView = function(){
         $('#map, .map-container').css({
@@ -80,6 +79,8 @@ var Map = function(params){
             this.mapView();
         });
     }
+
+    return this.create();
 };
 
 /**
@@ -116,3 +117,12 @@ var DataCollector = function(){
 var View = function(){
 
 };
+
+/**
+ *  Map
+ **/
+var m = {
+    init: function(){
+        this.map = new Map();
+    }
+}
