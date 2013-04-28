@@ -44,7 +44,7 @@ p {
 
 /* =Nav
 -----------------------------------------------------------------------------*/
-.left-nav {
+.nav-right {
     margin: 0 0 1em 0;
     list-style: none;
     background: #f6f6f6;
@@ -54,11 +54,11 @@ p {
     border-radius: 4px;
 }
 
-.left-nav li {
+.nav-right li {
     border-bottom: 1px solid #E5E5E5;
 }
 
-.left-nav li a {
+.nav-right li a {
     padding: 7px 10px;
     color: #3C4E5A;
     display: block;
@@ -68,16 +68,16 @@ p {
     font-size: inherit;
 }
 
-.left-nav li a:hover {
+.nav-right li a:hover {
     background: #fff;
     text-shadow: 0 1px 0 #fff;
 }
 
-.left-nav li.active {
+.nav-right li.active {
 
 }
 
-.left-nav li.active a {
+.nav-right li.active a {
     background: #3887b3 url(../img/white-gradient.png) repeat-x top;
     color: #fff;
     font-weight: bold;
@@ -95,17 +95,17 @@ p {
     border-radius: 3px;
 }
 
-.left-nav li.active a i.label {
+.nav-right li.active a i.label {
     border-color: #fff;
 }
 
-.left-nav li.divider {
+.nav-right li.divider {
     background: none;
     border: none;
     height: 2em;
 }
 
-.left-nav li i.label {
+.nav-right li i.label {
     display: block;
     float: right;
     width: 16px;
@@ -2052,13 +2052,13 @@ table .delete-btn {
     overflow-y: auto;
 }
 
-.bottom-panel .panel-content {
+.side-panel .panel-content {
     padding: 12px 20px;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #fefefe;
 }
 
-.bottom-panel .row strong {
+.side-panel .row strong {
     color: #555;
 }
 

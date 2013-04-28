@@ -947,7 +947,7 @@ var map = {
     hash: {},
 
     closeTools: function () {
-        $('.map-bottom-panel').animate({
+        $('.map-side-panel').animate({
             width: 15
         }, 250);
 
@@ -961,7 +961,7 @@ var map = {
     },
 
     openTools: function () {
-        $('.map-bottom-panel').animate({
+        $('.map-side-panel').animate({
             width: 260
         }, 250);
 
@@ -977,11 +977,11 @@ var map = {
     prepareMap: function (callback) {
         $('#map, .map-container').css({
             height: $('body').height() - $('.top-panel').height() - $('footer').height() - 60,
-            width: $('body').width() - $('.map-bottom-panel').width()
+            width: $('body').width() - $('.map-side-panel').width()
         });
 
         $('.map-full-sized-frame .h1').css({
-            width: $('body').width() - $('.map-bottom-panel').width()
+            width: $('body').width() - $('.map-side-panel').width()
         });
 
         this.m_ctrl = leaflet_ctrl;
@@ -990,14 +990,14 @@ var map = {
         $(window).on('resize', function () {
             $('#map, .map-container').css({
                 height: $('body').height() - $('.top-panel').height() - $('footer').height() - 20,
-                width: $('body').width() - $('.map-bottom-panel').width()
+                width: $('body').width() - $('.map-side-panel').width()
             });
 
             $('.map-full-sized-frame .h1').css({
-                width: $('body').width() - $('.map-bottom-panel').width()
+                width: $('body').width() - $('.map-side-panel').width()
             });
 
-            $('.map-bottom-panel').css({
+            $('.map-side-panel').css({
                 minHeight: $('.map-container').height()
             });
 
@@ -1006,7 +1006,7 @@ var map = {
             }
         });
 
-        $('.map-bottom-panel').css({
+        $('.map-side-panel').css({
             minHeight: $('.map-container').height()
         });
     },
@@ -2047,7 +2047,7 @@ var map = {
 
         if (panel1_html && !map.checkTimemachineMode()) {
             $('#bottom-panel-1').show()
-            $('#bottom-panel-1 .panel-content').html(panel1_html);
+            $('#side-panel-1 .panel-content').html(panel1_html);
         } else {
             $('#bottom-panel-1').hide();
         }
@@ -2055,7 +2055,7 @@ var map = {
 
         if (panel2_html) {
             $('#bottom-panel-2').show()
-            $('#bottom-panel-2 .panel-content').html(panel2_html);
+            $('#side-panel-2 .panel-content').html(panel2_html);
         } else {
             $('#bottom-panel-2').hide();
         }
@@ -2063,7 +2063,7 @@ var map = {
 
         if (panel3_html && !map.checkTimemachineMode()) {
             $('#bottom-panel-3').show()
-            $('#bottom-panel-3 .panel-content').html(panel3_html);
+            $('#side-panel-3 .panel-content').html(panel3_html);
         } else {
             $('#bottom-panel-3').hide();
         }
@@ -2071,7 +2071,7 @@ var map = {
 
         if (panel4_html && !map.checkTimemachineMode()) {
             $('#bottom-panel-4').show()
-            $('#bottom-panel-4 .panel-content').html(panel4_html);
+            $('#side-panel-4 .panel-content').html(panel4_html);
         } else {
             $('#bottom-panel-4').hide();
         }
@@ -2169,7 +2169,7 @@ var map = {
             }
         });
 
-        $('map-bottom-panel').on('click', '#max-speed-marker', function () {
+        $('.map-side-panel').on('click', '#max-speed-marker', function () {
             map.m_ctrl.topSpeedMarker();
         });
 

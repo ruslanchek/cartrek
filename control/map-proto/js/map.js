@@ -12,40 +12,6 @@ var Map = function(){
         height: 400
     };
 
-    this.mapView = function(){
-        $('#map, .map-container').css({
-            height: $('body').height() - $('.top-panel').height() - $('footer').height() - 60,
-            width: $('body').width() - $('.map-side-panel').width()
-        });
-
-        $('.map-full-sized-frame .h1').css({
-            width: $('body').width() - $('.map-side-panel').width()
-        });
-
-        $(window).on('resize', function () {
-            $('#map, .map-container').css({
-                height: $('body').height() - $('.top-panel').height() - $('footer').height() - 20,
-                width: $('body').width() - $('.map-side-panel').width()
-            });
-
-            $('.map-full-sized-frame .h1').css({
-                width: $('body').width() - $('.map-side-panel').width()
-            });
-
-            $('.map-side-panel').css({
-                minHeight: $('.map-container').height()
-            });
-
-            if (map.map) {
-                map.map.invalidateSize();
-            }
-        });
-
-        $('.map-side-panel').css({
-            minHeight: $('.map-container').height()
-        });
-    };
-
     this.create = function(){
         var t = this;
 
@@ -75,14 +41,11 @@ var Map = function(){
             setTimeout(function () {
                 $('.leaflet-control-attribution').fadeOut(3000);
             }, 10000);
-
-            t.mapView();
         });
-    }
+    };
 
-    this.create()
-
-    return this.map;
+    // Construct methods calls
+    this.create();
 };
 
 /**
@@ -117,14 +80,46 @@ var DataCollector = function(){
  *  View
  **/
 var View = function(){
+    this.mapView = function(){
+        var resize = function(h){
+            $('#map, .map-container').css({
+                height: $('body').height() - $('.top-panel').height() - $('footer').height() - h,
+                width: $('body').width() - $('.map-side-panel').width()
+            });
 
+            $('.map-full-sized-frame .h1').css({
+                width: $('body').width() - $('.map-side-panel').width()
+            });
+
+            $('.map-side-panel').css({
+                minHeight: $('.map-container').height()
+            });
+
+            if (map.map_controller.map) {
+                map.map_controller.map.invalidateSize();
+            }
+        };
+
+        resize(60);
+
+        $(window).on('resize', function () {
+            resize(20);
+        });
+    };
+
+    // Construct methods calls
+    this.mapView();
 };
 
 /**
  *  Map
  **/
 var map = {
+    map_controller: null,
+    view_controller: null,
+
     init: function(){
-        this.map = new Map();
+        this.map_controller = new Map();
+        this.view_controller = new View();
     }
 }

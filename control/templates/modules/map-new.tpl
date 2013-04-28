@@ -89,7 +89,7 @@ sd
     {/if}
 
     <div id="cars_menu_holder" class="scroll-pane horizontal-only">
-        <ul id="cars_menu" class="left-nav"></ul>
+        <ul id="cars_menu" class="nav-right"></ul>
     </div>
 
     <div id="registered_info" class="side_block"></div>

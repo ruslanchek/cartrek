@@ -1,10 +1,10 @@
-<ul class="left-nav">
+<ul class="nav-right">
     <li{if $core->module.name == 'user.fleet' || $core->module.name == 'user.fleet.add'} class="active"{/if}><a href="/control/user/fleet">Автопарк</a></li>
     <li{if $core->module.name == 'user.groups'} class="active"{/if}><a href="/control/user/groups">Группы</a></li>
     <li{if $core->module.name == 'user.geozones'} class="active"{/if}><a href="/control/user/geozones">Геозоны</a></li>
 </ul>
 
-<ul class="left-nav">
+<ul class="nav-right">
     <li{if $core->module.name == 'user'} class="active"{/if}><a href="/control/user">Настройка аккаунта</a></li>
     <li{if $core->module.name == 'user.security'} class="active"{/if}><a href="/control/user/security">Пароль и авторизация</a></li>
     <li{if $core->module.name == 'user.system'} class="active"{/if}><a href="/control/user/system">Настройка системы</a></li>

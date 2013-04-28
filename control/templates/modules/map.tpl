@@ -70,9 +70,9 @@
         </div>
     </div>
 
-    <div class="map-bottom-panel">
+    <div class="map-side-panel">
         {* Map data triggers block *}
-        <div class="bottom-panel">
+        <div class="side-panel">
             <div class="panel-content">
                 <div id="togglers">
                     <label class="third" title="Автообновление данных">
@@ -96,7 +96,7 @@
         </div>
 
         {* Fleet and car selection block *}
-        <div class="bottom-panel">
+        <div class="side-panel">
             <div class="panel-content">
                 <div id="fleets-menu"></div>
                 <div class="clear"></div>
@@ -105,7 +105,7 @@
         </div>
 
         {* Time machine block *}
-        <div class="bottom-panel">
+        <div class="side-panel">
             <div class="panel-content time-machine">
                 <div class="row">
                     <div class="twothird">
@@ -127,19 +127,19 @@
         </div>
 
         {* Other data panel blocks *}
-        <div class="bottom-panel" id="bottom-panel-1">
+        <div class="side-panel" id="side-panel-1">
             <div class="panel-content"></div>
         </div>
 
-        <div class="bottom-panel" id="bottom-panel-2">
+        <div class="side-panel" id="side-panel-2">
             <div class="panel-content"></div>
         </div>
 
-        <div class="bottom-panel" id="bottom-panel-3">
+        <div class="side-panel" id="side-panel-3">
             <div class="panel-content"></div>
         </div>
 
-        <div class="bottom-panel" id="bottom-panel-4">
+        <div class="side-panel" id="side-panel-4">
             <div class="panel-content"></div>
         </div>
     </div>
@@ -159,7 +159,5 @@
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
 
 <script>
-
-        map.init();
-
+    map.init();
 </script>
