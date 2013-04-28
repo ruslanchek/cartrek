@@ -1064,7 +1064,7 @@ core.map_tools = {
         var degrees_zone = Math.round(parseInt(heading) / 15) * 1;
 
         if (isNaN(degrees_zone)) {
-            degrees_zone = 0; //TODO Сделать иконку без хеадинга для NaN
+            degrees_zone = 0;
         }
 
         if (degrees_zone == 360) {
