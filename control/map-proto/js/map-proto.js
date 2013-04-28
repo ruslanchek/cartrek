@@ -1,7 +1,42 @@
 /**
+ *  View
+ **/
+var ViewController = function(){
+    this.mapView = function(){
+        var resize = function(h){
+            $('#map, .map-container').css({
+                height: $('body').height() - $('.top-panel').height() - $('footer').height() - h,
+                width: $('body').width() - $('.map-side-panel').width()
+            });
+
+            $('.map-full-sized-frame .h1').css({
+                width: $('body').width() - $('.map-side-panel').width()
+            });
+
+            $('.map-side-panel').css({
+                minHeight: $('.map-container').height()
+            });
+
+            if(Map && Map.map) {
+               Map.map.invalidateSize();
+            }
+        };
+
+        resize(60);
+
+        $(window).on('resize', function () {
+            resize(20);
+        });
+    };
+
+    // Construct methods calls
+    this.mapView();
+};
+
+/**
  *  Map implementation
  **/
-var Map = function(){
+var MapController = function(){
     this.map = null;
 
     this.params = {
@@ -76,50 +111,15 @@ var DataCollector = function(){
 
 };
 
-/**
- *  View
- **/
-var View = function(){
-    this.mapView = function(){
-        var resize = function(h){
-            $('#map, .map-container').css({
-                height: $('body').height() - $('.top-panel').height() - $('footer').height() - h,
-                width: $('body').width() - $('.map-side-panel').width()
-            });
-
-            $('.map-full-sized-frame .h1').css({
-                width: $('body').width() - $('.map-side-panel').width()
-            });
-
-            $('.map-side-panel').css({
-                minHeight: $('.map-container').height()
-            });
-
-            if (map.map_controller.map) {
-                map.map_controller.map.invalidateSize();
-            }
-        };
-
-        resize(60);
-
-        $(window).on('resize', function () {
-            resize(20);
-        });
-    };
-
-    // Construct methods calls
-    this.mapView();
-};
+//Global controller instances
+var Map, View;
 
 /**
  *  Map
  **/
 var map = {
-    map_controller: null,
-    view_controller: null,
-
     init: function(){
-        this.map_controller = new Map();
-        this.view_controller = new View();
+        Map = new MapController();
+        View = new ViewController();
     }
 }

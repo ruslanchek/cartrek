@@ -5,7 +5,7 @@
 
 
 <div class="quarter">
-    <ul class="nav-right">
+    <ul class="nav-side">
         <li class="active"><a data-action="unreaded" class="action_menu_item" href="javascript:void(0)">Непросмотренные</a></li>
         <li><a data-action="readed" class="action_menu_item" href="javascript:void(0)">Просмотренные</a></li>
 
