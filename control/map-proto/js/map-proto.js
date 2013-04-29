@@ -141,6 +141,7 @@ var Marker = function (params) {
     };
 };
 
+
 /**
  *  Position marker implementation
  **/
