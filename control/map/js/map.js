@@ -197,7 +197,6 @@ var leaflet_ctrl = {
                         zoom = map.m_options.zoom;
                     }
 
-
                     map_instance.setView(new L.LatLng(lat, lon), zoom);
                 });
             }

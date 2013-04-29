@@ -1711,7 +1711,7 @@ table .delete-btn {
 }
 
 .leaflet-control-zoom-fullscreen.last {
-    margin-top: 5px
+
 }
 
 .map-full-sized-frame .map-container {
@@ -1725,6 +1725,14 @@ table .delete-btn {
     display: inline-block;
     position: absolute;
     bottom: 1px;
+}
+
+.leaflet-control-attribution {
+    margin: 0 10px 10px 0 !important;
+    -webkit-border-radius: 5px;
+        border-radius: 5px;
+    padding: 3px 5px !important;
+    display: block;
 }
 
 .g_id-spacer {
@@ -1805,6 +1813,10 @@ table .delete-btn {
 
 .map-observer .leaflet-container .leaflet-control-zoom {
     margin-top: 75px !important;
+    margin-left: 20px !important;
+}
+
+.map-observer .leaflet-container .leaflet-control-locate {
     margin-left: 20px !important;
 }
 
@@ -2155,16 +2167,19 @@ table .delete-btn {
     text-decoration: none;
     color: #3C4E5A;
     min-height: 42px;
+    -webkit-border-radius: 2px;
+        border-radius: 2px;
 }
 
 .map-types .item:hover {
-    background: #fff;
+    background: #ddd;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .map-types .item.active {
     background: #3887B3;
     color: white;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
     cursor: default;
 }
 

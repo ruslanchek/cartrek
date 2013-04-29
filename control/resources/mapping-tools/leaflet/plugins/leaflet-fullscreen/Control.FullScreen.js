@@ -14,7 +14,7 @@ L.Control.FullScreen = L.Control.extend({
 			className = '-fullscreen';
 		}
 		
-		this._createButton('Full Screen', containerClass + className, container, this.toogleFullScreen, map);
+		this._createButton('На весь экран', containerClass + className, container, this.toogleFullScreen, map);
 
 		return container;
 	},

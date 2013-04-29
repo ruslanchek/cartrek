@@ -967,7 +967,6 @@ core.utilities = {
         }
     }
 }
-;
 
 core.map_tools = {
     layersList: function () {
@@ -1005,6 +1004,10 @@ core.map_tools = {
                 new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-jgqvxlts/{z}/{x}/{y}.png', {attribution: '', maxZoom: 17})
             ],
 
+            mbx4: [
+                new L.TileLayer('http://{s}.tiles.mapbox.com/v3/ruslanchek.map-z4iy8go9/{z}/{x}/{y}.png', {attribution: '', maxZoom: 17})
+            ],
+
             wms: [
                 new L.TileLayer.WMS('http://wms.latlon.org/', {layers: 'irs', crs: L.CRS.EPSG4326})
             ],
@@ -1014,12 +1017,25 @@ core.map_tools = {
                 new L.TileLayer.WMS('http://wms.latlon.org/', {layers: 'bing', crs: L.CRS.EPSG4326})
             ],
 
+            ba: [
+                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "Aerial", maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
+                // new L.TileLayer('http://{s}.tile.osmosnimki.ru/hyb/{z}/{x}/{y}.png', {attribution: '', maxZoom: 16})
+            ],
+
+            bal: [
+                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "AerialWithLabels", maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
+            ],
+
+            br: [
+                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "Road", maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
+            ],
+
             gglsat: [
                 new L.Google('SATELLITE')
             ],
 
             gglroad: [
-                new L.Google('TRAFFIC')
+                new L.Google('ROADMAP')
             ],
 
             gglterr: [
@@ -1075,31 +1091,51 @@ core.map_tools = {
     },
 
     getGeoposition: function (callback) {
+        if(!callback){
+            return false;
+        };
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                    callback(position);
+                    callback(position, false);
                 },
                 function (error) {
                     switch (error.code) {
                         case error.TIMEOUT:
-                            callback(false);
+                            callback(false, error);
                             break;
                         case error.POSITION_UNAVAILABLE:
-                            callback(false);
+                            callback(false, error);
                             break;
                         case error.PERMISSION_DENIED:
-                            callback(false);
+                            callback(false, error);
                             break;
                         case error.UNKNOWN_ERROR:
-                            callback(false);
+                            callback(false, error);
                             break;
                     }
-                    ;
                 });
         } else {
-            callback(false);
+            callback(false, 'NOT_SUPPORTED');
         }
-        ;
+    },
+
+    geocodingRequest: function(lat, lng, callback){
+        var url = 'http://api.tiles.mapbox.com/v3/ruslanchek.map-e89iu6uu/geocode/'+lat+','+lng+'.json';
+
+        if(callback){
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                success: function(data){
+                    callback(data);
+                },
+                error: function(){
+                    callback(false);
+                }
+            });
+        };
     }
 };
 

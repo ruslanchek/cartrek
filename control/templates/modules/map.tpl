@@ -155,8 +155,11 @@
 <script src="/control/resources/mapping-tools/leaflet/plugins/leaflet-fullscreen/Control.FullScreen.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/html-icon/Html.icon.js"></script>
 
+<script src="http://api-maps.yandex.ru/2.0/?load=package.map&lang=ru-RU" type="text/javascript"></script>
 <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
+<script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
+<script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Yandex.js"></script>
 
 <script>
     map.init();

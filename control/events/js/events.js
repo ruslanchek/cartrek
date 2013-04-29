@@ -301,17 +301,17 @@ core.events = {
             core.events.getItems();
         });
 
-        $('.event-item .hide').live('click', function(){
+        $('.event-item').on('click', '.hide', function(){
             core.events.hideEvent($(this));
         });
 
-        $('.event-item .close').live('click', function(){
+        $('.event-item').on('click', '.close', function(){
             core.events.delEvent($(this));
         });
 
-        $('.action_menu_item').on('click', function(){
+        $('.nav-side').on('click', '.action_menu_item', function(){
             if(!$(this).hasClass('btn')){
-                $('.left-nav li').removeClass('active');
+                $('.nav-side li').removeClass('active');
                 $(this).parent().addClass('active');
 
                 $('#events_type_header_suffix').html(' / '+$(this).text());

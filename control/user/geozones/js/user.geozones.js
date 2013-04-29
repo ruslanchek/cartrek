@@ -1,5 +1,6 @@
 var geozones = {
     map: null,
+    edit_trigger: false,
     zones_layers: null,
     geozones: {
         raw: [],
@@ -50,11 +51,11 @@ var geozones = {
                 success: function (data) {
                     core.loading.unsetGlobalLoading();
 
-                    if(data.status === false){
+                    if (data.status === false) {
                         core.events_api.showEventsMeow({
                             message: data.message
                         }, true);
-                    }else{
+                    } else {
                         data.edges = edges;
                         callback(data);
                     }
@@ -92,34 +93,55 @@ var geozones = {
         });
     },
 
-    createMap: function (callback) {
-        var map = new L.Map('map', {
-            layers: core.map_tools.getLayers(),
-            center: new L.LatLng(geozones.m_options.coordinates.lat, geozones.m_options.coordinates.lon),
-            zoom: geozones.m_options.zoom
-        });
+    initMapControls: function () {
+        if (!this.map) {
+            return false;
+        }
 
-        map.addControl(new L.Control.Draw({
-            position: 'topright',
-            polyline: false,
-            circle: false,
-            marker: false,
-            rectangle: false,
-            polygon: {
-                allowIntersection: false,
-                drawError: {
-                    color: '#e1e100',
-                    message: 'Линии зоны не могут пересекаться!'
-                },
-                shapeOptions: {
-                    color: '#bada55'
+        if (this.controls && this.controls.length > 0) {
+            for (var i = 0, l = this.controls.length; i < l; i++) {
+                this.map.removeControl(this.controls[i]);
+            }
+        }
+
+        this.controls = [];
+
+        this.controls.push(new L.Control.Draw({
+            draw: {
+                polyline: false,
+                marker: false,
+                rectangle: false,
+                circle: false,
+                position: 'topleft',
+                polygon: {
+                    title: 'Нарисовать геозону',
+                    allowIntersection: false,
+                    drawError: {
+                        color: '#e1e100',
+                        message: 'Линии зоны не могут пересекаться!',
+                        timeout: 2500
+                    },
+                    shapeOptions: {
+                        color: '#bada55'
+                    }
                 }
+            },
+            edit: {
+                featureGroup: this.zones_layers,
+                remove: false
             }
         }));
 
-        map.on('draw:poly-created', function (e) {
-            geozones.addGeozone(e.poly.getLatLngs(), function (data) {
-                geozones.addShape(e.poly.getLatLngs(), data);
+        // this.controls.push(new L.Control.FullScreen());
+        this.controls.push(new L.Control.Locate());
+
+        for (var i = 0, l = this.controls.length; i < l; i++) {
+            this.map.addControl(this.controls[i]);
+        }
+
+        this.map.on('draw:created', function (e) {
+            geozones.addGeozone(e.layer.getLatLngs(), function (data) {
+                geozones.addShape(e.layer.getLatLngs(), data);
 
                 geozones.drawData(function () {
                     geozones.editGeozone(data.id);
@@ -133,7 +155,70 @@ var geozones = {
             });
         });
 
-        map.addControl(new L.Control.FullScreen());
+        this.map.on('draw:drawstart', function (e) {
+            geozones.edit_trigger = true;
+        });
+
+        this.map.on('draw:drawstop', function (e) {
+            geozones.edit_trigger = false;
+        });
+
+        this.map.on('draw:edited', function (e) {
+            geozones.saveShapes(e.layers);
+        });
+    },
+
+    saveShapes: function (layers) {
+        var data = [];
+
+        layers.eachLayer(function (layer) {
+            var edges = [];
+
+            for (var i = 0, l = layer._latlngs.length; i < l; i++) {
+                edges.push([
+                    layer._latlngs[i].lat,
+                    layer._latlngs[i].lng
+                ]);
+            }
+
+            geozones.getGeozoneRaw(layer.options.id).edges = edges;
+            geozones.getGeozoneRaw(layer.options.id).points = JSON.stringify(edges);
+
+            data.push({
+                id: layer.options.id,
+                points: geozones.getGeozoneRaw(layer.options.id).points
+            });
+        });
+
+        this.loading_process = $.ajax({
+            url: '/control/user/geozones/?ajax&action=saveShapes',
+            data: {shapes: data},
+            dataType: 'json',
+            type: 'post',
+            beforeSend: function () {
+                if (this.loading_process) {
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                }
+
+                core.loading.setGlobalLoading();
+            },
+            success: function () {
+                core.loading.unsetGlobalLoading();
+                geozones.drawData();
+            },
+            error: function () {
+                core.loading.unsetGlobalLoading();
+            }
+        });
+    },
+
+    createMap: function (callback) {
+        this.map = new L.Map('map', {
+            layers: core.map_tools.getLayers(),
+            center: new L.LatLng(geozones.m_options.coordinates.lat, geozones.m_options.coordinates.lon),
+            zoom: geozones.m_options.zoom
+        });
 
         $('.leaflet-control-attribution').html('О наших <a href="/control/about#maps">картах</a>');
 
@@ -141,7 +226,7 @@ var geozones = {
             $('.leaflet-control-attribution').fadeOut(3000);
         }, 10000);
 
-        callback(map);
+        callback();
     },
 
     addShape: function (lat_lngs, data) {
@@ -294,6 +379,10 @@ var geozones = {
     },
 
     editGeozone: function (id) {
+        if (this.edit_trigger === true) {
+            return false;
+        }
+
         var gz = this.getGeozoneRaw(id);
 
         this.focusToGeozone(id);
@@ -433,21 +522,19 @@ var geozones = {
         }
     },
 
-    drawMenu: function (data) {
-        console.log(data)
-
+    drawMenu: function () {
         var html = '<ul>';
 
-        for (var i = 0, l = data.length; i < l; i++) {
+        for (var i = 0, l = this.geozones.raw.length; i < l; i++) {
             var classname;
 
-            if (data[i].active == '1') {
+            if (this.geozones.raw[i].active == '1') {
                 classname = '';
             } else {
                 classname = 'unactive';
             }
 
-            html += '<li class="' + classname + '"><a id="gz-item-' + data[i].id + '" data-id="' + data[i].id + '" href="#"><i data-id="' + data[i].id + '"></i><span>' + data[i].name + '</span></a></li>';
+            html += '<li class="' + classname + '"><a id="gz-item-' + this.geozones.raw[i].id + '" data-id="' + this.geozones.raw[i].id + '" href="#"><i data-id="' + this.geozones.raw[i].id + '"></i><span>' + this.geozones.raw[i].name + '</span></a></li>';
         }
 
         html += '</ul>';
@@ -470,14 +557,14 @@ var geozones = {
     drawData: function (callback) {
         if (this.zones_layers) {
             this.map.removeLayer(this.zones_layers);
-            this.zones_layers = new L.LayerGroup();
+            this.zones_layers = new L.FeatureGroup();
         }
 
         geozones.getGeozones(function (data) {
             geozones.geozones.raw = data;
 
             if (data) {
-                geozones.drawMenu(data);
+                geozones.drawMenu();
 
                 for (var i = 0, l = data.length; i < l; i++) {
                     geozones.addShape(JSON.parse(data[i].points), {
@@ -495,38 +582,31 @@ var geozones = {
                 }
 
                 //geozones.map.fitBounds(geozones.zones_layers.getBounds());
+
+                geozones.initMapControls();
             }
         });
     },
 
     init: function () {
-        this.zones_layers = new L.LayerGroup();
+        this.zones_layers = new L.FeatureGroup();
 
-        this.createMap(function (map) {
-            geozones.map = map;
+        this.createMap(function () {
+            var height = 0;
 
-            core.map_tools.getGeoposition(function (position) {
-                geozones.map.panTo(new L.LatLng(position.coords.latitude, position.coords.longitude));
-                geozones.map.setZoom(11);
+            if ($.cookie('map-gz-height') > 0) {
+                height = $.cookie('map-gz-height');
+            } else {
+                height = geozones.m_options.height;
+            }
+
+            $('#map, .map-container').css({
+                height: height
             });
 
-            if ($.cookie('map-gz-height') && $.cookie('map-gz-height') > geozones.m_options.minHeight) {
-                $('#map, .map-container').css({
-                    height: parseInt($.cookie('map-gz-height'))
-                });
-
-                $('.geozones-menu').css({
-                    height: parseInt($.cookie('map-gz-height')) + 15
-                });
-            } else {
-                $('#map, .map-container').css({
-                    height: geozones.m_options.height
-                });
-
-                $('.geozones-menu').css({
-                    height: geozones.m_options.height + 15
-                });
-            }
+            $('.geozones-menu').css({
+                height: height
+            });
 
             geozones.map.invalidateSize();
 
