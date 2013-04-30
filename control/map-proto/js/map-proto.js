@@ -1,9 +1,16 @@
 "use strict";
 
 /**
- *  View
+ *  View tools
  **/
 var ViewController = function () {
+    /* Class constructor */
+    this.__construct = function () {
+        this.mapView();
+    };
+
+    /* Methods */
+    /* Set map and side tools sizes */
     this.mapView = function () {
         var resize = function (h) {
             $('#map, .map-container').css({
@@ -31,12 +38,8 @@ var ViewController = function () {
         });
     };
 
-    this.init = function () {
-        this.mapView();
-    };
-
-    // Construct methods calls
-    this.init();
+    /* Init actions */
+    this.__construct();
 };
 
 /**
@@ -79,7 +82,7 @@ var MapController = function (params) {
         this.instance.invalidateSize();
     };
 
-    // Construct methods calls
+    /* Init actions */
     this.__construct();
 };
 
@@ -91,8 +94,13 @@ var Marker = function (params) {
     //this.layer = null;
     this.instance = null;
     this.params = {
-        lat: 0,
-        lng: 0,
+        metrics: {
+            lat: 0,
+            lng: 0,
+            speed: 0,
+            heding: 0,
+            altitude: 0
+        },
         options: {
             clickable: true,
             draggable: false,
@@ -102,6 +110,7 @@ var Marker = function (params) {
             zIndexOffset: 1,
             title: ''
         },
+        car_id: null,
         focus_on_click: false,
         on_click: null,
         geocoder_data: null,
@@ -117,7 +126,7 @@ var Marker = function (params) {
         var t = this;
 
         this.instance = L.marker(
-            [this.params.lat, this.params.lng],
+            [this.params.metrics.lat, this.params.metrics.lng],
             this.params.options
         );
 
@@ -153,9 +162,9 @@ var Marker = function (params) {
 
     /* Move marker in new position */
     this.move = function (lat, lng) {
-        if(this.params.lat != lat || this.params.lng != lng){
-            this.params.lat = lat;
-            this.params.lng = lng;
+        if(this.params.metrics.lat != lat || this.params.metrics.lng != lng){
+            this.params.metrics.lat = lat;
+            this.params.metrics.lng = lng;
 
             this.instance.setLatLng(new L.LatLng(lat, lng));
 
@@ -175,7 +184,7 @@ var Marker = function (params) {
         if (this.params.geocoder === true) {
             var t = this;
 
-            core.map_tools.geocodingRequest(this.params.lat, this.params.lng, function (data) {
+            core.map_tools.geocodingRequest(this.params.metrics.lat, this.params.metrics.lng, function (data) {
                 t.params.geocoder_data = data;
             });
         }
@@ -191,14 +200,15 @@ var Marker = function (params) {
 var PosMarker = function (params) {
     /* Class params */
     this.params = {
-        heading: 0,
         car_label: false,
-        car_label_data: null,
-        point_data: null,
+        car_label_data: {
+            name: '',
+            g_id: ''
+        },
         options: {
             icon: null,
             title: '',
-            zIndexOffset: (params.car_label_data && params.car_label_data.id) ? (params.car_label_data.id + 10000) : 10000
+            zIndexOffset: (params.car_id) ? (params.car_id + 10000) : 10000
         },
         geocoder: false // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
     };
@@ -207,13 +217,26 @@ var PosMarker = function (params) {
 
     /* Class constructor */
     this.__construct = function(){
-        this.params.options.icon = this.getHeadingIcon(this.params.heading);
+        this.params.options.icon = this.getHeadingIcon(this.params.metrics.heading);
         this.__proto__ = new Marker(this.params);
     }
 
     /* Methods */
-    this.getHeadingIconSpriteOffset = function (heading) {
-        var degrees_zone = Math.round(parseInt(heading) / 15) * 1;
+    /* Heading degree to CSS background offset */
+
+    /* Create icon HTML based on heading degrees */
+    this.getHeadingIcon = function () {
+        var icon;
+
+        // Compensate the over 360 degree heading
+        if (this.params.metrics.heading > 360) {
+            var h1 = this.params.metrics.heading / 360,
+                h2 = h1 - Math.floor(h1);
+
+            this.params.metrics.heading = Math.round(h2 * 360);
+        }
+
+        var degrees_zone = Math.round(parseInt(this.params.metrics.heading) / 15) * 1;
 
         if (isNaN(degrees_zone)) {
             degrees_zone = 0;
@@ -223,23 +246,11 @@ var PosMarker = function (params) {
             degrees_zone = 0;
         }
 
-        return degrees_zone * 40;
-    };
+        degrees_zone = degrees_zone * 40;
 
-    this.getHeadingIcon = function (heading) {
-        var icon;
-
-        // Compensate the over 360 degree heading
-        if (heading > 360) {
-            var h1 = heading / 360,
-                h2 = h1 - Math.floor(h1);
-
-            heading = Math.round(h2 * 360);
-        }
-
-        if (this.params.car_label === true && this.params.car_label_data) {
+        if (this.params.car_label === true && this.params) {
             var html =
-                    '<div class="icon" style="background-position: -' + this.getHeadingIconSpriteOffset(heading) + 'px 0px"></div>' +
+                    '<div class="icon" style="background-position: -' + degrees_zone + 'px 0px"></div>' +
                     '<div class="info-block">' +
                     '<i class="arm"></i>' +
                     '<div class="name">' + this.params.car_label_data.name + '</div>' +
@@ -254,7 +265,7 @@ var PosMarker = function (params) {
                 className: 'marker-with-info'
             });
         } else {
-            var html = '<div class="icon" style="background-position: -' + this.getHeadingIconSpriteOffset(heading) + 'px 0px"></div>';
+            var html = '<div class="icon" style="background-position: -' + degrees_zone + 'px 0px"></div>';
 
             icon = new L.DivIcon({
                 html: html,
@@ -268,9 +279,45 @@ var PosMarker = function (params) {
         return icon;
     };
 
+    /* Renew heading param and redraw marker icon */
     this.setHeading = function (heading) {
-        this.params.heading = heading;
-        this.instance.setIcon(this.getHeadingIcon(heading));
+        this.params.metrics.heading = heading;
+        this.instance.setIcon(this.getHeadingIcon());
+    };
+
+    /* Generate current position popup HTML */
+    this.getCurrentPositionPopupHtml = function () {
+        var car = Data.getCarById(this.params.car_id);
+
+        var html = '<div class="tooltip-content">';
+
+        html += '<h3>Текущее положение</h3>';
+        html += core.utilities.humanizeDate(car.last_point_date, 'MYSQLTIME') + '<br>';
+        html += '<div class="table-wrapper"><table class="bordered hovered">';
+        html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(car.last_point.speed) + ' км/ч</td></tr>';
+        html += '<tr><th>Высота</th><td>' + car.last_point.altitude + ' м</td></tr>';
+        html += '<tr><th>Координаты Ш/Д</th><td>' + car.last_point.lat + '&deg; / ' + car.last_point.lon + '&deg;</td></tr>';
+        html += '</table></div>';
+
+        if (!this.current_car) {
+            var h = core.ui.getHashData(), hash = '';
+
+            if (h && h.fleet) {
+                hash += '#fleet=' + h.fleet + '&car=' + car_id;
+            } else {
+                hash += '#car=' + car_id;
+            }
+
+            if (h && h.timemachine) {
+                hash += '&timemachine=' + h.timemachine;
+            }
+
+            html += '<a href="' + hash + '" class="btn btn-small">Выбрать эту машину</a>';
+        }
+
+        html += '</div>';
+
+        return html;
     };
 
     /* Init actions */
@@ -331,10 +378,30 @@ var WpMarker = function (params) {
 };
 
 /**
- *  Data collector implementation
+ *  Model implementation
  **/
-var DataCollector = function () {
+var ModelController = function () {
 
+};
+
+/**
+ *  Data implementation
+ **/
+var DataController = function () {
+    /* Data items */
+    this.cars = [{
+        id: 1,
+        name: 'xxx',
+        g_id: 'е086ом190',
+        last_point_date: '2013-04-19 22:22:29'
+    }];
+
+    /* Methods */
+    this.getCarById = function(id){
+        return $.grep(this.cars_list, function (e) {
+            return e.id == id;
+        })[0];
+    }
 };
 
 
@@ -368,14 +435,17 @@ var Path = function (params) {
     this.__construct();
 };
 
-//Global controller instances
-var Map, View, m, m1, m2, p;
+var Map, View, Model, Data, m, m1, m2;
 
 /**
  *  Map
  **/
 var map = {
     init: function () {
+        Model = new ModelController();
+
+        View = new ViewController();
+
         Map = new MapController({
             zoom: 6,
             zoom_geoposition: 10,
@@ -385,40 +455,40 @@ var map = {
             height: 400
         });
 
-        View = new ViewController();
-
         m = new PosMarker({
-            heading: 55,
-            lat: 33,
-            lng: 55,
+            metrics: {
+                heading: 55,
+                lat: 33,
+                lng: 55
+            },
             map_instance: Map.instance,
-            car_label: true,
-            car_label_data: {
-                id: 2,
-                name: 'Volvo S40 1',
-                g_id: 'е086ом190'
-            }
+            car_id: 1
         });
 
         m1 = new WpMarker({
-            heading: 55,
-            lat: 35,
-            lng: 54,
+            metrics: {
+                heading: 55,
+                lat: 35,
+                lng: 54
+            },
             map_instance: Map.instance,
-            focus_on_click: true
+            focus_on_click: true,
+            car_id: 2
         });
 
         m2 = new PosMarker({
-            heading: 145,
-            lat: 34,
-            lng: 56,
-            map_instance: Map.instance,
+            metrics: {
+                heading: 145,
+                lat: 34,
+                lng: 56
+            },
             car_label: true,
             car_label_data: {
-                id: 1,
-                name: 'Volvo S40 2',
-                g_id: 'е086ом190'
+                name: 'Test',
+                g_id: 'а777аа177'
             },
+            map_instance: Map.instance,
+            car_id: 3,
             on_click: function(e){
                 console.log(e)
             }
