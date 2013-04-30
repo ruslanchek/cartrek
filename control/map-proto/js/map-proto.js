@@ -99,7 +99,8 @@ var Marker = function (params) {
             lng: 0,
             speed: 0,
             heding: 0,
-            altitude: 0
+            altitude: 0,
+            date: 0
         },
         options: {
             clickable: true,
@@ -179,6 +180,8 @@ var Marker = function (params) {
         }
     };
 
+    /* Renew metrics event */
+
     /* Renew position data, based  (geocoding) */
     this.renewGeocoderData = function () {
         if (this.params.geocoder === true) {
@@ -219,11 +222,14 @@ var PosMarker = function (params) {
     this.__construct = function(){
         this.params.options.icon = this.getHeadingIcon(this.params.metrics.heading);
         this.__proto__ = new Marker(this.params);
+
+        this.instance.bindPopup(this.getCurrentPositionPopupHtml(), {
+            maxWidth: 300,
+            minWidth: 100
+        });
     }
 
     /* Methods */
-    /* Heading degree to CSS background offset */
-
     /* Create icon HTML based on heading degrees */
     this.getHeadingIcon = function () {
         var icon;
@@ -287,34 +293,15 @@ var PosMarker = function (params) {
 
     /* Generate current position popup HTML */
     this.getCurrentPositionPopupHtml = function () {
-        var car = Data.getCarById(this.params.car_id);
-
         var html = '<div class="tooltip-content">';
 
         html += '<h3>Текущее положение</h3>';
-        html += core.utilities.humanizeDate(car.last_point_date, 'MYSQLTIME') + '<br>';
+        html += core.utilities.humanizeDate(this.params.metrics.date, 'MYSQLTIME') + '<br>';
         html += '<div class="table-wrapper"><table class="bordered hovered">';
-        html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(car.last_point.speed) + ' км/ч</td></tr>';
-        html += '<tr><th>Высота</th><td>' + car.last_point.altitude + ' м</td></tr>';
-        html += '<tr><th>Координаты Ш/Д</th><td>' + car.last_point.lat + '&deg; / ' + car.last_point.lon + '&deg;</td></tr>';
+        html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</td></tr>';
+        html += '<tr><th>Высота</th><td>' + this.params.metrics.altitude + ' м</td></tr>';
+        html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
         html += '</table></div>';
-
-        if (!this.current_car) {
-            var h = core.ui.getHashData(), hash = '';
-
-            if (h && h.fleet) {
-                hash += '#fleet=' + h.fleet + '&car=' + car_id;
-            } else {
-                hash += '#car=' + car_id;
-            }
-
-            if (h && h.timemachine) {
-                hash += '&timemachine=' + h.timemachine;
-            }
-
-            html += '<a href="' + hash + '" class="btn btn-small">Выбрать эту машину</a>';
-        }
-
         html += '</div>';
 
         return html;
@@ -389,12 +376,7 @@ var ModelController = function () {
  **/
 var DataController = function () {
     /* Data items */
-    this.cars = [{
-        id: 1,
-        name: 'xxx',
-        g_id: 'е086ом190',
-        last_point_date: '2013-04-19 22:22:29'
-    }];
+    this.cars = [];
 
     /* Methods */
     this.getCarById = function(id){
@@ -480,7 +462,10 @@ var map = {
             metrics: {
                 heading: 145,
                 lat: 34,
-                lng: 56
+                lng: 56,
+                speed: 10,
+                date: '2013-04-19 22:22:29',
+                altitude: '112'
             },
             car_label: true,
             car_label_data: {
