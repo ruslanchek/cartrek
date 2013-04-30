@@ -1,6 +1,7 @@
 var geozones = {
     map: null,
     edit_trigger: false,
+    create_trigger: false,
     zones_layers: null,
     geozones: {
         raw: [],
@@ -140,11 +141,18 @@ var geozones = {
         }
 
         this.map.on('draw:created', function (e) {
+            if(geozones.create_trigger === true){
+                return false;
+            }
+
+            geozones.create_trigger = true;
+
             geozones.addGeozone(e.layer.getLatLngs(), function (data) {
                 geozones.addShape(e.layer.getLatLngs(), data);
 
                 geozones.drawData(function () {
                     geozones.editGeozone(data.id);
+                    geozones.create_trigger = false;
                 });
 
                 /*core.events_api.pushEvent({
@@ -165,6 +173,7 @@ var geozones = {
 
         this.map.on('draw:edited', function (e) {
             geozones.saveShapes(e.layers);
+            geozones.setResizer();
         });
     },
 
@@ -588,6 +597,22 @@ var geozones = {
         });
     },
 
+    setResizer: function(){
+        $(window).off('resize').on('resize', function () {
+            $('#map').css({
+                width: 0
+            });
+
+            $('#map').css({
+                width: $('.map-container').width() - 1
+            });
+
+            if (geozones.map) {
+                geozones.map.invalidateSize();
+            }
+        });
+    },
+
     init: function () {
         this.zones_layers = new L.FeatureGroup();
 
@@ -635,16 +660,7 @@ var geozones = {
                 }
             });
 
-            $(window).on('resize', function () {
-                $('#map').css({
-                    width: $('.map-container').width() - 1
-                });
-
-                if (geozones.map) {
-                    geozones.map.invalidateSize();
-                }
-            });
-
+            geozones.setResizer();
             geozones.drawData();
         });
     }

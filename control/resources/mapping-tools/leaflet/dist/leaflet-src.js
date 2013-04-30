@@ -4159,6 +4159,8 @@ L.FeatureGroup = L.LayerGroup.extend({
 	},
 
 	bringToFront: function () {
+
+
 		return this.invoke('bringToFront');
 	},
 

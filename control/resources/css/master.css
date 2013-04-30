@@ -1241,7 +1241,7 @@ footer a:active {
 }
 
 .g_id.small.standart .region i label {
-    width: 3.3ex;
+    width: 3.1ex;
     height: 1.2em;
     top: -0.6em;
     right: 1ex;
@@ -1279,7 +1279,7 @@ footer a:active {
 }
 
 .g_id.small.tranzit .region i label {
-    width: 3.3ex;
+    width: 3.1ex;
     height: 1.2em;
     top: -0.6em;
     right: 1ex;
@@ -1979,7 +1979,10 @@ table .delete-btn {
 
 /* Marker with info */
 .marker-with-info {
-    position: relative;
+    position: absolute;
+    margin: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .marker-with-info .icon {
@@ -2018,7 +2021,7 @@ table .delete-btn {
     position: absolute;
     top: 12px;
     left: 12px;
-    opacity: 0.82;
+    opacity: 0.80;
     transition: opacity, background 100ms linear;
     -webkit-transition: opacity, background 100ms linear;
 }

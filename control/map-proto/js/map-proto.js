@@ -42,9 +42,9 @@ var ViewController = function () {
 /**
  *  Map implementation
  **/
-var MapController = function () {
+var MapController = function (params) {
+    /* Class params */
     this.instance = null;
-
     this.params = {
         zoom: 4,
         zoom_geoposition: 10,
@@ -54,7 +54,10 @@ var MapController = function () {
         height: 400
     };
 
-    this.init = function () {
+    $.extend(true, this.params, params);
+
+    /* Class constructor */
+    this.__construct = function () {
         this.instance = new L.Map('map', {
             layers: core.map_tools.getLayers(),
             center: new L.LatLng(this.params.lat, this.params.lng),
@@ -71,48 +74,84 @@ var MapController = function () {
         }, 10000);
     };
 
+    /* Methods */
     this.invalidateSize = function () {
         this.instance.invalidateSize();
     };
 
     // Construct methods calls
-    this.init();
+    this.__construct();
 };
 
 /**
  *  Marker implementation
  **/
 var Marker = function (params) {
-    this.layer = null;
-
+    /* Class params */
+    //this.layer = null;
+    this.instance = null;
     this.params = {
         lat: 0,
         lng: 0,
-        options: { },
+        options: {
+            clickable: true,
+            draggable: false,
+            opacity: 1,
+            riseOnHover: true,
+            riseOffset: 250,
+            zIndexOffset: 1,
+            title: ''
+        },
+        focus_on_click: false,
+        on_click: null,
         geocoder_data: null,
-        geocoder: false, // TODO: WARNING!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
-        map_instance: null
+        geocoder: false, // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
+        map_instance: null,
+        draw: true
     };
 
-    $.extend(this.params, params);
+    $.extend(true, this.params, params);
 
-    this.instance = L.marker(
-        [this.params.lat, this.params.lng],
-        this.params.options
-    );
+    /* Class constructor */
+    this.__construct = function(){
+        var t = this;
 
+        this.instance = L.marker(
+            [this.params.lat, this.params.lng],
+            this.params.options
+        );
+
+        this.instance.on('click', function() {
+            if(t.params.focus_on_click === true){
+                t.focus();
+            }
+
+            if(t.params.on_click){
+                t.params.on_click(t);
+            }
+        })
+
+        if(this.params.draw === true){
+            this.draw();
+        }
+    }
+
+    /* Methods */
+    /* Draw marker on a map */
     this.draw = function () {
         if (this.params.map_instance) {
             this.params.map_instance.addLayer(this.instance);
         }
     };
 
+    /* Remove marker from a map */
     this.remove = function () {
         if (this.params.map_instance) {
             this.params.map_instance.removeLayer(this.instance);
         }
     };
 
+    /* Move marker in new position */
     this.move = function (lat, lng) {
         if(this.params.lat != lat || this.params.lng != lng){
             this.params.lat = lat;
@@ -124,12 +163,14 @@ var Marker = function (params) {
         }
     };
 
+    /* Pan to a marker */
     this.focus = function () {
         if(this.params && this.params.map_instance){
             this.params.map_instance.panTo(this.instance.getLatLng());
         }
     };
 
+    /* Renew position data, based  (geocoding) */
     this.renewGeocoderData = function () {
         if (this.params.geocoder === true) {
             var t = this;
@@ -139,21 +180,38 @@ var Marker = function (params) {
             });
         }
     };
-};
 
+    /* Init actions */
+    this.__construct();
+};
 
 /**
  *  Position marker implementation
  **/
 var PosMarker = function (params) {
+    /* Class params */
     this.params = {
         heading: 0,
-        show_info: false,
-        car_data: null,
-        geocoder: false // TODO: WARNING!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
+        car_label: false,
+        car_label_data: null,
+        point_data: null,
+        options: {
+            icon: null,
+            title: '',
+            zIndexOffset: (params.car_label_data && params.car_label_data.id) ? (params.car_label_data.id + 10000) : 10000
+        },
+        geocoder: false // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
     };
-    $.extend(this.params, params);
 
+    $.extend(true, this.params, params);
+
+    /* Class constructor */
+    this.__construct = function(){
+        this.params.options.icon = this.getHeadingIcon(this.params.heading);
+        this.__proto__ = new Marker(this.params);
+    }
+
+    /* Methods */
     this.getHeadingIconSpriteOffset = function (heading) {
         var degrees_zone = Math.round(parseInt(heading) / 15) * 1;
 
@@ -179,32 +237,31 @@ var PosMarker = function (params) {
             heading = Math.round(h2 * 360);
         }
 
-        if (this.show_info === true && this.params.car_data) {
-            var html = '<div class="marker-with-info">' +
-                '<div class="icon" style="background-position: -' + this.getHeadingIconSpriteOffset(heading) + 'px 0px"></div>' +
-                '<div class="info-block">' +
-                '<i class="arm"></i>' +
-                '<div class="name">' + this.params.car_data.name + '</div>' +
-                '<div class="id">' + core.utilities.drawGId(this.params.car_data.g_id, 'small') + '</div>' +
-                '</div>' +
-                '</div>';
+        if (this.params.car_label === true && this.params.car_label_data) {
+            var html =
+                    '<div class="icon" style="background-position: -' + this.getHeadingIconSpriteOffset(heading) + 'px 0px"></div>' +
+                    '<div class="info-block">' +
+                    '<i class="arm"></i>' +
+                    '<div class="name">' + this.params.car_label_data.name + '</div>' +
+                    '<div class="id">' + core.utilities.drawGId(this.params.car_label_data.g_id, 'small') + '</div>' +
+                    '</div>';
 
-            icon = new L.HtmlIcon({
+            icon = new L.DivIcon({
                 html: html,
                 iconSize: [16, 16], // size of the icon
                 iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-                popupAnchor: [0, -20]
+                popupAnchor: [0, -20],
+                className: 'marker-with-info'
             });
         } else {
-            var html = '<div class="marker-with-info">' +
-                '<div class="icon" style="background-position: -' + this.getHeadingIconSpriteOffset(heading) + 'px 0px"></div>' +
-                '</div>';
+            var html = '<div class="icon" style="background-position: -' + this.getHeadingIconSpriteOffset(heading) + 'px 0px"></div>';
 
-            icon = new L.HtmlIcon({
+            icon = new L.DivIcon({
                 html: html,
                 iconSize: [40, 40], // size of the icon
                 iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-                popupAnchor: [0, -20]
+                popupAnchor: [0, -20],
+                className: 'marker-with-info'
             });
         }
 
@@ -216,24 +273,61 @@ var PosMarker = function (params) {
         this.instance.setIcon(this.getHeadingIcon(heading));
     };
 
-    this.params.options = {
-        icon: this.getHeadingIcon(params.heading),
-        title: '',
-        clickable: true,
-        draggable: false,
-        opacity: 1,
-        riseOnHover: true,
-        riseOffset: 10000
-    };
-
-    this.__proto__ = new Marker(this.params);
+    /* Init actions */
+    this.__construct();
 };
 
 /**
  *  Waypoint marker implementation
  **/
-var WpMarker = function () {
-    this.__proto__ = new Marker(this.params);
+var WpMarker = function (params) {
+    /* Class params */
+    this.params = {
+        car_data: null,
+        point_data: null,
+        type: 'way',
+        options: {
+            icon: null,
+            title: '',
+            zIndexOffset: 5000
+        },
+        geocoder: false // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
+    };
+
+    $.extend(true, this.params, params);
+
+    /* Class constructor */
+    this.__construct = function(){
+        this.params.options.icon = this.getWpIcon(this.params.type);
+        this.__proto__ = new Marker(this.params);
+    }
+
+    /* Methods */
+    this.getWpIcon = function(type){
+        switch(type){
+            case 'stop' : {
+                return L.icon({
+                    iconUrl: '/control/map/img/markers/waypoint_stop.png',
+                    iconSize: [7, 7], // size of the icon
+                    iconAnchor: [3, 3], // point of the icon which will correspond to marker's location
+                    popupAnchor: [0, -4] // point from which the popup should open relative to the iconAnchor
+                });
+            } break;
+
+            case 'way' :
+            default : {
+                return L.icon({
+                    iconUrl: '/control/map/img/markers/waypoint.png',
+                    iconSize: [7, 7], // size of the icon
+                    iconAnchor: [3, 3], // point of the icon which will correspond to marker's location
+                    popupAnchor: [0, -4] // point from which the popup should open relative to the iconAnchor
+                });
+            } break;
+        }
+    };
+
+    /* Init actions */
+    this.__construct();
 };
 
 /**
@@ -243,25 +337,91 @@ var DataCollector = function () {
 
 };
 
+
+/**
+ *  Path implementation
+ **/
+var Path = function (params) {
+    /* Class params */
+    this.params = {
+        options: {
+            color: '#000000',
+            weight: 5,
+            opacity: 0.5,
+            smoothFactor: 1.0,
+            dashArray: null,
+            clickable: true
+        }
+    };
+
+    $.extend(true, this.params, params);
+
+    /* Class constructor */
+    this.__construct = function(){
+        this.params.options.icon = this.getWpIcon(this.params.type);
+        this.__proto__ = new Marker(this.params);
+    }
+
+    /* Methods */
+
+    /* Init actions */
+    this.__construct();
+};
+
 //Global controller instances
-var Map, View, m;
+var Map, View, m, m1, m2, p;
 
 /**
  *  Map
  **/
 var map = {
     init: function () {
-        Map = new MapController();
+        Map = new MapController({
+            zoom: 6,
+            zoom_geoposition: 10,
+            lat: 33,
+            lng: 55,
+            minHeight: 250,
+            height: 400
+        });
+
         View = new ViewController();
 
         m = new PosMarker({
             heading: 55,
             lat: 33,
             lng: 55,
-            map_instance: Map.instance
+            map_instance: Map.instance,
+            car_label: true,
+            car_label_data: {
+                id: 2,
+                name: 'Volvo S40 1',
+                g_id: 'е086ом190'
+            }
         });
 
-        m.draw()
-        m.move(22, 33)
+        m1 = new WpMarker({
+            heading: 55,
+            lat: 35,
+            lng: 54,
+            map_instance: Map.instance,
+            focus_on_click: true
+        });
+
+        m2 = new PosMarker({
+            heading: 145,
+            lat: 34,
+            lng: 56,
+            map_instance: Map.instance,
+            car_label: true,
+            car_label_data: {
+                id: 1,
+                name: 'Volvo S40 2',
+                g_id: 'е086ом190'
+            },
+            on_click: function(e){
+                console.log(e)
+            }
+        });
     }
 }
