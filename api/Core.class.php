@@ -25,6 +25,7 @@ Class Core
         'db' => 'Database',
         'auth' => 'Auth',
         'mail' => 'Mail',
+        'sms' => 'Sms',
         'form' => 'Form',
         'devices' => 'Devices',
         'eventsApi' => 'EventsApi',

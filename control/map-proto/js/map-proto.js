@@ -123,7 +123,7 @@ var Marker = function (params) {
     $.extend(true, this.params, params);
 
     /* Class constructor */
-    this.__construct = function(){
+    this.__construct = function () {
         var t = this;
 
         this.instance = L.marker(
@@ -131,37 +131,36 @@ var Marker = function (params) {
             this.params.options
         );
 
-        this.instance.on('click', function() {
-            if(t.params.focus_on_click === true){
+        this.instance.on('click', function () {
+            if (t.params.focus_on_click === true) {
                 t.focus();
             }
 
-            if(t.params.on_click){
+            if (t.params.on_click) {
                 t.params.on_click(t);
             }
         })
 
-        if(this.params.draw === true){
+        if (this.params.draw === true) {
             this.draw();
         }
-
-        var popup_html = this.getPopupHtml();
-
-        // TODO : CHANGE, DONT WORKS!!!
-
-        if(popup_html){
-            this.instance.bindPopup(popup_html, {
-                maxWidth: 300,
-                minWidth: 100
-            });
-        }
-    }
+    };
 
     /* Abstraction */
-    this.getPopupHtml = function(){return;};
+    this.getPopupHtml = function () {
+        return;
+    };
 
     /* Methods */
-    this.renewPopupHtml = function(){
+    /* Bind Popup */
+    this.setPopup = function () {
+        this.instance.bindPopup(this.getPopupHtml(), {
+            maxWidth: 300,
+            minWidth: 100
+        });
+    };
+
+    this.renewPopupHtml = function () {
         if (this.instance._popup) {
             this.instance._popup.setContent(this.getPopupHtml());
         }
@@ -183,7 +182,7 @@ var Marker = function (params) {
 
     /* Move marker in new position */ // TODO: DEPRECATED TO USE DIRECTLY! USE Marker.updateMetrics() METHOD INSTEAD!
     this.move = function (lat, lng) {
-        if(this.params.metrics.lat != lat || this.params.metrics.lng != lng){
+        if (this.params.metrics.lat != lat || this.params.metrics.lng != lng) {
             this.params.metrics.lat = lat;
             this.params.metrics.lng = lng;
 
@@ -194,7 +193,7 @@ var Marker = function (params) {
 
     /* Pan to a marker */
     this.focus = function () {
-        if(this.params && this.params.map_instance){
+        if (this.params && this.params.map_instance) {
             this.params.map_instance.panTo(this.instance.getLatLng());
         }
     };
@@ -211,41 +210,41 @@ var Marker = function (params) {
     };
 
     /* Renew all the metrics */
-    this.updateMetrics = function(metrics){
+    this.updateMetrics = function (metrics) {
         var data_changed = false;
 
-        if((metrics.lat && metrics.lng) && (this.params.metrics.lat != metrics.lat || this.params.metrics.lng != metrics.lng)){
+        if ((metrics.lat && metrics.lng) && (this.params.metrics.lat != metrics.lat || this.params.metrics.lng != metrics.lng)) {
             this.move(metrics.lat, metrics.lng);
             data_changed = true;
         }
 
-        if(metrics.heading && this.params.metrics.heding != metrics.heading){
+        if (metrics.heading && this.params.metrics.heding != metrics.heading) {
             this.params.metrics.heading = metrics.heading;
 
-            if(this.setHeadingIcon){
+            if (this.setHeadingIcon) {
                 this.setHeadingIcon(metrics.heading);
             }
 
             data_changed = true;
         }
 
-        if(metrics.speed && this.params.metrics.speed != metrics.speed){
+        if (metrics.speed && this.params.metrics.speed != metrics.speed) {
             this.params.metrics.speed = metrics.speed;
             data_changed = true;
         }
 
-        if(metrics.altitude && this.params.metrics.altitude != metrics.altitude){
+        if (metrics.altitude && this.params.metrics.altitude != metrics.altitude) {
             this.params.metrics.altitude = metrics.altitude;
             data_changed = true;
         }
 
-        if(metrics.date && this.params.metrics.date != metrics.date){
+        if (metrics.date && this.params.metrics.date != metrics.date) {
             // TODO: Make the dates comparsion by Date.getTime() method. And make the all input dates parser to objects
             this.params.metrics.date = metrics.date;
             data_changed = true;
         }
 
-        if(data_changed === true){
+        if (data_changed === true) {
             this.renewPopupHtml();
         }
     };
@@ -276,10 +275,11 @@ var PosMarker = function (params) {
     $.extend(true, this.params, params);
 
     /* Class constructor */
-    this.__construct = function(){
-        this.params.options.icon = this.getHeadingIcon(this.params.metrics.heading);
+    this.__construct = function () {
+        this.params.options.icon = this.getHeadingIcon();
         this.__proto__ = new Marker(this.params);
-    }
+        this.setPopup();
+    };
 
     /* Methods */
     /* Create icon HTML based on heading degrees */
@@ -308,7 +308,7 @@ var PosMarker = function (params) {
 
         if (this.params.car_label === true && this.params) {
             var html =
-                    '<div class="icon" style="background-position: -' + degrees_zone + 'px 0px"></div>' +
+                '<div class="icon" style="background-position: -' + degrees_zone + 'px 0px"></div>' +
                     '<div class="info-block">' +
                     '<i class="arm"></i>' +
                     '<div class="name">' + this.params.car_label_data.name + '</div>' +
@@ -347,11 +347,25 @@ var PosMarker = function (params) {
         var html = '<div class="tooltip-content">';
 
         html += '<h3>Текущее положение</h3>';
-        html += core.utilities.humanizeDate(this.params.metrics.date, 'MYSQLTIME') + '<br>';
+
+        if (this.params.metrics.date) {
+            html += core.utilities.humanizeDate(this.params.metrics.date, 'MYSQLTIME') + '<br>';
+        }
+
         html += '<div class="table-wrapper"><table class="bordered hovered">';
-        html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</td></tr>';
-        html += '<tr><th>Высота</th><td>' + this.params.metrics.altitude + ' м</td></tr>';
-        html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
+
+        if (this.params.metrics.speed) {
+            html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</td></tr>';
+        }
+
+        if (this.params.metrics.altitude) {
+            html += '<tr><th>Высота</th><td>' + this.params.metrics.altitude + ' м' + '</td></tr>';
+        }
+
+        if (this.params.metrics.lat && this.params.metrics.lng) {
+            html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
+        }
+
         html += '</table></div>';
         html += '</div>';
 
@@ -382,32 +396,37 @@ var WpMarker = function (params) {
     $.extend(true, this.params, params);
 
     /* Class constructor */
-    this.__construct = function(){
+    this.__construct = function () {
         this.params.options.icon = this.getWpIcon(this.params.type);
         this.__proto__ = new Marker(this.params);
-    }
+        this.setPopup();
+    };
 
     /* Methods */
-    this.getWpIcon = function(type){
-        switch(type){
-            case 'stop' : {
+    this.getWpIcon = function (type) {
+        switch (type) {
+            case 'stop' :
+            {
                 return L.icon({
                     iconUrl: '/control/map/img/markers/waypoint_stop.png',
                     iconSize: [7, 7], // size of the icon
                     iconAnchor: [3, 3], // point of the icon which will correspond to marker's location
                     popupAnchor: [0, -4] // point from which the popup should open relative to the iconAnchor
                 });
-            } break;
+            }
+                break;
 
             case 'way' :
-            default : {
+            default :
+            {
                 return L.icon({
                     iconUrl: '/control/map/img/markers/waypoint.png',
                     iconSize: [7, 7], // size of the icon
                     iconAnchor: [3, 3], // point of the icon which will correspond to marker's location
                     popupAnchor: [0, -4] // point from which the popup should open relative to the iconAnchor
                 });
-            } break;
+            }
+                break;
         }
     };
 
@@ -440,18 +459,19 @@ var DataController = function () {
     this.cars = [];
 
     /* Methods */
-    this.getCarById = function(id){
+    this.getCarById = function (id) {
         return $.grep(this.cars_list, function (e) {
             return e.id == id;
         })[0];
     }
 };
 
-
 /**
  *  Path implementation
  **/
 var Path = function (params) {
+    this.instance = null;
+
     /* Class params */
     this.params = {
         options: {
@@ -461,24 +481,57 @@ var Path = function (params) {
             smoothFactor: 1.0,
             dashArray: null,
             clickable: true
-        }
+        },
+        map_instance: null,
+        points: []
     };
 
     $.extend(true, this.params, params);
 
     /* Class constructor */
-    this.__construct = function(){
-        this.params.options.icon = this.getWpIcon(this.params.type);
-        this.__proto__ = new Marker(this.params);
-    }
+    this.__construct = function () {
+        this.instance = L.polyline(
+            this.params.points,
+            this.params.options
+        );
+    };
 
     /* Methods */
+    /* Draw path on a map */
+    this.draw = function () {
+        if (this.params.map_instance) {
+            this.params.map_instance.addLayer(this.instance);
+        }
+    };
+
+    /* Remove path from a map */
+    this.remove = function () {
+        if (this.params.map_instance) {
+            this.params.map_instance.removeLayer(this.instance);
+        }
+    };
+
+    /* Add path point */
+    this.addPoint = function(lat, lng){
+        this.instance.addLatLng(new L.LatLng(lat, lng));
+    };
+
+    /* Add path point */
+    this.addPoints = function(points){
+        for(var i = 0, l = points.length; i < l; i++){
+            if(points[i][0] && points[i][1]){
+                this.addPoint(points[i][0], points[i][1]);
+            }else{
+                this.addPoint(points[i].lat, points[i].lng);
+            }
+        }
+    };
 
     /* Init actions */
     this.__construct();
 };
 
-var Map, View, Model, Data, m, m1, m2;
+var Map, View, Model, Data, m, m1, m2, p;
 
 /**
  *  Map
@@ -535,9 +588,27 @@ var map = {
             },
             map_instance: Map.instance,
             car_id: 3,
-            on_click: function(e){
+            on_click: function (e) {
                 console.log(e)
             }
         });
+
+        p = new Path({
+            options: {
+                color: '#000',
+                opacity: 1,
+                weight: 3
+            },
+            map_instance: Map.instance,
+            points: [
+                new L.LatLng(33,54),
+                new L.LatLng(34, 45),
+                new L.LatLng(32,65),
+                new L.LatLng(33,41),
+                new L.LatLng(31,49)
+            ]
+        });
+
+        p.draw();
     }
 }
