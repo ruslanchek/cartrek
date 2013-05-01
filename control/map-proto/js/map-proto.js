@@ -144,9 +144,29 @@ var Marker = function (params) {
         if(this.params.draw === true){
             this.draw();
         }
+
+        var popup_html = this.getPopupHtml();
+
+        // TODO : CHANGE, DONT WORKS!!!
+
+        if(popup_html){
+            this.instance.bindPopup(popup_html, {
+                maxWidth: 300,
+                minWidth: 100
+            });
+        }
     }
 
+    /* Abstraction */
+    this.getPopupHtml = function(){return;};
+
     /* Methods */
+    this.renewPopupHtml = function(){
+        if (this.instance._popup) {
+            this.instance._popup.setContent(this.getPopupHtml());
+        }
+    };
+
     /* Draw marker on a map */
     this.draw = function () {
         if (this.params.map_instance) {
@@ -161,14 +181,13 @@ var Marker = function (params) {
         }
     };
 
-    /* Move marker in new position */
+    /* Move marker in new position */ // TODO: DEPRECATED TO USE DIRECTLY! USE Marker.updateMetrics() METHOD INSTEAD!
     this.move = function (lat, lng) {
         if(this.params.metrics.lat != lat || this.params.metrics.lng != lng){
             this.params.metrics.lat = lat;
             this.params.metrics.lng = lng;
 
             this.instance.setLatLng(new L.LatLng(lat, lng));
-
             this.renewGeocoderData();
         }
     };
@@ -180,9 +199,7 @@ var Marker = function (params) {
         }
     };
 
-    /* Renew metrics event */
-
-    /* Renew position data, based  (geocoding) */
+    /* Renew position data, based (geocoding) */
     this.renewGeocoderData = function () {
         if (this.params.geocoder === true) {
             var t = this;
@@ -190,6 +207,46 @@ var Marker = function (params) {
             core.map_tools.geocodingRequest(this.params.metrics.lat, this.params.metrics.lng, function (data) {
                 t.params.geocoder_data = data;
             });
+        }
+    };
+
+    /* Renew all the metrics */
+    this.updateMetrics = function(metrics){
+        var data_changed = false;
+
+        if((metrics.lat && metrics.lng) && (this.params.metrics.lat != metrics.lat || this.params.metrics.lng != metrics.lng)){
+            this.move(metrics.lat, metrics.lng);
+            data_changed = true;
+        }
+
+        if(metrics.heading && this.params.metrics.heding != metrics.heading){
+            this.params.metrics.heading = metrics.heading;
+
+            if(this.setHeadingIcon){
+                this.setHeadingIcon(metrics.heading);
+            }
+
+            data_changed = true;
+        }
+
+        if(metrics.speed && this.params.metrics.speed != metrics.speed){
+            this.params.metrics.speed = metrics.speed;
+            data_changed = true;
+        }
+
+        if(metrics.altitude && this.params.metrics.altitude != metrics.altitude){
+            this.params.metrics.altitude = metrics.altitude;
+            data_changed = true;
+        }
+
+        if(metrics.date && this.params.metrics.date != metrics.date){
+            // TODO: Make the dates comparsion by Date.getTime() method. And make the all input dates parser to objects
+            this.params.metrics.date = metrics.date;
+            data_changed = true;
+        }
+
+        if(data_changed === true){
+            this.renewPopupHtml();
         }
     };
 
@@ -222,11 +279,6 @@ var PosMarker = function (params) {
     this.__construct = function(){
         this.params.options.icon = this.getHeadingIcon(this.params.metrics.heading);
         this.__proto__ = new Marker(this.params);
-
-        this.instance.bindPopup(this.getCurrentPositionPopupHtml(), {
-            maxWidth: 300,
-            minWidth: 100
-        });
     }
 
     /* Methods */
@@ -285,14 +337,13 @@ var PosMarker = function (params) {
         return icon;
     };
 
-    /* Renew heading param and redraw marker icon */
-    this.setHeading = function (heading) {
-        this.params.metrics.heading = heading;
+    /* Renew heading param and redraw marker icon */ // TODO: DEPRECATED TO USE DIRECTLY! USE Marker.updateMetrics() METHOD INSTEAD!
+    this.setHeadingIcon = function (heading) {
         this.instance.setIcon(this.getHeadingIcon());
     };
 
     /* Generate current position popup HTML */
-    this.getCurrentPositionPopupHtml = function () {
+    this.getPopupHtml = function () {
         var html = '<div class="tooltip-content">';
 
         html += '<h3>Текущее положение</h3>';
@@ -358,6 +409,16 @@ var WpMarker = function (params) {
                 });
             } break;
         }
+    };
+
+    /* Generate current position popup HTML */ // TODO: Complete this!
+    this.getPopupHtml = function () {
+        var html = '<div class="tooltip-content">';
+
+        html += '<h3>Метка</h3>';
+        html += '</div>';
+
+        return html;
     };
 
     /* Init actions */
