@@ -651,7 +651,6 @@ var leaflet_ctrl = {
             map_instance.removeLayer(this.path);
         }
 
-
         //Если путевые маркеры уже отрисованы, то удаляем их
         /*if(this.run_markers_group){
          this.run_markers_group.clearLayers();

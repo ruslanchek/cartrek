@@ -1,51 +1,9 @@
 "use strict";
 
 /**
- *  View tools
- **/
-var ViewController = function () {
-    /* Class constructor */
-    this.__construct = function () {
-        this.mapView();
-    };
-
-    /* Methods */
-    /* Set map and side tools sizes */
-    this.mapView = function () {
-        var resize = function (h) {
-            $('#map, .map-container').css({
-                height: $('body').height() - $('.top-panel').height() - $('footer').height() - h,
-                width: $('body').width() - $('.map-side-panel').width()
-            });
-
-            $('.map-full-sized-frame .h1').css({
-                width: $('body').width() - $('.map-side-panel').width()
-            });
-
-            $('.map-side-panel').css({
-                minHeight: $('.map-container').height()
-            });
-
-            if (Map) {
-                Map.invalidateSize();
-            }
-        };
-
-        resize(60);
-
-        $(window).on('resize', function () {
-            resize(20);
-        });
-    };
-
-    /* Init actions */
-    this.__construct();
-};
-
-/**
  *  Map implementation
  **/
-var MapController = function (params) {
+var Map = function (params) {
     /* Class params */
     this.instance = null;
     this.params = {
@@ -445,28 +403,6 @@ var WpMarker = function (params) {
 };
 
 /**
- *  Model implementation
- **/
-var ModelController = function () {
-
-};
-
-/**
- *  Data implementation
- **/
-var DataController = function () {
-    /* Data items */
-    this.cars = [];
-
-    /* Methods */
-    this.getCarById = function (id) {
-        return $.grep(this.cars_list, function (e) {
-            return e.id == id;
-        })[0];
-    }
-};
-
-/**
  *  Path implementation
  **/
 var Path = function (params) {
@@ -531,18 +467,218 @@ var Path = function (params) {
     this.__construct();
 };
 
-var Map, View, Model, Data, m, m1, m2, p;
+/**
+ *  Data implementation
+ **/
+var Data = function () {
+    /* Data items */
+    this.cars = [];
+
+    /* Methods */
+    this.getCarById = function (id) {
+        return $.grep(this.cars_list, function (e) {
+            return e.id == id;
+        })[0];
+    }
+
+    this.error = function () {
+        /*$.meow({
+         title   : 'Ошибка',
+         message : 'Внутренняя ошибка сервиса',
+         duration: 12000
+         });*/
+    },
+
+    this.getCarPath = function (car_id, last_point_id, callback) {
+        this.loading_process = $.ajax({
+            url: '/control/map/?ajax',
+            data: {
+                action: 'getPoints',
+                date: map.date,
+                device_id: car_id,
+                last_point_id: (last_point_id) ? last_point_id : '0'
+            },
+            dataType: 'json',
+            type: 'get',
+            beforeSend: function () {
+                if (this.loading_process) {
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                }
+
+                core.loading.setGlobalLoading();
+            },
+            success: function (data) {
+                core.loading.unsetGlobalLoading();
+                callback(data);
+            },
+            error: function () {
+                core.loading.unsetGlobalLoading();
+                data_ctrl.error();
+            }
+        });
+    },
+
+    //Загружаем данные о группах и тачках с сервера
+    this.getUserFleetsAndDevices = function (callback) {
+        this.loading_process = $.ajax({
+            url: '/control/map/?ajax',
+            data: {
+                action: 'getUserFleetsAndDevices',
+                date: map.date
+            },
+            dataType: 'json',
+            type: 'get',
+            beforeSend: function () {
+                if (this.loading_process) {
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                }
+
+                core.loading.setGlobalLoading();
+            },
+            success: function (data) {
+                core.loading.unsetGlobalLoading();
+                callback(data);
+            },
+            error: function () {
+                core.loading.unsetGlobalLoading();
+                data_ctrl.error();
+            }
+        });
+    },
+
+    //Загружаем динамические данные тачек (координаты, скорость, HDOP и пр.)
+    this.getDynamicCarsData = function (cars, options, callback) {
+        var h = core.ui.getHashData(),
+            tm_flag = '0';
+
+        if (h && h.timemachine) {
+            tm_flag = '1';
+        }
+
+        this.loading_process = $.ajax({
+            url: '/control/map/?ajax&action=getDynamicDevicesData&date=' + map.date,
+            data: {
+                cars: JSON.stringify(cars),
+                tm_flag: tm_flag
+            },
+            dataType: 'json',
+            type: 'post',
+            beforeSend: function () {
+                //Если запрос был на обновление данных, а не на первечную загрузку -
+                // отключем на время загрузки данных автообновление,
+                // чтобы не было ситуации, когда маркеров на карте нет,
+                // а функция обновления запускается
+                if (!options.renew) {
+                    map.auto_renew = false;
+                }
+
+                if (this.loading_process) {
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                }
+
+                //Не показываем глобал лоадинг, если запрос был на обновление данных
+                if (!options.renew) {
+                    core.loading.setGlobalLoading();
+                }
+            },
+            success: function (data) {
+                //Если запрос был на обновление данных, а не на первечную загрузку -
+                // включаем автообновление, если оно, конечно не отключено в куках
+                if (!options.renew && $.cookie('auto-renew') != '0' && !map.checkTimemachineMode()) {
+                    map.auto_renew = true;
+                }
+
+                if (!options.renew) {
+                    core.loading.unsetGlobalLoading();
+                }
+
+                callback(data);
+            },
+            error: function () {
+                if (!options.renew && $.cookie('auto-renew') != '0' && !map.checkTimemachineMode()) {
+                    map.auto_renew = true;
+                }
+
+                if (!options.renew) {
+                    core.loading.unsetGlobalLoading();
+                }
+
+                data_ctrl.error();
+            }
+        });
+    }
+};
 
 /**
- *  Map
+ *  Model implementation
  **/
-var map = {
-    init: function () {
-        Model = new ModelController();
+var Model = function () {
 
-        View = new ViewController();
+};
 
-        Map = new MapController({
+/**
+ *  View tools
+ **/
+var View = function (params) {
+    /* Class params */
+    this.params = {
+        map_instance: null
+    };
+
+    $.extend(true, this.params, params);
+
+    /* Class constructor */
+    this.__construct = function () {
+        this.mapView();
+    };
+
+    /* Methods */
+    /* Set map and side tools sizes */
+    this.mapView = function () {
+        var t = this;
+
+        var resize = function () {
+            $('#map, .map-container').css({
+                height: $('body').height() - $('.top-panel').height() - $('footer').height() - 20,
+                width: $('body').width() - $('.map-side-panel').width()
+            });
+
+            $('.map-full-sized-frame .h1').css({
+                width: $('body').width() - $('.map-side-panel').width()
+            });
+
+            $('.map-side-panel').css({
+                minHeight: $('.map-container').height()
+            });
+
+            if (t.params.map_instance) {
+                t.params.map_instance.invalidateSize();
+            }
+        };
+
+        resize();
+
+        $(window).on('resize', function () {
+            resize();
+        });
+    };
+
+    /* Init actions */
+    this.__construct();
+};
+
+/**
+ *  Object implementation
+ **/
+var Controller = function(){
+    /* Class constructor */
+    this.__construct = function(){
+        this.Data = new Model();
+
+        this.Map = new Map({
             zoom: 6,
             zoom_geoposition: 10,
             lat: 33,
@@ -551,28 +687,35 @@ var map = {
             height: 400
         });
 
-        m = new PosMarker({
+        this.Model = new Model();
+
+        this.View = new View({
+            map_instance: this.Map.instance
+        });
+
+        /**/
+        var m = new PosMarker({
             metrics: {
                 heading: 55,
                 lat: 33,
                 lng: 55
             },
-            map_instance: Map.instance,
+            map_instance: this.Map.instance,
             car_id: 1
         });
 
-        m1 = new WpMarker({
+        var m1 = new WpMarker({
             metrics: {
                 heading: 55,
                 lat: 35,
                 lng: 54
             },
-            map_instance: Map.instance,
+            map_instance: this.Map.instance,
             focus_on_click: true,
             car_id: 2
         });
 
-        m2 = new PosMarker({
+        var m2 = new PosMarker({
             metrics: {
                 heading: 145,
                 lat: 34,
@@ -586,23 +729,23 @@ var map = {
                 name: 'Test',
                 g_id: 'а777аа177'
             },
-            map_instance: Map.instance,
+            map_instance: this.Map.instance,
             car_id: 3,
             on_click: function (e) {
                 console.log(e)
             }
         });
 
-        p = new Path({
+        var p = new Path({
             options: {
                 color: '#000',
                 opacity: 1,
                 weight: 3
             },
-            map_instance: Map.instance,
+            map_instance: this.Map.instance,
             points: [
                 new L.LatLng(33,54),
-                new L.LatLng(34, 45),
+                new L.LatLng(34,45),
                 new L.LatLng(32,65),
                 new L.LatLng(33,41),
                 new L.LatLng(31,49)
@@ -611,4 +754,7 @@ var map = {
 
         p.draw();
     }
+
+    /* Init actions */
+    this.__construct();
 }

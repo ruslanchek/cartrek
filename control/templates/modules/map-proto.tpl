@@ -32,5 +32,9 @@
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
 
 <script>
-    map.init();
+    var map;
+
+    $(function(){
+         map = new Controller();
+    });
 </script>
