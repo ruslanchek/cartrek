@@ -10,7 +10,14 @@
     </div>
 
     <div class="map-side-panel">
-
+        {* Fleet and car selection block *}
+        <div class="side-panel">
+            <div class="panel-content">
+                <div id="fleets-menu"></div>
+                <div class="clear"></div>
+                <div id="cars-menu"></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -30,11 +37,3 @@
 <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
-
-<script>
-    var map;
-
-    $(function(){
-         map = new Controller();
-    });
-</script>

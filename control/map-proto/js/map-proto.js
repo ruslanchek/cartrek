@@ -468,6 +468,13 @@ var Path = function (params) {
 };
 
 /**
+ *  Car implementation
+ **/
+var Car = function(params){
+
+};
+
+/**
  *  Data implementation
  **/
 var Data = function () {
@@ -482,11 +489,11 @@ var Data = function () {
     }
 
     this.error = function () {
-        /*$.meow({
-         title   : 'Ошибка',
-         message : 'Внутренняя ошибка сервиса',
-         duration: 12000
-         });*/
+        $.meow({
+            title   : 'Ошибка',
+            message : 'Внутренняя ошибка сервиса',
+            duration: 12000
+        });
     },
 
     this.getCarPath = function (car_id, last_point_id, callback) {
@@ -620,7 +627,7 @@ var Model = function () {
 };
 
 /**
- *  View tools
+ *  View implementation
  **/
 var View = function (params) {
     /* Class params */
@@ -666,6 +673,50 @@ var View = function (params) {
         });
     };
 
+    this.createCarsAndFleetsMenu = function(fleet_id){
+        //Cars select
+        var exclude = null;
+
+        if (fleet_id != 'all' && fleet_id != '') {
+            exclude = {
+                param_name: 'fleet_id',
+                param_value: fleet_id
+            };
+        }
+
+        core.ui.createSelect('#cars-menu', {
+            id: 'cars-menu-select',
+            default_opt: {
+                val: 'all',
+                name: 'Все машины'
+            },
+            default: this.hash.car,
+            key_name: 'id',
+            value_name: 'name',
+            exclude: exclude,
+            items: this.cars_list,
+            onChange: function (val) {
+
+            }
+        });
+
+        //Groups select
+        core.ui.createSelect('#fleets-menu', {
+            id: 'fleets-menu-select',
+            default_opt: {
+                val: 'all',
+                name: 'Все группы'
+            },
+            default: this.hash.fleet,
+            key_name: 'id',
+            value_name: 'name',
+            items: this.fleets_list,
+            onChange: function (val) {
+
+            }
+        });
+    };
+
     /* Init actions */
     this.__construct();
 };
@@ -692,6 +743,8 @@ var Controller = function(){
         this.View = new View({
             map_instance: this.Map.instance
         });
+
+
 
         /**/
         var m = new PosMarker({

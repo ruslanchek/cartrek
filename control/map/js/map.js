@@ -1020,7 +1020,6 @@ var map = {
             };
         }
 
-
         core.ui.createSelect('#cars-menu', {
             id: 'cars-menu-select',
             default_opt: {val: 'all', name: 'Все машины'},
@@ -1035,7 +1034,6 @@ var map = {
                 if (map.checkTimemachineMode()) {
                     tm_hash = '&timemachine=' + core.ui.getHashData().timemachine;
                 }
-
 
                 document.location.hash = '#fleet=' + fleet_id + '&car=' + val + tm_hash;
             }
@@ -1058,7 +1056,6 @@ var map = {
                     tm_hash = '&timemachine=' + core.ui.getHashData().timemachine;
                 }
 
-
                 document.location.hash = '#fleet=' + val + tm_hash;
                 map.createCarsSelect(val);
             }
@@ -1078,7 +1075,6 @@ var map = {
         } else {
             this.current_fleet = null;
         }
-
 
         if (car) {
             this.current_car = car[0];
