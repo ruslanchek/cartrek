@@ -37,3 +37,9 @@
 <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
 <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
+
+<script>
+    $(function(){
+        MC.init();
+    });
+</script>

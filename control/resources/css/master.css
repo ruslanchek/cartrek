@@ -1759,6 +1759,7 @@ table .delete-btn {
     margin-left: -25%;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+    text-align: center;
 }
 
 /* Map top panel */

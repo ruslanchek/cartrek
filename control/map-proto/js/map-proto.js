@@ -74,7 +74,6 @@ var Marker = function (params) {
         on_click: null,
         geocoder_data: null,
         geocoder: false, // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
-        map_instance: null,
         draw: true
     };
 
@@ -126,15 +125,15 @@ var Marker = function (params) {
 
     /* Draw marker on a map */
     this.draw = function () {
-        if (this.params.map_instance) {
-            this.params.map_instance.addLayer(this.instance);
+        if (MC.Map.instance) {
+            MC.Map.instance.addLayer(this.instance);
         }
     };
 
     /* Remove marker from a map */
     this.remove = function () {
-        if (this.params.map_instance) {
-            this.params.map_instance.removeLayer(this.instance);
+        if (MC.Map.instance) {
+            MC.Map.instance.removeLayer(this.instance);
         }
     };
 
@@ -151,8 +150,8 @@ var Marker = function (params) {
 
     /* Pan to a marker */
     this.focus = function () {
-        if (this.params && this.params.map_instance) {
-            this.params.map_instance.panTo(this.instance.getLatLng());
+        if (this.params && MC.Map.instance) {
+            MC.Map.instance.panTo(this.instance.getLatLng());
         }
     };
 
@@ -418,7 +417,6 @@ var Path = function (params) {
             dashArray: null,
             clickable: true
         },
-        map_instance: null,
         points: []
     };
 
@@ -435,29 +433,29 @@ var Path = function (params) {
     /* Methods */
     /* Draw path on a map */
     this.draw = function () {
-        if (this.params.map_instance) {
-            this.params.map_instance.addLayer(this.instance);
+        if (MC.Map.instance) {
+            MC.Map.instance.addLayer(this.instance);
         }
     };
 
     /* Remove path from a map */
     this.remove = function () {
-        if (this.params.map_instance) {
-            this.params.map_instance.removeLayer(this.instance);
+        if (MC.Map.instance) {
+            MC.Map.instance.removeLayer(this.instance);
         }
     };
 
     /* Add path point */
-    this.addPoint = function(lat, lng){
+    this.addPoint = function (lat, lng) {
         this.instance.addLatLng(new L.LatLng(lat, lng));
     };
 
     /* Add path point */
-    this.addPoints = function(points){
-        for(var i = 0, l = points.length; i < l; i++){
-            if(points[i][0] && points[i][1]){
+    this.addPoints = function (points) {
+        for (var i = 0, l = points.length; i < l; i++) {
+            if (points[i][0] && points[i][1]) {
                 this.addPoint(points[i][0], points[i][1]);
-            }else{
+            } else {
                 this.addPoint(points[i].lat, points[i].lng);
             }
         }
@@ -470,183 +468,69 @@ var Path = function (params) {
 /**
  *  Car implementation
  **/
-var Car = function(params){
-
-};
-
-/**
- *  Data implementation
- **/
-var Data = function () {
-    /* Data items */
-    this.cars = [];
-
-    /* Methods */
-    this.getCarById = function (id) {
-        return $.grep(this.cars_list, function (e) {
-            return e.id == id;
-        })[0];
-    }
-
-    this.error = function () {
-        $.meow({
-            title   : 'Ошибка',
-            message : 'Внутренняя ошибка сервиса',
-            duration: 12000
-        });
-    },
-
-    this.getCarPath = function (car_id, last_point_id, callback) {
-        this.loading_process = $.ajax({
-            url: '/control/map/?ajax',
-            data: {
-                action: 'getPoints',
-                date: map.date,
-                device_id: car_id,
-                last_point_id: (last_point_id) ? last_point_id : '0'
-            },
-            dataType: 'json',
-            type: 'get',
-            beforeSend: function () {
-                if (this.loading_process) {
-                    this.loading_process.abort();
-                    core.loading.unsetGlobalLoading();
-                }
-
-                core.loading.setGlobalLoading();
-            },
-            success: function (data) {
-                core.loading.unsetGlobalLoading();
-                callback(data);
-            },
-            error: function () {
-                core.loading.unsetGlobalLoading();
-                data_ctrl.error();
-            }
-        });
-    },
-
-    //Загружаем данные о группах и тачках с сервера
-    this.getUserFleetsAndDevices = function (callback) {
-        this.loading_process = $.ajax({
-            url: '/control/map/?ajax',
-            data: {
-                action: 'getUserFleetsAndDevices',
-                date: map.date
-            },
-            dataType: 'json',
-            type: 'get',
-            beforeSend: function () {
-                if (this.loading_process) {
-                    this.loading_process.abort();
-                    core.loading.unsetGlobalLoading();
-                }
-
-                core.loading.setGlobalLoading();
-            },
-            success: function (data) {
-                core.loading.unsetGlobalLoading();
-                callback(data);
-            },
-            error: function () {
-                core.loading.unsetGlobalLoading();
-                data_ctrl.error();
-            }
-        });
-    },
-
-    //Загружаем динамические данные тачек (координаты, скорость, HDOP и пр.)
-    this.getDynamicCarsData = function (cars, options, callback) {
-        var h = core.ui.getHashData(),
-            tm_flag = '0';
-
-        if (h && h.timemachine) {
-            tm_flag = '1';
-        }
-
-        this.loading_process = $.ajax({
-            url: '/control/map/?ajax&action=getDynamicDevicesData&date=' + map.date,
-            data: {
-                cars: JSON.stringify(cars),
-                tm_flag: tm_flag
-            },
-            dataType: 'json',
-            type: 'post',
-            beforeSend: function () {
-                //Если запрос был на обновление данных, а не на первечную загрузку -
-                // отключем на время загрузки данных автообновление,
-                // чтобы не было ситуации, когда маркеров на карте нет,
-                // а функция обновления запускается
-                if (!options.renew) {
-                    map.auto_renew = false;
-                }
-
-                if (this.loading_process) {
-                    this.loading_process.abort();
-                    core.loading.unsetGlobalLoading();
-                }
-
-                //Не показываем глобал лоадинг, если запрос был на обновление данных
-                if (!options.renew) {
-                    core.loading.setGlobalLoading();
-                }
-            },
-            success: function (data) {
-                //Если запрос был на обновление данных, а не на первечную загрузку -
-                // включаем автообновление, если оно, конечно не отключено в куках
-                if (!options.renew && $.cookie('auto-renew') != '0' && !map.checkTimemachineMode()) {
-                    map.auto_renew = true;
-                }
-
-                if (!options.renew) {
-                    core.loading.unsetGlobalLoading();
-                }
-
-                callback(data);
-            },
-            error: function () {
-                if (!options.renew && $.cookie('auto-renew') != '0' && !map.checkTimemachineMode()) {
-                    map.auto_renew = true;
-                }
-
-                if (!options.renew) {
-                    core.loading.unsetGlobalLoading();
-                }
-
-                data_ctrl.error();
-            }
-        });
-    }
-};
-
-/**
- *  Model implementation
- **/
-var Model = function () {
+var Car = function (params) {
 
 };
 
 /**
  *  View implementation
  **/
-var View = function (params) {
-    /* Class params */
-    this.params = {
-        map_instance: null
-    };
-
-    $.extend(true, this.params, params);
-
+var View = function () {
     /* Class constructor */
     this.__construct = function () {
         this.mapView();
     };
 
     /* Methods */
+    this.showMapMessage = function (message) {
+        $('.map-container .map-notice').remove();
+
+        message = '<p>'+message+'</p>';
+
+        message += '<a id="hide-map-notice" href="javascript:void(0)" class="btn">Закрыть</a>';
+
+        var $mn = $('<div/>').addClass('map-notice').html(message);
+
+        $('.map-container').append($mn);
+
+        $('.map-container .map-notice').css({
+            marginTop: -$('.map-container .map-notice').height() + 40 / 2
+        });
+
+        $('#hide-map-notice').on('click', function(){
+            $('.map-notice').fadeOut(150, function(){
+                $('.map-notice').remove();
+            });
+        });
+    };
+
+    /* Set header texts */
+    this.setHeaderTexts = function () {
+        var html = '',
+            hash = core.ui.getHashData();
+
+        if (hash && hash.timemachine) {
+            html += '<span class="header-timemeachine"> / ' + core.utilities.humanizeDate(core.utilities.parseDateStrToDateOdject(hash.timemachine)) + '</span>';
+        }
+
+        if (MC.Data.current_fleet) {
+            html += ' / ' + MC.Data.current_fleet.name;
+        }
+
+        if (MC.Data.current_car) {
+            html += ' / ' + MC.Data.current_car.name + ' ' + core.utilities.drawGId(MC.Data.current_car.g_id, 'small');
+            html += '<span class="g_id-spacer"></span>';
+        } else if (MC.Data.current_fleet) {
+            html += ' <span class="badge">' + MC.Data.current_fleet.cars + ' ' + core.utilities.plural(MC.Data.current_fleet.cars, 'машина', 'машины', 'машин') + '</span>';
+        } else {
+            html += ' <span class="badge">' + MC.Data.cars.length + ' ' + core.utilities.plural(MC.Data.cars.length, 'машина', 'машины', 'машин') + '</span>';
+        }
+
+        $('#current-fleet-and-car').html(html);
+    };
+
     /* Set map and side tools sizes */
     this.mapView = function () {
-        var t = this;
-
         var resize = function () {
             $('#map, .map-container').css({
                 height: $('body').height() - $('.top-panel').height() - $('footer').height() - 20,
@@ -661,8 +545,8 @@ var View = function (params) {
                 minHeight: $('.map-container').height()
             });
 
-            if (t.params.map_instance) {
-                t.params.map_instance.invalidateSize();
+            if (MC.Map.instance) {
+                MC.Map.instance.invalidateSize();
             }
         };
 
@@ -673,15 +557,27 @@ var View = function (params) {
         });
     };
 
-    this.createCarsAndFleetsMenu = function(fleet_id){
+    /* Create fleets selects */
+    this.createCarsAndFleetsMenu = function () {
         //Cars select
-        var exclude = null;
+        var exclude = null,
+            default_car = MC.Data.car,
+            default_fleet = MC.Data.fleet,
+            t = this;
 
-        if (fleet_id != 'all' && fleet_id != '') {
-            exclude = {
-                param_name: 'fleet_id',
-                param_value: fleet_id
-            };
+        if((default_car != 'all' || !default_car) && !MC.Data.current_car){
+            default_car = 'all';
+        }
+
+        if((default_fleet != 'all' || !default_fleet) && !MC.Data.current_fleet){
+            default_fleet = 'all';
+        }else{
+            if (MC.Data.fleet != 'all' && MC.Data.fleet != '') {
+                exclude = {
+                    param_name: 'fleet_id',
+                    param_value: MC.Data.fleet
+                };
+            }
         }
 
         core.ui.createSelect('#cars-menu', {
@@ -690,13 +586,19 @@ var View = function (params) {
                 val: 'all',
                 name: 'Все машины'
             },
-            default: this.hash.car,
+            default: default_car,
             key_name: 'id',
             value_name: 'name',
             exclude: exclude,
-            items: this.cars_list,
+            items: MC.Data.cars,
             onChange: function (val) {
+                var tm_hash = '';
 
+                if (MC.Data.timemachine === true) {
+                    tm_hash = '&timemachine=' + MC.Data.hash.timemachine;
+                }
+
+                document.location.hash = '#fleet=' + default_fleet + '&car=' + val + tm_hash;
             }
         });
 
@@ -707,12 +609,18 @@ var View = function (params) {
                 val: 'all',
                 name: 'Все группы'
             },
-            default: this.hash.fleet,
+            default: default_fleet,
             key_name: 'id',
             value_name: 'name',
-            items: this.fleets_list,
+            items: MC.Data.fleets,
             onChange: function (val) {
+                var tm_hash = '';
 
+                if (MC.Data.timemachine === true) {
+                    tm_hash = '&timemachine=' + MC.Data.hash.timemachine;
+                }
+
+                document.location.hash = '#fleet=' + val + tm_hash;
             }
         });
     };
@@ -722,92 +630,203 @@ var View = function (params) {
 };
 
 /**
- *  Object implementation
+ *  Data implementation
  **/
-var Controller = function(){
+var Data = function () {
+    /* Class params */
+    this.cars = [];
+    this.fleets = [];
+    this.timemachine = false;
+    this.date = new Date();
+    this.hash = core.ui.getHashData();
+    this.car = 'all';
+    this.fleet = 'all';
+    this.current_car = null;
+    this.current_fleet = null;
+
     /* Class constructor */
-    this.__construct = function(){
-        this.Data = new Model();
+    this.__construct = function () {
+        this.hardLoad();
 
-        this.Map = new Map({
-            zoom: 6,
-            zoom_geoposition: 10,
-            lat: 33,
-            lng: 55,
-            minHeight: 250,
-            height: 400
+        var t = this;
+
+        $(window).on('hashchange', function () {
+            t.softLoad();
         });
+    };
 
-        this.Model = new Model();
+    /* Methods */
+    this.hardLoad = function(){
+        this.setParamsFromHash();
+        this.getUserFleetsAndDevices();
+    };
 
-        this.View = new View({
-            map_instance: this.Map.instance
+    this.softLoad = function(){
+        this.setParamsFromHash();
+
+        MC.View.setHeaderTexts();
+        MC.View.createCarsAndFleetsMenu();
+    };
+
+    this.setParamsFromHash = function () {
+        if (this.hash) {
+            if (this.hash.fleet) {
+                this.fleet = this.hash.fleet;
+            }
+
+            if (this.hash.car) {
+                this.car = this.hash.car;
+            }
+
+            if (this.hash.timemachine) {
+                this.timemachine = true;
+                this.date = core.utilities.timestampToDateYearLast(this.hash.timemachine);
+            }
+        }
+    }
+
+    this.getCarById = function (id) {
+        return $.grep(this.cars, function (e) {
+            return e.id == id;
+        })[0];
+    }
+
+    this.getFleetById = function (id) {
+        return $.grep(this.fleets, function (e) {
+            return e.id == id;
+        })[0];
+    }
+
+    this.error = function () {
+        $.meow({
+            title: 'Ошибка',
+            message: 'Внутренняя ошибка сервиса',
+            duration: 12000
         });
+    },
 
+    this.processLoadedData = function(data){
+        this.cars = data.devices;
+        this.fleets = data.fleets;
 
+        if (this.car != 'all' && this.car) {
+            this.current_car = this.getCarById(this.car);
 
-        /**/
-        var m = new PosMarker({
-            metrics: {
-                heading: 55,
-                lat: 33,
-                lng: 55
+            if (!this.current_car) {
+                MC.View.showMapMessage('Ошибка, машины с ID ' + this.car + ' не существует!');
+            }
+        }
+
+        if (this.fleet != 'all' && this.fleet) {
+            this.current_fleet = this.getFleetById(this.fleet);
+
+            if (!this.current_fleet) {
+                MC.View.showMapMessage('Ошибка, группы с ID ' + this.fleet + ' не существует!');
+            }
+        }
+
+        MC.View.setHeaderTexts();
+        MC.View.createCarsAndFleetsMenu();
+    };
+
+    //Загружаем данные о группах и тачках с сервера
+    this.getUserFleetsAndDevices = function () {
+        var t = this;
+
+        this.loading_process = $.ajax({
+            url: '/control/map/?ajax',
+            data: {
+                action: 'getUserFleetsAndDevices',
+                date: core.utilities.tmToDate(this.date)
             },
-            map_instance: this.Map.instance,
-            car_id: 1
-        });
+            dataType: 'json',
+            type: 'get',
+            beforeSend: function () {
+                if (this.loading_process) {
+                    this.loading_process.abort();
+                    core.loading.unsetGlobalLoading();
+                }
 
-        var m1 = new WpMarker({
-            metrics: {
-                heading: 55,
-                lat: 35,
-                lng: 54
+                core.loading.setGlobalLoading();
             },
-            map_instance: this.Map.instance,
-            focus_on_click: true,
-            car_id: 2
-        });
+            success: function (data) {
+                core.loading.unsetGlobalLoading();
 
-        var m2 = new PosMarker({
-            metrics: {
-                heading: 145,
-                lat: 34,
-                lng: 56,
-                speed: 10,
-                date: '2013-04-19 22:22:29',
-                altitude: '112'
+                t.processLoadedData(data);
             },
-            car_label: true,
-            car_label_data: {
-                name: 'Test',
-                g_id: 'а777аа177'
-            },
-            map_instance: this.Map.instance,
-            car_id: 3,
-            on_click: function (e) {
-                console.log(e)
+            error: function () {
+                core.loading.unsetGlobalLoading();
+                t.error();
             }
         });
-
-        var p = new Path({
-            options: {
-                color: '#000',
-                opacity: 1,
-                weight: 3
-            },
-            map_instance: this.Map.instance,
-            points: [
-                new L.LatLng(33,54),
-                new L.LatLng(34,45),
-                new L.LatLng(32,65),
-                new L.LatLng(33,41),
-                new L.LatLng(31,49)
-            ]
-        });
-
-        p.draw();
     }
 
     /* Init actions */
     this.__construct();
-}
+};
+
+var MC = {
+    init: function () {
+        this.Map = new Map();
+        this.View = new View();
+        this.Data = new Data();
+
+        /*
+         var m = new PosMarker({
+         metrics: {
+         heading: 55,
+         lat: 33,
+         lng: 55
+         },
+         car_id: 1
+         });
+
+         var m1 = new WpMarker({
+         metrics: {
+         heading: 55,
+         lat: 35,
+         lng: 54
+         },
+         focus_on_click: true,
+         car_id: 2
+         });
+
+         var m2 = new PosMarker({
+         metrics: {
+         heading: 145,
+         lat: 34,
+         lng: 56,
+         speed: 10,
+         date: '2013-04-19 22:22:29',
+         altitude: '112'
+         },
+         car_label: true,
+         car_label_data: {
+         name: 'Test',
+         g_id: 'а777аа177'
+         },
+         car_id: 3,
+         on_click: function (e) {
+         console.log(e)
+         }
+         });
+
+         var p = new Path({
+         options: {
+         color: '#000',
+         opacity: 1,
+         weight: 3
+         },
+         points: [
+         new L.LatLng(33,54),
+         new L.LatLng(34,45),
+         new L.LatLng(32,65),
+         new L.LatLng(33,41),
+         new L.LatLng(31,49)
+         ]
+         });
+
+         p.draw();
+         */
+    }
+};

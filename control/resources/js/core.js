@@ -534,6 +534,12 @@ core.utilities = {
         return d + '-' + m + '-' + y;
     },
 
+    tmToDate: function(date){
+        return  core.utilities.pad(date.getDate(), 2) + '-' +
+                core.utilities.pad(date.getMonth() + 1, 2) + '-' +
+                date.getFullYear();
+    },
+
     humanizeHeadingDegrees: function (degree) {
         if ((degree >= 338 && degree <= 360) || (degree >= 0 && degree <= 25)) {
             return {name: 'север', code: 'n'};
