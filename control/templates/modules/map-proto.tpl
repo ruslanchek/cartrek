@@ -10,6 +10,30 @@
     </div>
 
     <div class="map-side-panel">
+         {* Map data triggers block *}
+        <div class="side-panel">
+            <div class="panel-content">
+                <div id="togglers">
+                    <label class="third" title="Автообновление данных">
+                        <input type="checkbox" class="slickswitch" id="auto-renew" />
+                        Авто
+                    </label>
+
+                    <label class="third">
+                        <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
+                        <a href="javascript:void(0)" id="focus" title="Показать текущее положение">Фокус</a>
+                    </label>
+
+                    <label class="third" title="Показывать пройденный путь">
+                        <input type="checkbox" class="slickswitch" id="show-path" />
+                        Путь
+                    </label>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
         {* Fleet and car selection block *}
         <div class="side-panel">
             <div class="panel-content">

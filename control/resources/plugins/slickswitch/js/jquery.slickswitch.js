@@ -31,15 +31,19 @@
                 var div = $('<a>');
 
                 self.bind('ss-toggle', function () {
-                    if (self.is(':checked')) {
-                        self.removeAttr('checked');
-                        settings.toggledOff(self);
-                    } else {
-                        self.attr('checked', 'checked');
-                        settings.toggledOn(self);
+                    if(!self.hasClass('unactive')){
+                        if (self.is(':checked')) {
+                            self.removeAttr('checked');
+                            self.prop('checked', false);
+                            settings.toggledOff(self);
+                        } else {
+                            self.attr('checked', 'checked');
+                            self.prop('checked', true);
+                            settings.toggledOn(self);
+                        }
+                        self.trigger('ss-update');
+                        settings.toggled(self);
                     }
-                    self.trigger('ss-update');
-                    settings.toggled(self);
                 });
 
                 self.bind('ss-toggleOn', function () {

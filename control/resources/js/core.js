@@ -1173,7 +1173,7 @@ core.ui = {
             default_opt: false,
             default: null,
             exclude: null,
-            onChange: function () {
+            onChange: function (val) {
 
             }
         };
@@ -1183,13 +1183,13 @@ core.ui = {
         var html = '<select id="' + options.id + '">';
 
         if (options.default_opt) {
-            html += '<option ' + ((options.default == options.default_opt.val) ? 'selected' : '') + ' value="' + options.default_opt.val + '">' + options.default_opt.name + '</option>';
+            html += '<option ' + ((options.default == options.default_opt.val) ? 'selected="selected"' : '') + ' value="' + options.default_opt.val + '">' + options.default_opt.name + '</option>';
         }
 
         if (options.items) {
             for (var i = 0, l = options.items.length; i < l; i++) {
                 if (!(options.exclude && options.items[i][options.exclude.param_name] != options.exclude.param_value)) {
-                    html += '<option ' + ((options.default == options.items[i][options.key_name]) ? 'selected' : '') + ' value="' + options.items[i][options.key_name] + '">' + options.items[i][options.value_name] + '</option>';
+                    html += '<option ' + ((options.default == options.items[i][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.key_name] + '">' + options.items[i][options.value_name] + '</option>';
                 }
             }
         }
@@ -1198,12 +1198,12 @@ core.ui = {
 
         $(selector).html(html);
 
-        $('select#' + options.id).on('change', function () {
-            options.onChange($(this).val());
-        });
-
         $('select#' + options.id).coreUISelect({
             jScrollPane: true
+        });
+
+        $('select#' + options.id).off('change').on('change', function () {
+            options.onChange($(this).val());
         });
     }
 };

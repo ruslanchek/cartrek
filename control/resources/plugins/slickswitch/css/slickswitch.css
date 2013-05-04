@@ -14,6 +14,10 @@
     margin: 0 auto 0.3em;
 }
 
+.slickswitch.unactive {
+    cursor: default !important;
+}
+
 table .slickswitch {
     margin: 3px 0 0 0;
 }
