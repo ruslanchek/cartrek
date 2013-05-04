@@ -1159,11 +1159,9 @@ core.ui = {
                 var part = h[i].split('=', 2);
                 result[part[0]] = part[1];
             }
-            ;
 
             return result;
         }
-        ;
     },
 
     createSelect: function (selector, opts) {
@@ -1176,6 +1174,7 @@ core.ui = {
             default: null,
             exclude: null,
             onChange: function () {
+
             }
         };
 
@@ -1199,7 +1198,7 @@ core.ui = {
 
         $(selector).html(html);
 
-        $('select#' + options.id).off('change').on('change', function () {
+        $('select#' + options.id).on('change', function () {
             options.onChange($(this).val());
         });
 
@@ -1215,12 +1214,12 @@ core.modal = {
     modal_created: false,
 
     prepareCode: function (header, html) {
-        var code = '<div class="window" id="modal_window">' +
-            '<a href="javascript:void(0)" id="modal_closer"></a>' +
-            '<h1>' + header + '</h1>' +
-            '<div class="message" title="Клик закроет это сообщение"></div>' +
-            '<div class="window_content">' + html + '</div>' +
-            '</div>';
+        var code =  '<div class="window" id="modal_window">' +
+                        '<a href="javascript:void(0)" id="modal_closer"></a>' +
+                        '<h1>' + header + '</h1>' +
+                        '<div class="message" title="Клик закроет это сообщение"></div>' +
+                        '<div class="window_content">' + html + '</div>' +
+                    '</div>';
 
         return code;
     },

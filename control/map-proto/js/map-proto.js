@@ -560,24 +560,13 @@ var View = function () {
     /* Create fleets selects */
     this.createCarsAndFleetsMenu = function () {
         //Cars select
-        var exclude = null,
-            default_car = MC.Data.car,
-            default_fleet = MC.Data.fleet,
-            t = this;
+        var exclude = null;
 
-        if((default_car != 'all' || !default_car) && !MC.Data.current_car){
-            default_car = 'all';
-        }
-
-        if((default_fleet != 'all' || !default_fleet) && !MC.Data.current_fleet){
-            default_fleet = 'all';
-        }else{
-            if (MC.Data.fleet != 'all' && MC.Data.fleet != '') {
-                exclude = {
-                    param_name: 'fleet_id',
-                    param_value: MC.Data.fleet
-                };
-            }
+        if (MC.Data.fleet != 'all' && MC.Data.fleet != '' && MC.Data.current_fleet) {
+            exclude = {
+                param_name: 'fleet_id',
+                param_value: MC.Data.fleet
+            };
         }
 
         core.ui.createSelect('#cars-menu', {
@@ -586,7 +575,7 @@ var View = function () {
                 val: 'all',
                 name: 'Все машины'
             },
-            default: default_car,
+            default: MC.Data.car,
             key_name: 'id',
             value_name: 'name',
             exclude: exclude,
@@ -598,7 +587,8 @@ var View = function () {
                     tm_hash = '&timemachine=' + MC.Data.hash.timemachine;
                 }
 
-                document.location.hash = '#fleet=' + default_fleet + '&car=' + val + tm_hash;
+
+                document.location.hash = '#fleet=' + MC.Data.fleet + '&car=' + val + tm_hash;
             }
         });
 
@@ -609,7 +599,7 @@ var View = function () {
                 val: 'all',
                 name: 'Все группы'
             },
-            default: default_fleet,
+            default: MC.Data.fleet,
             key_name: 'id',
             value_name: 'name',
             items: MC.Data.fleets,
@@ -619,6 +609,8 @@ var View = function () {
                 if (MC.Data.timemachine === true) {
                     tm_hash = '&timemachine=' + MC.Data.hash.timemachine;
                 }
+
+                console.log('fleet', val)
 
                 document.location.hash = '#fleet=' + val + tm_hash;
             }
@@ -648,10 +640,8 @@ var Data = function () {
     this.__construct = function () {
         this.hardLoad();
 
-        var t = this;
-
         $(window).on('hashchange', function () {
-            t.softLoad();
+            MC.Data.softLoad();
         });
     };
 
@@ -663,19 +653,26 @@ var Data = function () {
 
     this.softLoad = function(){
         this.setParamsFromHash();
+        this.bindCurrents();
 
         MC.View.setHeaderTexts();
         MC.View.createCarsAndFleetsMenu();
     };
 
     this.setParamsFromHash = function () {
+        this.hash = core.ui.getHashData();
+
         if (this.hash) {
             if (this.hash.fleet) {
                 this.fleet = this.hash.fleet;
+            }else{
+                this.fleet = 'all';
             }
 
             if (this.hash.car) {
                 this.car = this.hash.car;
+            }else{
+                this.car = 'all';
             }
 
             if (this.hash.timemachine) {
@@ -683,19 +680,19 @@ var Data = function () {
                 this.date = core.utilities.timestampToDateYearLast(this.hash.timemachine);
             }
         }
-    }
+    };
 
     this.getCarById = function (id) {
         return $.grep(this.cars, function (e) {
             return e.id == id;
         })[0];
-    }
+    };
 
     this.getFleetById = function (id) {
         return $.grep(this.fleets, function (e) {
             return e.id == id;
         })[0];
-    }
+    };
 
     this.error = function () {
         $.meow({
@@ -703,11 +700,20 @@ var Data = function () {
             message: 'Внутренняя ошибка сервиса',
             duration: 12000
         });
-    },
+    };
 
     this.processLoadedData = function(data){
         this.cars = data.devices;
         this.fleets = data.fleets;
+        this.bindCurrents();
+
+        MC.View.setHeaderTexts();
+        MC.View.createCarsAndFleetsMenu();
+    };
+
+    this.bindCurrents = function(){
+        this.current_car = null;
+        this.current_fleet = null;
 
         if (this.car != 'all' && this.car) {
             this.current_car = this.getCarById(this.car);
@@ -724,9 +730,6 @@ var Data = function () {
                 MC.View.showMapMessage('Ошибка, группы с ID ' + this.fleet + ' не существует!');
             }
         }
-
-        MC.View.setHeaderTexts();
-        MC.View.createCarsAndFleetsMenu();
     };
 
     //Загружаем данные о группах и тачках с сервера
@@ -759,11 +762,13 @@ var Data = function () {
                 t.error();
             }
         });
-    }
+    };
 
     /* Init actions */
     this.__construct();
 };
+
+
 
 var MC = {
     init: function () {
