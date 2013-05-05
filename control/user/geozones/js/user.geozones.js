@@ -311,18 +311,17 @@ var geozones = {
 
     saveGeozoneData: function (gz) {
         var name = $('#name').val(),
-            active = $('#active').attr('checked'),
-            sms = $('#sms').attr('checked'),
-            email = $('#email').attr('checked'),
+            active = $('#active').prop('checked'),
+            sms = $('#sms').prop('checked'),
+            email = $('#email').prop('checked'),
             notify = '0',
             color = $('#color').val();
 
-        if (active == 'checked') {
+        if (active === true) {
             active = '1';
         } else {
             active = '0';
         }
-
 
         /**
          * 0 - no sms, no email
@@ -331,13 +330,13 @@ var geozones = {
          * 3 - both
          */
 
-        if (sms != 'checked' && email != 'checked') {
+        if (sms !== true && email !== true) {
             notify = '0';
-        } else if (sms == 'checked' && email != 'checked') {
+        } else if (sms === true && email !== true) {
             notify = '1';
-        } else if (sms != 'checked' && email == 'checked') {
+        } else if (sms !== true && email === true) {
             notify = '2';
-        } else if (sms == 'checked' && email == 'checked') {
+        } else if (sms === true && email === true) {
             notify = '3';
         }
 

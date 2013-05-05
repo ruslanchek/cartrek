@@ -297,7 +297,7 @@ core.events = {
     },
 
     binds: function(){
-        $('#load_more').on('click', function(){
+        $('body').on('click', '#load_more', function(){
             core.events.getItems();
         });
 
@@ -309,7 +309,7 @@ core.events = {
             core.events.delEvent($(this));
         });
 
-        $('.nav-side').on('click', '.action_menu_item', function(){
+        $('body').on('click', '.action_menu_item', function(){
             if(!$(this).hasClass('btn')){
                 $('.nav-side li').removeClass('active');
                 $(this).parent().addClass('active');
