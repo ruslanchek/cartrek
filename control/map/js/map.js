@@ -16,32 +16,32 @@ var leaflet_ctrl = {
 
     icons: {
         heading: function (heading) {
-            var html = '<div class="marker-with-info">' +
-                '<div class="icon" style="background-position: -' + core.map_tools.getHeadingIconSpriteOffset(heading) + 'px 0px"></div>' +
-                '</div>';
+            var html =
+                '<div class="icon" style="background-position: -' + core.map_tools.getHeadingIconSpriteOffset(heading) + 'px 0px"></div>';
 
-            return new L.HtmlIcon({
+            return new L.DivIcon({
                 html: html,
                 iconSize: [40, 40], // size of the icon
                 iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-                popupAnchor: [0, -20]
+                popupAnchor: [0, -20],
+                className: 'marker-with-info'
             });
         },
         heading_with_info: function (car, point) {
-            var html = '<div class="marker-with-info">' +
+            var html =
                 '<div class="icon" style="background-position: -' + core.map_tools.getHeadingIconSpriteOffset(point.heading) + 'px 0px"></div>' +
                 '<div class="info-block">' +
                 '<i class="arm"></i>' +
                 '<div class="name">' + car.name + '</div>' +
                 '<div class="id">' + core.utilities.drawGId(car.g_id, 'small') + '</div>' +
-                '</div>' +
                 '</div>';
 
-            return new L.HtmlIcon({
+            return new L.DivIcon({
                 html: html,
                 iconSize: [16, 16], // size of the icon
                 iconAnchor: [20, 20], // point of the icon which will correspond to marker's location
-                popupAnchor: [0, -20]
+                popupAnchor: [0, -20],
+                className: 'marker-with-info'
             });
         },
         stop: function () {
