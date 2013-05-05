@@ -1199,11 +1199,10 @@ core.ui = {
         $(selector).html(html);
 
         $('select#' + options.id).coreUISelect({
-            jScrollPane: true
-        });
-
-        $('select#' + options.id).off('change').on('change', function () {
-            options.onChange($(this).val());
+            jScrollPane: true,
+            onChange: function(e){
+               options.onChange($(e[0]).val());
+            }
         });
     }
 };

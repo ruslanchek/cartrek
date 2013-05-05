@@ -94,7 +94,6 @@
         this.dropdownList =  $(this.templates.dropdown.list).appendTo(this.dropdownWrapper);
         this.domSelect.find('option').each($.proxy(this, 'addItems'));
 
-
         // Build dropdown
         this.dropdownItem =  this.dropdown.find('.'+$(this.templates.dropdown.item).attr('class'));
 
@@ -132,13 +131,13 @@
 
     CoreUISelect.prototype.bindUIEvents = function() {
         // Bind plugin elements
-        this.domSelect.bind('focus', $.proxy(this, 'onFocus'));
-        this.domSelect.bind('blur', $.proxy(this, 'onBlur'));
-        this.domSelect.bind('change', $.proxy(this, 'onChange'));
+        this.domSelect.on('focus', $.proxy(this, 'onFocus'));
+        this.domSelect.on('blur', $.proxy(this, 'onBlur'));
+        this.domSelect.on('change', $.proxy(this, 'onChange'));
 
-        if( browser.mobile) this.domSelect.bind('change', $.proxy(this, 'changeDropdownData'));
-        this.select.bind('click', $.proxy(this, 'onSelectClick'));
-        this.dropdownItem.bind('click', $.proxy(this, 'onDropdownItemClick'));
+        if( browser.mobile) this.domSelect.on('change', $.proxy(this, 'changeDropdownData'));
+        this.select.on('click', $.proxy(this, 'onSelectClick'));
+        this.dropdownItem.on('click', $.proxy(this, 'onDropdownItemClick'));
     }
 
     CoreUISelect.prototype.getCurrentIndexOfItem = function(__item) {
@@ -218,7 +217,8 @@
     }
 
     CoreUISelect.prototype.onDomSelectChange = function(_is) {
-        this.domSelect.bind('change', $.proxy(this, 'onChange'));
+        this.domSelect.on('change', $.proxy(this, 'onChange'));
+
         dispatchEvent(this.domSelect.get(0), 'change');
         if(!_is) this.settings.onChange && this.settings.onChange.apply(this, [this.domSelect, 'change']);
     }
@@ -263,16 +263,16 @@
 
     CoreUISelect.prototype.onDropdownItemClick = function(event) {
         var item = $(event.currentTarget);
+
         if(!(item.hasClass('disabled') || item.hasClass('selected'))) {
-            this.domSelect.unbind('change', $.proxy(this, 'onChange'));
-            var index = this.dropdown.find('.'+$(this.templates.dropdown.item).attr('class')).index(item)
+            this.domSelect.off('change', $.proxy(this, 'onChange'));
+            var index = this.dropdown.find('.'+$(this.templates.dropdown.item).attr('class')).index(item);
             this.dropdownItem.removeClass('selected');
             this.dropdownItem.eq(index).addClass('selected');
-            this.domSelect.find('option').removeAttr('selected');
-            this.domSelect.find('option').eq(index).attr('selected', true);
+            this.domSelect.find('option').removeAttr('selected').removeProp('selected');
+            this.domSelect.find('option').eq(index).attr('selected', 'selected').prop('selected', true);
             this.setSelectValue(this.getSelectedItem().text());
             this.onDomSelectChange(true);
-
         }
         this.hideDropdown();
         return false;
@@ -342,10 +342,10 @@
         var el = $(el);
         var item = $(this.templates.dropdown.item).text(el.text());
         if(el.attr("disabled")) item.addClass('disabled');
-        if(el.attr("selected")) {
-            this.domSelect.find('option').removeAttr('selected');
+        if(el.prop('selected')) {
+            this.domSelect.find('option').removeProp('selected');
             item.addClass('selected');
-            el.attr('selected', 'selected');
+            el.prop('selected', true);
         }
         item.appendTo(this.dropdownList);
     }
@@ -361,11 +361,11 @@
 
     CoreUISelect.prototype.destroy = function() {
         // Unbind plugin elements
-        this.domSelect.unbind('focus', $.proxy(this, 'onFocus'));
-        this.domSelect.unbind('blur', $.proxy(this, 'onBlur'));
-        this.domSelect.unbind('change', $.proxy(this, 'onChange'));
-        this.select.unbind('click', $.proxy(this, 'onSelectClick'));
-        this.dropdownItem.unbind('click', $.proxy(this, 'onDropdownItemClick'));
+        this.domSelect.off('focus', $.proxy(this, 'onFocus'));
+        this.domSelect.off('blur', $.proxy(this, 'onBlur'));
+        this.domSelect.off('change', $.proxy(this, 'onChange'));
+        this.select.off('click', $.proxy(this, 'onSelectClick'));
+        this.dropdownItem.off('click', $.proxy(this, 'onDropdownItemClick'));
         // Remove select container
         this.select.remove();
         this.dropdown.remove();
@@ -413,31 +413,28 @@
         }
     }
 
-    $(document).bind('mousedown', function(event){
+    $(document).on('mousedown', function(event){
         for(var i=0; i<allSelects.length; i++){
             allSelects[i].onDocumentMouseDown(event);
         }
     });
 
-    $(document).bind('keyup', function(event){
+    $(document).on('keyup', function(event){
         for(var i=0; i<allSelects.length; i++){
             if(browser.safari || browser.msie || browser.opera) allSelects[i].changeDropdownData(event); // Hack for Safari
             allSelects[i].addListenerByServicesKey(event);
         }
     });
 
-    $(document).bind(browser.safari ? 'keydown' : 'keypress', function(event){
+    $(document).on(browser.safari ? 'keydown' : 'keypress', function(event){
         for(var i=0; i<allSelects.length; i++){
             allSelects[i].changeDropdownData(event);
         }
     });
 
-    $(window).bind('resize', function(event){
+    $(window).on('resize', function(event){
         for(var i=0; i<allSelects.length; i++){
             allSelects[i].updateDropdownPosition(event);
         }
     });
-
-
-
 })(jQuery);

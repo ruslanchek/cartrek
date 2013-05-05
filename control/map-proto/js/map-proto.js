@@ -620,18 +620,15 @@ var View = function () {
         if (MC.Data.timemachine === true) {
             auto_renew_active = false;
             show_car_path_active = false;
-
-            MC.Data.auto_renew = false;
-            MC.Data.show_car_path = false;
         }
 
-        if (MC.Data.auto_renew === true) {
+        if (MC.Data.auto_renew === true && auto_renew_active === true) {
             $('#auto-renew').slickswitch('tOn');
         } else {
             $('#auto-renew').slickswitch('tOff');
         }
 
-        if (MC.Data.show_car_path === true) {
+        if (MC.Data.show_car_path === true && show_car_path_active === true) {
             $('#show-path').slickswitch('tOn');
         } else {
             $('#show-path').slickswitch('tOff');
@@ -644,36 +641,36 @@ var View = function () {
         }
 
         if (auto_renew_active === false) {
-            $('#auto-renew')
-                .addClass('unactive')
-                .removeClass('active')
-                .parent()
-                .addClass('unactive')
-                .removeClass('active');
-        } else {
-            $('#auto-renew')
-                .addClass('active')
-                .removeClass('unactive')
-                .parent()
-                .addClass('active')
-                .removeClass('unactive');
-        }
+           $('#auto-renew')
+               .addClass('unactive')
+               .removeClass('active')
+           .parent()
+               .addClass('unactive')
+               .removeClass('active');
+       } else {
+           $('#auto-renew')
+               .addClass('active')
+               .removeClass('unactive')
+           .parent()
+               .addClass('active')
+               .removeClass('unactive');
+       }
 
-        if (show_car_path_active === false) {
-            $('#show-path')
-                .addClass('unactive')
-                .removeClass('active')
-                .parent()
-                .addClass('unactive')
-                .removeClass('active');
-        } else {
-            $('#show-path')
-                .addClass('active')
-                .removeClass('unactive')
-                .parent()
-                .addClass('active')
-                .removeClass('unactive');
-        }
+       if (show_car_path_active === false) {
+           $('#show-path')
+               .addClass('unactive')
+               .removeClass('active')
+           .parent()
+               .addClass('unactive')
+               .removeClass('active');
+       } else {
+           $('#show-path')
+               .addClass('active')
+               .removeClass('unactive')
+           .parent()
+               .addClass('active')
+               .removeClass('unactive');
+       }
 
         if ($('#auto-renew').next('a.slickswitch').length < 1) {
             $('#auto-renew').slickswitch({
@@ -692,7 +689,6 @@ var View = function () {
                 }
             });
         }
-        ;
 
         if ($('#show-path').next('a.slickswitch').length < 1) {
             $('#show-path').slickswitch({
@@ -716,7 +712,6 @@ var View = function () {
                 }
             });
         }
-        ;
 
         if ($('#auto-focus').next('a.slickswitch').length < 1) {
             $('#auto-focus').slickswitch({
@@ -732,7 +727,6 @@ var View = function () {
                 }
             });
         }
-        ;
     }
 
     /* Init actions */
@@ -828,6 +822,15 @@ var Data = function () {
             if (this.hash.timemachine) {
                 this.timemachine = true;
                 this.date = core.utilities.timestampToDateYearLast(this.hash.timemachine);
+
+                this.auto_renew = false;
+                this.show_car_path = false;
+            }else{
+                this.timemachine = false;
+                this.date = new Date();
+
+                // Re init params when TM is off
+                this.readOptionsFromCookies();
             }
         }
     };
@@ -851,7 +854,7 @@ var Data = function () {
         $.meow({
             title: 'Ошибка',
             message: 'Внутренняя ошибка сервиса',
-            duration: 12000
+            duration: 8000
         });
     };
 
@@ -922,14 +925,11 @@ var Data = function () {
     };
 };
 
-
 var MC = {
     init: function () {
         this.Map = new Map();
         this.View = new View();
         this.Data = new Data();
-
-
         this.Data.__construct();
 
         /*

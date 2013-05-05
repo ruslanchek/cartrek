@@ -48,6 +48,7 @@
 
                 self.bind('ss-toggleOn', function () {
                     self.attr('checked', 'checked');
+                    self.prop('checked', true);
                     self.trigger('ss-update');
                     settings.toggledOn(self);
                     settings.toggled(self);
@@ -55,6 +56,7 @@
 
                 self.bind('ss-toggleOff', function () {
                     self.removeAttr('checked');
+                    self.prop('checked', false);
                     self.trigger('ss-update');
                     settings.toggledOff(self);
                     settings.toggled(self);
@@ -98,11 +100,11 @@
             $(this).trigger('ss-toggleOff');
         },
         tOff: function () {
-            $(this).removeAttr('checked');
+            $(this).removeAttr('checked').prop('checked', false);
             $(this).trigger('ss-update');
         },
         tOn: function () {
-            $(this).attr('checked', 'checked');
+            $(this).attr('checked', 'checked').prop('checked', true);
             $(this).trigger('ss-update');
         }
     };

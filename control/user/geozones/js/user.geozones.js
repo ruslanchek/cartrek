@@ -340,7 +340,6 @@ var geozones = {
             notify = '3';
         }
 
-
         if (!name) {
             core.modal.setMessage({
                 status: false,
