@@ -932,7 +932,7 @@ var MC = {
         this.Data = new Data();
         this.Data.__construct();
 
-        /*
+
          var m = new PosMarker({
          metrics: {
          heading: 55,
@@ -988,6 +988,5 @@ var MC = {
          });
 
          p.draw();
-         */
     }
 };
