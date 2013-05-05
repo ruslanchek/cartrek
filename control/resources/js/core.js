@@ -1501,11 +1501,13 @@ core.getRawTitle = function () {
 };
 
 core.webkitNotificationsRequest = function () {
-    var havePermission = window.webkitNotifications.checkPermission();
-
-    if (havePermission == 0) {
-
+    if(window.webkitNotifications){
+        var havePermission = window.webkitNotifications.checkPermission();
     } else {
+        return;
+    }
+
+    if (havePermission != 0) {
         window.webkitNotifications.requestPermission();
     }
 };

@@ -489,12 +489,10 @@ var View = function () {
 
         message += '<a id="hide-map-notice" href="javascript:void(0)" class="btn">Закрыть</a>';
 
-        var $mn = $('<div/>').addClass('map-notice').html(message);
-
-        $('.map-container').append($mn);
+        $('.map-container').append('<div class="map-notice"><div class="mn-inner">' + message + '</div></div>');
 
         $('.map-container .map-notice').css({
-            marginTop: -$('.map-container .map-notice').height() + 40 / 2
+            marginTop: -$('.map-container .map-notice').height() / 2
         });
 
         $('#hide-map-notice').on('click', function () {
@@ -649,14 +647,14 @@ var View = function () {
             $('#auto-renew')
                 .addClass('unactive')
                 .removeClass('active')
-            .parent()
+                .parent()
                 .addClass('unactive')
                 .removeClass('active');
         } else {
             $('#auto-renew')
                 .addClass('active')
                 .removeClass('unactive')
-            .parent()
+                .parent()
                 .addClass('active')
                 .removeClass('unactive');
         }
@@ -665,19 +663,19 @@ var View = function () {
             $('#show-path')
                 .addClass('unactive')
                 .removeClass('active')
-            .parent()
+                .parent()
                 .addClass('unactive')
                 .removeClass('active');
         } else {
             $('#show-path')
                 .addClass('active')
                 .removeClass('unactive')
-            .parent()
+                .parent()
                 .addClass('active')
                 .removeClass('unactive');
         }
 
-        if($('#auto-renew').next('a.slickswitch').length < 1){
+        if ($('#auto-renew').next('a.slickswitch').length < 1) {
             $('#auto-renew').slickswitch({
                 toggled: function () {
                     if (MC.Data.auto_renew === true) {
@@ -693,9 +691,10 @@ var View = function () {
                     }
                 }
             });
-        };
+        }
+        ;
 
-        if($('#show-path').next('a.slickswitch').length < 1){
+        if ($('#show-path').next('a.slickswitch').length < 1) {
             $('#show-path').slickswitch({
                 toggled: function () {
                     if (MC.Data.show_car_path === true) {
@@ -716,9 +715,10 @@ var View = function () {
                     }
                 }
             });
-        };
+        }
+        ;
 
-        if($('#auto-focus').next('a.slickswitch').length < 1){
+        if ($('#auto-focus').next('a.slickswitch').length < 1) {
             $('#auto-focus').slickswitch({
                 toggled: function () {
                     if (MC.Data.auto_focus === true) {
@@ -731,7 +731,8 @@ var View = function () {
                     }
                 }
             });
-        };
+        }
+        ;
     }
 
     /* Init actions */
@@ -873,6 +874,7 @@ var Data = function () {
             this.current_car = this.getCarById(this.car);
 
             if (!this.current_car) {
+                this.car = 'all';
                 MC.View.showMapMessage('Ошибка, машины с ID ' + this.car + ' не существует!');
             }
         }
@@ -881,6 +883,7 @@ var Data = function () {
             this.current_fleet = this.getFleetById(this.fleet);
 
             if (!this.current_fleet) {
+                this.fleet = 'all';
                 MC.View.showMapMessage('Ошибка, группы с ID ' + this.fleet + ' не существует!');
             }
         }

@@ -1750,16 +1750,19 @@ table .delete-btn {
     position: absolute;
     z-index: 10;
     background: #fff;
-    padding: 20px;
     -webkit-box-shadow: 0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     top: 50%;
     left: 50%;
     width: 42%;
-    margin-left: -25%;
+    margin-left: -21%;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     text-align: center;
+}
+
+.map-notice .mn-inner {
+    padding: 20px;
 }
 
 /* Map top panel */
