@@ -1179,6 +1179,46 @@ core.map_tools = {
 };
 
 core.ui = {
+    window_focus: null,
+
+    windowFocus: function(){
+        $(window).focus(function() {
+            core.ui.window_focus = true;
+        })
+        .blur(function() {
+            core.ui.window_focus = false;
+        });
+    },
+
+    //Common functions
+    exitUser: function () {
+        if (confirm('Выйти?')) {
+            $.get(
+                '/control/user?exit',
+                function () {
+                    window.location.reload();
+                }
+            );
+        }
+    },
+
+    // TODO: What is it???
+    getRawTitle: function () {
+        this.page_title_raw = $('title').html();
+    },
+
+    webkitNotificationsRequest: function () {
+        if(window.webkitNotifications){
+            var havePermission = window.webkitNotifications.checkPermission();
+        } else {
+            return;
+        }
+
+        if (havePermission != 0) {
+            window.webkitNotifications.requestPermission();
+        }
+    },
+
     getHashData: function () {
         var h = document.location.hash;
 
@@ -1241,6 +1281,22 @@ core.ui = {
             onChange: function(e){
                options.onChange($(e[0]).val());
             }
+        });
+    },
+
+    init: function(){
+        this.webkitNotificationsRequest();
+        this.getRawTitle();
+        this.windowFocus();
+
+        $('.core-ui-select').coreUISelect({
+            jScrollPane: true
+        });
+
+        $('.form_message').on('click', '.close', function(){
+            $('.form_message').slideUp(150, function () {
+                $('.form_message').html('');
+            });
         });
     }
 };
@@ -1521,38 +1577,8 @@ core.events_api = {
     }
 };
 
-//Common functions
-core.exitUser = function () {
-    if (confirm('Выйти?')) {
-        $.get(
-            '/control/user?exit',
-            function () {
-                window.location.reload();
-            }
-        );
-    }
-};
-
-core.getRawTitle = function () {
-    this.page_title_raw = $('title').html();
-};
-
-core.webkitNotificationsRequest = function () {
-    if(window.webkitNotifications){
-        var havePermission = window.webkitNotifications.checkPermission();
-    } else {
-        return;
-    }
-
-    if (havePermission != 0) {
-        window.webkitNotifications.requestPermission();
-    }
-};
-
-
-//Object starter
-$(function () {
-    core.getRawTitle();
+core.init = function(){
+    core.ui.init();
 
     core.ticker.startSystemInterval();
 
@@ -1561,17 +1587,10 @@ $(function () {
     });
 
     //core.effects.breathe($('#global_events_counter'));
+}
 
-    $('.core-ui-select').coreUISelect({
-        jScrollPane: true
-    });
-
-    core.webkitNotificationsRequest();
-
-    $('.form_message').on('click', '.close', function(){
-        $('.form_message').slideUp(150, function () {
-            $('.form_message').html('');
-        });
-    });
+//Object starter
+$(function () {
+    core.init();
 });
 

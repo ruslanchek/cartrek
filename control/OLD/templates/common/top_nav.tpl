@@ -45,7 +45,7 @@
                                 <li><a href="/control/user/password_change"><i class="icon-lock"></i> Изменить пароль</a></li>
 
                                 <li class="divider"></li>
-                                <li><a href="javascript:void(0)" onclick="core.exitUser()"><i class="icon-share"></i> Выйти</a></li>
+                                <li><a href="javascript:void(0)" onclick="core.ui.exitUser()"><i class="icon-share"></i> Выйти</a></li>
                             </ul>
                         {else}
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Авторизация <b class="caret"></b></a>
