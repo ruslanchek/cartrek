@@ -865,12 +865,10 @@ var data_ctrl = {
                     map.auto_renew = false;
                 }
 
-
                 if (this.loading_process) {
                     this.loading_process.abort();
                     core.loading.unsetGlobalLoading();
                 }
-
 
                 //Не показываем глобал лоадинг, если запрос был на обновление данных
                 if (!options.renew) {

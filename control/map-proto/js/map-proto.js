@@ -11,7 +11,7 @@ var Map = function (params) {
         zoom: 4,
         zoom_geoposition: 10,
         lat: 55,
-        lng: 35,
+        lng: 37,
         minHeight: 250,
         height: 400
     };
@@ -67,15 +67,20 @@ var Map = function (params) {
         this.instance.invalidateSize();
     };
 
-    this.panTo = function(lat, lng){
+    this.returnToRoots = function () {
+        this.instance.panTo(new L.LatLng(this.params.lat, this.params.lng));
+        this.instance.setZoom(this.params.zoom);
+    };
+
+    this.panTo = function (lat, lng) {
         this.instance.panTo(new L.LatLng(lat, lng));
     };
 
-    this.zoom = function(zoom){
+    this.zoom = function (zoom) {
         this.instance.setZoom(zoom);
     };
 
-    this.fitBounds = function(bounds){
+    this.fitBounds = function (bounds) {
         this.instance.fitBounds(bounds);
     };
 
@@ -346,7 +351,7 @@ var PosMarker = function (params) {
     this.getPopupHtml = function () {
         var html = '<div class="tooltip-content">';
 
-        html += '<h3>'+this.params.car_label_data.name+'</h3>';
+        html += '<h3>' + this.params.car_label_data.name + '</h3>';
 
         html += '<em class="small gray">Текущее положение';
 
@@ -521,6 +526,7 @@ var Path = function (params) {
 var Car = function (params) {
     /* Instances */
     this.pos_marker = null;
+    this.path = null;
 
     /* Data */
 
@@ -540,11 +546,17 @@ var Car = function (params) {
         id: null,
         imei: null,
         last_point_date: null,
+        last_path_point_id: null,
         last_update: null,
         make: null,
         model: null,
         name: null,
-        online: null
+        online: null,
+        point_id: null,
+        sat_count: null,
+
+        /* Storage */
+        path_points: []
     };
 
     $.extend(true, this.params, params);
@@ -618,9 +630,9 @@ var Car = function (params) {
             this.params.sat_count = params.sat_count;
         }
 
-        if(this.params.metrics.lat && this.params.metrics.lng){
+        if (this.params.metrics.lat && this.params.metrics.lng) {
             this.params.has_metrics = true;
-        }else{
+        } else {
             this.params.has_metrics = false;
         }
 
@@ -646,19 +658,102 @@ var Car = function (params) {
         });
     };
 
-    this.draw = function(){
+    this.loadPathPoints = function (last_point_id, callback) {
+        if ((last_point_id || last_point_id === false) && this.params.id && MC.Data.date) {
+            var t = this;
+
+            $.ajax({
+                url: '/control/map/?ajax',
+                data: {
+                    action: 'getPoints',
+                    date: core.utilities.tmToDate(MC.Data.date),
+                    device_id: this.params.id,
+                    last_point_id: last_point_id
+                },
+                dataType: 'json',
+                type: 'get',
+                beforeSend: function () {
+                    core.loading.setGlobalLoading('Car.loadPathData.' + t.params.id);
+                },
+                success: function (data) {
+                    core.loading.unsetGlobalLoading('Car.loadPathData.' + t.params.id);
+
+                    if (callback) {
+                        callback(data)
+                    }
+                },
+                error: function () {
+                    core.loading.unsetGlobalLoading('Car.loadPathData.' + t.params.id);
+                    MC.Data.error(); // TODO: Сделать ajaxError() в core.ui
+                }
+            });
+        }
+    };
+
+    this.getPathPoints = function (callback) {
+        // Get from server (new data)
+        if (this.params.last_path_point_id === null || this.params.point_id > this.params.last_path_point_id) {
+            var last_point_id;
+
+            if (this.params.last_path_point_id === null) {
+                last_point_id = false;
+            } else {
+                last_point_id = this.params.last_path_point_id;
+            }
+
+            this.loadPathPoints(last_point_id, function (data) {
+                if (callback) {
+                    callback(data);
+                }
+            })
+        } else {
+            if (callback) {
+                callback([]);
+            }
+        }
+    };
+
+    this.drawPath = function () {
+        var t = this;
+
+        this.getPathPoints(function (data) {
+            t.params.path_points = t.params.path_points.concat(data);
+            t.params.last_path_point_id = t.params.path_points[t.params.path_points.length - 1].id;
+
+            var points = [];
+
+            for(var i = 0, l = data.length; i < l; i++){
+                points.push(new L.latLng(data[i].lat, data[i].lon));
+            }
+
+            if (t.path === null) {
+                t.path = new Path({
+                    options: {
+                        color: '#000',
+                        opacity: 1,
+                        weight: 3
+                    },
+                    points: points
+                });
+            }else{
+                t.path.addPoints(points);
+            }
+        });
+    };
+
+    this.draw = function () {
         this.pos_marker.draw();
         this.params.on_map = true;
-    }
+    };
 
-    this.remove = function(){
+    this.remove = function () {
         this.pos_marker.remove();
         this.params.on_map = false;
-    }
+    };
 
-    this.focus = function(){
+    this.focus = function () {
         this.pos_marker.focus();
-    }
+    };
 
     /* Init actions */
     this.__construct();
@@ -921,24 +1016,29 @@ var View = function () {
             });
         }
 
-        $('#focus').on('click', function(){
+        $('#focus').on('click', function () {
             MC.View.focus();
         });
     };
 
     /* Smart focus on a current sutuation on a map */
-    this.focus = function(){
-        if(MC.Map.busy === true){
+    this.focus = function () {
+        if (MC.Map.busy === true) {
             return;
         }
 
-        if(MC.Data.current_cars.length > 1 && MC.Data.car == 'all'){
-            var bounds = [];
+        if (MC.Data.current_cars.length > 1 && MC.Data.car == 'all') {
+            var bounds = [],
+                single = null;
 
-            for(var i = 0, l = MC.Data.current_cars.length; i < l; i++){
+            for (var i = 0, l = MC.Data.current_cars.length; i < l; i++) {
                 var car = MC.Data.getCarById(MC.Data.current_cars[i]);
 
-                if(car.params.metrics && car.params.metrics.lat && car.params.metrics.lng){
+                if (car.params.on_map === true) {
+                    single = car;
+                }
+
+                if (car.params.on_map && car.params.metrics && car.params.metrics.lat && car.params.metrics.lng) {
                     bounds.push([
                         car.params.metrics.lat,
                         car.params.metrics.lng
@@ -948,10 +1048,26 @@ var View = function () {
 
             if (bounds.length > 1) {
                 MC.Map.fitBounds(bounds);
+            } else if (single) {
+                MC.Map.zoom(14);
+                single.focus();
+            } else {
+                MC.Map.returnToRoots();
             }
-        }else if(MC.Data.current_cars.length == 1 && MC.Data.car != 'all'){
-            MC.Map.zoom(14);
-            MC.Data.current_car.focus();
+
+        } else if (MC.Data.current_cars.length == 1 && MC.Data.car == 'all') {
+            var car = MC.Data.getCarById(MC.Data.current_cars[0]);
+            car.focus();
+
+        } else if (MC.Data.current_cars.length == 1 && MC.Data.car != 'all') {
+            if (MC.Data.current_car.params.on_map === true) {
+                MC.Map.zoom(14);
+                MC.Data.current_car.focus();
+            } else {
+                MC.Map.returnToRoots();
+            }
+        } else {
+
         }
     };
 
@@ -978,6 +1094,7 @@ var Data = function () {
     this.show_car_path = false;
     this.current_cars = [];
     this.auto_renew_blocker = false;
+    this.cars_on_map = 0;
 
     /* Class constructor */
     this.__construct = function () {
@@ -1018,7 +1135,7 @@ var Data = function () {
     /* Read map view options */
     this.readOptionsFromCookies = function () {
         // Проверяем на наличие отключенного автообновления в куках
-        if($.cookie('auto-renew')){
+        if ($.cookie('auto-renew')) {
             if ($.cookie('auto-renew') == '0') {
                 this.auto_renew = false;
             } else {
@@ -1026,7 +1143,7 @@ var Data = function () {
             }
         }
 
-        if($.cookie('auto-focus')){
+        if ($.cookie('auto-focus')) {
             if ($.cookie('auto-focus') == '1') {
                 this.auto_focus = true;
             } else {
@@ -1034,7 +1151,7 @@ var Data = function () {
             }
         }
 
-        if($.cookie('car-path')){
+        if ($.cookie('car-path')) {
             if ($.cookie('car-path') == '1') {
                 this.show_car_path = true;
             } else {
@@ -1175,84 +1292,87 @@ var Data = function () {
                 this.getCarById(data[i].id).updateParams(data[i]);
             }
         }
-
-        if(this.auto_focus === true){
-            MC.View.focus();
-        }
     };
 
     /* Remove cars from a map */
-    this.removeCars = function(){
-        for(var i = 0, l = this.cars.length; i < l; i++){
+    this.removeCars = function () {
+        this.cars_on_map = 0;
+
+        for (var i = 0, l = this.cars.length; i < l; i++) {
             this.cars[i].remove();
         }
     };
 
     /* Draw cars */
-    this.drawCars = function(){
-        for(var i = 0, l = this.current_cars.length; i < l; i++){
+    this.drawCars = function () {
+        for (var i = 0, l = this.current_cars.length; i < l; i++) {
             var car = this.getCarById(this.current_cars[i]);
 
-            if(car.params.has_metrics && !car.params.on_map){
+            if (car.params.has_metrics && !car.params.on_map) {
                 car.draw();
+                this.cars_on_map++;
             }
         }
     };
 
     /* Get cars metrics */
     this.loadDynamicCarsData = function (firstload) {
-        if (this.current_cars.length > 0) {
-            $.ajax({
-                url: '/control/map/?ajax&action=getDynamicDevicesData&date=' + core.utilities.tmToDate(this.date),
-                data: {
-                    cars: JSON.stringify(this.current_cars),
-                    tm_flag: (this.timemachine === true) ? '1' : '0'
-                },
-                dataType: 'json',
-                type: 'post',
-                beforeSend: function () {
-                    /*  Если запрос был на обновление данных, а не на первичную загрузку -
-                     отключем на время загрузки данных автообновление,
-                     чтобы не было ситуации, когда маркеров на карте нет,
-                     а функция обновления запускается */
-                    if (firstload === true) {
-                        MC.Data.auto_renew_blocker = true;
-                            // Не показываем глобал лоадинг, если запрос был на обновление данных
-                        core.loading.setGlobalLoading('loadDynamicCarsData');
-                    }
-                },
-                success: function (data) {
-                    if (firstload === true) {
-                        core.loading.unsetGlobalLoading('loadDynamicCarsData');
-                    }
-
-                    /*  Если запрос был на обновление данных, а не на первечную загрузку -
-                     включаем автообновление, если оно, конечно не отключено в куках и если тайм машина не запущена */
-                    if (firstload === true && $.cookie('auto-renew') != '0' && MC.Data.timemachine !== true) {
-                        MC.Data.auto_renew_blocker = false;
-                    }
-
-                    MC.Data.mergeCarsData(data);
-
-                    if (firstload === true){
-                        MC.Data.removeCars();
-                    }
-
-                    MC.Data.drawCars();
-                },
-                error: function () {
-                    if (firstload === true && $.cookie('auto-renew') != '0' && MC.Data.timemachine !== true) {
-                        MC.Data.auto_renew_blocker = false;
-                    }
-
-                    if (firstload === true) {
-                        core.loading.unsetGlobalLoading('loadDynamicCarsData');
-                    }
-
-                    MC.Data.error();
-                }
-            });
+        if (this.current_cars.length <= 0) {
+            return;
         }
+
+        $.ajax({
+            url: '/control/map/?ajax&action=getDynamicDevicesData&date=' + core.utilities.tmToDate(this.date),
+            data: {
+                cars: JSON.stringify(this.current_cars),
+                tm_flag: (this.timemachine === true) ? '1' : '0'
+            },
+            dataType: 'json',
+            type: 'post',
+            beforeSend: function () {
+                /*  Если запрос был на обновление данных, а не на первичную загрузку -
+                 отключем на время загрузки данных автообновление,
+                 чтобы не было ситуации, когда маркеров на карте нет,
+                 а функция обновления запускается */
+                if (firstload === true) {
+                    MC.Data.auto_renew_blocker = true;
+                    // Не показываем глобал лоадинг, если запрос был на обновление данных
+                    core.loading.setGlobalLoading('loadDynamicCarsData');
+                }
+            },
+            success: function (data) {
+                if (firstload === true) {
+                    core.loading.unsetGlobalLoading('loadDynamicCarsData');
+                }
+
+                /*  Если запрос был на обновление данных, а не на первечную загрузку -
+                 включаем автообновление, если оно, конечно не отключено в куках и если тайм машина не запущена */
+                if (firstload === true) {
+                    MC.Data.auto_renew_blocker = false;
+                }
+
+                MC.Data.mergeCarsData(data);
+
+                if (firstload === true) {
+                    MC.Data.removeCars();
+                }
+
+                MC.Data.drawCars();
+
+                if(firstload) {
+                    MC.View.focus();
+                }
+            },
+            error: function () {
+                MC.Data.auto_renew_blocker = false;
+
+                if (firstload === true) {
+                    core.loading.unsetGlobalLoading('loadDynamicCarsData');
+                }
+
+                MC.Data.error();
+            }
+        });
     };
 
     //Load fleets and their cars data
@@ -1282,16 +1402,16 @@ var Data = function () {
         });
     };
 
-    this.autoRenewStack = function(){
-        if(this.auto_renew !== true){
+    this.autoRenewStack = function () {
+        if (this.auto_renew !== true) {
             return;
         }
 
-        if(this.auto_renew_blocker !== true){
+        if (this.auto_renew_blocker !== true) {
             MC.Data.loadDynamicCarsData(false);
         }
 
-        if(this.auto_focus === true){
+        if (this.auto_focus === true) {
             MC.View.focus();
         }
     }

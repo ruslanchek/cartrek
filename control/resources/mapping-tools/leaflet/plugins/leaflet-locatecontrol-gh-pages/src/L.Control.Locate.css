@@ -1,18 +1,4 @@
 .leaflet-control-locate a {
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    display: block;
-
-    -moz-border-radius: 4px 4px 4px 4px;
-    -webkit-border-radius: 4px 4px 4px 4px;
-            border-radius: 4px 4px 4px 4px;
-}
-
-.leaflet-control-locate a:hover {
-    background-color: #fff;
-}
-
-.leaflet-control-locate a {
 	background-image: url(images/locate.png);
 }
 

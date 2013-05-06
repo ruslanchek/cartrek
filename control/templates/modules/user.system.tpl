@@ -1,8 +1,11 @@
 <div class="threequarter">
-    <h2>Стиль карты</h2>
-    <p>Выбранный стиль карты, будет испозьзоваться Картреком во всех разделах с картографической системой.</p>
+    <div class="map-types forms">
+        <h2>Стиль карты</h2>
 
-    <div class="map-types">
+        <p>Выбранный стиль карты, будет испозьзоваться Картреком как сандартный.</p>
+
+        <hr>
+
         <div class="row">
             <a class="quarter item" href="#" rel="mbx1"><i><img src="/control/resources/img/map-previews/mbx1.png" alt=""></i><span class="name">Картрек <span class="sup">дороги</span></span></a>
             <a class="quarter item" href="#" rel="mbx4"><i><img src="/control/resources/img/map-previews/mbx4.png" alt=""></i><span class="name">Картрек Ч/Б <span class="sup">дороги</span></span></a>

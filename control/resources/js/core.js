@@ -1179,13 +1179,13 @@ core.map_tools = {
 };
 
 core.ui = {
-    window_focus: null,
+    window_focus: true,
 
     windowFocus: function(){
-        $(window).focus(function() {
+        $(window).on('focus', function() {
             core.ui.window_focus = true;
         })
-        .blur(function() {
+        .on('blur', function() {
             core.ui.window_focus = false;
         });
     },
@@ -1480,7 +1480,7 @@ core.events_api = {
         if (window.webkitNotifications) {
             var havePermission = window.webkitNotifications.checkPermission();
 
-            if (havePermission == 0) {
+            if (havePermission == 0 && core.ui.window_focus !== true) {
                 // 0 is PERMISSION_ALLOWED
 
                 var notification = window.webkitNotifications.createNotification(
@@ -1558,11 +1558,11 @@ core.events_api = {
 
                 if (data.total > 0) {
                     $('#global_events_counter, #icon-events-main-counter-bubble').show().html(data.total);
-                    $('title').html(core.page_title_raw + ' (' + data.total + ')');
+                    $('title').html(core.ui.page_title_raw + ' (' + data.total + ')');
                     $('#icon-events-main').addClass('events-active').removeClass('events-unactive');
                 } else {
                     $('#global_events_counter, #icon-events-main-counter-bubble').hide().html('');
-                    $('title').html(core.page_title_raw);
+                    $('title').html(core.ui.page_title_raw);
                     $('#icon-events-main').addClass('events-unactive').removeClass('events-active');
                 }
 

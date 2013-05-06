@@ -336,7 +336,7 @@ Class Devices extends Core
         $date_related_where = " && (`datetime` >= '" . $this->db->quote($date_start) . "' && `datetime` <= '" . $this->db->quote($date_end) . "')";
 
         if ($gt_id > 0) {
-            $gt_id = " && `id` >= " . intval($gt_id);
+            $gt_id = " && `id` > " . intval($gt_id);
         } else {
             $gt_id = "";
         }

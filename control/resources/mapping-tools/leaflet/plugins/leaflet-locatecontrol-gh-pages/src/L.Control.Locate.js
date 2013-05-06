@@ -23,9 +23,11 @@ L.Control.Locate = L.Control.extend({
         metric: true,
         debug: false,
         onLocationError: function(err) {
-            alert(err.message);
+            core.events_api.showEventsMeow({
+                message: 'Не удалось определить ваше местоположение'
+            })
         },
-        title: "Show me where I am",
+        title: "Определить мое местоположение",
         popupText: ["You are within ", " from this point"],
         setView: true, // automatically sets the map view to the user's location
         locateOptions: {}
