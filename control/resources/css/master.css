@@ -130,7 +130,7 @@ a.red-button {
     background: #89101a;
     color: #fff !important;
     border: none;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
     text-decoration: none !important;
     -webkit-border-radius: 5px;
     border-radius: 5px;
@@ -139,13 +139,11 @@ a.red-button {
 .red-button a:hover,
 a.red-button:hover {
     background: #b90400 !important;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 .red-button a:active,
 a.red-button:active {
     background: #9b0300 !important;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 .gray-button a,
@@ -1040,8 +1038,8 @@ a.badge:active {
 }
 
 .tooltip-content .table-wrapper {
-    margin-top: 15px;
-    margin-bottom: 10px;
+    margin-top: 12px;
+    margin-bottom: 20px;
 }
 
 .tooltip-content table {
@@ -1050,6 +1048,25 @@ a.badge:active {
 
 .tooltip-content table th {
     font-weight: bold;
+}
+
+.tooltip-content h3 {
+    margin: 0 15px 0.2em 0 !important;
+}
+
+.tooltip-content em.small {
+    display: block;
+    font-size: 0.93em;
+    font-style: normal;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+    padding: 17px 17px 0 0 !important;
+}
+
+.leaflet-popup-content-wrapper {
+    -webkit-border-radius: 5px !important;
+    border-radius: 5px !important;
 }
 
 /* =Footer
@@ -1630,7 +1647,7 @@ footer a:active {
     color: white;
     font-weight: bold;
     border-color: #a50c0c;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
 
@@ -1686,12 +1703,12 @@ table .delete-btn {
     width: 100%;
     z-index: 1;
     background: #fff;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.6);
     height: 42px;
     padding-top: 13px;
-    -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
-
-    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 #map:-webkit-full-screen {
@@ -1742,10 +1759,6 @@ table .delete-btn {
     width: 16.5ex;
     font-size: 13px;
     display: inline-block;
-}
-
-.leaflet-container a.leaflet-popup-close-button {
-    padding: 15px 17px 0 0 !important;
 }
 
 /* Map Notice */

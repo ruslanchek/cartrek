@@ -109,7 +109,7 @@ var user_groups = {
 
             '<li class="form-item">' +
             '<label for="new_fleet_name" class="bold">Название <span class="error"></span></label>' +
-            '<input class="text width-50" style="width: 50%" type="text" name="new_fleet_name" id="new_fleet_name" value="" />' +
+            '<input class="text width-50" style="width: 50%" type="text" name="new_fleet_name" id="new_fleet_name" value="Новая группа" />' +
             '</li>' +
 
             '<hr>' +
@@ -203,9 +203,9 @@ var user_groups = {
 
                             core.loading.setGlobalLoading();
                         },
-                        success: function () {
+                        success: function (data) {
                             core.loading.unsetGlobalLoading();
-                            $('.group-row[rel="' + id + '"]').remove();
+                            $('.group-row[rel="' + data.id + '"]').remove();
                         },
                         error: function () {
                             core.loading.unsetGlobalLoading();

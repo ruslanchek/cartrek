@@ -31,7 +31,10 @@ Class Groups extends Core
                     break;
 
                 case 'deleteFleet' : {
+                    header('Content-type: application/json');
                     $this->devices->deleteFleet($_GET['id']);
+
+                    print json_encode(array('id' => $_GET['id']));
                 }
                     break;
             }

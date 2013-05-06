@@ -30,6 +30,8 @@ core.notify = {
 };
 
 core.loading = {
+    gl_ns_pool: {},
+
     showTopIndicator: function () {
         var $li = $('#loading_indicator');
 
@@ -88,7 +90,6 @@ core.loading = {
         if ($loading.data('animation_interval') != null) {
             clearInterval($loading.data('animation_interval'));
         }
-        ;
     },
 
     startAnimation: function (name) {
@@ -111,12 +112,10 @@ core.loading = {
         if (micro) {
             micro_class += ' micro'
         }
-        ;
 
         if (!zIndex) {
             zIndex = 100;
         }
-        ;
 
         var obj_offset = obj.offset();
 
@@ -131,7 +130,6 @@ core.loading = {
         if (!micro) {
             this.startAnimation(name);
         }
-        ;
 
         return $loading;
     },
@@ -142,14 +140,12 @@ core.loading = {
         if (micro) {
             micro_class += ' micro'
         }
-        ;
 
         var obj_offset = obj.offset();
 
         if (!zIndex) {
             zIndex = 100;
         }
-        ;
 
         var $loading = $('<i name="' + name + '" class="loading' + micro_class + '"></i>').css({
             top: obj_offset.top + obj.height() / 2,
@@ -170,7 +166,6 @@ core.loading = {
         if (!micro) {
             this.startAnimation(name);
         }
-        ;
 
         return $loading;
     },
@@ -181,7 +176,6 @@ core.loading = {
         if (micro) {
             micro_class += ' micro'
         }
-        ;
 
         var $loading = $('<i name="' + name + '" class="loading' + micro_class + '"></i>').css({
             margin: '0'
@@ -192,7 +186,6 @@ core.loading = {
         if (!micro) {
             this.startAnimation(name);
         }
-        ;
 
         return $loading;
     },
@@ -202,31 +195,47 @@ core.loading = {
         this.setLoadingToElementByAppend(name, $('.notify .loading_area'), micro);
     },
 
-    unsetGlobalLoading: function () {
+    unsetGlobalLoading: function (ns) {
         setTimeout(function () {
+            if(ns && core.loading.gl_ns_pool[ns]){
+                delete(core.loading.gl_ns_pool[ns]);
+            }
+
+            var ns_c = 0;
+
+            $.each(core.loading.gl_ns_pool, function(){
+                ns_c++;
+            });
+
+            if(ns_c > 0){
+                return;
+            }
+
             $('div.global-loading-bar').animate({
                 height: 0,
                 opacity: 0
             }, 200, 'easeOutQuad', function () {
                 core.loading.c = 0;
 
-                if (core.loading.global_loadin_interval) {
-                    clearInterval(core.loading.global_loadin_interval);
+                if (core.loading.global_loading_interval) {
+                    clearInterval(core.loading.global_loading_interval);
                 }
-                ;
             });
         }, 650);
     },
 
-    setGlobalLoading: function () {
+    setGlobalLoading: function (ns) {
+        if(ns){
+            this.gl_ns_pool[ns] = true;
+        }
+
         this.c = 0;
 
-        if (this.global_loadin_interval) {
-            clearInterval(this.global_loadin_interval);
+        if (this.global_loading_interval) {
+            clearInterval(this.global_loading_interval);
         }
-        ;
 
-        this.global_loadin_interval = setInterval(function () {
+        this.global_loading_interval = setInterval(function () {
             core.loading.c += 2;
             $('div.global-loading-bar').css("backgroundPosition", "0 " + core.loading.c + "px");
         }, 8);
@@ -249,8 +258,6 @@ core.utilities = {
             B = " " + C.substr(C.indexOf("x"));
             C = C.substr(0, C.indexOf("x"))
         }
-
-
 
         switch (C.length) {
             case (10):
@@ -689,7 +696,33 @@ core.utilities = {
         return h + ':' + m + ':' + s;
     },
 
+    humanizeDateTime: function(date){
+        var month_names = [
+            'января',
+            'февраля',
+            'марта',
+            'апреля',
+            'мая',
+            'июня',
+            'июля',
+            'августа',
+            'сентября',
+            'октября',
+            'ноября',
+            'декабря'
+        ],
+            d = date.getDate(),
+            m = date.getMonth(),
+            y = date.getFullYear(),
+            hou = core.utilities.pad(date.getHours(), 2),
+            min = core.utilities.pad(date.getMinutes(), 2),
+            sec = core.utilities.pad(date.getSeconds(), 2);
+
+        return d + ' ' + month_names[m] + ', ' + y + ', ' + hou + ':' + min + ':' + sec;
+    },
+
     timestampToDate: function (str) {
+
         if (str) {
             var t = str.split(/[- :]/);
 
@@ -1169,6 +1202,7 @@ core.ui = {
             id: null,
             items: [],
             key_name: 'id',
+            inner_object: false,
             value_name: 'name',
             default_opt: false,
             default: null,
@@ -1189,7 +1223,11 @@ core.ui = {
         if (options.items) {
             for (var i = 0, l = options.items.length; i < l; i++) {
                 if (!(options.exclude && options.items[i][options.exclude.param_name] != options.exclude.param_value)) {
-                    html += '<option ' + ((options.default == options.items[i][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.key_name] + '">' + options.items[i][options.value_name] + '</option>';
+                    if(options.inner_object){
+                        html += '<option ' + ((options.default == options.items[i][options.inner_object][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.inner_object][options.key_name] + '">' + options.items[i][options.inner_object][options.value_name] + '</option>';
+                    }else{
+                        html += '<option ' + ((options.default == options.items[i][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.key_name] + '">' + options.items[i][options.value_name] + '</option>';
+                    }
                 }
             }
         }

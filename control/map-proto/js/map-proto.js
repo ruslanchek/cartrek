@@ -6,6 +6,7 @@
 var Map = function (params) {
     /* Class params */
     this.instance = null;
+    this.busy = false;
     this.params = {
         zoom: 4,
         zoom_geoposition: 10,
@@ -33,11 +34,49 @@ var Map = function (params) {
         setTimeout(function () {
             $('.leaflet-control-attribution').fadeOut(3000);
         }, 10000);
+
+        var t = this;
+
+        this.instance.on('dragstart', function () {
+            t.busy = true;
+        });
+
+        this.instance.on('dragend', function () {
+            t.busy = false;
+        });
+
+        this.instance.on('zoomstart', function () {
+            t.busy = true;
+        });
+
+        this.instance.on('zoomend', function () {
+            t.busy = false;
+        });
+
+        this.instance.on('movestart', function () {
+            t.busy = true;
+        });
+
+        this.instance.on('moveend', function () {
+            t.busy = false;
+        });
     };
 
     /* Methods */
     this.invalidateSize = function () {
         this.instance.invalidateSize();
+    };
+
+    this.panTo = function(lat, lng){
+        this.instance.panTo(new L.LatLng(lat, lng));
+    };
+
+    this.zoom = function(zoom){
+        this.instance.setZoom(zoom);
+    };
+
+    this.fitBounds = function(bounds){
+        this.instance.fitBounds(bounds);
     };
 
     /* Init actions */
@@ -223,8 +262,8 @@ var PosMarker = function (params) {
         },
         options: {
             icon: null,
-            title: '',
-            zIndexOffset: (params.car_id) ? (params.car_id + 10000) : 10000
+            title: (params.car_label_data && params.car_label_data.name) ? params.car_label_data.name + ' &mdash; текущее положение' : 'Текущее положение',
+            zIndexOffset: 10000
         },
         geocoder: false // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
     };
@@ -244,14 +283,18 @@ var PosMarker = function (params) {
         var icon;
 
         // Compensate the over 360 degree heading
-        if (this.params.metrics.heading > 360) {
+        if (this.params.metrics && this.params.metrics.heading > 360) {
             var h1 = this.params.metrics.heading / 360,
                 h2 = h1 - Math.floor(h1);
 
             this.params.metrics.heading = Math.round(h2 * 360);
         }
 
-        var degrees_zone = Math.round(parseInt(this.params.metrics.heading) / 15) * 1;
+        if (this.params.metrics && this.params.metrics.heading) {
+            var degrees_zone = Math.round(parseInt(this.params.metrics.heading) / 15) * 1;
+        } else {
+            degrees_zone = 0;
+        }
 
         if (isNaN(degrees_zone)) {
             degrees_zone = 0;
@@ -303,27 +346,34 @@ var PosMarker = function (params) {
     this.getPopupHtml = function () {
         var html = '<div class="tooltip-content">';
 
-        html += '<h3>Текущее положение</h3>';
+        html += '<h3>'+this.params.car_label_data.name+'</h3>';
 
-        if (this.params.metrics.date) {
-            html += core.utilities.humanizeDate(this.params.metrics.date, 'MYSQLTIME') + '<br>';
+        html += '<em class="small gray">Текущее положение';
+
+        if (this.params.metrics && this.params.metrics.date) {
+            html += ' от ' + core.utilities.humanizeDateTime(this.params.metrics.date);
         }
 
-        html += '<div class="table-wrapper"><table class="bordered hovered">';
+        html += '</em>';
 
-        if (this.params.metrics.speed) {
-            html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</td></tr>';
+        if (this.params.metrics && (this.params.metrics.speed || this.params.metrics.altitude || (this.params.metrics.lat && this.params.metrics.lng))) {
+            html += '<div class="table-wrapper"><table class="bordered hovered">';
+
+            if (this.params.metrics && this.params.metrics.speed) {
+                html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</td></tr>';
+            }
+
+            if (this.params.metrics && this.params.metrics.altitude) {
+                html += '<tr><th>Высота</th><td>' + this.params.metrics.altitude + ' м' + '</td></tr>';
+            }
+
+            if (this.params.metrics && this.params.metrics.lat && this.params.metrics.lng) {
+                html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
+            }
+
+            html += '</table></div>';
         }
 
-        if (this.params.metrics.altitude) {
-            html += '<tr><th>Высота</th><td>' + this.params.metrics.altitude + ' м' + '</td></tr>';
-        }
-
-        if (this.params.metrics.lat && this.params.metrics.lng) {
-            html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
-        }
-
-        html += '</table></div>';
         html += '</div>';
 
         return html;
@@ -469,7 +519,149 @@ var Path = function (params) {
  *  Car implementation
  **/
 var Car = function (params) {
+    /* Instances */
+    this.pos_marker = null;
 
+    /* Data */
+
+    /* Class params */
+    this.params = {
+        /* Standart */
+        on_map: false,
+        has_metrics: false,
+
+        /* Extendable */
+        metrics: {},
+        active: null,
+        color: null,
+        fleet_id: null,
+        fleet_name: null,
+        g_id: null,
+        id: null,
+        imei: null,
+        last_point_date: null,
+        last_update: null,
+        make: null,
+        model: null,
+        name: null,
+        online: null
+    };
+
+    $.extend(true, this.params, params);
+
+    /* Class constructor */
+    this.__construct = function () {
+        this.params.last_point_date = core.utilities.timestampToDate(this.params.last_point_date);
+
+        this.createPosMarker();
+    };
+
+    /* Methods */
+    this.updateParams = function (params) {
+        if (params.lat) {
+            this.params.metrics.lat = params.lat;
+        }
+
+        if (params.lon) {
+            this.params.metrics.lng = params.lon;
+        }
+
+        if (params.speed) {
+            this.params.metrics.speed = params.speed;
+        }
+
+        if (params.altitude) {
+            this.params.metrics.altitude = params.altitude;
+        }
+
+        if (params.last_point_date) {
+            this.params.metrics.date = core.utilities.timestampToDate(params.last_point_date);
+        }
+
+        if (params.heading) {
+            this.params.metrics.heading = params.heading;
+        }
+
+        if (params.active) {
+            this.params.active = params.active;
+        }
+
+        if (params.csq) {
+            this.params.csq = params.csq;
+        }
+
+        if (params.hdop) {
+            this.params.hdop = params.hdop;
+        }
+
+        if (params.journey) {
+            this.params.journey = params.journey;
+        }
+
+        if (params.last_update) {
+            this.params.last_update = core.utilities.timestampToDate(params.last_update);
+        }
+
+        if (params.online) {
+            this.params.online = params.online;
+        }
+
+        if (params.params) {
+            this.params.params = params.params;
+        }
+
+        if (params.point_id) {
+            this.params.point_id = params.point_id;
+        }
+
+        if (params.sat_count) {
+            this.params.sat_count = params.sat_count;
+        }
+
+        if(this.params.metrics.lat && this.params.metrics.lng){
+            this.params.has_metrics = true;
+        }else{
+            this.params.has_metrics = false;
+        }
+
+        this.pos_marker.updateMetrics(this.params.metrics);
+    };
+
+    this.createPosMarker = function () {
+        this.pos_marker = new PosMarker({
+            metrics: {
+                date: this.params.last_point_date
+            },
+            draw: false,
+            car_id: this.params.id,
+            car_label: true,
+            car_label_data: {
+                name: this.params.name,
+                g_id: this.params.g_id
+            },
+            focus_on_click: true,
+            on_click: function (e) {
+                //console.log(e)
+            }
+        });
+    };
+
+    this.draw = function(){
+        this.pos_marker.draw();
+        this.params.on_map = true;
+    }
+
+    this.remove = function(){
+        this.pos_marker.remove();
+        this.params.on_map = false;
+    }
+
+    this.focus = function(){
+        this.pos_marker.focus();
+    }
+
+    /* Init actions */
+    this.__construct();
 };
 
 /**
@@ -516,7 +708,7 @@ var View = function () {
         }
 
         if (MC.Data.current_car) {
-            html += ' / ' + MC.Data.current_car.name + ' ' + core.utilities.drawGId(MC.Data.current_car.g_id, 'small');
+            html += ' / ' + MC.Data.current_car.params.name + ' ' + core.utilities.drawGId(MC.Data.current_car.params.g_id, 'small');
             html += '<span class="g_id-spacer"></span>';
         } else if (MC.Data.current_fleet) {
             html += ' <span class="badge">' + MC.Data.current_fleet.cars + ' ' + core.utilities.plural(MC.Data.current_fleet.cars, 'машина', 'машины', 'машин') + '</span>';
@@ -576,6 +768,7 @@ var View = function () {
             default: MC.Data.car,
             key_name: 'id',
             value_name: 'name',
+            inner_object: 'params',
             exclude: exclude,
             items: MC.Data.cars,
             onChange: function (val) {
@@ -641,36 +834,36 @@ var View = function () {
         }
 
         if (auto_renew_active === false) {
-           $('#auto-renew')
-               .addClass('unactive')
-               .removeClass('active')
-           .parent()
-               .addClass('unactive')
-               .removeClass('active');
-       } else {
-           $('#auto-renew')
-               .addClass('active')
-               .removeClass('unactive')
-           .parent()
-               .addClass('active')
-               .removeClass('unactive');
-       }
+            $('#auto-renew')
+                .addClass('unactive')
+                .removeClass('active')
+                .parent()
+                .addClass('unactive')
+                .removeClass('active');
+        } else {
+            $('#auto-renew')
+                .addClass('active')
+                .removeClass('unactive')
+                .parent()
+                .addClass('active')
+                .removeClass('unactive');
+        }
 
-       if (show_car_path_active === false) {
-           $('#show-path')
-               .addClass('unactive')
-               .removeClass('active')
-           .parent()
-               .addClass('unactive')
-               .removeClass('active');
-       } else {
-           $('#show-path')
-               .addClass('active')
-               .removeClass('unactive')
-           .parent()
-               .addClass('active')
-               .removeClass('unactive');
-       }
+        if (show_car_path_active === false) {
+            $('#show-path')
+                .addClass('unactive')
+                .removeClass('active')
+                .parent()
+                .addClass('unactive')
+                .removeClass('active');
+        } else {
+            $('#show-path')
+                .addClass('active')
+                .removeClass('unactive')
+                .parent()
+                .addClass('active')
+                .removeClass('unactive');
+        }
 
         if ($('#auto-renew').next('a.slickswitch').length < 1) {
             $('#auto-renew').slickswitch({
@@ -727,7 +920,40 @@ var View = function () {
                 }
             });
         }
-    }
+
+        $('#focus').on('click', function(){
+            MC.View.focus();
+        });
+    };
+
+    /* Smart focus on a current sutuation on a map */
+    this.focus = function(){
+        if(MC.Map.busy === true){
+            return;
+        }
+
+        if(MC.Data.current_cars.length > 1 && MC.Data.car == 'all'){
+            var bounds = [];
+
+            for(var i = 0, l = MC.Data.current_cars.length; i < l; i++){
+                var car = MC.Data.getCarById(MC.Data.current_cars[i]);
+
+                if(car.params.metrics && car.params.metrics.lat && car.params.metrics.lng){
+                    bounds.push([
+                        car.params.metrics.lat,
+                        car.params.metrics.lng
+                    ]);
+                }
+            }
+
+            if (bounds.length > 1) {
+                MC.Map.fitBounds(bounds);
+            }
+        }else if(MC.Data.current_cars.length == 1 && MC.Data.car != 'all'){
+            MC.Map.zoom(14);
+            MC.Data.current_car.focus();
+        }
+    };
 
     /* Init actions */
     this.__construct();
@@ -747,9 +973,11 @@ var Data = function () {
     this.fleet = 'all';
     this.current_car = null;
     this.current_fleet = null;
-    this.auto_renew = false;
-    this.auto_focus = false;
+    this.auto_renew = true;
+    this.auto_focus = true;
     this.show_car_path = false;
+    this.current_cars = [];
+    this.auto_renew_blocker = false;
 
     /* Class constructor */
     this.__construct = function () {
@@ -757,6 +985,10 @@ var Data = function () {
 
         $(window).on('hashchange', function () {
             MC.Data.softLoad();
+        });
+
+        core.ticker.addIntervalMethod(function () {
+            MC.Data.autoRenewStack();
         });
     };
 
@@ -773,7 +1005,10 @@ var Data = function () {
     this.softLoad = function () {
         this.readOptionsFromCookies();
         this.setParamsFromHash();
-        this.bindCurrents();
+        this.bindCurrentFleetAndCar();
+
+        this.getSetCurrentCars();
+        this.loadDynamicCarsData(true);
 
         MC.View.bindMapOptionsController();
         MC.View.setHeaderTexts();
@@ -783,22 +1018,28 @@ var Data = function () {
     /* Read map view options */
     this.readOptionsFromCookies = function () {
         // Проверяем на наличие отключенного автообновления в куках
-        if ($.cookie('auto-renew') == '0') {
-            this.auto_renew = false;
-        } else {
-            this.auto_renew = true;
+        if($.cookie('auto-renew')){
+            if ($.cookie('auto-renew') == '0') {
+                this.auto_renew = false;
+            } else {
+                this.auto_renew = true;
+            }
         }
 
-        if ($.cookie('auto-focus') == '1') {
-            this.auto_focus = true;
-        } else {
-            this.auto_focus = false;
+        if($.cookie('auto-focus')){
+            if ($.cookie('auto-focus') == '1') {
+                this.auto_focus = true;
+            } else {
+                this.auto_focus = false;
+            }
         }
 
-        if ($.cookie('car-path') == '1') {
-            this.show_car_path = true;
-        } else {
-            this.show_car_path = false;
+        if($.cookie('car-path')){
+            if ($.cookie('car-path') == '1') {
+                this.show_car_path = true;
+            } else {
+                this.show_car_path = false;
+            }
         }
     };
 
@@ -825,7 +1066,7 @@ var Data = function () {
 
                 this.auto_renew = false;
                 this.show_car_path = false;
-            }else{
+            } else {
                 this.timemachine = false;
                 this.date = new Date();
 
@@ -838,7 +1079,7 @@ var Data = function () {
     /* Get car by id from loaded data */
     this.getCarById = function (id) {
         return $.grep(this.cars, function (e) {
-            return e.id == id;
+            return e.params.id == id;
         })[0];
     };
 
@@ -858,18 +1099,27 @@ var Data = function () {
         });
     };
 
+    /* Create cars */
+    this.createCarsObjects = function () {
+        for (var i = 0, l = this.cars.length; i < l; i++) {
+            this.cars[i] = new Car(this.cars[i]);
+        }
+    };
+
     /* Postprocess cars and fleets data loader */
     this.processLoadedData = function (data) {
         this.cars = data.devices;
         this.fleets = data.fleets;
-        this.bindCurrents();
+
+        this.createCarsObjects();
+        this.bindCurrentFleetAndCar();
 
         MC.View.setHeaderTexts();
         MC.View.createCarsAndFleetsMenu();
     };
 
     /* Bind current car and current fleet data */
-    this.bindCurrents = function () {
+    this.bindCurrentFleetAndCar = function () {
         this.current_car = null;
         this.current_fleet = null;
 
@@ -892,11 +1142,122 @@ var Data = function () {
         }
     };
 
+    /* Get-set curent cars to process */
+    this.getSetCurrentCars = function () {
+        this.current_cars = [];
+
+        var cars;
+
+        //Находим все тачки, соответствующие выбранным опциям (группа/тачка)
+        if (this.current_car && this.current_car.params.id > 0) {
+            cars = $.grep(this.cars, function (e) {
+                return e.params.id == MC.Data.current_car.params.id;
+            });
+
+        } else if (this.current_fleet && this.current_fleet.id > 0) {
+            cars = $.grep(this.cars, function (e) {
+                return e.params.fleet_id == MC.Data.current_fleet.id;
+            });
+
+        } else {
+            cars = this.cars;
+        }
+
+        for (var i = 0, l = cars.length; i < l; i++) {
+            this.current_cars.push(cars[i].params.id);
+        }
+    };
+
+    /* Merge cars data */
+    this.mergeCarsData = function (data) {
+        if (data) {
+            for (var i = 0, l = data.length; i < l; i++) {
+                this.getCarById(data[i].id).updateParams(data[i]);
+            }
+        }
+
+        if(this.auto_focus === true){
+            MC.View.focus();
+        }
+    };
+
+    /* Remove cars from a map */
+    this.removeCars = function(){
+        for(var i = 0, l = this.cars.length; i < l; i++){
+            this.cars[i].remove();
+        }
+    };
+
+    /* Draw cars */
+    this.drawCars = function(){
+        for(var i = 0, l = this.current_cars.length; i < l; i++){
+            var car = this.getCarById(this.current_cars[i]);
+
+            if(car.params.has_metrics && !car.params.on_map){
+                car.draw();
+            }
+        }
+    };
+
+    /* Get cars metrics */
+    this.loadDynamicCarsData = function (firstload) {
+        if (this.current_cars.length > 0) {
+            $.ajax({
+                url: '/control/map/?ajax&action=getDynamicDevicesData&date=' + core.utilities.tmToDate(this.date),
+                data: {
+                    cars: JSON.stringify(this.current_cars),
+                    tm_flag: (this.timemachine === true) ? '1' : '0'
+                },
+                dataType: 'json',
+                type: 'post',
+                beforeSend: function () {
+                    /*  Если запрос был на обновление данных, а не на первичную загрузку -
+                     отключем на время загрузки данных автообновление,
+                     чтобы не было ситуации, когда маркеров на карте нет,
+                     а функция обновления запускается */
+                    if (firstload === true) {
+                        MC.Data.auto_renew_blocker = true;
+                            // Не показываем глобал лоадинг, если запрос был на обновление данных
+                        core.loading.setGlobalLoading('loadDynamicCarsData');
+                    }
+                },
+                success: function (data) {
+                    if (firstload === true) {
+                        core.loading.unsetGlobalLoading('loadDynamicCarsData');
+                    }
+
+                    /*  Если запрос был на обновление данных, а не на первечную загрузку -
+                     включаем автообновление, если оно, конечно не отключено в куках и если тайм машина не запущена */
+                    if (firstload === true && $.cookie('auto-renew') != '0' && MC.Data.timemachine !== true) {
+                        MC.Data.auto_renew_blocker = false;
+                    }
+
+                    MC.Data.mergeCarsData(data);
+
+                    if (firstload === true){
+                        MC.Data.removeCars();
+                    }
+
+                    MC.Data.drawCars();
+                },
+                error: function () {
+                    if (firstload === true && $.cookie('auto-renew') != '0' && MC.Data.timemachine !== true) {
+                        MC.Data.auto_renew_blocker = false;
+                    }
+
+                    if (firstload === true) {
+                        core.loading.unsetGlobalLoading('loadDynamicCarsData');
+                    }
+
+                    MC.Data.error();
+                }
+            });
+        }
+    };
+
     //Load fleets and their cars data
     this.getUserFleetsAndDevices = function () {
-        var t = this;
-
-        this.loading_process = $.ajax({
+        $.ajax({
             url: '/control/map/?ajax',
             data: {
                 action: 'getUserFleetsAndDevices',
@@ -905,35 +1266,48 @@ var Data = function () {
             dataType: 'json',
             type: 'get',
             beforeSend: function () {
-                if (this.loading_process) {
-                    this.loading_process.abort();
-                    core.loading.unsetGlobalLoading();
-                }
-
-                core.loading.setGlobalLoading();
+                core.loading.setGlobalLoading('getUserFleetsAndDevices');
             },
             success: function (data) {
-                core.loading.unsetGlobalLoading();
+                core.loading.unsetGlobalLoading('getUserFleetsAndDevices');
 
-                t.processLoadedData(data);
+                MC.Data.processLoadedData(data);
+                MC.Data.getSetCurrentCars();
+                MC.Data.loadDynamicCarsData(true);
             },
             error: function () {
-                core.loading.unsetGlobalLoading();
-                t.error();
+                core.loading.unsetGlobalLoading('getUserFleetsAndDevices');
+                MC.Data.error();
             }
         });
     };
+
+    this.autoRenewStack = function(){
+        if(this.auto_renew !== true){
+            return;
+        }
+
+        if(this.auto_renew_blocker !== true){
+            MC.Data.loadDynamicCarsData(false);
+        }
+
+        if(this.auto_focus === true){
+            MC.View.focus();
+        }
+    }
 };
 
 var MC = {
     init: function () {
+        core.ticker.delay = 1000;
+
         this.Map = new Map();
         this.View = new View();
         this.Data = new Data();
         this.Data.__construct();
 
 
-         var m = new PosMarker({
+        /* var m = new PosMarker({
          metrics: {
          heading: 55,
          lat: 33,
@@ -987,6 +1361,6 @@ var MC = {
          ]
          });
 
-         p.draw();
+         p.draw();*/
     }
 };

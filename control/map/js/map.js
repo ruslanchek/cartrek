@@ -173,9 +173,7 @@ var leaflet_ctrl = {
                 if (data[i].lat && data[i].lon) {
                     markers.push(this.createCurrentPositionMarker(map_instance, data[i]));
                 }
-
             }
-
 
             if (markers.length > 0) {
                 this.current_position_markers_group = L.layerGroup(markers).addTo(map_instance);
@@ -1198,7 +1196,6 @@ var map = {
     },
 
     drawDynamicCarsData: function (data, options) {
-
         //Рисуем тачки на карте из полученного массива (последняя точка за сегодня)
         if (data && data !== null && data.length > 0) {
             if (options.renew === true) {
