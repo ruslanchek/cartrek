@@ -31,19 +31,17 @@
                 var div = $('<a>');
 
                 self.bind('ss-toggle', function () {
-                    if(!self.hasClass('unactive')){
-                        if (self.is(':checked')) {
-                            self.removeAttr('checked');
-                            self.prop('checked', false);
-                            settings.toggledOff(self);
-                        } else {
-                            self.attr('checked', 'checked');
-                            self.prop('checked', true);
-                            settings.toggledOn(self);
-                        }
-                        self.trigger('ss-update');
-                        settings.toggled(self);
+                    if (self.is(':checked')) {
+                        self.removeAttr('checked');
+                        self.prop('checked', false);
+                        settings.toggledOff(self);
+                    } else {
+                        self.attr('checked', 'checked');
+                        self.prop('checked', true);
+                        settings.toggledOn(self);
                     }
+                    self.trigger('ss-update');
+                    settings.toggled(self);
                 });
 
                 self.bind('ss-toggleOn', function () {
@@ -99,13 +97,13 @@
         toggleOff: function () {
             $(this).trigger('ss-toggleOff');
         },
-        tOff: function () {
+        tOff: function (instant) {
             $(this).removeAttr('checked').prop('checked', false);
-            $(this).trigger('ss-update');
+            $(this).trigger('ss-update', instant);
         },
-        tOn: function () {
+        tOn: function (instant) {
             $(this).attr('checked', 'checked').prop('checked', true);
-            $(this).trigger('ss-update');
+            $(this).trigger('ss-update', instant);
         }
     };
 

@@ -30,7 +30,8 @@ class Auth extends Core
             'balance',
             'user_timezone',
             'phones',
-            'daily_pay_amount'
+            'daily_pay_amount',
+            'ui_settings'
         );
 
         $this->password_length = 6;
@@ -304,7 +305,7 @@ class Auth extends Core
         if (!$login) {
             $result = array(
                 'status' => false,
-                'message' => 'Введите логин/e-mail'
+                'message' => 'Введите логин или e-mail'
             );
 
         } else {
@@ -412,12 +413,12 @@ class Auth extends Core
     }
 
     //Generate another login
-    public function getAnotherLogin($login)
+    public function getAnotherLogin($login, $suffix = 1)
     {
-        $login = $login . '_' . rand();
+        $login = $login . '_' . $suffix;
 
         if ($this->checkAlreadyByLogin($login)) {
-            $login = $this->getAnotherLogin($login);
+            $login = $this->getAnotherLogin($login, $suffix++);
         }
 
         return $login;
@@ -533,12 +534,16 @@ class Auth extends Core
                             `name`,
                             `email`,
                             `login`,
+                            `ui_settings`,
+                            `user_timezone`,
                             `reg_date`
                         ) VALUES (
                             '" . $this->db->quote(md5(md5($password))) . "',
                             '" . $this->db->quote($login) . "',
                             '" . $this->db->quote($_POST['email']) . "',
                             '" . $this->db->quote($login) . "',
+                            '" . $this->db->quote(json_encode((object) $this->config->default_user_settings)) . "',
+                            'Europe/Moscow',
                             NOW()
                         )
                     ");
@@ -547,7 +552,7 @@ class Auth extends Core
                         'Менеджер аккаунтов ' . $_SERVER['SERVER_NAME'],
                         'account_manager@' . $_SERVER['SERVER_NAME'],
                         $_POST['email'],
-                        'Добро пожаловать на сервис мониторинга автотранспорта!',
+                        'Добро пожаловать в Картрек!',
                         'mailing/register_success.tpl',
                         array(
                             'login' => $login,

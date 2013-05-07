@@ -135,6 +135,10 @@ var geozones = {
 
         // this.controls.push(new L.Control.FullScreen());
         this.controls.push(new L.Control.Locate());
+        this.controls.push(new L.Control.Scale({
+            imperial: false,
+            maxWidth: 150
+        }));
 
         for (var i = 0, l = this.controls.length; i < l; i++) {
             this.map.addControl(this.controls[i]);

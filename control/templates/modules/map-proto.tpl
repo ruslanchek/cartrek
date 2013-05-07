@@ -21,12 +21,12 @@
 
                     <label class="third">
                         <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
-                        <a href="javascript:void(0)" id="focus" title="Показать текущее положение">Фокус</a>
+                        <a href="javascript:void(0)" id="focus-toggler" title="Показать текущее положение">Фокус</a>
                     </label>
 
                     <label class="third" title="Показывать пройденный путь">
                         <input type="checkbox" class="slickswitch" id="show-path" />
-                        Путь
+                        <a href="javascript:void(0)" id="path-toggler" title="Показать текущий путь">Путь</a>
                     </label>
 
                     <div class="clear"></div>

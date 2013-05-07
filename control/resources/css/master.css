@@ -1831,6 +1831,12 @@ table .delete-btn {
     opacity: 0.55;
 }
 
+#togglers label.unactive a {
+    text-decoration: none;
+    color: #3C4E5A;
+    cursor: default !important;
+}
+
 .map-observer .leaflet-container .leaflet-control-zoom {
     margin-top: 75px !important;
     margin-left: 20px !important;
@@ -2605,6 +2611,10 @@ table .delete-btn {
     margin-top: -305px;
     opacity: 0.25;
     z-index: 2;
+}
+
+.login-body .login-content {
+
 }
 
 .hero-login {

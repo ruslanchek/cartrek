@@ -100,7 +100,11 @@ Class Core
             $this->params->tz_offset = $this->getTzOffset($this->auth->user['data']['user_timezone']);
         }
 
-        if (!$this->auth->user['status'] && $this->uri != '/control/auth/login/') {
+        if (!$this->auth->user['status'] &&
+            $this->module['name'] != 'auth.login' &&
+            $this->module['name'] != 'auth.register' &&
+            $this->module['name'] != 'auth.remember_pass'
+        ) {
             $return = '?return='.urlencode($_SERVER['REQUEST_URI']);
             header('Location: /control/auth/login' . $return);
         }
