@@ -1319,6 +1319,7 @@ var Data = function () {
 
         for (var i = 0, l = this.cars.length; i < l; i++) {
             this.cars[i].remove();
+            this.cars[i].removePath();
         }
     };
 
