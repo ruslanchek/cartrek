@@ -718,7 +718,10 @@ var Car = function (params) {
 
         this.getPathPoints(function (data) {
             t.params.path_points = t.params.path_points.concat(data);
-            t.params.last_path_point_id = t.params.path_points[t.params.path_points.length - 1].id;
+
+            if(t.params.path_points[t.params.path_points.length - 1]){
+                t.params.last_path_point_id = t.params.path_points[t.params.path_points.length - 1].id;
+            }
 
             var points = [];
 
@@ -738,7 +741,15 @@ var Car = function (params) {
             }else{
                 t.path.addPoints(points);
             }
+
+            t.path.draw();
         });
+    };
+
+    this.removePath = function(){
+        if(this.path){
+            this.path.remove();
+        }
     };
 
     this.draw = function () {
@@ -989,9 +1000,17 @@ var View = function () {
                         // автозагрузки могли появится новые точки.
                         // this.m_ctrl.first_loaded_car_id = false;
                         // this.drawCarPath(true);
+
+                        if(MC.Data.current_car){
+                            MC.Data.current_car.removePath();
+                        }
                     } else {
-                        MC.Data.show_car_path = false;
+                        MC.Data.show_car_path = true;
                         $.cookie('car-path', '1', core.options.cookie_options);
+
+                        if(MC.Data.current_car){
+                            MC.Data.current_car.drawPath();
+                        }
 
                         // this.m_ctrl.removeAllThePath(this.map);
                         // this.m_ctrl.removeAllCurrentPositionMarkers(this.map);
@@ -1361,6 +1380,10 @@ var Data = function () {
 
                 if(firstload) {
                     MC.View.focus();
+                }
+
+                if(MC.Data.show_car_path === true && MC.Data.current_car){
+                    MC.Data.current_car.drawPath();
                 }
             },
             error: function () {
