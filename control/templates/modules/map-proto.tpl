@@ -36,7 +36,7 @@
 
         {* Fleet and car selection block *}
         <div class="side-panel">
-            <div class="panel-content">
+            <div class="panel-content" id="fleets-and-cars-menu-block">
                 <div id="fleets-menu"></div>
                 <div class="clear"></div>
                 <div id="cars-menu"></div>

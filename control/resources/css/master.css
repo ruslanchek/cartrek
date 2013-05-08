@@ -623,6 +623,14 @@ table.hovered {
     z-index: 10;
 }
 
+.loading {
+    display: block;
+    width: 42px;
+    height: 42px;
+    position: absolute;
+    background: url(../img/spinner.png);
+}
+
 .text-right {
     text-align: right;
 }
@@ -1741,6 +1749,10 @@ table .delete-btn {
 }
 
 /* Map misc */
+#fleets-and-cars-menu-block {
+    height: 70px;
+}
+
 #current-fleet-and-car .g_id {
     display: inline-block;
     position: absolute;

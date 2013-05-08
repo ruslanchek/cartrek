@@ -134,7 +134,7 @@ core.loading = {
         return $loading;
     },
 
-    setLoadingToElementCenter: function (name, obj, zIndex, micro) {
+    setLoadingToElementCenter: function (name, obj, zIndex, micro, set_relative) {
         var micro_class = new String();
 
         if (micro) {
@@ -153,15 +153,28 @@ core.loading = {
             zIndex: zIndex
         });
 
-        $('body').prepend($loading);
-
-        $(window).unbind('resize').bind('resize', function () {
-            var obj_offset = obj.offset();
+        if(set_relative){
+            obj.css({position: 'relative'});
             $loading.css({
-                top: obj_offset.top + obj.height() / 2,
-                left: obj_offset.left + obj.width() / 2
+                top: '50%',
+                left: '50%',
+                marginLeft: -21,
+                marginTop: -21
             });
-        });
+            obj.prepend($loading);
+        }else{
+            $('body').prepend($loading);
+        }
+
+        if(!set_relative){
+            $(window).unbind('resize').bind('resize', function () {
+                var obj_offset = obj.offset();
+                $loading.css({
+                    top: obj_offset.top + obj.height() / 2,
+                    left: obj_offset.left + obj.width() / 2
+                });
+            });
+        }
 
         if (!micro) {
             this.startAnimation(name);
@@ -696,7 +709,7 @@ core.utilities = {
         return h + ':' + m + ':' + s;
     },
 
-    humanizeDateTime: function(date){
+    humanizeDateTime: function(date, show_time){
         var month_names = [
             'января',
             'февраля',
@@ -716,9 +729,14 @@ core.utilities = {
             y = date.getFullYear(),
             hou = core.utilities.pad(date.getHours(), 2),
             min = core.utilities.pad(date.getMinutes(), 2),
-            sec = core.utilities.pad(date.getSeconds(), 2);
+            sec = core.utilities.pad(date.getSeconds(), 2),
+            time = '';
 
-        return d + ' ' + month_names[m] + ', ' + y + ', ' + hou + ':' + min + ':' + sec;
+        if(show_time === true){
+            time = ', в ' + hou + ':' + min + ':' + sec;
+        }
+
+        return d + ' ' + month_names[m] + ',&nbsp;' + y + time;
     },
 
     timestampToDate: function (str) {

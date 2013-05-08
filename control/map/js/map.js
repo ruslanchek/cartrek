@@ -243,7 +243,6 @@ var leaflet_ctrl = {
                     });
                 }
 
-
                 this.drawAllThePath(map.map, data.id);
             }
 
