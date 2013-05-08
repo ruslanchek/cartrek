@@ -369,7 +369,7 @@ var PosMarker = function (params) {
         html += '<em class="small gray">Текущее положение';
 
         if (this.params.metrics && this.params.metrics.date) {
-            html += ' от ' + core.utilities.humanizeDateTime(this.params.metrics.date);
+            html += ' от ' + core.utilities.humanizeDateTime(this.params.metrics.date, true);
         }
 
         html += '</em>';
