@@ -142,11 +142,11 @@ Class Devices extends Core
                 	`devices`.`fleet_id`,
                 	CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`,
                 	`fleets`.`name` AS `fleet_name`,
-                	CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_point_date`
+                	max(CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `last_point_date`
                 FROM
                 	`devices`
                 LEFT JOIN
-                    `fleets` ON `devices`.`fleet_id` = `fleets`.`id` && `fleets`.`user_id` = " . intval($this->auth->user['data']['id']) . $addition . "
+                    `fleets` ON `devices`.`fleet_id` = `fleets`.`id` && `fleets`.`user_id` = " . intval($this->auth->user['data']['id']) /*. $addition TODO: What it motherfucking means??? What the hell are addition does here? */ . "
                 LEFT JOIN
                     `tracks` ON `tracks`.`device_id` = `devices`.`id`
                 WHERE

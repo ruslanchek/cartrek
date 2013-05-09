@@ -8,7 +8,7 @@ var Map = function (params) {
     this.instance = null;
     this.busy = false;
     this.params = {
-        zoom: 2,
+        zoom: 4,
         zoom_geoposition: 10,
         lat: 0,
         lng: 0,
