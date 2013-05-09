@@ -1280,8 +1280,7 @@ core.ui = {
 
         if (options.items) {
             for (var i = 0, l = options.items.length; i < l; i++) {
-                console.log(options.items[i])
-
+                // TODO: Сделать проверку на exclude
                 if (
                     !(
                         options.exclude &&
