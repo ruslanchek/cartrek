@@ -938,8 +938,8 @@ var View = function () {
 
         if (MC.Data.fleet != 'all' && MC.Data.fleet != '' && MC.Data.current_fleet) {
             exclude = {
-                param_name: 'fleet_id',
-                param_value: MC.Data.fleet
+                key_name: 'fleet_id',
+                value_name: MC.Data.fleet
             };
         }
 
@@ -1481,13 +1481,13 @@ var Data = function () {
                 var hash = '',
                     hs = '';
 
-                if (MC.Data.hash && MC.Data.fleet != 'all' && MC.Data.fleet > 0) {
+                if (MC.Data.hash != null && MC.Data.fleet != 'all' && MC.Data.fleet > 0) {
                     hash += 'fleet=' + MC.Data.fleet;
                 }
 
-                if (MC.Data.hash && MC.Data.car && MC.Data.fleet != 'all' && MC.Data.fleet > 0) {
+                if (MC.Data.hash != null && MC.Data.car && MC.Data.fleet != 'all' && MC.Data.fleet > 0) {
                     hash += '&car=' + MC.Data.car;
-                } else if (MC.Data && MC.Data.car && !MC.Data.fleet) {
+                } else if (MC.Data.hash != null && MC.Data.car && (!MC.Data.fleet || MC.Data.fleet == 'all')) {
                     hash += 'car=' + MC.Data.car;
                 }
 

@@ -1280,7 +1280,16 @@ core.ui = {
 
         if (options.items) {
             for (var i = 0, l = options.items.length; i < l; i++) {
-                if (!(options.exclude && options.items[i][options.exclude.param_name] != options.exclude.param_value)) {
+                console.log(options.items[i])
+
+                if (
+                    !(
+                        options.exclude &&
+                        (
+                            options.items[i][options.inner_object][options.exclude.key_name] != options.exclude.value_name
+                        )
+                    )
+                ) {
                     if(options.inner_object){
                         html += '<option ' + ((options.default == options.items[i][options.inner_object][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.inner_object][options.key_name] + '">' + options.items[i][options.inner_object][options.value_name] + '</option>';
                     }else{
