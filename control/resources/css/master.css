@@ -3103,7 +3103,7 @@ table .delete-btn {
 }
 
 .dispatcher .item .head {
-    padding: 6px 8px 4px;
+    padding: 6px 8px 3px;
     background: #ececec url(../img/pattern_white.png);
     text-shadow: 0 1px 0 #fff;
     padding-right: 100px;
