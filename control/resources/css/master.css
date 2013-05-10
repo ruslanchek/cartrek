@@ -4,7 +4,7 @@
 /* =Typography
 -----------------------------------------------------------------------------*/
 body {
-    background: #eee url(../img/body-bg.png) top center;
+    background: #eee url(../img/pattern_white.png) top center;
     font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
     color: #3C4E5A;
 }
@@ -13,6 +13,7 @@ h1 {
     font-size: 2em;
     font-family: 'Cuprum', sans-serif;
     position: relative;
+    text-shadow: 0 1px 0 #fff;
 }
 
 h1 span {
@@ -1120,7 +1121,7 @@ footer a:active {
     position: relative;
     display: block;
     padding: 2px;
-    width: 14.5ex;
+    width: 13.5ex;
     font-family: Tahoma, Arial, sans-serif;
     -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
             box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
@@ -1177,7 +1178,7 @@ footer a:active {
 }
 
 .g_id .id {
-    width: 10ex;
+    width: 9ex;
     height: 1.7em;
     line-height: 1.8em;
     text-transform: uppercase;
@@ -1227,8 +1228,8 @@ footer a:active {
 
 .g_id.small {
     font-size: 13px !important;
-    line-height: 22px;
-    height: 22px;
+    line-height: 1.7em;
+    height: 1.7em;
 }
 
 .g_id.small .region em {
@@ -1716,7 +1717,10 @@ table .delete-btn {
     padding-top: 13px;
     -webkit-box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15);
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.map-full-sized-frame .h1 h1 {
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 
 #map:-webkit-full-screen {
@@ -3054,4 +3058,109 @@ table .delete-btn {
     border-radius: 4px;
 
     margin: 0 0 1em;
+}
+
+/* Dispatcher */
+.dispatcher {
+    margin-left: -2%;
+}
+
+.dispatcher .third {
+    width: 31.985673758865245%;
+    margin-left: 2%;
+}
+
+.dispatcher .row .third:first-child {
+    margin-left: 0;
+}
+
+.dispatcher .row .quarter {
+    width: 23.85%;
+    margin-left: 1.5%;
+}
+
+.dispatcher .row .quarter:first-child {
+    margin-left: 0;
+}
+
+.dispatcher .brick {
+    width: 23%;
+    margin-left: 2%;
+    margin-bottom: 18px;
+    float: left;
+}
+
+.dispatcher .item {
+    border: 3px solid #e5e5e5;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: #f6f6f6 url(../img/pattern_white.png);
+}
+
+.dispatcher .item:hover {
+    border-color: #ddd;
+}
+
+.dispatcher .item .head {
+    padding: 6px 8px 4px;
+    background: #ececec url(../img/pattern_white.png);
+    text-shadow: 0 1px 0 #fff;
+    padding-right: 100px;
+    position: relative;
+    border-bottom: 1px solid #d5d5d5;
+    cursor: move;
+}
+
+.dispatcher .item .head .g_id {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    font-size: 11px !important;
+}
+
+.dispatcher .item:hover .head {
+    background-color: #e7e7e7;
+}
+
+.dispatcher .item .head h2 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.dispatcher .item .head .make_model {
+    font-size: 0.8em;
+    color: #888;
+}
+
+.dispatcher .item .map {
+    height: 150px;
+    border-top: 1px solid #fff;
+}
+
+.dispatcher .item .map .leaflet-control-container {
+    display: none;
+}
+
+.dispatcher .item .map .leaflet-control-container .leaflet-bar a {
+    height: 22px;
+    width: 20px;
+}
+
+.dispatcher .ui-sortable-helper {
+    -webkit-box-shadow:  0px 10px 35px 0px rgba(0, 0, 0, 0.4);
+            box-shadow:  0px 10px 35px 0px rgba(0, 0, 0, 0.4);
+    background: none;
+}
+
+.dispatcher .ui-sortable-placeholder {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: #eee url(../img/pattern_white.png);
+    visibility: visible !important;
+
+    -webkit-box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+            box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
 }
