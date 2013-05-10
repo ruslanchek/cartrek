@@ -17,10 +17,10 @@
 <script src="/control/meta"></script>
 {/if}
 
-<script src="/control/resources/js/jquery-2.0.0.min.js"></script>
-<script src="/control/resources/js/jquery.cookie.js"></script>
-<script src="/control/resources/js/jquery.mousewheel.js"></script>
-<script src="/control/resources/js/jquery.scrollpane.js"></script>
+<script src="/control/resources/libs/jquery-2.0.0.min.js"></script>
+<script src="/control/resources/libs/jquery.cookie.js"></script>
+<script src="/control/resources/libs/jquery.mousewheel.js"></script>
+<script src="/control/resources/libs/jquery.scrollpane.js"></script>
 
 {*<script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
 <script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>*}

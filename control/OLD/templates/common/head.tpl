@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="/control/resources/plugins/meow/jquery.meow.css" type="text/css" />
 
 <script src="/control/resources/js/jquery-1.7.2.min.js"></script>
-<script src="/control/resources/js/jquery.cookie.js"></script>
+<script src="/control/resources/libs/jquery.cookie.js"></script>
 
 <script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
 <script src="/control/resources/plugins/flot/jquery.flot.resize.min.js"></script>
