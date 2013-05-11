@@ -153,7 +153,7 @@ core.loading = {
             zIndex: zIndex
         });
 
-        if(set_relative){
+        if (set_relative) {
             obj.css({position: 'relative'});
             $loading.css({
                 top: '50%',
@@ -162,11 +162,11 @@ core.loading = {
                 marginTop: -21
             });
             obj.prepend($loading);
-        }else{
+        } else {
             $('body').prepend($loading);
         }
 
-        if(!set_relative){
+        if (!set_relative) {
             $(window).unbind('resize').bind('resize', function () {
                 var obj_offset = obj.offset();
                 $loading.css({
@@ -210,17 +210,17 @@ core.loading = {
 
     unsetGlobalLoading: function (ns) {
         setTimeout(function () {
-            if(ns && core.loading.gl_ns_pool[ns]){
+            if (ns && core.loading.gl_ns_pool[ns]) {
                 delete(core.loading.gl_ns_pool[ns]);
             }
 
             var ns_c = 0;
 
-            $.each(core.loading.gl_ns_pool, function(){
+            $.each(core.loading.gl_ns_pool, function () {
                 ns_c++;
             });
 
-            if(ns_c > 0){
+            if (ns_c > 0) {
                 return;
             }
 
@@ -238,7 +238,7 @@ core.loading = {
     },
 
     setGlobalLoading: function (ns) {
-        if(ns){
+        if (ns) {
             this.gl_ns_pool[ns] = true;
         }
 
@@ -535,7 +535,11 @@ core.utilities = {
     },
 
     convertKnotsToKms: function (value) {
-        return (value * 1.852).toFixed(1);
+        if (value > 0) {
+            return (value * 1.852).toFixed(1);
+        } else {
+            return 0;
+        }
     },
 
     convertDateNMEAtoCOMMON: function (value) {
@@ -554,10 +558,10 @@ core.utilities = {
         return d + '-' + m + '-' + y;
     },
 
-    tmToDate: function(date){
+    tmToDate: function (date) {
         return  core.utilities.pad(date.getDate(), 2) + '-' +
-                core.utilities.pad(date.getMonth() + 1, 2) + '-' +
-                date.getFullYear();
+            core.utilities.pad(date.getMonth() + 1, 2) + '-' +
+            date.getFullYear();
     },
 
     humanizeHeadingDegrees: function (degree) {
@@ -709,21 +713,21 @@ core.utilities = {
         return h + ':' + m + ':' + s;
     },
 
-    humanizeDateTime: function(date, show_time){
+    humanizeDateTime: function (date, show_time) {
         var month_names = [
-            'января',
-            'февраля',
-            'марта',
-            'апреля',
-            'мая',
-            'июня',
-            'июля',
-            'августа',
-            'сентября',
-            'октября',
-            'ноября',
-            'декабря'
-        ],
+                'января',
+                'февраля',
+                'марта',
+                'апреля',
+                'мая',
+                'июня',
+                'июля',
+                'августа',
+                'сентября',
+                'октября',
+                'ноября',
+                'декабря'
+            ],
             d = date.getDate(),
             m = date.getMonth(),
             y = date.getFullYear(),
@@ -732,7 +736,7 @@ core.utilities = {
             sec = core.utilities.pad(date.getSeconds(), 2),
             time = '';
 
-        if(show_time === true){
+        if (show_time === true) {
             time = ', в ' + hou + ':' + min + ':' + sec;
         }
 
@@ -740,10 +744,8 @@ core.utilities = {
     },
 
     timestampToDate: function (str) {
-
         if (str) {
             var t = str.split(/[- :]/);
-
             return new Date(t[0], t[1] - 1, t[2], t[3] || 0, t[4] || 0, t[5] || 0);
         }
     },
@@ -751,7 +753,6 @@ core.utilities = {
     timestampToDateYearLast: function (str) {
         if (str) {
             var t = str.split(/[- :]/);
-
             return new Date(t[2], t[1] - 1, t[0], t[3] || 0, t[4] || 0, t[5] || 0);
         }
     },
@@ -774,9 +775,47 @@ core.utilities = {
         if (sat_count > 0) {
             sats = ' (' + sat_count + ' ' + core.utilities.plural(sat_count, 'спутник', 'спутника', 'спутников') + ')';
         }
-        ;
 
         return '<span class="signal-indicator" title="GPS: ' + hdop.level_name + sats + '"><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
+    },
+
+    getFuelIndicator: function (current_percent, total_liters, width_100_percent) {
+        var level_class = '',
+            style = '';
+
+        if (current_percent > 0) {
+            if (current_percent > 99) {
+                level_class = 'info';
+            }
+
+            if (current_percent > 75 && current_percent <= 99) {
+                level_class = 'success';
+            }
+
+            if (current_percent > 50 && current_percent <= 75) {
+                level_class = 'success';
+            }
+
+            if (current_percent > 25 && current_percent <= 50) {
+                level_class = 'warning';
+            }
+
+            if (current_percent > 15 && current_percent <= 25) {
+                level_class = 'warning';
+            }
+
+            if (current_percent >= 0 && current_percent <= 15) {
+                level_class = 'warning';
+            }
+        } else {
+            level_class = 'danger';
+        }
+
+        if(width_100_percent === true){
+            style = 'width: 100%';
+        }
+
+        return '<span class="signal-indicator" style="'+style+'" title="' + current_percent + '% из ' + total_liters + ' л"><span class="' + level_class + '" style="width: ' + current_percent + '%"></span></span>';
     },
 
     getVoltsIndicator: function (v) {
@@ -1149,9 +1188,10 @@ core.map_tools = {
     },
 
     getGeoposition: function (callback) {
-        if(!callback){
+        if (!callback) {
             return false;
-        };
+        }
+        ;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -1178,35 +1218,36 @@ core.map_tools = {
         }
     },
 
-    geocodingRequest: function(lat, lng, callback){
-        var url = 'http://api.tiles.mapbox.com/v3/ruslanchek.map-e89iu6uu/geocode/'+lat+','+lng+'.json';
+    geocodingRequest: function (lat, lng, callback) {
+        var url = 'http://api.tiles.mapbox.com/v3/ruslanchek.map-e89iu6uu/geocode/' + lat + ',' + lng + '.json';
 
-        if(callback){
+        if (callback) {
             $.ajax({
                 url: url,
                 type: 'get',
                 dataType: 'json',
-                success: function(data){
+                success: function (data) {
                     callback(data);
                 },
-                error: function(){
+                error: function () {
                     callback(false);
                 }
             });
-        };
+        }
+        ;
     }
 };
 
 core.ui = {
     window_focus: true,
 
-    windowFocus: function(){
-        $(window).on('focus', function() {
+    windowFocus: function () {
+        $(window).on('focus', function () {
             core.ui.window_focus = true;
         })
-        .on('blur', function() {
-            core.ui.window_focus = false;
-        });
+            .on('blur', function () {
+                core.ui.window_focus = false;
+            });
     },
 
     //Common functions
@@ -1227,7 +1268,7 @@ core.ui = {
     },
 
     webkitNotificationsRequest: function () {
-        if(window.webkitNotifications){
+        if (window.webkitNotifications) {
             var havePermission = window.webkitNotifications.checkPermission();
         } else {
             return;
@@ -1285,14 +1326,14 @@ core.ui = {
                 if (
                     !(
                         options.exclude &&
-                        (
-                            options.items[i][options.inner_object][options.exclude.key_name] != options.exclude.value_name
+                            (
+                                options.items[i][options.inner_object][options.exclude.key_name] != options.exclude.value_name
+                                )
                         )
-                    )
-                ) {
-                    if(options.inner_object){
+                    ) {
+                    if (options.inner_object) {
                         html += '<option ' + ((options.default == options.items[i][options.inner_object][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.inner_object][options.key_name] + '">' + options.items[i][options.inner_object][options.value_name] + '</option>';
-                    }else{
+                    } else {
                         html += '<option ' + ((options.default == options.items[i][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.key_name] + '">' + options.items[i][options.value_name] + '</option>';
                     }
                 }
@@ -1305,13 +1346,13 @@ core.ui = {
 
         $('select#' + options.id).coreUISelect({
             jScrollPane: true,
-            onChange: function(e){
-               options.onChange($(e[0]).val());
+            onChange: function (e) {
+                options.onChange($(e[0]).val());
             }
         });
     },
 
-    init: function(){
+    init: function () {
         this.webkitNotificationsRequest();
         this.getRawTitle();
         this.windowFocus();
@@ -1320,7 +1361,7 @@ core.ui = {
             jScrollPane: true
         });
 
-        $('.form_message').on('click', '.close', function(){
+        $('.form_message').on('click', '.close', function () {
             $('.form_message').slideUp(150, function () {
                 $('.form_message').html('');
             });
@@ -1334,12 +1375,12 @@ core.modal = {
     modal_created: false,
 
     prepareCode: function (header, html) {
-        var code =  '<div class="window" id="modal_window">' +
-                        '<a href="javascript:void(0)" id="modal_closer"></a>' +
-                        '<h1>' + header + '</h1>' +
-                        '<div class="message" title="Клик закроет это сообщение"></div>' +
-                        '<div class="window_content">' + html + '</div>' +
-                    '</div>';
+        var code = '<div class="window" id="modal_window">' +
+            '<a href="javascript:void(0)" id="modal_closer"></a>' +
+            '<h1>' + header + '</h1>' +
+            '<div class="message" title="Клик закроет это сообщение"></div>' +
+            '<div class="window_content">' + html + '</div>' +
+            '</div>';
 
         return code;
     },
@@ -1536,7 +1577,7 @@ core.events_api = {
             duration: this.events_meow_duration
         });
 
-        if(no_wk_notify !== true){
+        if (no_wk_notify !== true) {
             this.webkitNotification(data.message);
         }
     },
@@ -1604,7 +1645,7 @@ core.events_api = {
     }
 };
 
-core.init = function(){
+core.init = function () {
     core.ui.init();
 
     core.ticker.startSystemInterval();

@@ -1057,11 +1057,11 @@ a.badge:active {
 
 .tooltip-content table th {
     font-weight: bold;
-    padding: 5px !important;
+    padding: 3px 5px 2px !important;
 }
 
 .tooltip-content table td {
-    padding: 5px !important;
+    padding: 3px 5px 2px !important;
 }
 
 .tooltip-content h3 {

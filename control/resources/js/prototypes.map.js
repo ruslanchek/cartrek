@@ -188,8 +188,8 @@ var Marker = function (params) {
     /* Bind Popup */
     this.setPopup = function () {
         this.instance.bindPopup(this.getPopupHtml(), {
-            maxWidth: 300,
-            minWidth: 100
+            maxWidth: 350,
+            minWidth: 200
         });
     };
 
@@ -286,6 +286,7 @@ var Marker = function (params) {
             data_changed = true;
         }
 
+        // TODO: Сделать проверку объектов, чтобы лишний раз не вызывалось renewPopouHtml()
         if (metrics.params) {
             this.params.metrics.params = metrics.params;
             data_changed = true;
@@ -319,7 +320,7 @@ var PosMarker = function (params) {
         },
         options: {
             icon: null,
-            title: (params.car_label_data && params.car_label_data.name) ? params.car_label_data.name + ' &mdash; текущее положение' : 'Текущее положение',
+            title: (params.car_label_data && params.car_label_data.name) ? params.car_label_data.name + ' - текущее положение' : 'Текущее положение',
             zIndexOffset: 10000
         },
         geocoder: false // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
@@ -441,29 +442,35 @@ var PosMarker = function (params) {
             html += '<div class="table-wrapper"><table class="bordered hovered">';
 
             if (this.params.metrics && this.params.metrics.speed) {
-                html += '<tr><th>Скорость</th><td>' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</td></tr>';
+                html += '<tr><th>Скорость</th><td colspan="2">' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</td></tr>';
             }
 
             if (this.params.metrics && this.params.metrics.altitude) {
-                html += '<tr><th>Высота</th><td>' + this.params.metrics.altitude + ' м' + '</td></tr>';
+                html += '<tr><th>Высота</th><td colspan="2">' + this.params.metrics.altitude + ' м' + '</td></tr>';
             }
 
             if (this.params.metrics && this.params.metrics.lat && this.params.metrics.lng) {
-                html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
+                html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg;</td><td> ' + this.params.metrics.lng + '&deg;</td></tr>';
             }
 
-            if (this.params.metrics && this.params.metrics.params &&  this.params.metrics.params.power_inp && this.params.metrics.lng) {
-                html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
-            } Object.toJSON(user1) == Object.toJSON(user2);
+            if (this.params.metrics && this.params.metrics.params && (this.params.metrics.params.power_inp || this.params.metrics.params.power_inp === 0)) {
+                html += '<tr><th>Бортовое питание</th><td colspan="2">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_inp) + '</td></tr>';
+            }
+
+            if (this.params.metrics && this.params.metrics.params && (this.params.metrics.params.power_bat || this.params.metrics.params.power_bat === 0)) {
+                html += '<tr><th>Батарея терминала</th><td colspan="2">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_bat) + '</td></tr>';
+            }
+
+            if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.fls === true && (this.params.metrics.params.fuel || this.params.metrics.params.fuel === 0)) {
+                html += '<tr><th>Топливо</th><td colspan="2">' + core.utilities.getFuelIndicator(this.params.metrics.params.fuel, this.params.metrics.params.fuel_tank_capacity, true) + '</td></tr>';
+            }
 
             html += '</table></div>';
         }
 
         if (this.params.metrics && this.params.metrics.date) {
             html += '<em class="small gray">Текущее положение';
-
             html += ' от ' + core.utilities.humanizeDateTime(this.params.metrics.date, true);
-
             html += '</em>';
         }
 

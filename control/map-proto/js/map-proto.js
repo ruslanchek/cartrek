@@ -112,7 +112,16 @@ var Car = function (params) {
         }
 
         if (params.params) {
-            this.params.metrics.params = params.params;
+            try {
+                this.params.metrics.params = JSON.parse(params.params);
+                // TODO: make this!
+                this.params.metrics.params.fls = true;
+                this.params.metrics.params.fuel = 33;
+                this.params.metrics.params.fuel_tank_capacity = 65;
+            } catch(e) {
+                this.params.metrics.params = null;
+            }
+
         } else {
             this.params.metrics.params = null;
         }
@@ -123,18 +132,7 @@ var Car = function (params) {
             this.params.active = null;
         }
 
-        if (params.csq) {
-            this.params.csq = params.csq;
-        } else {
-            this.params.csq = null;
-        }
-
-        if (params.hdop) {
-            this.params.hdop = params.hdop;
-        } else {
-            this.params.hdop = null;
-        }
-
+        // TODO: Точно нужна эта херотень???
         if (params.journey) {
             this.params.journey = params.journey;
         } else {
@@ -145,12 +143,6 @@ var Car = function (params) {
             this.params.last_update = core.utilities.timestampToDate(params.last_update);
         } else {
             this.params.last_update = null;
-        }
-
-        if (params.params) {
-            this.params.params = params.params;
-        } else {
-            this.params.params = null;
         }
 
         if (params.point_id) {
