@@ -3,7 +3,7 @@
 /**
  *  Car implementation
  **/
-var DCar = function (id) {
+var Car = function (id) {
     /* Instances */
     this.instance_map = null;
     this.instance_pos_marker = null;
@@ -114,7 +114,7 @@ var Data = function () {
         var t = this;
 
         $('.dispatcher .item').each(function () {
-            t.cars.push(new DCar($(this).data('id')));
+            t.cars.push(new Car($(this).data('id')));
         });
     };
 

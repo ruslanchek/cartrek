@@ -565,7 +565,7 @@ footer {
 /* =Misc
 -----------------------------------------------------------------------------*/
 table {
-
+    width: 100%;
 }
 
 .table-wrapper {
@@ -1047,8 +1047,8 @@ a.badge:active {
 }
 
 .tooltip-content .table-wrapper {
-    margin-top: 12px;
-    margin-bottom: 20px;
+    margin-top: 7px;
+    margin-bottom: 7px;
 }
 
 .tooltip-content table {
@@ -1057,16 +1057,39 @@ a.badge:active {
 
 .tooltip-content table th {
     font-weight: bold;
+    padding: 5px !important;
+}
+
+.tooltip-content table td {
+    padding: 5px !important;
 }
 
 .tooltip-content h3 {
     margin: 0 15px 0.2em 0 !important;
 }
 
-.tooltip-content em.small {
+.tooltip-content em {
     display: block;
-    font-size: 0.93em;
     font-style: normal;
+}
+
+.tooltip-content .small {
+    font-size: 0.95em;
+}
+
+.tooltip-content .indicators {
+    float: right;
+    width: 100px;
+    text-align: right;
+}
+
+.tooltip-content .indicators .signal-indicator {
+    margin-left: 5px;
+    width: 45px;
+}
+
+.tooltip-content .make-model {
+    float: left;
 }
 
 .leaflet-container a.leaflet-popup-close-button {
@@ -1510,7 +1533,6 @@ footer a:active {
 .signal-indicator {
     width: 75px;
     height: 8px;
-    padding: 2px;
     display: block;
     display: inline-block;
     overflow: hidden;
@@ -2642,8 +2664,8 @@ table .delete-btn {
     margin-top: -165px;
     left: 50%;
     margin-left: -157px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
     -webkit-box-shadow: 0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     border-top: 1px solid rgba(255, 255, 255, 0.5);
@@ -3104,7 +3126,7 @@ table .delete-btn {
 
 .dispatcher .item .head {
     padding: 6px 8px 3px;
-    background: #ececec url(../img/pattern_white.png);
+    background: #eee;
     text-shadow: 0 1px 0 #fff;
     padding-right: 100px;
     position: relative;

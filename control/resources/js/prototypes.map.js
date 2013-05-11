@@ -131,7 +131,10 @@ var Marker = function (params) {
             speed: 0,
             heading: 0,
             altitude: 0,
-            date: 0
+            date: 0,
+            hdop: null,
+            csq: null,
+            online: null
         },
         options: {
             clickable: true,
@@ -268,6 +271,26 @@ var Marker = function (params) {
             data_changed = true;
         }
 
+        if (metrics.online) {
+            this.params.metrics.online = metrics.online;
+            data_changed = true;
+        }
+
+        if (metrics.csq) {
+            this.params.metrics.csq = metrics.csq;
+            data_changed = true;
+        }
+
+        if (metrics.hdop) {
+            this.params.metrics.hdop = metrics.hdop;
+            data_changed = true;
+        }
+
+        if (metrics.params) {
+            this.params.metrics.params = metrics.params;
+            data_changed = true;
+        }
+
         if (metrics.date && this.params.metrics.date != metrics.date) {
             // TODO: Make the dates comparsion by Date.getTime() method. And make the all input dates parser to objects
             this.params.metrics.date = metrics.date;
@@ -382,13 +405,37 @@ var PosMarker = function (params) {
 
         html += '<h3>' + this.params.car_label_data.name + '</h3>';
 
-        html += '<em class="small gray">Текущее положение';
+        if (this.params.car_label_data.make || this.params.car_label_data.model) {
 
-        if (this.params.metrics && this.params.metrics.date) {
-            html += ' от ' + core.utilities.humanizeDateTime(this.params.metrics.date, true);
+            html += '<em class="small gray make-model">';
+
+            if (this.params.car_label_data.make) {
+                html += this.params.car_label_data.make;
+            }
+
+            if (this.params.car_label_data.model) {
+                html += ' ' + this.params.car_label_data.model;
+            }
+
+            html += '</em>';
         }
 
-        html += '</em>';
+        html += '<span class="indicators">';
+
+        if (this.params.metrics && this.params.metrics.online === true) {
+
+            if (this.params.metrics.hdop) {
+                html += core.utilities.getHDOPIndicator(this.params.metrics.hdop);
+            }
+
+            if (this.params.metrics.csq) {
+                html += core.utilities.getCSQIndicator(this.params.metrics.csq);
+            }
+        } else {
+            html += '<span class="small gray">Офлайн</span>';
+        }
+
+        html += '</span><div class="clear"></div>';
 
         if (this.params.metrics && (this.params.metrics.speed || this.params.metrics.altitude || (this.params.metrics.lat && this.params.metrics.lng))) {
             html += '<div class="table-wrapper"><table class="bordered hovered">';
@@ -405,7 +452,19 @@ var PosMarker = function (params) {
                 html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
             }
 
+            if (this.params.metrics && this.params.metrics.params &&  this.params.metrics.params.power_inp && this.params.metrics.lng) {
+                html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg; / ' + this.params.metrics.lng + '&deg;</td></tr>';
+            } Object.toJSON(user1) == Object.toJSON(user2);
+
             html += '</table></div>';
+        }
+
+        if (this.params.metrics && this.params.metrics.date) {
+            html += '<em class="small gray">Текущее положение';
+
+            html += ' от ' + core.utilities.humanizeDateTime(this.params.metrics.date, true);
+
+            html += '</em>';
         }
 
         html += '</div>';
@@ -548,302 +607,6 @@ var Path = function (params) {
     /* Fit path bounds on map */
     this.focus = function () {
         MC.Map.fitBounds(this.instance.getBounds());
-    };
-
-    /* Init actions */
-    this.__construct();
-};
-
-/**
- *  Car implementation
- **/
-var Car = function (params) {
-    /* Instances */
-    this.pos_marker = null;
-    this.path = null;
-
-    /* Data */
-
-    /* Class params */
-    this.params = {
-        /* Standart */
-        on_map: false,
-        has_metrics: false,
-
-        /* Extendable */
-        metrics: {},
-        active: null,
-        color: null,
-        fleet_id: null,
-        fleet_name: null,
-        g_id: null,
-        id: null,
-        imei: null,
-        last_point_date: null,
-        last_path_point_id: null,
-        last_update: null,
-        make: null,
-        model: null,
-        name: null,
-        online: null,
-        point_id: null,
-        sat_count: null,
-
-        /* Storage */
-        path_points: []
-    };
-
-    $.extend(true, this.params, params);
-
-    /* Class constructor */
-    this.__construct = function () {
-        this.params.last_point_date = core.utilities.timestampToDate(this.params.last_point_date);
-
-        this.createPosMarker();
-    };
-
-    /* Methods */
-    this.updateParams = function (params) {
-        if (params.lat) {
-            this.params.metrics.lat = params.lat;
-        } else {
-            this.params.metrics.lat = null;
-        }
-
-        if (params.lon) {
-            this.params.metrics.lng = params.lon;
-        } else {
-            this.params.metrics.lng = null;
-        }
-
-        if (params.speed) {
-            this.params.metrics.speed = params.speed;
-        } else {
-            this.params.metrics.speed = null;
-        }
-
-        if (params.altitude) {
-            this.params.metrics.altitude = params.altitude;
-        } else {
-            this.params.metrics.altitude = null;
-        }
-
-        if (params.last_point_date) {
-            this.params.metrics.date = core.utilities.timestampToDate(params.last_point_date);
-        } else {
-            this.params.metrics.date = null;
-        }
-
-        if (params.heading) {
-            this.params.metrics.heading = params.heading;
-        } else {
-            this.params.metrics.heading = null;
-        }
-
-        if (params.active) {
-            this.params.active = params.active;
-        } else {
-            this.params.active = null;
-        }
-
-        if (params.csq) {
-            this.params.csq = params.csq;
-        } else {
-            this.params.csq = null;
-        }
-
-        if (params.hdop) {
-            this.params.hdop = params.hdop;
-        } else {
-            this.params.hdop = null;
-        }
-
-        if (params.journey) {
-            this.params.journey = params.journey;
-        } else {
-            this.params.journey = null;
-        }
-
-        if (params.last_update) {
-            this.params.last_update = core.utilities.timestampToDate(params.last_update);
-        } else {
-            this.params.last_update = null;
-        }
-
-        if (params.online) {
-            this.params.online = params.online;
-        } else {
-            this.params.online = null;
-        }
-
-        if (params.params) {
-            this.params.params = params.params;
-        } else {
-            this.params.params = null;
-        }
-
-        if (params.point_id) {
-            this.params.point_id = params.point_id;
-        } else {
-            this.params.point_id = null;
-        }
-
-        if (params.sat_count) {
-            this.params.sat_count = params.sat_count;
-        } else {
-            this.params.sat_count = null;
-        }
-
-        if (this.params.metrics.lat && this.params.metrics.lng) {
-            this.params.has_metrics = true;
-        } else {
-            this.params.has_metrics = false;
-        }
-
-        this.pos_marker.updateMetrics(this.params.metrics);
-    };
-
-    this.createPosMarker = function () {
-        this.pos_marker = new PosMarker({
-            metrics: {
-                date: this.params.last_point_date
-            },
-            draw: false,
-            car_id: this.params.id,
-            car_label: true,
-            car_label_data: {
-                name: this.params.name,
-                g_id: this.params.g_id
-            },
-            focus_on_click: true,
-            on_click: function (e) {
-                //console.log(e)
-            }
-        });
-    };
-
-    this.loadPathPoints = function (last_point_id, callback) {
-        if ((last_point_id || last_point_id === false) && this.params.id && MC.Data.date) {
-            var t = this;
-
-            $.ajax({
-                url: '/control/map/?ajax',
-                data: {
-                    action: 'getPoints',
-                    date: core.utilities.tmToDate(MC.Data.date),
-                    device_id: this.params.id,
-                    last_point_id: last_point_id
-                },
-                dataType: 'json',
-                type: 'get',
-                beforeSend: function () {
-                    core.loading.setGlobalLoading('Car.' + t.params.id + '.loadPathData');
-                },
-                success: function (data) {
-                    core.loading.unsetGlobalLoading('Car.' + t.params.id + '.loadPathData');
-
-                    if (callback) {
-                        callback(data)
-                    }
-                },
-                error: function () {
-                    core.loading.unsetGlobalLoading('Car.' + t.params.id + '.loadPathData');
-                    MC.Data.error(); // TODO: Сделать ajaxError() в core.ui
-                }
-            });
-        }
-    };
-
-    this.getPathPoints = function (callback) {
-        if (!this.params.point_id || this.params.point_id <= 0) {
-            return;
-        }
-
-        // Get from server (new data)
-        if (this.params.last_path_point_id === null || this.params.point_id > this.params.last_path_point_id) {
-            var last_point_id;
-
-            if (this.params.last_path_point_id === null) {
-                last_point_id = false;
-            } else {
-                last_point_id = this.params.last_path_point_id;
-            }
-
-            this.loadPathPoints(last_point_id, function (data) {
-                if (callback) {
-                    callback(data);
-                }
-            })
-        } else {
-            if (callback) {
-                callback([]);
-            }
-        }
-    };
-
-    this.drawPath = function (callback) {
-        var t = this;
-
-        this.getPathPoints(function (data) {
-            t.params.path_points = t.params.path_points.concat(data);
-
-            if (t.params.path_points[t.params.path_points.length - 1]) {
-                t.params.last_path_point_id = t.params.path_points[t.params.path_points.length - 1].id;
-            }
-
-            var points = [];
-
-            for (var i = 0, l = data.length; i < l; i++) {
-                points.push(new L.latLng(data[i].lat, data[i].lon));
-            }
-
-            if (t.path === null) {
-                t.path = new Path({
-                    options: {
-                        color: '#222',
-                        opacity: 0.55,
-                        weight: 4
-                    },
-                    points: points
-                });
-
-                MC.View.focusOnPath();
-            } else {
-                t.path.addPoints(points);
-            }
-
-            t.path.draw();
-
-            if (callback) {
-                callback();
-            }
-        });
-    };
-
-    this.removePath = function () {
-        if (this.path) {
-            this.path.remove();
-        }
-    };
-
-    this.focusOnPath = function () {
-        if (this.path) {
-            this.path.focus();
-        }
-    };
-
-    this.draw = function () {
-        this.pos_marker.draw();
-        this.params.on_map = true;
-    };
-
-    this.remove = function () {
-        this.pos_marker.remove();
-        this.params.on_map = false;
-    };
-
-    this.focus = function () {
-        this.pos_marker.focus();
     };
 
     /* Init actions */
