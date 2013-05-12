@@ -261,10 +261,6 @@ core.loading = {
 };
 
 core.utilities = {
-    calculateFLSlevel: function(volts, capacity, type){
-        return volts;
-    },
-
     hexDec: function(hex_string){
         hex_string = (hex_string + '').replace(/[^a-f0-9]/gi, '');
         return parseInt(hex_string, 16);
@@ -786,6 +782,10 @@ core.utilities = {
         }
 
         return '<span class="signal-indicator" title="GPS: ' + hdop.level_name + sats + '"><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
+    },
+
+    calculateFLSLevel: function(volts, capacity, type){
+        return volts;
     },
 
     getFuelIndicator: function (current_percent, total_liters, width_100_percent) {

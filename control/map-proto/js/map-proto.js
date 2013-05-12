@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- *  View implementation
+ *  View realisation
  **/
 var View = function () {
     /* Class constructor */
@@ -388,7 +388,7 @@ var View = function () {
 };
 
 /**
- *  Data implementation
+ *  Data realisation
  **/
 var Data = function () {
     /* Class params */
@@ -614,7 +614,7 @@ var Data = function () {
         for (var i = 0, l = this.current_cars.length; i < l; i++) {
             var car = this.getCarById(this.current_cars[i]);
 
-            if (car.params.has_metrics && !car.params.on_map) {
+            if (car.params.has_metrics === true && car.params.on_map !== true) {
                 car.draw();
                 this.cars_on_map++;
             }

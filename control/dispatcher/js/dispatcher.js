@@ -6,10 +6,30 @@
 var DCar = function (params) {
     /* Instances */
     this.instance_map = null;
-    this.pos_marker = null;
 
     this.params = {
+        /* Extendable */
+        metrics: {},
+        active: null,
+        color: null,
+        fleet_id: null,
+        fleet_name: null,
+        g_id: null,
+        id: null,
+        imei: null,
+        last_point_date: null,
+        last_path_point_id: null,
+        last_update: null,
+        make: null,
+        model: null,
+        name: null,
+        online: null,
+        point_id: null,
+        sat_count: null,
+        extensions: null,
 
+        popup: false,
+        car_label: false
     };
 
     $.extend(true, this.params, params);
@@ -38,7 +58,7 @@ var DCar = function (params) {
 };
 
 /**
- *  View implementation
+ *  View realisation
  **/
 var View = function () {
     /* Class constructor */
@@ -62,17 +82,18 @@ var View = function () {
             var c = MC.Data.cars[i];
 
             html += '<div class="brick">' +
-                        '<div class="item" id="item_' + c.id + '" data-id="' + c.id + '">' +
-                        '<div class="head">' +
-                        '<h2>' + c.name + '</h2>' +
-                        '<div class="make_model">' + c.make + ' ' + c.model + '</div>' +
-                        core.utilities.drawGId(c.g_id) +
-                        '</div>' +
+                '<div class="item" id="item_' + c.id + '" data-id="' + c.id + '">' +
+                '<div class="head">' +
+                '<h2>' + c.name + '</h2>' +
+                '<div class="make_model">' + ((c.make) ? c.make : '') + ' ' + ((c.model) ? c.model : '') + '</div>' +
+                core.utilities.drawGId(c.g_id) +
+                '</div>' +
 
-                        '<div class="map" id="car-map-{$item.id}">' +
+                '<div class="map" id="car-map-' + c.id + '">' +
 
-                        '</div>' +
-                    '</div>';
+                '</div>' +
+                '</div>' +
+                '</div>';
         }
 
         $('.dispatcher').html(html);
@@ -125,15 +146,21 @@ var View = function () {
 };
 
 /**
- *  Data implementation
+ *  Data realisation
  **/
 var Data = function () {
     this.cars = [];
     this.fleets = [];
+    this.current_cars = [];
+    this.auto_renew_blocker = false;
 
     /* Class constructor */
     this.__construct = function () {
         this.getUserFleetsAndDevices();
+
+        core.ticker.addIntervalMethod(function () {
+            MC.Data.autoRenewStack();
+        });
     };
 
     /* Get car by id from loaded data */
@@ -152,20 +179,21 @@ var Data = function () {
 
     /* Draw cars */
     this.drawCars = function () {
-        for (var i = 0, l = this.current_cars.length; i < l; i++) {
-            var car = this.getCarById(this.current_cars[i]);
+        for (var i = 0, l = this.cars.length; i < l; i++) {
+            if (this.cars[i].params.has_metrics && !this.cars[i].params.on_map) {
+                this.cars[i].draw();
+            }
 
-            if (car.params.has_metrics && !car.params.on_map) {
-                car.draw();
-                this.cars_on_map++;
+            if (this.cars[i].params.has_metrics === true && this.cars[i].params.on_map === true) {
+                this.cars[i].focus();
+            }else{
+                // Todo: Set no marker action
             }
         }
     };
 
     /* Remove cars from a map */
     this.removeCars = function () {
-        this.cars_on_map = 0;
-
         for (var i = 0, l = this.cars.length; i < l; i++) {
             this.cars[i].remove();
         }
@@ -173,16 +201,32 @@ var Data = function () {
 
     /* Postprocess cars and fleets data loader */
     this.processLoadedData = function (data) {
+        this.current_cars = [];
+
         this.cars = data.devices;
         this.fleets = data.fleets;
 
+        for (var i = 0, l = this.cars.length; i < l; i++) {
+            this.current_cars.push(this.cars[i].id);
+        }
+
         MC.View.drawCarsGrid();
 
-        //this.createCarsObjects();
-        //this.drawCars();
+        this.createCarsObjects();
+        this.loadDynamicCarsData(true);
     };
 
-    /* Methods */
+    /* Merge cars data */
+    this.mergeCarsData = function (data) {
+        if (data) {
+            for (var i = 0, l = data.length; i < l; i++) {
+                var car = this.getCarById(data[i].id);
+
+                car.updateParams(data[i]);
+            }
+        }
+    };
+
     //Load fleets and their cars data
     this.getUserFleetsAndDevices = function () {
         $.ajax({
@@ -198,7 +242,6 @@ var Data = function () {
             },
             success: function (data) {
                 core.loading.unsetGlobalLoading('getUserFleetsAndDevices');
-
                 MC.Data.processLoadedData(data);
             },
             error: function () {
@@ -207,6 +250,61 @@ var Data = function () {
             }
         });
     };
+
+    /* Get cars metrics */
+    this.loadDynamicCarsData = function (firstload) {
+        if (this.current_cars.length <= 0) {
+            return;
+        }
+
+        $.ajax({
+            url: '/control/map/?ajax&action=getDynamicDevicesData&date=' + core.utilities.tmToDate(new Date()),
+            data: {
+                cars: JSON.stringify(this.current_cars),
+                tm_flag: '0'
+            },
+            dataType: 'json',
+            type: 'post',
+            beforeSend: function () {
+                /*  Если запрос был на обновление данных, а не на первичную загрузку -
+                 отключем на время загрузки данных автообновление,
+                 чтобы не было ситуации, когда маркеров на карте нет,
+                 а функция обновления запускается */
+                if (firstload === true) {
+                    // Не показываем глобал лоадинг, если запрос был на обновление данных
+                    core.loading.setGlobalLoading('loadDynamicCarsData');
+                    MC.Data.auto_renew_blocker = false;
+                }
+            },
+            success: function (data) {
+                MC.Data.auto_renew_blocker = false;
+
+                if (firstload === true) {
+                    core.loading.unsetGlobalLoading('loadDynamicCarsData');
+                }
+
+                /*  Если запрос был на обновление данных, а не на первечную загрузку -
+                 включаем автообновление */
+                MC.Data.mergeCarsData(data);
+                MC.Data.drawCars();
+            },
+            error: function () {
+                MC.Data.auto_renew_blocker = false;
+
+                if (firstload === true) {
+                    core.loading.unsetGlobalLoading('loadDynamicCarsData');
+                }
+
+                MC.Data.error();
+            }
+        });
+    };
+
+    this.autoRenewStack = function () {
+        if (this.auto_renew_blocker !== true) {
+            MC.Data.loadDynamicCarsData(false);
+        }
+    }
 
     /* Show an loading error */
     this.error = function () {

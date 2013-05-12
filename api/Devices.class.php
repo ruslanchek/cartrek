@@ -186,13 +186,6 @@ Class Devices extends Core
             $date_start = date("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
             $date_end = date("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
 
-            // TODO: Chack this algorhythm
-            if ($tm_flag == '1') {
-                $t_fn = 'min';
-            } else {
-                $t_fn = 'max';
-            }
-
             $query = "
                     SELECT
                         `d`.`id`,
@@ -203,22 +196,9 @@ Class Devices extends Core
                         `d`.`online`,
                         `d`.`params`,
                         `d`.`sat_count`,
-                        CONVERT_TZ(`d`.`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`,
-                        ".$t_fn."(CONVERT_TZ(`t`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `last_point_date`,
-                        `t`.`id` AS `point_id`,
-                        `t`.`lat`,
-                        `t`.`lon`,
-                        `t`.`speed`,
-                        `t`.`heading`,
-                        `t`.`altitude`
+                        CONVERT_TZ(`d`.`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`
                     FROM
                         `devices` `d`
-                    LEFT JOIN
-                        `tracks` `t`
-                    ON
-                        `t`.`device_id` = `d`.`id` &&
-                        `t`.`datetime` >= CONVERT_TZ('" . $date_start . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') &&
-                        `t`.`datetime` <= CONVERT_TZ('" . $date_end . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')
                     WHERE
                         `d`.`user_id` = " . intval($this->auth->user['data']['id']) . " &&
                         `d`.`id` IN (" . $in . ") &&
@@ -228,6 +208,40 @@ Class Devices extends Core
                 ";
 
             $devices = $this->db->assocMulti($query);
+
+            if ($tm_flag == '1') {
+                $order = 'ASC';
+            } else {
+                $order = 'DESC';
+            }
+
+            for ($i = 0, $l = count($devices); $i < $l; $i++) {
+                $query = "
+                        SELECT
+                            CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_point_date`,
+                            `tracks`.`id` AS `point_id`,
+                            `tracks`.`lat`,
+                            `tracks`.`lon`,
+                            `tracks`.`speed`,
+                            `tracks`.`heading`,
+                            `tracks`.`altitude`
+                        FROM
+                            `tracks`
+                        WHERE
+                            `tracks`.`device_id` = " . intval($devices[$i]['id']) . " &&
+                            `tracks`.`datetime` >= CONVERT_TZ('" . $date_start . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') &&
+                            `tracks`.`datetime` <= CONVERT_TZ('" . $date_end . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')
+                        ORDER BY
+                            `tracks`.`datetime` " . $order . "
+                        LIMIT 1
+                    ";
+
+                $track = $this->db->assocItem($query);
+
+                if ($track) {
+                    $devices[$i] = array_merge($devices[$i], $track);
+                }
+            }
 
             return $devices;
         }
@@ -302,7 +316,7 @@ Class Devices extends Core
                     `altitude`,
                     `csq`,
                     `hdop`,
-                    CONVERT_TZ(`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `date`
+                    max(CONVERT_TZ(`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `date`
                 FROM
                     `tracks`
                 WHERE
@@ -310,8 +324,6 @@ Class Devices extends Core
                     " . $date_related_where . "
                 ORDER BY
                     `datetime` DESC
-                LIMIT
-                    1
             ";
 
         return $this->db->assocItem($query);

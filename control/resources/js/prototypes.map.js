@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- *  Map implementation
+ *  Map realisation
  **/
 var Map = function (params) {
     /* Class params */
@@ -149,7 +149,7 @@ var Map = function (params) {
 };
 
 /**
- *  Marker implementation
+ *  Marker abstraction
  **/
 var Marker = function (params, instance_map) {
     /* Class params */
@@ -595,7 +595,7 @@ var WpMarker = function (params, instance_map) {
 };
 
 /**
- *  Path implementation
+ *  Path realisation
  **/
 var Path = function (params, instance_map) {
     this.instance = null;
@@ -666,7 +666,7 @@ var Path = function (params, instance_map) {
 };
 
 /**
- *  Car implementation
+ *  Car realisation
  **/
 var Car = function (params, instance_map) {
     /* Instances */
@@ -682,6 +682,8 @@ var Car = function (params, instance_map) {
         /* Standart */
         on_map: false,
         has_metrics: false,
+        car_label: true,
+        popup: true,
 
         /* Extendable */
         metrics: {},
@@ -713,6 +715,7 @@ var Car = function (params, instance_map) {
     /* Class constructor */
     this.__construct = function () {
         // Prepare date
+        this.params.last_update = core.utilities.timestampToDate(this.params.last_update);
         this.params.last_point_date = core.utilities.timestampToDate(this.params.last_point_date);
 
         // Prepare extensions
@@ -727,13 +730,14 @@ var Car = function (params, instance_map) {
 
     /* Methods */
     this.updateParams = function (params) {
-        if (params.lat || params.lat === 0) {
+
+        if (params.lat) {
             this.params.metrics.lat = params.lat;
         } else {
             this.params.metrics.lat = null;
         }
 
-        if (params.lon || params.lng === 0) {
+        if (params.lon) {
             this.params.metrics.lng = params.lon;
         } else {
             this.params.metrics.lng = null;
@@ -804,7 +808,7 @@ var Car = function (params, instance_map) {
             (this.params.metrics.params.inputs[this.params.extensions.fls.input_index] || this.params.metrics.params.inputs[this.params.extensions.fls.input_index] == 0)
         ) {
             this.params.metrics.params.fls = true;
-            this.params.metrics.params.fuel = core.utilities.calculateFLSlevel(core.utilities.hexDec(this.params.metrics.params.inputs[this.params.extensions.fls.input_index]), this.params.extensions.fls.fuel_tank_capacity, this.params.extensions.fls.type);
+            this.params.metrics.params.fuel = core.utilities.calculateFLSLevel(this.params.metrics.params.inputs[this.params.extensions.fls.input_index], this.params.extensions.fls.fuel_tank_capacity, this.params.extensions.fls.type);
             this.params.metrics.params.fuel_tank_capacity = this.params.extensions.fls.fuel_tank_capacity;
         } else if(this.params.metrics.params != null) {
             this.params.metrics.params.fls = false;
@@ -839,6 +843,12 @@ var Car = function (params, instance_map) {
             this.params.last_update = null;
         }
 
+        if (params.last_point_date) {
+            this.params.last_point_date = core.utilities.timestampToDate(params.last_point_date);
+        } else {
+            this.params.last_point_date = null;
+        }
+
         if (params.point_id) {
             this.params.point_id = params.point_id;
         } else {
@@ -857,7 +867,9 @@ var Car = function (params, instance_map) {
             this.params.has_metrics = false;
         }
 
-        this.pos_marker.updateMetrics(this.params.metrics);
+        if(this.pos_marker){
+            this.pos_marker.updateMetrics(this.params.metrics);
+        }
     };
 
     this.createPosMarker = function () {
@@ -867,7 +879,8 @@ var Car = function (params, instance_map) {
             },
             draw: false,
             car_id: this.params.id,
-            car_label: true,
+            car_label: this.params.car_label,
+            popup: this.params.popup,
             car_label_data: {
                 name: this.params.name,
                 g_id: this.params.g_id,
