@@ -609,6 +609,20 @@ var Data = function () {
         }
     };
 
+    /* Draw cars */
+    this.drawCars = function () {
+        for (var i = 0, l = this.current_cars.length; i < l; i++) {
+            var car = this.getCarById(this.current_cars[i]);
+
+            if (car.params.has_metrics && !car.params.on_map) {
+                car.draw();
+                this.cars_on_map++;
+            }
+        }
+
+        this.presenceStatusAndMessages();
+    };
+
     /* Remove cars from a map */
     this.removeCars = function () {
         this.cars_on_map = 0;
@@ -682,20 +696,6 @@ var Data = function () {
             }
         }
     }
-
-    /* Draw cars */
-    this.drawCars = function () {
-        for (var i = 0, l = this.current_cars.length; i < l; i++) {
-            var car = this.getCarById(this.current_cars[i]);
-
-            if (car.params.has_metrics && !car.params.on_map) {
-                car.draw();
-                this.cars_on_map++;
-            }
-        }
-
-        this.presenceStatusAndMessages();
-    };
 
     /* Get cars metrics */
     this.loadDynamicCarsData = function (firstload) {
