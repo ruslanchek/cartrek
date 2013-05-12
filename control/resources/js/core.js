@@ -261,6 +261,15 @@ core.loading = {
 };
 
 core.utilities = {
+    calculateFLSlevel: function(volts, capacity, type){
+        return volts;
+    },
+
+    hexDec: function(hex_string){
+        hex_string = (hex_string + '').replace(/[^a-f0-9]/gi, '');
+        return parseInt(hex_string, 16);
+    },
+
     formatPhoneStr: function (str, code) {
         var C = str.replace(/[^0-9xX]/g, ""),
             B = "";
@@ -818,13 +827,19 @@ core.utilities = {
         return '<span class="signal-indicator" style="'+style+'" title="' + current_percent + '% из ' + total_liters + ' л"><span class="' + level_class + '" style="width: ' + current_percent + '%"></span></span>';
     },
 
-    getVoltsIndicator: function (v) {
+    getVoltsIndicator: function (v, warning_value) {
         if (v || parseFloat(v) === 0) {
             var t = v.toFixed(2) + ' В',
                 html = '';
 
-            if (v > 0) {
+            if(!warning_value){
+                warning_value = v + 1;
+            }
+
+            if (v > 0 && v >= warning_value) {
                 html = '<div class="success">' + t + '</div>';
+            }else if (v < warning_value && v > 0){
+                html = '<div class="yellow">' + t + '</div>';
             } else {
                 html = '<div class="error">0 В</div>';
             }

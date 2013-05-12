@@ -35,16 +35,27 @@ var Car = function (params) {
         online: null,
         point_id: null,
         sat_count: null,
+        extensions: null,
+        params: null,
 
         /* Storage */
-        path_points: []
+        path_points: [],
+        time_machine_data: []
     };
 
     $.extend(true, this.params, params);
 
     /* Class constructor */
     this.__construct = function () {
+        // Prepare date
         this.params.last_point_date = core.utilities.timestampToDate(this.params.last_point_date);
+
+        // Prepare extensions
+        try {
+            this.params.extensions = JSON.parse(params.extensions);
+        } catch (e) {
+            this.params.extensions = null;
+        }
 
         this.createPosMarker();
     };
@@ -114,16 +125,40 @@ var Car = function (params) {
         if (params.params) {
             try {
                 this.params.metrics.params = JSON.parse(params.params);
-                // TODO: make this!
-                this.params.metrics.params.fls = true;
-                this.params.metrics.params.fuel = 33;
-                this.params.metrics.params.fuel_tank_capacity = 65;
-            } catch(e) {
+            } catch (e) {
                 this.params.metrics.params = null;
             }
 
         } else {
             this.params.metrics.params = null;
+        }
+
+        // Prepare FLS data
+        // TODO: make this!
+        if (
+            this.params.extensions !== null &&
+            this.params.extensions.fls &&
+            this.params.extensions.fls.active === true &&
+            (this.params.extensions.fls.input_index || this.params.extensions.fls.input_index == 0) &&
+            this.params.extensions.fls.type &&
+            this.params.metrics.params.input &&
+            (this.params.metrics.params.input[this.params.extensions.fls.input_index] || this.params.metrics.params.input[this.params.extensions.fls.input_index] == 0)
+        ) {
+            this.params.metrics.params.fls = true;
+            this.params.metrics.params.fuel = core.utilities.calculateFLSlevel(core.utilities.hexDec(this.params.metrics.params.input[this.params.extensions.fls.input_index]), this.params.extensions.fls.fuel_tank_capacity, this.params.extensions.fls.type);
+            this.params.metrics.params.fuel_tank_capacity = this.params.extensions.fls.fuel_tank_capacity;
+        } else {
+            this.params.metrics.params.fls = false;
+            this.params.metrics.params.fuel = null;
+            this.params.metrics.params.fuel_tank_capacity = null;
+        }
+
+        if (this.params.extensions !== null && this.params.extensions.power_bat_normal_level) {
+            this.params.metrics.params.power_bat_normal_level = this.params.extensions.power_bat_normal_level;
+        }
+
+        if (this.params.extensions !== null && this.params.extensions.power_inp_normal_level) {
+            this.params.metrics.params.power_inp_normal_level = this.params.extensions.power_inp_normal_level;
         }
 
         if (params.active) {
@@ -1185,6 +1220,6 @@ var MC = {
     }
 };
 
-$(function(){
+$(function () {
     MC.init();
 });

@@ -95,7 +95,7 @@ Class Devices extends Core
 
         $query = "
                 SELECT
-                    MIN(CONVERT_TZ(`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `date`
+                    min(CONVERT_TZ(`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `date`
                 FROM
                     `tracks`
                 WHERE
@@ -119,42 +119,47 @@ Class Devices extends Core
     public function getUserDevices($include_unactive = false)
     {
         if ($include_unactive) {
-            $addition = " && `devices`.`activated` = 1";
+            $addition = " && `d`.`activated` = 1";
         } else {
-            $addition = " && `devices`.`active` = 1 && `devices`.`activated` = 1";
+            $addition = " && `d`.`active` = 1 && `d`.`activated` = 1";
         }
 
         if (isset($_GET['fleet']) && $_GET['fleet'] >= 1) {
-            $addition .= " && `devices`.`fleet_id` = " . intval($_GET['fleet']);
+            $addition .= " && `d`.`fleet_id` = " . intval($_GET['fleet']);
         }
 
         $query = "
                 SELECT
-                	`devices`.`id`,
-                	`devices`.`imei`,
-                	`devices`.`name`,
-                	`devices`.`model`,
-                	`devices`.`make`,
-                	`devices`.`online`,
-                	`devices`.`g_id`,
-                	`devices`.`color`,
-                	`devices`.`active`,
-                	`devices`.`fleet_id`,
-                	CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`,
-                	`fleets`.`name` AS `fleet_name`,
-                	max(CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `last_point_date`
+                	`d`.`id`,
+                	`d`.`imei`,
+                	`d`.`name`,
+                	`d`.`model`,
+                	`d`.`make`,
+                	`d`.`online`,
+                	`d`.`g_id`,
+                	`d`.`color`,
+                	`d`.`active`,
+                	`d`.`fleet_id`,
+                	`d`.`extensions`,
+                	CONVERT_TZ(`d`.`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`,
+                	`f`.`name` AS `fleet_name`,
+                	max(CONVERT_TZ(`t`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `last_point_date`
                 FROM
-                	`devices`
+                	`devices` `d`
                 LEFT JOIN
-                    `fleets` ON `devices`.`fleet_id` = `fleets`.`id` && `fleets`.`user_id` = " . intval($this->auth->user['data']['id']) /*. $addition TODO: What it motherfucking means??? What the hell are addition does here? */ . "
+                    `fleets` `f`
+                ON
+                    `d`.`fleet_id` = `f`.`id` && `f`.`user_id` = " . intval($this->auth->user['data']['id']) /*. $addition TODO: What it motherfucking means??? What the hell are addition does here? */ . "
                 LEFT JOIN
-                    `tracks` ON `tracks`.`device_id` = `devices`.`id`
+                    `tracks` `t`
+                ON
+                    `t`.`device_id` = `d`.`id`
                 WHERE
-                	`devices`.`user_id` = " . intval($this->auth->user['data']['id']) . $addition . "
+                	`d`.`user_id` = " . intval($this->auth->user['data']['id']) . $addition . "
                 GROUP BY
-                	`devices`.`id`
+                	`d`.`id`
                 ORDER BY
-                	`devices`.`sort` ASC
+                	`d`.`sort` ASC
             ";
 
         $devices = $this->db->assocMulti($query);
@@ -181,62 +186,48 @@ Class Devices extends Core
             $date_start = date("Y-m-d H-i-s", mktime(0, 0, 0, $m, $d, $y));
             $date_end = date("Y-m-d H-i-s", mktime(23, 59, 59, $m, $d, $y));
 
+            // TODO: Chack this algorhythm
+            if ($tm_flag == '1') {
+                $t_fn = 'min';
+            } else {
+                $t_fn = 'max';
+            }
+
             $query = "
                     SELECT
-                        `devices`.`id`,
-                        `devices`.`hdop`,
-                        `devices`.`csq`,
-                        `devices`.`journey`,
-                        `devices`.`active`,
-                        `devices`.`online`,
-                        `devices`.`params`,
-                        `devices`.`sat_count`,
-                        CONVERT_TZ(`devices`.`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`
+                        `d`.`id`,
+                        `d`.`hdop`,
+                        `d`.`csq`,
+                        `d`.`journey`,
+                        `d`.`active`,
+                        `d`.`online`,
+                        `d`.`params`,
+                        `d`.`sat_count`,
+                        CONVERT_TZ(`d`.`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`,
+                        ".$t_fn."(CONVERT_TZ(`t`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `last_point_date`,
+                        `t`.`id` AS `point_id`,
+                        `t`.`lat`,
+                        `t`.`lon`,
+                        `t`.`speed`,
+                        `t`.`heading`,
+                        `t`.`altitude`
                     FROM
-                        `devices`
+                        `devices` `d`
+                    LEFT JOIN
+                        `tracks` `t`
+                    ON
+                        `t`.`device_id` = `d`.`id` &&
+                        `t`.`datetime` >= CONVERT_TZ('" . $date_start . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') &&
+                        `t`.`datetime` <= CONVERT_TZ('" . $date_end . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')
                     WHERE
-                        `devices`.`user_id` = " . intval($this->auth->user['data']['id']) . " &&
-                        `devices`.`id` IN (" . $in . ") &&
-                        `devices`.`activated` = 1
+                        `d`.`user_id` = " . intval($this->auth->user['data']['id']) . " &&
+                        `d`.`id` IN (" . $in . ") &&
+                        `d`.`activated` = 1
                     GROUP BY
-                        `devices`.`id`
+                        `d`.`id`
                 ";
 
             $devices = $this->db->assocMulti($query);
-
-            if ($tm_flag == '1') {
-                $order = 'ASC';
-            } else {
-                $order = 'DESC';
-            }
-
-            for ($i = 0, $l = count($devices); $i < $l; $i++) {
-                $query = "
-                        SELECT
-                        	CONVERT_TZ(`tracks`.`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_point_date`,
-                        	`tracks`.`id` AS `point_id`,
-                        	`tracks`.`lat`,
-                        	`tracks`.`lon`,
-                        	`tracks`.`speed`,
-                        	`tracks`.`heading`,
-                        	`tracks`.`altitude`
-                        FROM
-                        	`tracks`
-                        WHERE
-                        	`tracks`.`device_id` = " . intval($devices[$i]['id']) . " &&
-                        	`tracks`.`datetime` >= CONVERT_TZ('" . $date_start . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') &&
-                        	`tracks`.`datetime` <= CONVERT_TZ('" . $date_end . "', 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')
-                        ORDER BY
-                        	`tracks`.`datetime` " . $order . "
-                        LIMIT 1
-                    ";
-
-                $track = $this->db->assocItem($query);
-
-                if ($track) {
-                    $devices[$i] = array_merge($devices[$i], $track);
-                }
-            }
 
             return $devices;
         }
@@ -270,6 +261,8 @@ Class Devices extends Core
                     `journey`,
                     `active`,
                     `online`,
+                    `extensions`,
+                    `params`,
                     CONVERT_TZ(`last_update`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "') AS `last_update`
                 FROM
                     `devices`

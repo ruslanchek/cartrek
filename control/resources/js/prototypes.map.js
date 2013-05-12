@@ -286,6 +286,11 @@ var Marker = function (params) {
             data_changed = true;
         }
 
+        if (metrics.hdop) {
+            this.params.metrics.hdop = metrics.hdop;
+            data_changed = true;
+        }
+
         // TODO: Сделать проверку объектов, чтобы лишний раз не вызывалось renewPopouHtml()
         if (metrics.params) {
             this.params.metrics.params = metrics.params;
@@ -453,12 +458,12 @@ var PosMarker = function (params) {
                 html += '<tr><th>Координаты Ш/Д</th><td>' + this.params.metrics.lat + '&deg;</td><td> ' + this.params.metrics.lng + '&deg;</td></tr>';
             }
 
-            if (this.params.metrics && this.params.metrics.params && (this.params.metrics.params.power_inp || this.params.metrics.params.power_inp === 0)) {
-                html += '<tr><th>Бортовое питание</th><td colspan="2">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_inp) + '</td></tr>';
+            if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.power_inp_normal_level && (this.params.metrics.params.power_inp || this.params.metrics.params.power_inp === 0)) {
+                html += '<tr><th>Бортовое питание</th><td colspan="2">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_inp, this.params.metrics.params.power_inp_normal_level) + '</td></tr>';
             }
 
-            if (this.params.metrics && this.params.metrics.params && (this.params.metrics.params.power_bat || this.params.metrics.params.power_bat === 0)) {
-                html += '<tr><th>Батарея терминала</th><td colspan="2">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_bat) + '</td></tr>';
+            if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.power_bat_normal_level && (this.params.metrics.params.power_bat || this.params.metrics.params.power_bat === 0)) {
+                html += '<tr><th>Батарея терминала</th><td colspan="2">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_bat, this.params.metrics.params.power_bat_normal_level) + '</td></tr>';
             }
 
             if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.fls === true && (this.params.metrics.params.fuel || this.params.metrics.params.fuel === 0)) {
