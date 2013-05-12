@@ -7,6 +7,8 @@ var Map = function (params) {
     /* Class params */
     this.instance = null;
     this.busy = false;
+    this.busy_by_popup = false;
+
     this.params = {
         zoom: 4,
         zoom_geoposition: 10,
@@ -62,20 +64,39 @@ var Map = function (params) {
         });
 
         this.instance.on('dragend', function (e) {
-            t.busy = false;
+            if(this.busy_by_popup !== true){
+                t.busy = false;
+            }
 
             $.cookie('map-lat', t.instance.getCenter().lat, core.options.cookie_options);
             $.cookie('map-lng', t.instance.getCenter().lng, core.options.cookie_options);
         });
 
         this.instance.on('zoomend', function () {
-            t.busy = false;
+            if(this.busy_by_popup !== true){
+                t.busy = false;
+            }
 
             $.cookie('map-zoom', t.instance.getZoom(), core.options.cookie_options);
         });
 
         this.instance.on('zoomstart', function () {
             t.busy = true;
+        });
+
+        this.instance.on('popupopen', function () {
+            t.busy = true;
+
+            if(MC && MC.Data && MC.Data.current_car && MC.Data.auto_focus){
+                this.busy_by_popup = false;
+            }else{
+                this.busy_by_popup = true;
+            }
+        });
+
+        this.instance.on('popupclose', function () {
+            t.busy = false;
+            this.busy_by_popup = false;
         });
 
         /*this.instance.on('zoomstart', function () {
@@ -87,7 +108,9 @@ var Map = function (params) {
          });
 
          this.instance.on('moveend', function () {
-         t.busy = false;
+            if(this.busy_by_popup !== true){
+                 t.busy = false;
+             }
          });*/
     };
 
@@ -105,12 +128,20 @@ var Map = function (params) {
         this.instance.panTo(new L.LatLng(lat, lng));
     };
 
-    this.zoom = function (zoom) {
+    this.setZoom = function (zoom) {
         this.instance.setZoom(zoom);
     };
 
     this.fitBounds = function (bounds) {
         this.instance.fitBounds(bounds);
+    };
+
+    this.addLayer = function(layer){
+        this.instance.addLayer(layer);
+    };
+
+    this.removeLayer = function(layer){
+        this.instance.removeLayer(layer);
     };
 
     /* Init actions */
@@ -120,10 +151,12 @@ var Map = function (params) {
 /**
  *  Marker implementation
  **/
-var Marker = function (params) {
+var Marker = function (params, instance_map) {
     /* Class params */
     //this.layer = null;
     this.instance = null;
+    this.instance_map = instance_map;
+
     this.params = {
         metrics: {
             lat: 0,
@@ -145,6 +178,7 @@ var Marker = function (params) {
             zIndexOffset: 1,
             title: ''
         },
+        popup: true,
         car_id: null,
         focus_on_click: false,
         on_click: null,
@@ -177,6 +211,10 @@ var Marker = function (params) {
         if (this.params.draw === true) {
             this.draw();
         }
+
+        if(this.params.popup === true){
+            this.setPopup();
+        }
     };
 
     /* Abstraction */
@@ -189,7 +227,8 @@ var Marker = function (params) {
     this.setPopup = function () {
         this.instance.bindPopup(this.getPopupHtml(), {
             maxWidth: 350,
-            minWidth: 200
+            minWidth: 200,
+            autoPanPadding: new L.Point(80, 80)
         });
     };
 
@@ -201,15 +240,15 @@ var Marker = function (params) {
 
     /* Draw marker on a map */
     this.draw = function () {
-        if (MC.Map.instance) {
-            MC.Map.instance.addLayer(this.instance);
+        if (this.instance_map) {
+            this.instance_map.addLayer(this.instance);
         }
     };
 
     /* Remove marker from a map */
     this.remove = function () {
-        if (MC.Map.instance) {
-            MC.Map.instance.removeLayer(this.instance);
+        if (this.instance_map) {
+            this.instance_map.removeLayer(this.instance);
         }
     };
 
@@ -226,8 +265,9 @@ var Marker = function (params) {
 
     /* Pan to a marker */
     this.focus = function () {
-        if (this.params && MC.Map.instance) {
-            MC.Map.instance.panTo(this.instance.getLatLng());
+        if (this.instance_map) {
+            var lat_lng = this.instance.getLatLng();
+            this.instance_map.panTo(lat_lng.lat, lat_lng.lng);
         }
     };
 
@@ -251,7 +291,7 @@ var Marker = function (params) {
             data_changed = true;
         }
 
-        if (metrics.heading && this.params.metrics.heading != metrics.heading) {
+        if (this.params.metrics.heading != metrics.heading) {
             this.params.metrics.heading = metrics.heading;
 
             if (this.setHeadingIcon) {
@@ -261,32 +301,27 @@ var Marker = function (params) {
             data_changed = true;
         }
 
-        if (metrics.speed && this.params.metrics.speed != metrics.speed) {
+        if (this.params.metrics.speed != metrics.speed) {
             this.params.metrics.speed = metrics.speed;
             data_changed = true;
         }
 
-        if (metrics.altitude && this.params.metrics.altitude != metrics.altitude) {
+        if (this.params.metrics.altitude != metrics.altitude) {
             this.params.metrics.altitude = metrics.altitude;
             data_changed = true;
         }
 
-        if (metrics.online) {
+        if (this.params.metrics.online != metrics.online) {
             this.params.metrics.online = metrics.online;
             data_changed = true;
         }
 
-        if (metrics.csq) {
+        if (this.params.metrics.csq != metrics.csq) {
             this.params.metrics.csq = metrics.csq;
             data_changed = true;
         }
 
-        if (metrics.hdop) {
-            this.params.metrics.hdop = metrics.hdop;
-            data_changed = true;
-        }
-
-        if (metrics.hdop) {
+        if (this.params.metrics.hdop != metrics.hdop) {
             this.params.metrics.hdop = metrics.hdop;
             data_changed = true;
         }
@@ -315,7 +350,9 @@ var Marker = function (params) {
 /**
  *  Position marker implementation
  **/
-var PosMarker = function (params) {
+var PosMarker = function (params, instance_map) {
+    this.instance_map = instance_map;
+
     /* Class params */
     this.params = {
         car_label: false,
@@ -336,8 +373,7 @@ var PosMarker = function (params) {
     /* Class constructor */
     this.__construct = function () {
         this.params.options.icon = this.getHeadingIcon();
-        this.__proto__ = new Marker(this.params);
-        this.setPopup();
+        this.__proto__ = new Marker(this.params, instance_map);
     };
 
     /* Methods */
@@ -491,7 +527,9 @@ var PosMarker = function (params) {
 /**
  *  Waypoint marker implementation
  **/
-var WpMarker = function (params) {
+var WpMarker = function (params, instance_map) {
+    this.instance_map = instance_map;
+
     /* Class params */
     this.params = {
         car_data: null,
@@ -559,8 +597,9 @@ var WpMarker = function (params) {
 /**
  *  Path implementation
  **/
-var Path = function (params) {
+var Path = function (params, instance_map) {
     this.instance = null;
+    this.instance_map = instance_map;
 
     /* Class params */
     this.params = {
@@ -588,21 +627,22 @@ var Path = function (params) {
     /* Methods */
     /* Draw path on a map */
     this.draw = function () {
-        if (MC.Map.instance) {
-            MC.Map.instance.addLayer(this.instance);
+        if (this.instance_map) {
+            this.instance_map.addLayer(this.instance);
         }
     };
 
     /* Remove path from a map */
     this.remove = function () {
-        if (MC.Map.instance) {
-            MC.Map.instance.removeLayer(this.instance);
+        if (this.instance_map) {
+            this.instance_map.removeLayer(this.instance);
         }
     };
 
     /* Add path point */
     this.addPoint = function (lat, lng) {
         this.instance.addLatLng(new L.LatLng(lat, lng));
+        // TODO: This woks incorrectly (the points will add randomly to array?) !!!
     };
 
     /* Add path point */
@@ -618,7 +658,351 @@ var Path = function (params) {
 
     /* Fit path bounds on map */
     this.focus = function () {
-        MC.Map.fitBounds(this.instance.getBounds());
+        this.instance_map.fitBounds(this.instance.getBounds());
+    };
+
+    /* Init actions */
+    this.__construct();
+};
+
+/**
+ *  Car implementation
+ **/
+var Car = function (params, instance_map) {
+    /* Instances */
+    if(instance_map){
+        this.instance_map = instance_map;
+    }
+
+    this.pos_marker = null;
+    this.path = null;
+
+    /* Class params */
+    this.params = {
+        /* Standart */
+        on_map: false,
+        has_metrics: false,
+
+        /* Extendable */
+        metrics: {},
+        active: null,
+        color: null,
+        fleet_id: null,
+        fleet_name: null,
+        g_id: null,
+        id: null,
+        imei: null,
+        last_point_date: null,
+        last_path_point_id: null,
+        last_update: null,
+        make: null,
+        model: null,
+        name: null,
+        online: null,
+        point_id: null,
+        sat_count: null,
+        extensions: null,
+
+        /* Storage */
+        path_points: [],
+        time_machine_data: []
+    };
+
+    $.extend(true, this.params, params);
+
+    /* Class constructor */
+    this.__construct = function () {
+        // Prepare date
+        this.params.last_point_date = core.utilities.timestampToDate(this.params.last_point_date);
+
+        // Prepare extensions
+        try {
+            this.params.extensions = JSON.parse(params.extensions);
+        } catch (e) {
+            this.params.extensions = null;
+        }
+
+        this.createPosMarker();
+    };
+
+    /* Methods */
+    this.updateParams = function (params) {
+        if (params.lat || params.lat === 0) {
+            this.params.metrics.lat = params.lat;
+        } else {
+            this.params.metrics.lat = null;
+        }
+
+        if (params.lon || params.lng === 0) {
+            this.params.metrics.lng = params.lon;
+        } else {
+            this.params.metrics.lng = null;
+        }
+
+        if (params.speed || params.speed === 0) {
+            this.params.metrics.speed = params.speed;
+        } else {
+            this.params.metrics.speed = null;
+        }
+
+        if (params.altitude || params.altitude === 0) {
+            this.params.metrics.altitude = params.altitude;
+        } else {
+            this.params.metrics.altitude = null;
+        }
+
+        if (params.last_point_date) {
+            this.params.metrics.date = core.utilities.timestampToDate(params.last_point_date);
+        } else {
+            this.params.metrics.date = null;
+        }
+
+        if (params.heading || params.heading === 0) {
+            this.params.metrics.heading = params.heading;
+        } else {
+            this.params.metrics.heading = null;
+        }
+
+        if (params.online || params.online === 0) {
+            this.params.metrics.online = (params.online == 1) ? true : false;
+        } else {
+            this.params.metrics.online = null;
+        }
+
+        if (params.hdop || params.hdop === 0) {
+            this.params.metrics.hdop = params.hdop;
+        } else {
+            this.params.metrics.hdop = null;
+        }
+
+        if (params.csq || params.csq === 0) {
+            this.params.metrics.csq = params.csq;
+        } else {
+            this.params.metrics.csq = null;
+        }
+
+        if (params.params) {
+            try {
+                this.params.metrics.params = JSON.parse(params.params);
+            } catch (e) {
+                this.params.metrics.params = null;
+            }
+
+        } else {
+            this.params.metrics.params = null;
+        }
+
+        // Prepare FLS data
+        // TODO: make this!
+        if (
+            this.params.extensions !== null &&
+            this.params.extensions.fls &&
+            this.params.extensions.fls.active === true &&
+            (this.params.extensions.fls.input_index || this.params.extensions.fls.input_index == 0) &&
+            this.params.extensions.fls.type &&
+            this.params.metrics.params.inputs &&
+            (this.params.metrics.params.inputs[this.params.extensions.fls.input_index] || this.params.metrics.params.inputs[this.params.extensions.fls.input_index] == 0)
+        ) {
+            this.params.metrics.params.fls = true;
+            this.params.metrics.params.fuel = core.utilities.calculateFLSlevel(core.utilities.hexDec(this.params.metrics.params.inputs[this.params.extensions.fls.input_index]), this.params.extensions.fls.fuel_tank_capacity, this.params.extensions.fls.type);
+            this.params.metrics.params.fuel_tank_capacity = this.params.extensions.fls.fuel_tank_capacity;
+        } else if(this.params.metrics.params != null) {
+            this.params.metrics.params.fls = false;
+            this.params.metrics.params.fuel = null;
+            this.params.metrics.params.fuel_tank_capacity = null;
+        }
+
+        if (this.params.extensions !== null && this.params.extensions.power_bat_normal_level) {
+            this.params.metrics.params.power_bat_normal_level = this.params.extensions.power_bat_normal_level;
+        }
+
+        if (this.params.extensions !== null && this.params.extensions.power_inp_normal_level) {
+            this.params.metrics.params.power_inp_normal_level = this.params.extensions.power_inp_normal_level;
+        }
+
+        if (params.active || params.active === 0) {
+            this.params.active = params.active;
+        } else {
+            this.params.active = null;
+        }
+
+        // TODO: Точно нужна эта херотень???
+        if (params.journey) {
+            this.params.journey = params.journey;
+        } else {
+            this.params.journey = null;
+        }
+
+        if (params.last_update) {
+            this.params.last_update = core.utilities.timestampToDate(params.last_update);
+        } else {
+            this.params.last_update = null;
+        }
+
+        if (params.point_id) {
+            this.params.point_id = params.point_id;
+        } else {
+            this.params.point_id = null;
+        }
+
+        if (params.sat_count || params.sat_count === 0) {
+            this.params.sat_count = params.sat_count;
+        } else {
+            this.params.sat_count = null;
+        }
+
+        if (this.params.metrics.lat && this.params.metrics.lng) {
+            this.params.has_metrics = true;
+        } else {
+            this.params.has_metrics = false;
+        }
+
+        this.pos_marker.updateMetrics(this.params.metrics);
+    };
+
+    this.createPosMarker = function () {
+        this.pos_marker = new PosMarker({
+            metrics: {
+                date: this.params.last_point_date
+            },
+            draw: false,
+            car_id: this.params.id,
+            car_label: true,
+            car_label_data: {
+                name: this.params.name,
+                g_id: this.params.g_id,
+                make: this.params.make,
+                model: this.params.model
+            },
+            focus_on_click: true,
+            on_click: function (e) {
+
+            }
+        }, this.instance_map);
+    };
+
+    this.loadPathPoints = function (last_point_id, callback) {
+        if ((last_point_id || last_point_id === false) && this.params.id && MC.Data.date) {
+            var t = this;
+
+            $.ajax({
+                url: '/control/map/?ajax',
+                data: {
+                    action: 'getPoints',
+                    date: core.utilities.tmToDate(MC.Data.date),
+                    device_id: this.params.id,
+                    last_point_id: last_point_id
+                },
+                dataType: 'json',
+                type: 'get',
+                beforeSend: function () {
+                    core.loading.setGlobalLoading('Car.' + t.params.id + '.loadPathData');
+                },
+                success: function (data) {
+                    core.loading.unsetGlobalLoading('Car.' + t.params.id + '.loadPathData');
+
+                    if (callback) {
+                        callback(data)
+                    }
+                },
+                error: function () {
+                    core.loading.unsetGlobalLoading('Car.' + t.params.id + '.loadPathData');
+                    MC.Data.error(); // TODO: Сделать ajaxError() в core.ui
+                }
+            });
+        }
+    };
+
+    this.getPathPoints = function (callback) {
+        if (!this.params.point_id || this.params.point_id <= 0) {
+            return;
+        }
+
+        // Get from server (new data)
+        if (this.params.last_path_point_id === null || this.params.point_id > this.params.last_path_point_id) {
+            var last_point_id;
+
+            if (this.params.last_path_point_id === null) {
+                last_point_id = false;
+            } else {
+                last_point_id = this.params.last_path_point_id;
+            }
+
+            this.loadPathPoints(last_point_id, function (data) {
+                if (callback) {
+                    callback(data);
+                }
+            })
+        } else {
+            if (callback) {
+                callback([]);
+            }
+        }
+    };
+
+    this.drawPath = function (callback) {
+        var t = this;
+
+        this.getPathPoints(function (data) {
+            t.params.path_points = t.params.path_points.concat(data);
+
+            if (t.params.path_points[t.params.path_points.length - 1]) {
+                t.params.last_path_point_id = t.params.path_points[t.params.path_points.length - 1].id;
+            }
+
+            var points = [];
+
+            for (var i = 0, l = data.length; i < l; i++) {
+                points.push(new L.latLng(data[i].lat, data[i].lon));
+            }
+
+            if (t.path === null) {
+                t.path = new Path({
+                    options: {
+                        color: '#222',
+                        opacity: 0.55,
+                        weight: 4
+                    },
+                    points: points
+                }, MC.Map);
+
+                MC.View.focusOnPath();
+            } else {
+                t.path.addPoints(points);
+            }
+
+            t.path.draw();
+
+            if (callback) {
+                callback();
+            }
+        });
+    };
+
+    this.removePath = function () {
+        if (this.path) {
+            this.path.remove();
+        }
+    };
+
+    this.focusOnPath = function () {
+        if (this.path) {
+            this.path.focus();
+        }
+    };
+
+    this.draw = function () {
+        this.pos_marker.draw();
+        this.params.on_map = true;
+    };
+
+    this.remove = function () {
+        this.pos_marker.remove();
+        this.params.on_map = false;
+    };
+
+    this.focus = function () {
+        this.pos_marker.focus();
     };
 
     /* Init actions */

@@ -772,7 +772,7 @@ core.utilities = {
 
     getCSQIndicator: function (csq) {
         var csq = this.parseCSQ(csq),
-            dbm = (csq.dbm > 0) ? ' (' + csq.dbm + ' dBm)' : '';
+            dbm = (csq.dbm < 0) ? ' (' + csq.dbm + ' dBm)' : '';
 
         return '<span class="signal-indicator" title="GSM: ' + csq.level_name + dbm + '"><span class="' + csq.level_class + '" style="width: ' + csq.percentage + '%"></span></span>';
     },
