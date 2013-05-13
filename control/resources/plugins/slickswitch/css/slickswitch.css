@@ -2,7 +2,7 @@
 	position: relative;
 	display: block;
 	width: 30px;
-	height: 17px;
+	height: 19px;
 	cursor: pointer;
 	background: url(../images/switch.png) 0 0 no-repeat;
     -webkit-touch-callout: none;
@@ -17,14 +17,14 @@
 
 
 table .slickswitch {
-    margin: 3px 0 0 0;
+    margin: 2px 0 0 0;
 }
 
 .slickswitch .ss-on {
 	position: absolute;
 	display: block;
 	width: 30px;
-	height: 17px;
+	height: 19px;
 	background: url(../images/switch.png) -30px 0 no-repeat;
 }
 
@@ -32,15 +32,15 @@ table .slickswitch {
 	position: absolute;
 	left: 0px;
 	width: 15px;
-	height: 16px;
+	height: 18px;
 	margin: 0 1px;
 	background: url(../images/switch.png) -60px 0 no-repeat;
 }
 
 .slickswitch.icons {
-	background-position: 0 -17px;
+	background-position: 0 -19px;
 }
 
 .slickswitch.icons .ss-on {
-	background: url(../images/switch.png) -30px -17px no-repeat;
+	background: url(../images/switch.png) -30px -19px no-repeat;
 }

@@ -1,10 +1,11 @@
 <div class="threequarter">
     {if $devices}
         <div class="table-wrapper">
-            <table class="width-100 hovered">
+            <table class="width-100 hovered" id="fleet-table">
                 <thead class="thead-gray">
                     <tr>
-                        <th width="44%">Название</th>
+                        <th width="1%"></th>
+                        <th width="43%">Название</th>
                         <th width="30%">Марка/модель</th>
                         <th width="5%">Госномер</th>
                         <th width="20%">Группа</th>
@@ -13,14 +14,15 @@
                 </thead>
                 <tbody>
                     {foreach $devices as $item}
-                    <tr{if !$item.active} class="unactive_row"{/if}>
+                    <tr rel="{$item.id}" class="{if !$item.active}unactive_row{/if}" data-online="{if $item.online == 1 && $item.active}true{else}false{/if}">
+                        <th width="1%" class="activity-cell"><i title="{if $item.online == 1}Онлайн{else}Офлайн{/if}" class="activity-icon {if $item.online == 1 && $item.active}active{else}unactive{/if}"></i></th>
                         <td><a href="/control/fleet/{$item.id}"><strong>{$item.name}</strong></a></td>
                         <td><strong>{$item.make}</strong> {$item.model}</td>
                         <td><span class="g_id">{$item.g_id}</span></td>
                         <td>{$item.fleet_name}</td>
                         <td>
                             <label for="item_active_{$item.id}"></label>
-                            <input class="activity-toggler slickswitch" type="checkbox" {if $item.active}checked="checked"{/if} data-id="{$item.id}" name="item_active" />
+                            <input class="activity-toggler slickswitch" type="checkbox" {if $item.active}checked{/if} data-id="{$item.id}" name="item_active" />
                         </td>
                     </tr>
                     {/foreach}

@@ -23,7 +23,7 @@ Class Fleet extends Core
         //If user have any actve devices
         if ($this->ajax_mode && isset($_GET['action'])) {
             switch ($_GET['action']) {
-                case 'toggle_device' :
+                case 'toggleDevice' :
                 {
                     header('Content-type: application/json');
                     $this->toggleDevice($_GET['id'], $_GET['activity']);

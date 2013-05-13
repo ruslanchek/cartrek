@@ -267,6 +267,8 @@ core.utilities = {
     },
 
     formatPhoneStr: function (str, code) {
+        str = str.toString();
+
         var C = str.replace(/[^0-9xX]/g, ""),
             B = "";
 
@@ -1434,11 +1436,11 @@ core.modal = {
 
     setLoading: function () {
         this.unSetLoading();
-        $('#modal_window').addClass('loading');
+        $('#modal_window').addClass('loading-bar');
     },
 
     unSetLoading: function () {
-        $('#modal_window').removeClass('loading');
+        $('#modal_window').removeClass('loading-bar');
     },
 
     createOverlay: function () {

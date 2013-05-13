@@ -2,6 +2,9 @@
 
 Class User extends Core
 {
+    private
+        $phones_limit = 5;
+
     public function __construct()
     {
         parent::__construct();
@@ -22,10 +25,31 @@ Class User extends Core
         //If user have any actve devices
         if ($this->ajax_mode && isset($_GET['action'])) {
             switch ($_GET['action']) {
-                case 'process_form' :
+                case 'processForm' :
                 {
                     header('Content-type: application/json');
                     print json_encode($this->processForm());
+                }
+                    break;
+
+                case 'phoneEdit' :
+                {
+                    header('Content-type: application/json');
+                    print json_encode($this->phoneEdit($_POST['active'], $_POST['phone'], $_POST['index']));
+                }
+                    break;
+
+                case 'phoneDelete' :
+                {
+                    header('Content-type: application/json');
+                    print json_encode($this->phoneDelete($_POST['phone'], $_POST['index']));
+                }
+                    break;
+
+                case 'phoneAdd' :
+                {
+                    header('Content-type: application/json');
+                    print json_encode($this->phoneAdd($_POST['active'], $_POST['phone']));
                 }
                     break;
             }
@@ -60,6 +84,164 @@ Class User extends Core
 
             $this->db->query($query);
         }
+    }
+
+    private function preparePhoneAndCode($phone)
+    {
+
+    }
+
+    private function phoneAdd($active, $phone)
+    {
+        $phone = $this->utils->clearPhoneStr($phone);
+
+        if (!$phone || $phone == '') {
+            return array(
+                'status' => false,
+                'message' => 'Введите номер телефона'
+            );
+        }
+
+        if ($phone && strlen($phone) < 10) {
+            return array(
+                'status' => false,
+                'message' => 'Номер телефона &mdash; не менее 10 цифр'
+            );
+        }
+
+        $orig_phones = json_decode($this->auth->user['data']['phones']);
+        $dublicate = false;
+
+        if (count($orig_phones) >= $this->phones_limit) {
+            return array(
+                'status' => false,
+                'message' => 'Достигнуто максимальное количество номеров &mdash; ' . $this->phones_limit
+            );
+        }
+
+        for ($i = 0, $l = count($orig_phones); $i < $l; $i++) {
+            if ($orig_phones[$i]->phone == $phone) {
+                $dublicate = true;
+            };
+        }
+
+        if ($dublicate === true) {
+            return array(
+                'status' => false,
+                'message' => 'Номер ' . $this->utils->formatPhoneStr($phone, 7) . ' уже добавлен'
+            );
+        } else {
+            if (
+                isset($_SESSION) &&
+                isset($_SESSION['phone_adding_request']) &&
+                $_POST['init'] != '1'
+            ) {
+                if($_SESSION['phone_adding_request']->code != $_POST['code'] || $_SESSION['phone_adding_request']->phone != $phone){
+                    return array(
+                        'status' => false,
+                        'message' => 'Неверный код подтверждения'
+                    );
+                }
+
+                array_push($orig_phones, (object) array('active' => (($_SESSION['phone_adding_request']->active == 'true') ? true : false), 'phone' => $_SESSION['phone_adding_request']->phone));
+
+                $orig_phones = json_encode($orig_phones);
+
+                $query = "
+                    UPDATE
+                        `public_users`
+                    SET
+                        `phones` = '" . $this->db->quote($orig_phones) . "'
+                    WHERE
+                        `id` = " . intval($this->auth->user['data']['id']);
+
+                $this->db->query($query);
+
+                unset($_SESSION['phone_adding_request']);
+
+                return array(
+                    'status' => true,
+                    'action' => 'added',
+                    'message' => 'Номер добавлен',
+                    'phones' => json_decode($orig_phones)
+                );
+            }else{
+                unset($_SESSION['phone_adding_request']);
+
+                $_SESSION['phone_adding_request'] = new stdClass();
+
+                $_SESSION['phone_adding_request']->active = $active;
+                $_SESSION['phone_adding_request']->phone = $phone;
+                $_SESSION['phone_adding_request']->code = $this->utils->createRandomCode(4);
+
+                $this->sms->send(array($phone), 'Ваш проверочный код: '.$_SESSION['phone_adding_request']->code);
+
+                return array(
+                    'status' => true,
+                    'action' => 'request',
+                    'phone' => $this->utils->formatPhoneStr($phone),
+                    'message' => 'Код подтверждения выслан на номер ' . $this->utils->formatPhoneStr($phone, 7)
+                );
+            }
+        }
+    }
+
+    private function phoneEdit($active, $phone, $index)
+    {
+        $orig_phones = json_decode($this->auth->user['data']['phones']);
+
+        for ($i = 0, $l = count($orig_phones); $i < $l; $i++) {
+            if ($orig_phones[$i]->phone == $phone && $i == $index) {
+                $orig_phones[$i]->active = ($active == 'true') ? true : false;
+            };
+        }
+
+        $orig_phones = json_encode($orig_phones);
+
+        $query = "
+                UPDATE
+                    `public_users`
+                SET
+                    `phones` = '" . $this->db->quote($orig_phones) . "'
+                WHERE
+                    `id` = " . intval($this->auth->user['data']['id']);
+
+        $this->db->query($query);
+
+        return array(
+            'status' => true,
+            'message' => 'Данные сохранены',
+            'phones' => json_decode($orig_phones)
+        );
+    }
+
+    private function phoneDelete($phone, $index)
+    {
+        $orig_phones = json_decode($this->auth->user['data']['phones']);
+
+        for ($i = 0, $l = count($orig_phones); $i < $l; $i++) {
+            if ($orig_phones[$i]->phone == $phone && $i == $index) {
+                unset($orig_phones[$i]);
+            };
+        }
+
+        $orig_phones = json_encode($orig_phones);
+
+        $query = "
+                UPDATE
+                    `public_users`
+                SET
+                    `phones` = '" . $this->db->quote($orig_phones) . "'
+                WHERE
+                    `id` = " . intval($this->auth->user['data']['id']);
+
+        $this->db->query($query);
+
+        return array(
+            'status' => true,
+            'message' => 'Номер удален',
+            'phones' => json_decode($orig_phones)
+        );
     }
 
     private function processForm()

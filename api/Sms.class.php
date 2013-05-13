@@ -1,6 +1,12 @@
 <?php
 Class Sms extends Core
 {
+    private
+        $user = 'ruslanchek@gmail.com',
+        $key = 'OaEwqp',
+        $ssl = true,
+        $sender = 'Cartrek';
+
     public function __construct()
     {
         parent::__construct();
@@ -10,10 +16,26 @@ Class Sms extends Core
         ));
     }
 
-    public function send($message, $phones, $timezone)
+    public function send($phones, $message)
     {
-        $date = date('HH:MM:ss, dd-mm-yy');
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/api/Sms.proto.php';
 
-        $message = $message . ' (' . $date . ')';
+        $api = new LittleSMS($this->user, $this->key, $this->ssl);
+
+        $recipients = implode(",", $phones);
+
+        // отправка СМС
+        $ids = $api->messageSend($recipients, $message, $this->sender);
+        if ($ids) {
+            return (object)array(
+                'status' => true,
+                'ids' => $ids
+            );
+        } else {
+            return (object)array(
+                'status' => false,
+                'response' => $api->getResponse()
+            );
+        }
     }
 }

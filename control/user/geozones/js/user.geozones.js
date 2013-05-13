@@ -370,13 +370,10 @@ var geozones = {
             },
             success: function (data) {
                 core.modal.unSetLoading();
+                core.modal.setMessage(data);
 
                 if (data.status === true) {
-                    core.modal.setMessage(data);
                     geozones.drawData();
-
-                } else {
-                    core.modal.setMessage(data);
                 }
             },
             error: function () {

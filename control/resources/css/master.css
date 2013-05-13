@@ -581,7 +581,12 @@ table {
 
 .table-wrapper table {
     margin: 0;
+    width: 100.1%;
     border-color: #E5E5E5 !important;
+}
+
+.unactive_row {
+    color: #999;
 }
 
 table td,
@@ -591,6 +596,24 @@ table th {
 
 table th {
     background: #f6f6f6 url(../img/pattern_white.png) !important;
+}
+
+table th.activity-cell {
+    border-right: 1px solid #eee;
+}
+
+table .activity-icon {
+    width: 23px;
+    height: 23px;
+    display: block;
+}
+
+table .active.activity-icon {
+    background: url(../img/sprite.png) no-repeat -134px -117px;
+}
+
+table .unactive.activity-icon {
+    background: url(../img/sprite.png) no-repeat -157px -117px;
 }
 
 table.hovered {
@@ -894,10 +917,17 @@ a.badge:active {
 
 .forms input.text {
     margin: 0 0 1.3em;
-    display: block;
-    padding: 2px 5px;
+    padding: 1px 5px;
     font-size: 1.03em;
     width: 97%;
+}
+
+.forms.columnar input.text {
+    margin: 0 0 0.2em;
+}
+
+input:disabled {
+    color: #999 !important;
 }
 
 .forms select {
@@ -1697,7 +1727,7 @@ footer a:active {
     background: linear-gradient(top, #f28989, #e53838);
 }
 
-table .delete-btn {
+.delete-btn {
     font-size: 12px !important;
     font-weight: normal !important;
     width: auto !important;
@@ -2250,10 +2280,13 @@ table .delete-btn {
 }
 
 .map-types .item.active {
-    background: #3887B3;
     color: white;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
     cursor: default;
+    background: #3887b3 url(../img/white-gradient.png) repeat-x top;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.55);
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.55);
 }
 
 .map-types .item .name {
@@ -2944,7 +2977,7 @@ table .delete-btn {
     box-shadow: inset 0px -1px 0px 0px rgba(0, 0, 0, 0.2), inset 0px 1px 0px 0px rgba(0, 0, 0, 0.25);
 }
 
-.window.loading h1 {
+.window.loading-bar h1 {
     background: #dcdcdc url(../img/modal_loading.gif) top;
 }
 
@@ -3056,34 +3089,37 @@ table .delete-btn {
 }
 
 /* Phones */
+#phones-table .table-wrapper {
+    margin-bottom: 1em;
+}
+
+#phones-table .table-wrapper table tr {
+    background: #fff;
+}
+
+
 #phones-table .item {
-    position: relative;
-    padding: 4px 10px;
-    font-size: 12px;
-    line-height: 18px;
-    color: #333;
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    margin-bottom: 1em;
+}
 
-    background: #ffffff; /* Old browsers */
-    background: -moz-linear-gradient(top,  #ffffff 0%, #dfe1e3 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#dfe1e3)); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  #ffffff 0%,#dfe1e3 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  #ffffff 0%,#dfe1e3 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dfe1e3',GradientType=0 ); /* IE6-9 */
+#phones-table .item .phone-edit-link {
+    color: #3C4E5A;
+    text-decoration: none;
+    border-bottom:  1px dashed #3C4E5A;
+    font-weight: bold;
+    padding-bottom: 0.01em;
+    display: block;
+    float: left;
+}
 
-    border: 1px solid #bfc0c2;
-    border-left: 1px solid #b9babc;
-    border-right: 1px solid #b9babc;
-    border-bottom-color: #8f9194;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.17), inset 0 1px 2px 0 rgba(255, 255, 255, 0.6);
-    text-shadow: 0 1px 0px #ffffff;
-    color: #5e5f63;
+#phones-table .item .phone-edit-link:hover {
+    color: #708593;
+    border-color: #708593;
+}
 
-    border-radius: 4px;
-
-    margin: 0 0 1em;
+#phones-table .item .phone-delete-link {
+    right: 0;
+    top: 0;
 }
 
 /* Dispatcher */
@@ -3130,7 +3166,7 @@ table .delete-btn {
 
 .dispatcher .item .head {
     padding: 6px 8px 3px;
-    background: #eee;
+    background: #eee url(../img/white-gradient.png) repeat-x top;
     text-shadow: 0 1px 0 #fff;
     padding-right: 100px;
     position: relative;

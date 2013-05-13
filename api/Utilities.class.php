@@ -380,6 +380,10 @@ class Utilities extends Core
         return trim(substr($str, 0, strlen($str) - 2));
     }
 
+    static public function createRandomCode($length = 5) {
+        return substr(number_format(time() * rand() , 0, '', ''), 0, intval($length, 10));
+    }
+
     //Get current url without given get param
     static public function getParamstring($excl = '')
     {
@@ -421,6 +425,39 @@ class Utilities extends Core
         }
 
         return $pageURL;
+    }
+
+    static public function clearPhoneStr ($str) {
+        $str = trim($str);
+
+        if(substr($str, 0, 2) == '+7'){
+            $str = substr($str, 2, strlen($str));
+        }
+
+        if(substr($str, 0, 1) == '7' || substr($str, 0, 1) == '8'){
+            $str = substr($str, 1, strlen($str));
+        }
+
+        $str = preg_replace('/[^0-9]/', '', $str);
+
+        return $str;
+    }
+
+    static public function formatPhoneStr ($str, $code = false) {
+        $phone = preg_replace("/[^0-9]/", "", $str);
+        $code_ins = '';
+
+        if($code){
+            $code_ins = '+'.$code.' ';
+        }
+
+        if(strlen($phone) == 7){
+            return $code_ins.preg_replace("/([0-9]{3})([0-9]{2})([0-9]{2})/", "$1-$2-$3", $phone);
+        }elseif(strlen($phone) == 10){
+            return $code_ins.preg_replace("/([0-9]{3})([0-9]{3})([0-9]{2})([0-9]{2})/", "($1) $2-$3-$4", $phone);
+        }else{
+            return $code_ins.$phone;
+        }
     }
 
     //Get list of timezones
