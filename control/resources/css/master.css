@@ -59,6 +59,12 @@ p {
     border-radius: 4px;
 }
 
+.nav-side-btn .btn {
+    display: block !important;
+    width: auto !important;
+    margin: 0 0 1em !important;
+}
+
 .nav-side li {
     border-bottom: 1px solid #E5E5E5;
 }

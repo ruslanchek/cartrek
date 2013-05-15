@@ -17,8 +17,10 @@
         <li><a data-action="all" class="action_menu_item" href="javascript:void(0)">Все</a></li>
     </ul>
 
-    <a data-action="read_all" class="btn action_menu_item" href="javascript:void(0)">Отметить все как просмотренные</a>
-    <a data-action="delete_all" class="btn action_menu_item" href="javascript:void(0)" class="red">Удалить все</a>
+    <div class="nav-side-btn">
+        <a data-action="read_all" class="btn gray action_menu_item" href="javascript:void(0)">Отметить все как просмотренные</a>
+        <a data-action="delete_all" class="btn red action_menu_item" href="javascript:void(0)" class="red">Удалить все</a>
+    </div>
 </div>
 
 <script>
