@@ -40,6 +40,7 @@ var DCar = function (params) {
         this.createMap();
         this.__proto__ = new Car(this.params, this.instance_map);
         this.dom_object = $('#item_'+this.params.id);
+        this.parseExtensions();
     };
 
     /* Methods */
@@ -47,6 +48,7 @@ var DCar = function (params) {
         this.instance_map = new Map({
             map_container_id: 'car-map-' + this.params.id,
             scroll: false,
+            zoom: 13,
             controls: {
                 fullscreen: false,
                 locate: false,
@@ -63,6 +65,81 @@ var DCar = function (params) {
         this.dom_object.find('.map-hider').css({
             top: this.dom_object.find('.head').height() + 11
         }).fadeIn(150);
+    };
+
+    this.drawData = function(){
+        var html = '';
+
+        /*if(this.params.metrics.online === true){
+            this.showMap();
+        }else{
+            this.hideMap();
+        }*/
+
+        html += '<div class="indicators">';
+
+        if (this.params.metrics && this.params.metrics.online === true) {
+
+            if (this.params.metrics.hdop) {
+                html += core.utilities.getHDOPIndicator(this.params.metrics.hdop, this.params.sat_count);
+            }
+
+            if (this.params.metrics.csq) {
+                html += core.utilities.getCSQIndicator(this.params.metrics.csq);
+            }
+        } else {
+            html += '<span class="small gray">Офлайн</span>';
+        }
+
+        html += '</div>';
+
+        if (this.params.metrics && (this.params.metrics.lat && this.params.metrics.lng)) {
+            html += '<div class="params">';
+
+            if (this.params.metrics && this.params.metrics.speed) {
+                html += '<div class="param">' +
+                            '<div class="key">Скорость</div>' +
+                            '<div class="value">' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</div>' +
+                            '<div class="clear"></div>' +
+                        '</div>';
+            }
+
+            if (this.params.metrics && this.params.metrics.altitude) {
+                html += '<div class="param">' +
+                            '<div class="key">Высота</div>' +
+                            '<div class="value">' + this.params.metrics.altitude + ' м' + '</div>' +
+                            '<div class="clear"></div>' +
+                        '</div>';
+            }
+
+            if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.power_inp_normal_level && (this.params.metrics.params.power_inp || this.params.metrics.params.power_inp === 0)) {
+                html += '<div class="param">' +
+                            '<div class="key">Питание</div>' +
+                            '<div class="value">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_inp, this.params.metrics.params.power_inp_normal_level) + '</div>' +
+                            '<div class="clear"></div>' +
+                        '</div>';
+            }
+
+            if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.power_bat_normal_level && (this.params.metrics.params.power_bat || this.params.metrics.params.power_bat === 0)) {
+                html += '<div class="param">' +
+                            '<div class="key">Батарея</div>' +
+                            '<div class="value">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_bat, this.params.metrics.params.power_bat_normal_level) + '</div>' +
+                            '<div class="clear"></div>' +
+                        '</div>';
+            }
+
+            if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.fls === true && (this.params.metrics.params.fuel || this.params.metrics.params.fuel === 0)) {
+                html += '<div class="param">' +
+                            '<div class="key">Топливо</div>' +
+                            '<div class="value">' + core.utilities.getFuelIndicator(this.params.metrics.params.fuel, this.params.metrics.params.fuel_tank_capacity, true) + '</div>' +
+                            '<div class="clear"></div>' +
+                        '</div>';
+            }
+
+            html += '<div class="clear"></div></div>';
+        }
+
+        this.dom_object.find('.foot').html(html);
     };
 
     /* Init actions */
@@ -87,6 +164,22 @@ var View = function () {
         });
     };
 
+    this.resizeGrid = function(){
+        var h = 0;
+
+        $('.dispatcher .brick .item').each(function(){
+            var h1 = $(this).find('.foot').height();
+
+            if(h < h1){
+                h = h1;
+            }
+        });
+
+        $('.dispatcher .brick .item .foot').css({
+            height: h
+        });
+    };
+
     this.drawCarsGrid = function () {
         var html = '';
 
@@ -99,11 +192,11 @@ var View = function () {
                                 '<h2>' + c.name + '</h2>' +
                                 '<div class="make_model">' + ((c.make) ? c.make : '') + ' ' + ((c.model) ? c.model : '') + '</div>' +
                                     core.utilities.drawGId(c.g_id) +
-                                '</div>' +
-
-                                '<div class="map-hider"></div>' +
-                                '<div class="map" id="car-map-' + c.id + '">' +
                             '</div>' +
+
+                            '<div class="map-hider"><i title="Данные о текущем местоположении не получены"></i></div>' +
+                            '<div class="map" id="car-map-' + c.id + '"></div>' +
+                            '<div class="foot"></div>' +
                         '</div>' +
                     '</div>';
         }
@@ -235,7 +328,10 @@ var Data = function () {
                 var car = this.getCarById(data[i].id);
 
                 car.updateParams(data[i]);
+                car.drawData();
             }
+
+            MC.View.resizeGrid();
         }
     };
 

@@ -3196,28 +3196,85 @@ footer a:active {
     font-size: 1.1em;
     font-weight: bold;
     margin: 0;
+    width: 100%;
+    overflow: hidden;
+    height: 1em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .dispatcher .item .head .make_model {
     font-size: 0.8em;
     color: #888;
+    width: 100%;
+    overflow: hidden;
+    height: 1.6em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .dispatcher .item .map-hider {
     height: 150px;
     position: absolute;
     width: 100%;
-    top: 0;
+    top: 43px;
     left: 0;
     z-index: 2;
-
     background: #eee url(../img/pattern_white.png);
+}
+
+.dispatcher .item .map-hider i {
+    background: url(../img/sprite.png) -184px -32px;
+    width: 96px;
+    height: 96px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -48px 0 0 -48px;
 }
 
 .dispatcher .item .map {
     height: 150px;
     border-top: 1px solid #fff;
+    border-bottom: 1px solid #d5d5d5;
 }
+
+.dispatcher .item .foot {
+    border-top: 1px solid #fff;
+}
+
+.dispatcher .item .indicators {
+    padding: 3px 8px 3px;
+    border-bottom: 1px solid #d5d5d5;
+}
+
+.dispatcher .item .params {
+    padding: 6px 8px 0;
+    font-size: 0.82em;
+    border-top: 1px solid #fff;
+    line-height: 1.3em;
+}
+
+.dispatcher .item .params .param {
+    float: left;
+    width: 50%;
+    padding-bottom: 6px;
+}
+
+.dispatcher .item .params .param .key {
+    width: 50%;
+    margin-right: 5%;
+    float: left;
+    color: #999;
+}
+
+.dispatcher .item .params .param .value {
+    width: 40%;
+    margin-right: 5%;
+    float: left;
+}
+
 
 .dispatcher .item .map .leaflet-control-container {
     display: none;

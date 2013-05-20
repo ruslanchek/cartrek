@@ -16,6 +16,7 @@ var Map = function (params) {
         lng: 37,
         minHeight: 250,
         height: 400,
+        dragging: true,
         controls: {
             fullscreen: true,
             locate: true,
@@ -33,6 +34,7 @@ var Map = function (params) {
             layers: core.map_tools.getLayers(),
             center: new L.LatLng(this.params.lat, this.params.lng),
             zoom: this.params.zoom,
+            dragging: this.params.dragging,
             scrollWheelZoom: this.params.scroll // TODO: Dont work in Leaflet lib :-( Wery! Sad!
         });
 
@@ -467,7 +469,7 @@ var PosMarker = function (params, instance_map) {
         if (this.params.metrics && this.params.metrics.online === true) {
 
             if (this.params.metrics.hdop) {
-                html += core.utilities.getHDOPIndicator(this.params.metrics.hdop);
+                html += core.utilities.getHDOPIndicator(this.params.metrics.hdop, this.params.sat_count);
             }
 
             if (this.params.metrics.csq) {
@@ -479,7 +481,7 @@ var PosMarker = function (params, instance_map) {
 
         html += '</span><div class="clear"></div>';
 
-        if (this.params.metrics && (this.params.metrics.speed || this.params.metrics.altitude || (this.params.metrics.lat && this.params.metrics.lng))) {
+        if (this.params.metrics && (this.params.metrics.lat && this.params.metrics.lng)) {
             html += '<div class="table-wrapper"><table class="bordered hovered">';
 
             if (this.params.metrics && this.params.metrics.speed) {
@@ -647,7 +649,7 @@ var Path = function (params, instance_map) {
 
     /* Add path point */
     this.addPoints = function (points) {
-        points = points.reverse(); // TODO: Mve into the parent method!!!
+        points = points.reverse(); // TODO: Move into the parent method!!!
 
         for (var i = 0, l = points.length; i < l; i++) {
             if (points[i][0] && points[i][1]) {
@@ -716,21 +718,25 @@ var Car = function (params, instance_map) {
 
     /* Class constructor */
     this.__construct = function () {
+        this.parseExtensions();
+
         // Prepare date
         this.params.last_update = core.utilities.timestampToDate(this.params.last_update);
         this.params.last_point_date = core.utilities.timestampToDate(this.params.last_point_date);
-
-        // Prepare extensions
-        try {
-            this.params.extensions = JSON.parse(params.extensions);
-        } catch (e) {
-            this.params.extensions = null;
-        }
 
         this.createPosMarker();
     };
 
     /* Methods */
+    this.parseExtensions = function(){
+         // Prepare extensions
+        try {
+            this.params.extensions = JSON.parse(params.extensions);
+        } catch (e) {
+            this.params.extensions = null;
+        }
+    }
+
     this.updateParams = function (params) {
 
         if (params.lat) {
