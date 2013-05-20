@@ -647,6 +647,8 @@ var Path = function (params, instance_map) {
 
     /* Add path point */
     this.addPoints = function (points) {
+        points = points.reverse(); // TODO: Mve into the parent method!!!
+
         for (var i = 0, l = points.length; i < l; i++) {
             if (points[i][0] && points[i][1]) {
                 this.addPoint(points[i][0], points[i][1]);
@@ -1004,9 +1006,19 @@ var Car = function (params, instance_map) {
         }
     };
 
-    this.draw = function () {
-        this.pos_marker.draw();
-        this.params.on_map = true;
+    this.draw = function (cb) {
+        var status = false;
+
+        if (this.params.has_metrics && !this.params.on_map) {
+            this.pos_marker.draw();
+            this.params.on_map = true;
+
+            status = true;
+        }
+
+        if(cb){
+            cb(status, this);
+        }
     };
 
     this.remove = function () {
@@ -1015,7 +1027,9 @@ var Car = function (params, instance_map) {
     };
 
     this.focus = function () {
-        this.pos_marker.focus();
+        if (this.params.has_metrics === true && this.params.on_map === true) {
+            this.pos_marker.focus();
+        }
     };
 
     /* Init actions */

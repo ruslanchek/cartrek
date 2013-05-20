@@ -6,6 +6,7 @@
 var DCar = function (params) {
     /* Instances */
     this.instance_map = null;
+    this.dom_object = null;
 
     this.params = {
         /* Extendable */
@@ -38,6 +39,7 @@ var DCar = function (params) {
     this.__construct = function () {
         this.createMap();
         this.__proto__ = new Car(this.params, this.instance_map);
+        this.dom_object = $('#item_'+this.params.id);
     };
 
     /* Methods */
@@ -51,6 +53,16 @@ var DCar = function (params) {
                 scale: false
             }
         });
+    };
+
+    this.showMap = function(){
+        this.dom_object.find('.map-hider').fadeOut(150);
+    };
+
+    this.hideMap = function(){
+        this.dom_object.find('.map-hider').css({
+            top: this.dom_object.find('.head').height() + 11
+        }).fadeIn(150);
     };
 
     /* Init actions */
@@ -82,18 +94,18 @@ var View = function () {
             var c = MC.Data.cars[i];
 
             html += '<div class="brick">' +
-                '<div class="item" id="item_' + c.id + '" data-id="' + c.id + '">' +
-                '<div class="head">' +
-                '<h2>' + c.name + '</h2>' +
-                '<div class="make_model">' + ((c.make) ? c.make : '') + ' ' + ((c.model) ? c.model : '') + '</div>' +
-                core.utilities.drawGId(c.g_id) +
-                '</div>' +
+                        '<div class="item" id="item_' + c.id + '" data-id="' + c.id + '">' +
+                            '<div class="head">' +
+                                '<h2>' + c.name + '</h2>' +
+                                '<div class="make_model">' + ((c.make) ? c.make : '') + ' ' + ((c.model) ? c.model : '') + '</div>' +
+                                    core.utilities.drawGId(c.g_id) +
+                                '</div>' +
 
-                '<div class="map" id="car-map-' + c.id + '">' +
-
-                '</div>' +
-                '</div>' +
-                '</div>';
+                                '<div class="map-hider"></div>' +
+                                '<div class="map" id="car-map-' + c.id + '">' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
         }
 
         $('.dispatcher').html(html);
@@ -180,15 +192,15 @@ var Data = function () {
     /* Draw cars */
     this.drawCars = function () {
         for (var i = 0, l = this.cars.length; i < l; i++) {
-            if (this.cars[i].params.has_metrics && !this.cars[i].params.on_map) {
-                this.cars[i].draw();
-            }
+            this.cars[i].draw(function(status, car){
+                if(status === true){
+                    car.showMap();
+                }else if(status !== true && car.params.on_map !== true){
+                    car.hideMap();
+                }
+            });
 
-            if (this.cars[i].params.has_metrics === true && this.cars[i].params.on_map === true) {
-                this.cars[i].focus();
-            }else{
-                // Todo: Set no marker action
-            }
+            this.cars[i].focus();
         }
     };
 

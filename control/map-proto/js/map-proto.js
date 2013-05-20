@@ -614,10 +614,11 @@ var Data = function () {
         for (var i = 0, l = this.current_cars.length; i < l; i++) {
             var car = this.getCarById(this.current_cars[i]);
 
-            if (car.params.has_metrics === true && car.params.on_map !== true) {
-                car.draw();
-                this.cars_on_map++;
-            }
+            car.draw(function(status){
+                if(status === true){
+                    MC.Data.cars_on_map++;
+                }
+            });
         }
 
         this.presenceStatusAndMessages();
