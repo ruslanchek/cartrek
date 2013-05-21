@@ -1542,7 +1542,7 @@ core.effects = {
 
 core.ticker = {
     interval: null,
-    delay: 112000,
+    delay: 1000,
     interval_methods: [],
 
     processSystemInterval: function () {
@@ -1694,4 +1694,3 @@ core.init = function () {
 $(function () {
     core.init();
 });
-
