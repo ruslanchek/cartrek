@@ -76,25 +76,41 @@ var DCar = function (params) {
             this.hideMap();
         }*/
 
-        html += '<div class="indicators">';
+        html += '<div class="params">';
 
         if (this.params.metrics && this.params.metrics.online === true) {
+            html += '<div class="param">' +
+                        '<div class="key">' +
+                            '<span class="status-text green">Онлайн</span>' +
+                        '</div>' +
+                        '<div class="value"></div>' +
+                    '</div>';
 
-            if (this.params.metrics.hdop) {
-                html += core.utilities.getHDOPIndicator(this.params.metrics.hdop, this.params.sat_count);
-            }
+            html += '<div class="param">';
 
             if (this.params.metrics.csq) {
-                html += core.utilities.getCSQIndicator(this.params.metrics.csq);
+                html += '<div class="key">' + core.utilities.getCSQIndicator(this.params.metrics.csq, true) + '</div>';
             }
+
+            if (this.params.metrics.hdop) {
+                html += '<div class="value">' + core.utilities.getHDOPIndicator(this.params.metrics.hdop, this.params.sat_count, true) + '</div>';
+            }
+
+            html += '</div>';
+
         } else {
-            html += '<span class="small gray">Офлайн</span>';
+            html += '<div class="param">' +
+                        '<div class="key">' +
+                            '<span class="status-text gray-light">Офлайн</span>' +
+                        '</div>' +
+                        '<div class="value"></div>' +
+                    '</div>';
         }
 
-        html += '</div>';
+        html += '<div class="clear"></div>';
 
-        if (this.params.metrics && (this.params.metrics.lat && this.params.metrics.lng)) {
-            html += '<div class="params">';
+        if (this.params.metrics && (this.params.metrics.lat && this.params.metrics.lng) && this.params.metrics.online === true) {
+            html += '<div class="separated-block">';
 
             if (this.params.metrics && this.params.metrics.speed) {
                 html += '<div class="param">' +
@@ -136,8 +152,24 @@ var DCar = function (params) {
                         '</div>';
             }
 
-            html += '<div class="clear"></div></div>';
+            html += '<div class="clear"></div>';
+
+            html += '</div>';
+
+            html += '<div class="param one-col">' +
+                        '<div class="key">Тек. положение</div>' +
+                        '<div class="value">' + core.utilities.dateRange(this.params.metrics.date, new Date()) + '</div>' +
+                    '</div>';
+
+            html += '<div class="param one-col">' +
+                       '<div class="key">Данные статуса</div>' +
+                        '<div class="value">' + core.utilities.dateRange(this.params.metrics.last_update, new Date()) + '</div>' +
+                   '</div>';
+
+            html += '<div class="clear"></div>';
         }
+
+        html += '</div>';
 
         this.dom_object.find('.foot').html(html);
     };
@@ -212,7 +244,7 @@ var View = function () {
             items: '.brick',
             handle: '.head',
             cursor: 'move',
-            opacity: 0.75,
+            opacity: 1,
             stop: function (e, ui) {
                 var i = 0,
                     sorting_result = [];

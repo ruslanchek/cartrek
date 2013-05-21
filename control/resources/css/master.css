@@ -1587,9 +1587,9 @@ footer a:active {
     -moz-border-radius: 6px;
     border-radius: 6px;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#fff9f9f9', GradientType=0);
-    -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 1);
-    -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 1);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 1);
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, 1);
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, 1);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 .signal-indicator span {
@@ -3129,6 +3129,14 @@ footer a:active {
 }
 
 /* Dispatcher */
+.dispatcher-fleets-menu {
+
+}
+
+.dispatcher-fleets-menu li {
+    float: left;
+}
+
 .dispatcher {
     margin-left: -2%;
 }
@@ -3173,7 +3181,7 @@ footer a:active {
 
 .dispatcher .item .head {
     padding: 6px 8px 3px;
-    background: #eee url(../img/white-gradient.png) repeat-x top;
+    background: #e5e5e5 url(../img/white-gradient.png) repeat-x top;
     text-shadow: 0 1px 0 #fff;
     padding-right: 100px;
     position: relative;
@@ -3189,7 +3197,7 @@ footer a:active {
 }
 
 .dispatcher .item:hover .head {
-    background-color: #e7e7e7;
+    background-color: #e8e8e8;
 }
 
 .dispatcher .item .head h2 {
@@ -3241,40 +3249,65 @@ footer a:active {
 }
 
 .dispatcher .item .foot {
-    border-top: 1px solid #fff;
-}
-
-.dispatcher .item .indicators {
-    padding: 3px 8px 3px;
-    border-bottom: 1px solid #d5d5d5;
+    text-shadow: 0 1px 0 #fff;
 }
 
 .dispatcher .item .params {
-    padding: 6px 8px 0;
+    padding: 6px 0 0 8px;
     font-size: 0.82em;
     border-top: 1px solid #fff;
     line-height: 1.3em;
+}
+
+.dispatcher .item .params .separator {
+    clear: both;
+    margin-bottom: 6px;
+    width: 100%;
+    padding: 6px 0 0 8px;
+    margin-left: -8px;
+}
+
+.dispatcher .item .params .separated-block {
+    background: #eee;
+    margin-bottom: 6px;
+    width: 100%;
+    padding: 6px 0 0 8px;
+    margin-left: -8px;
+    border-bottom: 1px solid #fff;
+    border-top: 1px solid #d2d2d2;
 }
 
 .dispatcher .item .params .param {
     float: left;
     width: 50%;
     padding-bottom: 6px;
+    border-radius: 5px;
+
+}
+
+.dispatcher .item .params .param .status-text {
+    font-size: 1.1em;
 }
 
 .dispatcher .item .params .param .key {
-    width: 50%;
-    margin-right: 5%;
+    width: 42%;
+    margin-right: 8%;
     float: left;
     color: #999;
 }
 
 .dispatcher .item .params .param .value {
-    width: 40%;
-    margin-right: 5%;
+    width: 42%;
+    margin-right: 8%;
     float: left;
 }
 
+.dispatcher .item .params .param.one-col .key,
+.dispatcher .item .params .param.one-col .value {
+    width: 95%;
+    float: none;
+    margin-right: 5%;
+}
 
 .dispatcher .item .map .leaflet-control-container {
     display: none;

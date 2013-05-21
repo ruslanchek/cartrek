@@ -35,7 +35,7 @@ var Map = function (params) {
             center: new L.LatLng(this.params.lat, this.params.lng),
             zoom: this.params.zoom,
             dragging: this.params.dragging,
-            scrollWheelZoom: this.params.scroll // TODO: Dont work in Leaflet lib :-( Wery! Sad!
+            scrollWheelZoom: this.params.scroll // TODO: Don't work in Leaflet lib :-( Very! Sad!
         });
 
         if (this.params.controls.fullscreen === true) {
@@ -340,6 +340,12 @@ var Marker = function (params, instance_map) {
             data_changed = true;
         }
 
+        if (metrics.last_update && this.params.metrics.last_update != metrics.last_update) {
+            // TODO: Make the dates comparsion by Date.getTime() method. And make the all input dates parser to objects
+            this.params.metrics.last_update = metrics.last_update;
+            data_changed = true;
+        }
+
         if (data_changed === true) {
             this.renewPopupHtml();
         }
@@ -511,10 +517,19 @@ var PosMarker = function (params, instance_map) {
             html += '</table></div>';
         }
 
-        if (this.params.metrics && this.params.metrics.date) {
-            html += '<em class="small gray">Текущее положение';
-            html += ' от ' + core.utilities.humanizeDateTime(this.params.metrics.date, true);
-            html += '</em>';
+        if (this.params.metrics && this.params.metrics.date && this.params.metrics.last_update) {
+            html += '<div class="row">'+
+                        '<div class="half">' +
+                            '<em class="small gray"><strong>Текущее положение</strong><br>' +
+                                core.utilities.dateRange(this.params.metrics.date, new Date()) +
+                            '</em>' +
+                        '</div>' +
+                        '<div class="half">' +
+                            '<em class="small gray"><strong>Данные статуса</strong><br>' +
+                                core.utilities.dateRange(this.params.metrics.last_update, new Date()) +
+                            '</em>' +
+                        '</div>'+
+                    '</div>';
         }
 
         html += '</div>';
@@ -847,8 +862,10 @@ var Car = function (params, instance_map) {
 
         if (params.last_update) {
             this.params.last_update = core.utilities.timestampToDate(params.last_update);
+            this.params.metrics.last_update = this.params.last_update;
         } else {
             this.params.last_update = null;
+            this.params.metrics.last_update = null;
         }
 
         if (params.last_point_date) {

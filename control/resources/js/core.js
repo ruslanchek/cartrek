@@ -768,29 +768,43 @@ core.utilities = {
         return ((val * 4.6 * 11) / 4096).toFixed(2);
     },
 
-    getCSQIndicator: function (csq) {
+    getCSQIndicator: function (csq, width) {
         var csq = this.parseCSQ(csq),
-            dbm = (csq.dbm < 0) ? ' (' + csq.dbm + ' dBm)' : '';
+            dbm = (csq.dbm < 0) ? ' (' + csq.dbm + ' dBm)' : '',
+            style = '';
 
-        return '<span class="signal-indicator" title="GSM: ' + csq.level_name + dbm + '"><span class="' + csq.level_class + '" style="width: ' + csq.percentage + '%"></span></span>';
+        if(width === true){
+                    style = 'width: 100%';
+                } else if(width && width !== true) {
+                    style = 'width: '+width;
+                }
+
+        return '<span class="signal-indicator" style="'+style+'" title="GSM: ' + csq.level_name + dbm + '"><span class="' + csq.level_class + '" style="width: ' + csq.percentage + '%"></span></span>';
     },
 
-    getHDOPIndicator: function (hdop, sat_count) {
+    getHDOPIndicator: function (hdop, sat_count, width) {
         var hdop = this.parseHDOP(hdop),
-            sats = '';
+            sats = '',
+            style = '';
 
         if (sat_count > 0) {
             sats = ' (' + sat_count + ' ' + core.utilities.plural(sat_count, 'спутник', 'спутника', 'спутников') + ')';
         }
 
-        return '<span class="signal-indicator" title="GPS: ' + hdop.level_name + sats + '"><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
+        if(width === true){
+                    style = 'width: 100%';
+                } else if(width && width !== true) {
+                    style = 'width: '+width;
+                }
+
+        return '<span class="signal-indicator" style="'+style+'" title="GPS: ' + hdop.level_name + sats + '"><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
     },
 
     calculateFLSLevel: function(volts, capacity, type){
         return volts;
     },
 
-    getFuelIndicator: function (current_percent, total_liters, width_100_percent) {
+    getFuelIndicator: function (current_percent, total_liters, width) {
         var level_class = '',
             style = '';
 
@@ -822,8 +836,10 @@ core.utilities = {
             level_class = 'danger';
         }
 
-        if(width_100_percent === true){
+        if(width === true){
             style = 'width: 100%';
+        } else if(width && width !== true) {
+            style = 'width: '+width;
         }
 
         return '<span class="signal-indicator" style="'+style+'" title="' + current_percent + '% из ' + total_liters + ' л"><span class="' + level_class + '" style="width: ' + current_percent + '%"></span></span>';
@@ -1526,7 +1542,7 @@ core.effects = {
 
 core.ticker = {
     interval: null,
-    delay: 2000,
+    delay: 112000,
     interval_methods: [],
 
     processSystemInterval: function () {
