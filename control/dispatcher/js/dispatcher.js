@@ -109,7 +109,7 @@ var DCar = function (params) {
 
         html += '<div class="clear"></div>';
 
-        if (this.params.metrics && (this.params.metrics.lat && this.params.metrics.lng) && this.params.metrics.online === true) {
+        if (this.params.metrics && this.params.metrics.online === true) {
             html += '<div class="separated-block">';
 
             if (this.params.metrics && this.params.metrics.speed) {

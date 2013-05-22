@@ -12,10 +12,13 @@ var core = {
 core.notify = {
     showNotify: function (content) {
         $('.notify').remove();
+
         var html = '<div class="notify">' + content + '</div>';
+
         $('body').prepend(html);
 
         var $notify = $('.notify');
+        
         $notify.css({
             marginTop: -$notify.height() / 2
         });
