@@ -3259,6 +3259,10 @@ footer a:active {
     line-height: 1.3em;
 }
 
+.dispatcher .item .params.offline * {
+    color: #999;
+}
+
 .dispatcher .item .params .separator {
     clear: both;
     margin-bottom: 6px;

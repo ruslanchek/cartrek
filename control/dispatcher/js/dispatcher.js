@@ -39,7 +39,7 @@ var DCar = function (params) {
     this.__construct = function () {
         this.createMap();
         this.__proto__ = new Car(this.params, this.instance_map);
-        this.dom_object = $('#item_'+this.params.id);
+        this.dom_object = $('#item_' + this.params.id);
         this.parseExtensions();
     };
 
@@ -57,34 +57,33 @@ var DCar = function (params) {
         });
     };
 
-    this.showMap = function(){
+    this.showMap = function () {
         this.dom_object.find('.map-hider').fadeOut(150);
     };
 
-    this.hideMap = function(){
+    this.hideMap = function () {
         this.dom_object.find('.map-hider').css({
             top: this.dom_object.find('.head').height() + 11
         }).fadeIn(150);
     };
 
-    this.drawData = function(){
-        var html = '';
+    this.drawData = function () {
+        var html = '',
+            classname = 'offline';
 
-        /*if(this.params.metrics.online === true){
-            this.showMap();
-        }else{
-            this.hideMap();
-        }*/
+        if (this.params.metrics.online === true) {
+            classname = 'online';
+        }
 
-        html += '<div class="params">';
+        html += '<div class="params ' + classname + '">';
 
         if (this.params.metrics && this.params.metrics.online === true) {
             html += '<div class="param">' +
-                        '<div class="key">' +
-                            '<span class="status-text green">Онлайн</span>' +
-                        '</div>' +
-                        '<div class="value"></div>' +
-                    '</div>';
+                '<div class="key">' +
+                '<span class="status-text green">Онлайн</span>' +
+                '</div>' +
+                '<div class="value"></div>' +
+                '</div>';
 
             html += '<div class="param">';
 
@@ -100,56 +99,56 @@ var DCar = function (params) {
 
         } else {
             html += '<div class="param">' +
-                        '<div class="key">' +
-                            '<span class="status-text gray-light">Офлайн</span>' +
-                        '</div>' +
-                        '<div class="value"></div>' +
-                    '</div>';
+                '<div class="key">' +
+                '<span class="status-text gray-light">Офлайн</span>' +
+                '</div>' +
+                '<div class="value"></div>' +
+                '</div>';
         }
 
         html += '<div class="clear"></div>';
 
-        if (this.params.metrics && this.params.metrics.online === true) {
+        if (this.params.metrics) {
             html += '<div class="separated-block">';
 
             if (this.params.metrics && this.params.metrics.speed) {
                 html += '<div class="param">' +
-                            '<div class="key">Скорость</div>' +
-                            '<div class="value">' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</div>' +
-                            '<div class="clear"></div>' +
-                        '</div>';
+                    '<div class="key">Скорость</div>' +
+                    '<div class="value">' + core.utilities.convertKnotsToKms(this.params.metrics.speed) + ' км/ч</div>' +
+                    '<div class="clear"></div>' +
+                    '</div>';
             }
 
             if (this.params.metrics && this.params.metrics.altitude) {
                 html += '<div class="param">' +
-                            '<div class="key">Высота</div>' +
-                            '<div class="value">' + this.params.metrics.altitude + ' м' + '</div>' +
-                            '<div class="clear"></div>' +
-                        '</div>';
+                    '<div class="key">Высота</div>' +
+                    '<div class="value">' + this.params.metrics.altitude + ' м' + '</div>' +
+                    '<div class="clear"></div>' +
+                    '</div>';
             }
 
             if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.power_inp_normal_level && (this.params.metrics.params.power_inp || this.params.metrics.params.power_inp === 0)) {
                 html += '<div class="param">' +
-                            '<div class="key">Питание</div>' +
-                            '<div class="value">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_inp, this.params.metrics.params.power_inp_normal_level) + '</div>' +
-                            '<div class="clear"></div>' +
-                        '</div>';
+                    '<div class="key">Питание</div>' +
+                    '<div class="value">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_inp, this.params.metrics.params.power_inp_normal_level) + '</div>' +
+                    '<div class="clear"></div>' +
+                    '</div>';
             }
 
             if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.power_bat_normal_level && (this.params.metrics.params.power_bat || this.params.metrics.params.power_bat === 0)) {
                 html += '<div class="param">' +
-                            '<div class="key">Батарея</div>' +
-                            '<div class="value">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_bat, this.params.metrics.params.power_bat_normal_level) + '</div>' +
-                            '<div class="clear"></div>' +
-                        '</div>';
+                    '<div class="key">Батарея</div>' +
+                    '<div class="value">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_bat, this.params.metrics.params.power_bat_normal_level) + '</div>' +
+                    '<div class="clear"></div>' +
+                    '</div>';
             }
 
             if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.fls === true && (this.params.metrics.params.fuel || this.params.metrics.params.fuel === 0)) {
                 html += '<div class="param">' +
-                            '<div class="key">Топливо</div>' +
-                            '<div class="value">' + core.utilities.getFuelIndicator(this.params.metrics.params.fuel, this.params.metrics.params.fuel_tank_capacity, true) + '</div>' +
-                            '<div class="clear"></div>' +
-                        '</div>';
+                    '<div class="key">Топливо</div>' +
+                    '<div class="value">' + core.utilities.getFuelIndicator(this.params.metrics.params.fuel, this.params.metrics.params.fuel_tank_capacity, true) + '</div>' +
+                    '<div class="clear"></div>' +
+                    '</div>';
             }
 
             html += '<div class="clear"></div>';
@@ -157,14 +156,14 @@ var DCar = function (params) {
             html += '</div>';
 
             html += '<div class="param one-col">' +
-                        '<div class="key">Тек. положение</div>' +
-                        '<div class="value">' + core.utilities.dateRange(this.params.metrics.date, new Date()) + '</div>' +
-                    '</div>';
+                '<div class="key">Тек. положение</div>' +
+                '<div class="value">' + core.utilities.dateRange(this.params.metrics.date, new Date()) + '</div>' +
+                '</div>';
 
             html += '<div class="param one-col">' +
-                       '<div class="key">Данные статуса</div>' +
-                        '<div class="value">' + core.utilities.dateRange(this.params.metrics.last_update, new Date()) + '</div>' +
-                   '</div>';
+                '<div class="key">Данные статуса</div>' +
+                '<div class="value">' + core.utilities.dateRange(this.params.metrics.last_update, new Date()) + '</div>' +
+                '</div>';
 
             html += '<div class="clear"></div>';
         }
@@ -196,18 +195,18 @@ var View = function () {
         });
     };
 
-    this.resizeGrid = function(){
+    this.resizeGrid = function () {
         var h = 0;
 
-        $('.dispatcher .brick .item').each(function(){
-            var h1 = $(this).find('.foot').height();
+        $('.dispatcher .brick .item').each(function () {
+            var h1 = $(this).find('.foot .separated-block').height();
 
-            if(h < h1){
+            if (h < h1) {
                 h = h1;
             }
         });
 
-        $('.dispatcher .brick .item .foot').css({
+        $('.dispatcher .brick .item .foot .separated-block').css({
             height: h
         });
     };
@@ -219,18 +218,18 @@ var View = function () {
             var c = MC.Data.cars[i];
 
             html += '<div class="brick">' +
-                        '<div class="item" id="item_' + c.id + '" data-id="' + c.id + '">' +
-                            '<div class="head">' +
-                                '<h2>' + c.name + '</h2>' +
-                                '<div class="make_model">' + ((c.make) ? c.make : '') + ' ' + ((c.model) ? c.model : '') + '</div>' +
-                                    core.utilities.drawGId(c.g_id) +
-                            '</div>' +
+                '<div class="item" id="item_' + c.id + '" data-id="' + c.id + '">' +
+                '<div class="head">' +
+                '<h2>' + c.name + '</h2>' +
+                '<div class="make_model">' + ((c.make) ? c.make : '') + ' ' + ((c.model) ? c.model : '') + '</div>' +
+                core.utilities.drawGId(c.g_id) +
+                '</div>' +
 
-                            '<div class="map-hider"><i title="Данные о текущем местоположении не получены"></i></div>' +
-                            '<div class="map" id="car-map-' + c.id + '"></div>' +
-                            '<div class="foot"></div>' +
-                        '</div>' +
-                    '</div>';
+                '<div class="map-hider"><i title="Данные о текущем местоположении не получены"></i></div>' +
+                '<div class="map" id="car-map-' + c.id + '"></div>' +
+                '<div class="foot"></div>' +
+                '</div>' +
+                '</div>';
         }
 
         $('.dispatcher').html(html);
@@ -317,10 +316,10 @@ var Data = function () {
     /* Draw cars */
     this.drawCars = function () {
         for (var i = 0, l = this.cars.length; i < l; i++) {
-            this.cars[i].draw(function(status, car){
-                if(status === true){
+            this.cars[i].draw(function (status, car) {
+                if (status === true) {
                     car.showMap();
-                }else if(status !== true && car.params.on_map !== true){
+                } else if (status !== true && car.params.on_map !== true) {
                     car.hideMap();
                 }
             });
