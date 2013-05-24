@@ -10,7 +10,9 @@ var core = {
 };
 
 core.ajax = {
+    errorHandler: function(){
 
+    }
 };
 
 core.loading = {
