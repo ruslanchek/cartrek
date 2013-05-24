@@ -9,6 +9,10 @@ var core = {
     }
 };
 
+core.ajax = {
+
+};
+
 core.loading = {
     gl_ns_pool: {},
 
