@@ -14,24 +14,32 @@ Class Meta extends Core
             'dir' => '/meta'
         ));
 
-        header('Content-Type: application/x-javascript');
+        if(isset($_GET['json'])){
+            header('Content-type: application/json');
+        }else{
+            header('Content-type: application/x-javascript');
+        }
 
-        $str = "var global_params = {};\n";
+        $global_params = new stdClass();
+        $global_params->user_logged_in = false;
 
-        $str .= "
-            global_params.timezone = {
-                name: '".$this->auth->user['data']['user_timezone']."',
-                offset: ".($this->params->tz_offset / 60)."
-            };
-        ";
+        if($this->auth->user && $this->auth->user['status'] == '1'){
+            $global_params->user_logged_in = true;
 
-        $str .= "
-            global_params.user = {
-                ui_settings: ".$this->auth->user['data']['ui_settings']."
-            };
-        ";
+            $global_params->timezone = new stdClass();
+            $global_params->timezone->name = $this->auth->user['data']['user_timezone'];
+            $global_params->timezone->offset = $this->params->tz_offset / 60;
 
-        print $str;
+            $global_params->user = new stdClass();
+            $global_params->user->ui_settings = json_decode($this->auth->user['data']['ui_settings']);
+        }
+
+        if(isset($_GET['json'])){
+            print stripslashes(json_encode($global_params));
+        }else{
+            print 'var global_params = JSON.parse(\''.stripslashes(json_encode($global_params)).'\')';
+        }
+
     }
 
     public function __destruct()

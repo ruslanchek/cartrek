@@ -753,7 +753,6 @@ var Car = function (params, instance_map) {
     }
 
     this.updateParams = function (params) {
-
         if (params.lat) {
             this.params.metrics.lat = params.lat;
         } else {
@@ -863,15 +862,10 @@ var Car = function (params, instance_map) {
         if (params.last_update) {
             this.params.last_update = core.utilities.timestampToDate(params.last_update);
             this.params.metrics.last_update = this.params.last_update;
-        } else {
-            this.params.last_update = null;
-            this.params.metrics.last_update = null;
         }
 
         if (params.last_point_date) {
             this.params.last_point_date = core.utilities.timestampToDate(params.last_point_date);
-        } else {
-            this.params.last_point_date = null;
         }
 
         if (params.point_id) {

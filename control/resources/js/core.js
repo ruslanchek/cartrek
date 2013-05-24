@@ -9,29 +9,6 @@ var core = {
     }
 };
 
-core.notify = {
-    showNotify: function (content) {
-        $('.notify').remove();
-
-        var html = '<div class="notify">' + content + '</div>';
-
-        $('body').prepend(html);
-
-        var $notify = $('.notify');
-        
-        $notify.css({
-            marginTop: -$notify.height() / 2
-        });
-    },
-
-    hideNotify: function () {
-        var $notify = $('.notify');
-        $notify.fadeOut(100, function () {
-            $notify.remove();
-        });
-    }
-};
-
 core.loading = {
     gl_ns_pool: {},
 
@@ -264,7 +241,7 @@ core.loading = {
 };
 
 core.utilities = {
-    hexDec: function(hex_string){
+    hexDec: function (hex_string) {
         hex_string = (hex_string + '').replace(/[^a-f0-9]/gi, '');
         return parseInt(hex_string, 16);
     },
@@ -608,7 +585,7 @@ core.utilities = {
         }
     },
 
-//2012-11-18 16:05:49 => Date()
+//2012-11-18 16:05:49 => Date() // TODO: Deprecated
     parseDateMysqlStrToDateOdject: function (str) {
         var d_str = str.substring(0, 10).split('-'),
             d = new Date();
@@ -776,13 +753,13 @@ core.utilities = {
             dbm = (csq.dbm < 0) ? ' (' + csq.dbm + ' dBm)' : '',
             style = '';
 
-        if(width === true){
-                    style = 'width: 100%';
-                } else if(width && width !== true) {
-                    style = 'width: '+width;
-                }
+        if (width === true) {
+            style = 'width: 100%';
+        } else if (width && width !== true) {
+            style = 'width: ' + width;
+        }
 
-        return '<span class="signal-indicator" style="'+style+'" title="GSM: ' + csq.level_name + dbm + '"><span class="' + csq.level_class + '" style="width: ' + csq.percentage + '%"></span></span>';
+        return '<span class="signal-indicator" style="' + style + '" title="GSM: ' + csq.level_name + dbm + '"><span class="' + csq.level_class + '" style="width: ' + csq.percentage + '%"></span></span>';
     },
 
     getHDOPIndicator: function (hdop, sat_count, width) {
@@ -794,20 +771,22 @@ core.utilities = {
             sats = ' (' + sat_count + ' ' + core.utilities.plural(sat_count, 'спутник', 'спутника', 'спутников') + ')';
         }
 
-        if(width === true){
-                    style = 'width: 100%';
-                } else if(width && width !== true) {
-                    style = 'width: '+width;
-                }
+        if (width === true) {
+            style = 'width: 100%';
+        } else if (width && width !== true) {
+            style = 'width: ' + width;
+        }
 
-        return '<span class="signal-indicator" style="'+style+'" title="GPS: ' + hdop.level_name + sats + '"><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
+        return '<span class="signal-indicator" style="' + style + '" title="GPS: ' + hdop.level_name + sats + '"><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
     },
 
-    calculateFLSLevel: function(volts, capacity, type){
+    calculateFLSLevel: function (volts, capacity, type) {
         return volts;
     },
 
     getFuelIndicator: function (current_percent, total_liters, width) {
+        current_percent = 29;
+
         var level_class = '',
             style = '';
 
@@ -833,19 +812,19 @@ core.utilities = {
             }
 
             if (current_percent >= 0 && current_percent <= 15) {
-                level_class = 'warning';
+                level_class = 'danger';
             }
         } else {
             level_class = 'danger';
         }
 
-        if(width === true){
+        if (width === true) {
             style = 'width: 100%';
-        } else if(width && width !== true) {
-            style = 'width: '+width;
+        } else if (width && width !== true) {
+            style = 'width: ' + width;
         }
 
-        return '<span class="signal-indicator" style="'+style+'" title="' + current_percent + '% из ' + total_liters + ' л"><span class="' + level_class + '" style="width: ' + current_percent + '%"></span></span>';
+        return '<span class="signal-indicator" style="' + style + '" title="~' + current_percent + '% (' + Math.round(((total_liters / 100) * current_percent)) + ' из ' + total_liters + ' л)"><span class="' + level_class + '" style="width: ' + current_percent + '%"></span></span>';
     },
 
     getVoltsIndicator: function (v, warning_value) {
@@ -853,13 +832,13 @@ core.utilities = {
             var t = v.toFixed(2) + ' В',
                 html = '';
 
-            if(!warning_value){
+            if (!warning_value) {
                 warning_value = v + 1;
             }
 
             if (v > 0 && v >= warning_value) {
                 html = '<div class="success">' + t + '</div>';
-            }else if (v < warning_value && v > 0){
+            } else if (v < warning_value && v > 0) {
                 html = '<div class="yellow">' + t + '</div>';
             } else {
                 html = '<div class="error">0 В</div>';
@@ -871,7 +850,7 @@ core.utilities = {
         }
     },
 
-//Google maps utils
+    //Google maps utils
     getAddressByLatLng: function (lat, lng, fn) {
         var geocoder = new google.maps.Geocoder();
 
@@ -1227,7 +1206,6 @@ core.map_tools = {
         if (!callback) {
             return false;
         }
-        ;
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
@@ -1270,7 +1248,6 @@ core.map_tools = {
                 }
             });
         }
-        ;
     }
 };
 
@@ -1516,6 +1493,98 @@ core.modal = {
             $(document).off('scroll');
 
             $('#modal_closer').off('click');
+            $('body').off('scroll');
+            $('body').off('keyup');
+
+            $('#modal_window, #fs_overlay').fadeOut(150, function () {
+                $('#modal_window, #fs_overlay').remove();
+            })
+
+            if (this.loading_process) {
+                this.loading_process.abort();
+            }
+
+            this.modal_created = false;
+        }
+    }
+};
+
+//Warning window class
+core.warning_modal = {
+    modal_created: false,
+
+    prepareCode: function (header, html) {
+        var code = '<div class="window" id="modal_window">' +
+            '<h1>' + header + '</h1>' +
+            '<div class="window_content">' + html + '</div>' +
+            '</div>';
+
+        return code;
+    },
+
+    setModalDimensions: function () {
+        var that = this;
+        $('#modal_window').css({
+            width: that.width,
+            marginLeft: -that.width / 2
+        });
+    },
+
+    setModalPosition: function () {
+        $('#modal_window').css({
+            marginTop: -$('#modal_window').height() / 2
+        });
+    },
+
+    createOverlay: function () {
+        $('body').prepend('<div id="fs_overlay"></div>');
+        $('#fs_overlay').css('background', 'black').show();
+    },
+
+    createModal: function (header, html, width) {
+        this.destroyModal();
+
+        var that = this;
+
+        $('#modal_window, #fs_overlay').remove();
+        this.width = width;
+
+        $('body').prepend(this.prepareCode(header, html));
+
+        $('#modal_window .message').on('click', function () {
+            that.unSetMessage();
+        });
+
+        this.setModalDimensions();
+        this.setModalPosition();
+        this.createOverlay();
+
+        $(window).on('resize', function () {
+            that.setModalPosition();
+        });
+
+        $(document).on('scroll', function () {
+            that.setModalPosition();
+        });
+
+        $('body').on('scroll', function () {
+            that.setModalPosition();
+        });
+
+        $('body').on('keyup', function (e) {
+            if (e.keyCode == 27) {
+                that.destroyModal();
+            }
+        });
+
+        this.modal_created = true;
+    },
+
+    destroyModal: function () {
+        if (this.modal_created === true) {
+            $(window).off('resize');
+            $(document).off('scroll');
+
             $('body').off('scroll');
             $('body').off('keyup');
 

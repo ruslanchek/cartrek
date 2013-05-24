@@ -38,7 +38,9 @@ Class Core
     public function __construct()
     {
         $this->params = new stdClass();
+
         require_once($_SERVER['DOCUMENT_ROOT'] . '/Config.class.php');
+
         $this->config = new Config();
         $this->setUriData();
     }
@@ -101,6 +103,7 @@ Class Core
         }
 
         if (!$this->auth->user['status'] &&
+            $this->module['name'] != 'meta' &&
             $this->module['name'] != 'auth.login' &&
             $this->module['name'] != 'auth.register' &&
             $this->module['name'] != 'auth.remember_pass'

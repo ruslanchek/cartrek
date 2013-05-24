@@ -156,13 +156,13 @@ var DCar = function (params) {
             html += '</div>';
 
             html += '<div class="param one-col">' +
-                '<div class="key">Тек. положение</div>' +
-                '<div class="value">' + core.utilities.dateRange(this.params.metrics.date, new Date()) + '</div>' +
+                '<div class="key">Текущ. положение</div>' +
+                '<div class="value">' + core.utilities.dateRange(this.params.last_point_date, new Date()) + '</div>' +
                 '</div>';
 
             html += '<div class="param one-col">' +
                 '<div class="key">Данные статуса</div>' +
-                '<div class="value">' + core.utilities.dateRange(this.params.metrics.last_update, new Date()) + '</div>' +
+                '<div class="value">' + core.utilities.dateRange(this.params.last_update, new Date()) + '</div>' +
                 '</div>';
 
             html += '<div class="clear"></div>';

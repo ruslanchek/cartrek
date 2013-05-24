@@ -58,6 +58,13 @@
                     <label class="bold">Телефоны <span class="error"></span></label>
 
                     <div id="phones-table"></div>
+
+                    <br>
+                    <hr>
+
+                    <em>
+                        Внимание, подключение телефонных номеров увеличивает абонентскую плату, согласно вашему тарифу.
+                    </em>
                 </div>
             </div>
         </div>
