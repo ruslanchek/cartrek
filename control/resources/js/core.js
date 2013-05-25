@@ -11,7 +11,28 @@ var core = {
 
 core.ajax = {
     errorHandler: function(){
+        $.ajax({
+            url: '/control/meta/?json',
+            type: 'get',
+            dataType: 'json',
+            success: function(data){
+                if(data.user_logged_in !== true){
+                    var html =  'Вы не авторизованы, <a href="javascript:void(0)" onclick="document.location.reload()">войдите в систему</a> заново!<br><hr>' +
+                                'Это могло произойти, если закончилось время сессии. Или если кто-то авторизовался в Картреке под вашем логином в другом браузере или на другом компьютере.';
 
+                    core.warning_modal.createModal(
+                        'Сбой авторизации',
+                        html,
+                        400
+                    );
+
+                    clearInterval(core.ticker.interval);
+                }
+            },
+            error: function(){
+
+            }
+        })
     }
 };
 
@@ -1544,7 +1565,10 @@ core.warning_modal = {
 
     createOverlay: function () {
         $('body').prepend('<div id="fs_overlay"></div>');
-        $('#fs_overlay').css('background', 'black').show();
+        $('#fs_overlay').css({
+            background: 'black',
+            opacity: 0.8
+        }).show();
     },
 
     createModal: function (header, html, width) {
@@ -1751,6 +1775,7 @@ core.events_api = {
             },
             error: function () {
                 core.loading.hideTopIndicator();
+                core.ajax.errorHandler();
             }
         });
     }
@@ -1768,7 +1793,9 @@ core.init = function () {
     //core.effects.breathe($('#global_events_counter'));
 }
 
-//Object starter
-$(function () {
-    core.init();
-});
+if(global_params && global_params.user_logged_in === true){
+    //Object starter
+    $(function () {
+        core.init();
+    });
+};

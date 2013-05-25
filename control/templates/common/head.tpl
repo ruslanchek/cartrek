@@ -13,9 +13,7 @@
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-core-ui-select/css/core-ui-select.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/slickswitch/css/slickswitch.css" />
 
-{if $core->auth->user.status}
 <script src="/control/meta"></script>
-{/if}
 
 <script src="/control/resources/libs/jquery-2.0.0.min.js"></script>
 <script src="/control/resources/libs/jquery.cookie.js"></script>

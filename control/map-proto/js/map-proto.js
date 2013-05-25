@@ -757,7 +757,7 @@ var Data = function () {
                     core.loading.unsetGlobalLoading('loadDynamicCarsData');
                 }
 
-                MC.Data.error();
+                core.ajax.errorHandler();
             }
         });
     };
@@ -784,7 +784,7 @@ var Data = function () {
             },
             error: function () {
                 core.loading.unsetGlobalLoading('getUserFleetsAndDevices');
-                MC.Data.error();
+                core.ajax.errorHandler();
             }
         });
     };
