@@ -187,6 +187,19 @@ var View = function () {
     };
 
     /* Methods */
+    this.drawFleetMenu = function () {
+        var html = '',
+            fl = MC.Data.fleets.length;
+
+        if(fl > 1){
+            for (var i = 0; i < fl; i++) {
+                html += '<li><a href="#">' + MC.Data.fleets[i].name + '</a></li>';
+            }
+        }
+
+        $('#fleets').html(html);
+    };
+
     this.gridInit = function () {
         $('.dispatcher .item .map').hover(function () {
             $(this).find('.leaflet-control-container').show();
@@ -342,6 +355,8 @@ var Data = function () {
 
         this.cars = data.devices;
         this.fleets = data.fleets;
+
+        MC.View.drawFleetMenu();
 
         for (var i = 0, l = this.cars.length; i < l; i++) {
             this.current_cars.push(this.cars[i].id);

@@ -3130,11 +3130,14 @@ footer a:active {
 
 /* Dispatcher */
 .dispatcher-fleets-menu {
-
+    padding: 0;
+    margin: 0;
 }
 
 .dispatcher-fleets-menu li {
     float: left;
+    margin: 0 15px 10px 0;
+    list-style-type: none;
 }
 
 .dispatcher {
