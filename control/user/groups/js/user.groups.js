@@ -51,6 +51,8 @@ var user_groups = {
                     status: false,
                     message: 'Ошибка связи с срвером, повторите попытку'
                 });
+
+                core.ajax.errorHandler();
             }
         });
     },
@@ -90,6 +92,8 @@ var user_groups = {
                 } else {
                     core.modal.setMessage(data);
                 }
+
+                core.ajax.errorHandler();
             },
             error: function () {
                 core.modal.unSetLoading();
@@ -97,6 +101,8 @@ var user_groups = {
                     status: false,
                     message: 'Ошибка связи с срвером, повторите попытку'
                 });
+
+                core.ajax.errorHandler();
             }
         });
     },
@@ -209,6 +215,7 @@ var user_groups = {
                         },
                         error: function () {
                             core.loading.unsetGlobalLoading();
+                            core.ajax.errorHandler();
                         }
                     });
                 }

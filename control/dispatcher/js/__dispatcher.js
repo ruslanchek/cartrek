@@ -168,7 +168,6 @@ core.dispatcher = {
                 if (this.get_renew_info) {
                     this.get_renew_info.abort();
                 }
-                ;
 
                 core.loading.showTopIndicator();
             },
@@ -203,20 +202,16 @@ core.dispatcher = {
 
                                     core.dispatcher.getAddresses();
                                 }
-                                ;
                             }
-                            ;
 
                             core.dispatcher.renewItemAdditionalParams(data[i]);
                         }
-                        ;
                     }
-                    ;
                 }
-                ;
             },
             error: function () {
                 core.loading.hideTopIndicator();
+                core.ajax.errorHandler();
             }
         });
     },
@@ -272,7 +267,10 @@ core.dispatcher = {
                         sorting_result: sorting_result
                     },
                     dataType: 'json',
-                    type: 'post'
+                    type: 'post',
+                    error: function(){
+                        core.ajax.errorHandler();
+                    }
                 });
             }
         });

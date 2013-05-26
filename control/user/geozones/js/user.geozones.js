@@ -63,6 +63,7 @@ var geozones = {
                 },
                 error: function () {
                     core.loading.unsetGlobalLoading();
+                    core.ajax.errorHandler();
                 }
             });
         }
@@ -90,6 +91,7 @@ var geozones = {
             },
             error: function () {
                 core.loading.unsetGlobalLoading();
+                core.ajax.errorHandler();
             }
         });
     },
@@ -222,6 +224,7 @@ var geozones = {
             },
             error: function () {
                 core.loading.unsetGlobalLoading();
+                core.ajax.errorHandler();
             }
         });
     },
@@ -382,6 +385,7 @@ var geozones = {
                     status: false,
                     message: 'Ошибка связи с срвером, повторите попытку'
                 });
+                core.ajax.errorHandler();
             }
         });
     },
@@ -525,6 +529,7 @@ var geozones = {
                         status: false,
                         message: 'Ошибка связи с срвером, повторите попытку'
                     });
+                    core.ajax.errorHandler();
                 }
             });
         }

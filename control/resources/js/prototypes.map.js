@@ -939,7 +939,7 @@ var Car = function (params, instance_map) {
                 },
                 error: function () {
                     core.loading.unsetGlobalLoading('Car.' + t.params.id + '.loadPathData');
-                    MC.Data.error(); // TODO: Сделать ajaxError() в core.ui
+                    core.ajax.errorHandler();
                 }
             });
         }

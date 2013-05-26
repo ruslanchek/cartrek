@@ -21,6 +21,7 @@ var fleet = {
             },
             error: function(){
                 core.loading.hideTopIndicator();
+                core.ajax.errorHandler();
             }
         });
     },

@@ -183,6 +183,7 @@ var fleet_add = {
                 },
                 error: function () {
                     core.loading.unsetGlobalLoading();
+                    core.ajax.errorHandler();
                 }
             });
         });
@@ -269,6 +270,7 @@ var fleet_add = {
                 },
                 error: function () {
                     core.loading.unsetGlobalLoading();
+                    core.ajax.errorHandler();
                 }
             })
         })

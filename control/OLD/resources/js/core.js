@@ -902,6 +902,7 @@ core.events_api = {
             },
             error: function(){
                 core.loading.hideTopIndicator();
+                core.ajax.errorHandler();
             }
         });
     }

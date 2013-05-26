@@ -49,6 +49,7 @@ var security = {
             },
             error: function(){
                 core.loading.unsetGlobalLoading();
+                core.ajax.errorHandler();
             }
         });
     },

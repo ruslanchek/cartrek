@@ -30,7 +30,7 @@ core.ajax = {
                 }
             },
             error: function(){
-
+                core.modal.destroyModal();
             }
         })
     }

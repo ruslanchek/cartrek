@@ -52,6 +52,7 @@ var user = {
             },
             error: function () {
                 core.loading.unsetGlobalLoading();
+                core.ajax.errorHandler();
             }
         });
     },
@@ -182,6 +183,8 @@ var user = {
                             status: false,
                             message: 'Ошибка связи с срвером, повторите попытку'
                         });
+
+                        core.ajax.errorHandler();
                     }
                 });
 
@@ -211,6 +214,7 @@ var user = {
                 },
                 error: function () {
                     core.loading.unsetGlobalLoading();
+                    core.ajax.errorHandler();
                 }
             });
         },
@@ -243,6 +247,7 @@ var user = {
                 },
                 error: function () {
                     core.loading.unsetGlobalLoading();
+                    core.ajax.errorHandler();
                 }
             });
         },

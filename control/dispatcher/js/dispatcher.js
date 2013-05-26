@@ -187,17 +187,45 @@ var View = function () {
     };
 
     /* Methods */
-    this.drawFleetMenu = function () {
-        var html = '',
-            fl = MC.Data.fleets.length;
+    this.setFleetMenuIndicator = function (i, instant) {
+        var $item = $('#fleets li[rel="' + i + '"]'),
+            s = 150;
 
-        if(fl > 1){
-            for (var i = 0; i < fl; i++) {
-                html += '<li><a href="#">' + MC.Data.fleets[i].name + '</a></li>';
-            }
+        if(instant === true){
+            s = 0;
         }
 
-        $('#fleets').html(html);
+        $('#fleets i').text($item.text()).animate({
+            top: $item.offset().top,
+            left: $item.offset().left,
+            width: $item.width()
+        }, s);
+
+        MC.Data.fleet = i;
+    };
+
+    this.drawFleetMenu = function () {
+        if (MC.Data.fleets.length > 0) {
+            var html = '<ul class="nav-top" id="fleets"><i></i><li rel="0" class="active"><a href="#fleet=all">Все группы</a></li>';
+
+            for (var i = 0, l = MC.Data.fleets.length; i < l; i++) {
+                html += '<li rel="' + MC.Data.fleets[i].id + '"><a href="#fleet=' + MC.Data.fleets[i].id + '">' + MC.Data.fleets[i].name + '</a></li>';
+            }
+
+            html += '<div class="clear"></div></ul>';
+
+            $('#fleets').html(html);
+        }
+
+        $('#fleets a').on('click', function(){
+            MC.View.setFleetMenuIndicator($(this).parent().attr('rel'), false);
+        });
+
+        this.setFleetMenuIndicator(MC.Data.fleet, true);
+
+        $(window).on('resize', function(){
+            MC.View.setFleetMenuIndicator(MC.Data.fleet, true);
+        });
     };
 
     this.gridInit = function () {
@@ -303,6 +331,7 @@ var Data = function () {
     this.fleets = [];
     this.current_cars = [];
     this.auto_renew_blocker = false;
+    this.fleet = 0;
 
     /* Class constructor */
     this.__construct = function () {

@@ -1,9 +1,5 @@
 {if $core->devices->devices_present}
-    <ul class="dispatcher-fleets-menu" id="fleets">
-
-    </ul>
-
-    <div class="clear"></div>
+    <div id="fleets"></div>
 
     <div class="dispatcher"></div>
 {else}

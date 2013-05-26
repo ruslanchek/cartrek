@@ -49,6 +49,64 @@ p {
 
 /* =Nav
 -----------------------------------------------------------------------------*/
+.nav-top {
+    list-style-type: none;
+    border: 3px solid #e5e5e5;
+    -webkit-border-radius: 4px;
+            border-radius: 4px;
+    margin: 0 0 1em;
+    padding: 0;
+    background: #e5e5e5 url(../img/white-gradient.png) repeat-x top;
+    text-align: center;
+}
+
+.nav-top i {
+    display: block;
+    width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 29px;
+    line-height: 29px;
+    text-align: center;
+    white-space: nowrap;
+
+    background: #3887b3 url(../img/white-gradient.png) repeat-x top;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    cursor: default;
+    -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.55);
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.55);
+    overflow: hidden;
+
+    z-index: 2;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+.nav-top li {
+    height: 30px;
+    display: block;
+    float: left;
+    margin: 0;
+}
+
+.nav-top li a {
+    height: 30px;
+    display: block;
+    line-height: 30px;
+    padding: 0 2ex;
+}
+
+.nav-top li a:hover {
+    background: #ccc url(../img/white-gradient.png) repeat-x top;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+
 .nav-side {
     margin: 0 0 2em 0;
     list-style: none;
@@ -3129,17 +3187,6 @@ footer a:active {
 }
 
 /* Dispatcher */
-.dispatcher-fleets-menu {
-    padding: 0;
-    margin: 0;
-}
-
-.dispatcher-fleets-menu li {
-    float: left;
-    margin: 0 15px 10px 0;
-    list-style-type: none;
-}
-
 .dispatcher {
     margin-left: -2%;
 }

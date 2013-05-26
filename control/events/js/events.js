@@ -4,280 +4,300 @@ core.events = {
     more_items: false,
     cond: 'unreaded',
 
-    drawItems: function(data, adding_method){
+    drawItems: function (data, adding_method) {
         var html = '',
             active_count = 0;
 
-        if(!data.more_items && this.step == 0 && data.items.length < 1){
+        if (!data.more_items && this.step == 0 && data.items.length < 1) {
             $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
-        }else{
-            for(var i = 0, l = data.items.length; i < l; i++){
-                if($('.event-item[rel="'+data.items[i].id+'"]').length <= 0){
-                    var timestamp = core.utilities.humanizeTime(data.items[i].datetime)+ ', ' + core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL'),
+        } else {
+            for (var i = 0, l = data.items.length; i < l; i++) {
+                if ($('.event-item[rel="' + data.items[i].id + '"]').length <= 0) {
+                    var timestamp = core.utilities.humanizeTime(data.items[i].datetime) + ', ' + core.utilities.humanizeDate(data.items[i].datetime, 'MYSQL'),
                         item_class = '',
                         hide_button_html = '';
 
-                    switch(data.items[i].status){
-                        case '1' : {
+                    switch (data.items[i].status) {
+                        case '1' :
+                        {
                             item_class = 'alert-error';
-                        }; break;
+                        }
+                            break;
 
-                        case '2' : {
+                        case '2' :
+                        {
                             item_class = 'alert-attention';
-                        }; break;
+                        }
+                            break;
 
-                        case '3' : {
+                        case '3' :
+                        {
                             item_class = 'alert-notify';
-                        }; break;
+                        }
+                            break;
 
-                        case '4' : {
+                        case '4' :
+                        {
                             item_class = 'alert-success';
-                        }; break;
+                        }
+                            break;
 
-                        default : {
+                        default :
+                        {
                             item_class = 'alert';
-                        }; break;
-                    };
+                        }
+                            break;
+                    }
 
-                    if(
+                    if (
                         data.items[i].active == '1' &&
-                        (this.cond != 'error' &&
-                        this.cond != 'attention' &&
-                        this.cond != 'notify' &&
-                        this.cond != 'success')
-                    ){
+                            (this.cond != 'error' &&
+                                this.cond != 'attention' &&
+                                this.cond != 'notify' &&
+                                this.cond != 'success')
+                        ) {
                         hide_button_html = '<a class="hide" href="javascript:void(0)" title="Отметить как просмотренное">−</a>';
-                    };
+                    }
 
-                    html += '<div rel="' + data.items[i].id + '" class="event-item alert '+item_class+'">' +
-                                '<span class="date">'+ timestamp + '</span>' +
-                                data.items[i].message +
-                                hide_button_html +
-                                '<a class="close" href="javascript:void(0)" title="Удалить">&times;</a>' +
-                            '</div>';
+                    html += '<div rel="' + data.items[i].id + '" class="event-item alert ' + item_class + '">' +
+                        '<span class="date">' + timestamp + '</span>' +
+                        data.items[i].message +
+                        hide_button_html +
+                        '<a class="close" href="javascript:void(0)" title="Удалить">&times;</a>' +
+                        '</div>';
 
 
-                    if(data.items[i].active == '1'){
+                    if (data.items[i].active == '1') {
                         active_count++;
-                    };
-                };
-            };
+                    }
+                }
+            }
 
-            if(i > 0){
+            if (i > 0) {
                 $('#events_load_area .no-items').remove();
-            };
-        };
+            }
+        }
 
         this.more_items = data.more_items;
 
-        if(data.more_items){
+        if (data.more_items) {
             //$('#load_more').show();
-        };
+        }
 
-        if(adding_method == 'prepend'){
+        if (adding_method == 'prepend') {
             $('#events_load_area').prepend(html);
-        }else{
+        } else {
             $('#events_load_area').append(html);
-        };
+        }
     },
 
-    getItems: function(silent_loading){
+    getItems: function (silent_loading) {
         core.events.events_loading_process = $.ajax({
             url: '/control/events/?ajax',
             type: 'get',
             dataType: 'json',
             data: {
-                action  : 'getItems',
-                step    : core.events.step,
-                offset  : core.events.offset,
-                cond    : core.events.cond
+                action: 'getItems',
+                step: core.events.step,
+                offset: core.events.offset,
+                cond: core.events.cond
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 //$('#load_more').hide();
 
-                if(core.events.events_loading_process){
+                if (core.events.events_loading_process) {
                     core.events.events_loading_process.abort();
                     core.loading.unsetGlobalLoading();
-                };
+                }
 
-                if(silent_loading){
+                if (silent_loading) {
                     core.loading.showTopIndicator();
-                }else{
+                } else {
                     core.loading.setGlobalLoading();
-                };
+                }
             },
-            success: function(data){
+            success: function (data) {
                 core.loading.unsetGlobalLoading();
 
-                if(silent_loading){
+                if (silent_loading) {
                     core.loading.hideTopIndicator();
-                };
+                }
 
                 core.events.drawItems(data, 'append');
                 core.events.step++;
             },
-            error: function(){
+            error: function () {
                 core.loading.unsetGlobalLoading();
+                core.ajax.errorHandler();
             }
         });
     },
 
-    hideEvent: function(o){
+    hideEvent: function (o) {
         core.events.events_loading_process = $.ajax({
             url: '/control/events/?ajax',
             type: 'get',
             data: {
-                action  : 'hideItem',
-                id      : o.parent().attr('rel'),
-                cond    : this.cond
+                action: 'hideItem',
+                id: o.parent().attr('rel'),
+                cond: this.cond
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 o.html('&nbsp;');
 
-                if(core.events.events_loading_process){
+                if (core.events.events_loading_process) {
                     core.events.events_loading_process.abort();
                     core.loading.unsetGlobalLoading();
-                };
+                }
 
                 core.loading.setGlobalLoading();
             },
-            success: function(count){
+            success: function (count) {
                 o.html();
                 core.loading.unsetGlobalLoading();
 
                 core.events.offset++;
 
-                if(count > 0){
+                if (count > 0) {
                     $('#global_events_counter').html(count)
-                }else{
+                } else {
                     $('#global_events_counter').hide();
-                };
+                }
 
-                o.parent().slideUp(120, function(){
-                    if(!core.events.more_items && $('.event-item:visible').length <= 0){
+                o.parent().slideUp(120, function () {
+                    if (!core.events.more_items && $('.event-item:visible').length <= 0) {
                         $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
-                    };
+                    }
                 });
             },
-            error: function(){
+            error: function () {
                 core.loading.unsetGlobalLoading();
+                core.ajax.errorHandler();
             }
         });
     },
 
-    delEvent: function(o){
-        if(confirm('Удалить событие?')){
+    delEvent: function (o) {
+        if (confirm('Удалить событие?')) {
             core.events.events_loading_process = $.ajax({
                 url: '/control/events/?ajax',
                 type: 'get',
                 data: {
-                    action  : 'delItem',
-                    id      : o.parent().attr('rel'),
-                    cond    : this.cond
+                    action: 'delItem',
+                    id: o.parent().attr('rel'),
+                    cond: this.cond
                 },
-                beforeSend: function(){
-                    if(core.events.events_loading_process){
+                beforeSend: function () {
+                    if (core.events.events_loading_process) {
                         core.events.events_loading_process.abort();
                         core.loading.unsetGlobalLoading();
-                    };
+                    }
 
                     core.loading.setGlobalLoading();
                 },
-                success: function(count){
+                success: function (count) {
                     core.loading.unsetGlobalLoading();
                     core.events.offset++;
 
                     //todo сделать маркер reader/unreaded для того чтобы если был удален непрочитанный эвент - то в верхнем счетчике -1 если нет - то ничего
 
-                    if(count > 0){
+                    if (count > 0) {
                         $('#global_events_counter').html(count)
-                    }else{
+                    } else {
                         $('#global_events_counter').hide();
-                    };
+                    }
 
-                    o.parent().slideUp(120, function(){
-                        if(!core.events.more_items && $('.event-item:visible').length <= 0){
+                    o.parent().slideUp(120, function () {
+                        if (!core.events.more_items && $('.event-item:visible').length <= 0) {
                             $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
-                        };
+                        }
                     });
                 },
-                error: function(){
+                error: function () {
                     core.loading.unsetGlobalLoading();
+                    core.ajax.errorHandler();
                 }
             });
-        };
+        }
+        ;
     },
 
-    delAllEvents: function(){
+    delAllEvents: function () {
         core.events.events_loading_process = $.ajax({
             url: '/control/events/?ajax',
             type: 'get',
             data: {
-                action  : 'delAllItems'
+                action: 'delAllItems'
             },
-            beforeSend: function(){
-                if(core.events.events_loading_process){
+            beforeSend: function () {
+                if (core.events.events_loading_process) {
                     core.events.events_loading_process.abort();
                     core.loading.unsetGlobalLoading();
-                };
+                }
 
                 core.loading.setGlobalLoading();
             },
-            success: function(){
+            success: function () {
                 core.loading.unsetGlobalLoading();
                 $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                 $('#global_events_counter').hide();
                 //$('#load_more').hide();
             },
-            error: function(){
+            error: function () {
                 core.loading.unsetGlobalLoading();
+                core.ajax.errorHandler();
             }
         });
     },
 
-    hideAllEvents: function(){
+    hideAllEvents: function () {
         core.events.events_loading_process = $.ajax({
             url: '/control/events/?ajax',
             type: 'get',
             data: {
-                action  : 'hideAllItems'
+                action: 'hideAllItems'
             },
-            beforeSend: function(){
-                if(core.events.events_loading_process){
+            beforeSend: function () {
+                if (core.events.events_loading_process) {
                     core.events.events_loading_process.abort();
                     core.loading.unsetGlobalLoading();
-                };
+                }
 
                 core.loading.setGlobalLoading();
             },
-            success: function(){
+            success: function () {
                 core.loading.unsetGlobalLoading();
                 $('#global_events_counter').hide();
 
-                if(core.events.cond == 'unreaded'){
+                if (core.events.cond == 'unreaded') {
                     $('#events_load_area').html('<div class="alert no-items">Нет cобытий</div>');
                     //$('#load_more').hide();
-                };
+                }
             },
-            error: function(){
+            error: function () {
                 core.loading.unsetGlobalLoading();
+                core.ajax.errorHandler();
             }
         });
     },
 
-    triggerAction: function(action){
-        switch(action){
-            case 'read_all' : {
-                if(confirm('Отметить все cобытия как просмотренные?')){
+    triggerAction: function (action) {
+        switch (action) {
+            case 'read_all' :
+            {
+                if (confirm('Отметить все cобытия как просмотренные?')) {
                     this.hideAllEvents();
-                };
-            }; break;
+                }
+            }
+                break;
 
-            case 'delete_all' : {
-                if(confirm('Удалить все cобытия?')){
+            case 'delete_all' :
+            {
+                if (confirm('Удалить все cобытия?')) {
                     this.delAllEvents();
-                };
-            }; break;
+                }
+            }
+                break;
 
             case 'unreaded' :
             case 'readed' :
@@ -285,43 +305,45 @@ core.events = {
             case 'notify' :
             case 'attention' :
             case 'success' :
-            case 'all' : {
+            case 'all' :
+            {
                 this.cond = action;
                 $('#events_load_area').html('');
                 core.events.step = 0;
                 core.events.offset = 0;
 
                 this.getItems();
-            }; break;
-        };
+            }
+                break;
+        }
     },
 
-    binds: function(){
-        $('body').on('click', '#load_more', function(){
+    binds: function () {
+        $('body').on('click', '#load_more', function () {
             core.events.getItems();
         });
 
-        $('.event-item').on('click', '.hide', function(){
+        $('.event-item').on('click', '.hide', function () {
             core.events.hideEvent($(this));
         });
 
-        $('.event-item').on('click', '.close', function(){
+        $('.event-item').on('click', '.close', function () {
             core.events.delEvent($(this));
         });
 
-        $('body').on('click', '.action_menu_item', function(){
-            if(!$(this).hasClass('btn')){
+        $('body').on('click', '.action_menu_item', function () {
+            if (!$(this).hasClass('btn')) {
                 $('.nav-side li').removeClass('active');
                 $(this).parent().addClass('active');
 
-                $('#events_type_header_suffix').html(' / '+$(this).text());
-            };
+                $('#events_type_header_suffix').html(' / ' + $(this).text());
+            }
 
             core.events.triggerAction($(this).data('action'));
         });
     },
 
-    init: function(){
+    init: function () {
         this.getItems();
         this.binds();
     }
