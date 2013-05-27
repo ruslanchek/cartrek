@@ -65,7 +65,7 @@ var Map = function (params) {
             t.busy = true;
         });
 
-        this.instance.on('dragend', function (e) {
+        this.instance.on('dragend', function () {
             if(this.busy_by_popup !== true){
                 t.busy = false;
             }

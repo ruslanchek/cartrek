@@ -58,13 +58,24 @@ var DCar = function (params) {
     };
 
     this.showMap = function () {
+        this.dom_object.find('.map').css({
+            visibility: 'visible'
+        });
         this.dom_object.find('.map-hider').fadeOut(150);
     };
 
     this.hideMap = function () {
+        var t = this;
+
         this.dom_object.find('.map-hider').css({
             top: this.dom_object.find('.head').height() + 11
-        }).fadeIn(150);
+        }).fadeIn(150, function () {
+                t.dom_object.find('.map').css({
+                    visibility: 'hidden'
+                });
+
+                t = null;
+            });
     };
 
     this.drawData = function () {
@@ -191,7 +202,7 @@ var View = function () {
         var $item = $('#fleets li[rel="' + i + '"]'),
             s = 150;
 
-        if(instant === true){
+        if (instant === true) {
             s = 0;
         }
 
@@ -199,14 +210,18 @@ var View = function () {
             top: $item.offset().top,
             left: $item.offset().left,
             width: $item.width()
-        }, s);
+        }, s, function () {
+            if (instant !== true) {
+                document.location.hash = '#fleet=' + i;
+            }
+        });
 
         MC.Data.fleet = i;
     };
 
     this.drawFleetMenu = function () {
         if (MC.Data.fleets.length > 0) {
-            var html = '<ul class="nav-top" id="fleets"><i></i><li rel="0" class="active"><a href="#fleet=all">Все группы</a></li>';
+            var html = '<ul class="nav-top" id="fleets"><i></i><li rel="all" class="active"><a href="#fleet=all">Все группы</a></li>';
 
             for (var i = 0, l = MC.Data.fleets.length; i < l; i++) {
                 html += '<li rel="' + MC.Data.fleets[i].id + '"><a href="#fleet=' + MC.Data.fleets[i].id + '">' + MC.Data.fleets[i].name + '</a></li>';
@@ -217,14 +232,11 @@ var View = function () {
             $('#fleets').html(html);
         }
 
-        $('#fleets a').on('click', function(){
+        $('#fleets a').on('click', function (e) {
             MC.View.setFleetMenuIndicator($(this).parent().attr('rel'), false);
-        });
+            e.preventDefault();
 
-        this.setFleetMenuIndicator(MC.Data.fleet, true);
-
-        $(window).on('resize', function(){
-            MC.View.setFleetMenuIndicator(MC.Data.fleet, true);
+            MC.Data.reset();
         });
     };
 
@@ -236,8 +248,35 @@ var View = function () {
         });
     };
 
-    this.resizeGrid = function () {
-        var h = 0;
+    this.showCars = function (cb) {
+        setTimeout(function () {
+            MC.View.resizeGrid(function () {
+                var i = 0,
+                    l = $('.dispatcher .brick').length;
+
+                var interval = setInterval(function () {
+                    $('.dispatcher .brick .item:eq(' + i + ')').animate({
+                        opacity: 1
+                    }, 200);
+
+                    i++;
+
+                    if(i >= l){
+                        clearInterval(interval);
+                        if (cb) {
+                            cb();
+                        }
+                    }
+                }, 70);
+            });
+        }, 300);
+    };
+
+    this.resizeGrid = function (cb) {
+        var h = 0,
+            hb = 0,
+            k = 4,
+            items_k = $('.dispatcher .brick .item:visible').length;
 
         $('.dispatcher .brick .item').each(function () {
             var h1 = $(this).find('.foot .separated-block').height();
@@ -250,6 +289,40 @@ var View = function () {
         $('.dispatcher .brick .item .foot .separated-block').css({
             height: h
         });
+
+        $('.dispatcher .brick').each(function () {
+            var hb1 = $(this).height();
+
+            if (hb < hb1) {
+                hb = hb1;
+            }
+        });
+
+        if (items_k % k != 0) {
+            items_k = (items_k / k) * k + k;
+        }
+
+        var gi = Math.floor(items_k / k);
+
+        $('.dispatcher').animate({
+            height: hb * gi + ((18 * gi) - 18)
+        }, 200, function () {
+            MC.View.setFleetMenuIndicator(MC.Data.fleet, true);
+
+            if (cb) {
+                cb();
+            }
+        });
+    };
+
+    this.destroyCarsGrid = function (cb) {
+        $('.dispatcher .brick').fadeOut(250, function () {
+            if (cb) {
+                cb();
+            }
+        });
+
+        this.setFleetMenuIndicator(MC.Data.fleet, true);
     };
 
     this.drawCarsGrid = function () {
@@ -277,6 +350,8 @@ var View = function () {
 
         this.gridInit();
         this.createSortable();
+
+        $('.dispatcher').sortable('refresh');
     };
 
     this.createSortable = function () {
@@ -331,14 +406,28 @@ var Data = function () {
     this.fleets = [];
     this.current_cars = [];
     this.auto_renew_blocker = false;
-    this.fleet = 0;
+    this.fleet = 'all';
+    this.hash = core.ui.getHashData();
 
     /* Class constructor */
     this.__construct = function () {
-        this.getUserFleetsAndDevices();
+        this.getUserFleetsAndDevices(true);
 
         core.ticker.addIntervalMethod(function () {
             MC.Data.autoRenewStack();
+        });
+
+        if (this.hash && this.hash.fleet) {
+            this.fleet = this.hash.fleet;
+        }
+    };
+
+    this.reset = function () {
+        this.cars = [];
+        this.current_cars = [];
+
+        MC.View.destroyCarsGrid(function () {
+            MC.Data.getUserFleetsAndDevices(false);
         });
     };
 
@@ -378,22 +467,66 @@ var Data = function () {
         }
     };
 
-    /* Postprocess cars and fleets data loader */
-    this.processLoadedData = function (data) {
+    this.createCarsCollection = function (cars) {
+        this.cars = [];
         this.current_cars = [];
 
-        this.cars = data.devices;
+        if (this.fleet == 'all' || !this.fleet) {
+            this.cars = cars.devices;
+
+            for (var i = 0, l = cars.devices.length; i < l; i++) {
+                this.current_cars.push(cars.devices[i].id);
+            }
+        } else {
+            for (var i = 0, l = cars.devices.length; i < l; i++) {
+                if (cars.devices[i].fleet_id == this.fleet) {
+                    this.cars.push(cars.devices[i]);
+                    this.current_cars.push(cars.devices[i].id);
+                }
+            }
+        }
+    };
+
+    /* Postprocess cars and fleets data loader */
+    this.processLoadedDataHard = function (data) {
         this.fleets = data.fleets;
 
         MC.View.drawFleetMenu();
 
-        for (var i = 0, l = this.cars.length; i < l; i++) {
-            this.current_cars.push(this.cars[i].id);
-        }
+        $(window).on('hashchange', function () {
+            MC.Data.hash = core.ui.getHashData();
+
+            if (MC.Data.hash && MC.Data.hash.fleet) {
+                MC.Data.fleet = MC.Data.hash.fleet;
+            }
+
+            MC.View.setFleetMenuIndicator(MC.Data.fleet, false);
+        });
+
+        $(window).on('resize', function () {
+            MC.View.setFleetMenuIndicator(MC.Data.fleet, true);
+        });
+
+        MC.View.setFleetMenuIndicator(MC.Data.fleet, true);
+
+        this.createCarsCollection(data);
 
         MC.View.drawCarsGrid();
 
         this.createCarsObjects();
+        this.auto_renew_blocker = true;
+        this.loadDynamicCarsData(true);
+    };
+
+    /* Postprocess cars and fleets data loader */
+    this.processLoadedDataSoft = function (data) {
+        this.createCarsCollection(data);
+
+        MC.View.destroyCarsGrid();
+        MC.View.drawCarsGrid();
+
+        this.createCarsObjects();
+        this.auto_renew_blocker = true;
         this.loadDynamicCarsData(true);
     };
 
@@ -403,16 +536,19 @@ var Data = function () {
             for (var i = 0, l = data.length; i < l; i++) {
                 var car = this.getCarById(data[i].id);
 
-                car.updateParams(data[i]);
-                car.drawData();
+                if (car) {
+                    car.updateParams(data[i]);
+                    car.drawData();
+                }
             }
 
             MC.View.resizeGrid();
+            MC.View.setFleetMenuIndicator(MC.Data.fleet, true);
         }
     };
 
     //Load fleets and their cars data
-    this.getUserFleetsAndDevices = function () {
+    this.getUserFleetsAndDevices = function (firstload) {
         $.ajax({
             url: '/control/map/?ajax',
             data: {
@@ -426,7 +562,12 @@ var Data = function () {
             },
             success: function (data) {
                 core.loading.unsetGlobalLoading('getUserFleetsAndDevices');
-                MC.Data.processLoadedData(data);
+
+                if (firstload === true) {
+                    MC.Data.processLoadedDataHard(data);
+                } else {
+                    MC.Data.processLoadedDataSoft(data);
+                }
             },
             error: function () {
                 core.loading.unsetGlobalLoading('getUserFleetsAndDevices');
@@ -457,12 +598,11 @@ var Data = function () {
                 if (firstload === true) {
                     // Не показываем глобал лоадинг, если запрос был на обновление данных
                     core.loading.setGlobalLoading('loadDynamicCarsData');
-                    MC.Data.auto_renew_blocker = false;
                 }
+
+                this.auto_renew_blocker = true;
             },
             success: function (data) {
-                MC.Data.auto_renew_blocker = false;
-
                 if (firstload === true) {
                     core.loading.unsetGlobalLoading('loadDynamicCarsData');
                 }
@@ -471,6 +611,12 @@ var Data = function () {
                  включаем автообновление */
                 MC.Data.mergeCarsData(data);
                 MC.Data.drawCars();
+
+                if(firstload === true){
+                    MC.View.showCars(function(){
+                        MC.Data.auto_renew_blocker = false;
+                    });
+                }
             },
             error: function () {
                 MC.Data.auto_renew_blocker = false;
@@ -485,6 +631,7 @@ var Data = function () {
     };
 
     this.autoRenewStack = function () {
+        console.log(this.auto_renew_blocker)
         if (this.auto_renew_blocker !== true) {
             MC.Data.loadDynamicCarsData(false);
         }
@@ -507,6 +654,8 @@ var MC = {
         this.Data.__construct();
     }
 }
+
+core.ticker.delay = 10000;
 
 $(function () {
     MC.init();
