@@ -59,7 +59,7 @@ core.loading = {
     },
 
     unsetLoading: function (name, micro) {
-        if ($('.notify .loading_area').html() != '') {
+        if (core.notify && $('.notify .loading_area').html() != '') {
             core.notify.hideNotify();
         }
 
