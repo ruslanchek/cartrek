@@ -547,7 +547,12 @@ var geozones = {
                 classname = 'unactive';
             }
 
-            html += '<li class="' + classname + '"><a id="gz-item-' + this.geozones.raw[i].id + '" data-id="' + this.geozones.raw[i].id + '" href="#"><i data-id="' + this.geozones.raw[i].id + '"></i><span>' + this.geozones.raw[i].name + '</span></a></li>';
+            html += '<li class="' + classname + '">' +
+                        '<a id="gz-item-' + this.geozones.raw[i].id + '" data-id="' + this.geozones.raw[i].id + '" href="#">' +
+                            '<i title="Показать на карте" data-id="' + this.geozones.raw[i].id + '"></i>' +
+                            '<span title="Редактировать">' + this.geozones.raw[i].name + '</span>' +
+                        '</a>' +
+                    '</li>';
         }
 
         html += '</ul>';
@@ -594,9 +599,11 @@ var geozones = {
                     callback();
                 }
 
-                //geozones.map.fitBounds(geozones.zones_layers.getBounds());
+                // geozones.map.fitBounds(geozones.zones_layers.getBounds());
 
                 geozones.initMapControls();
+
+                geozones.map.fitBounds(geozones.zones_layers.getBounds());
             }
         });
     },

@@ -1516,16 +1516,16 @@ core.modal = {
 
     destroyModal: function () {
         if (this.modal_created === true) {
-            $(window).off('resize');
-            $(document).off('scroll');
-
-            $('#modal_closer').off('click');
-            $('body').off('scroll');
-            $('body').off('keyup');
-
             $('#modal_window, #fs_overlay').fadeOut(150, function () {
                 $('#modal_window, #fs_overlay').remove();
-            })
+
+                $(window).off('resize');
+                $(document).off('scroll');
+
+                $('#modal_closer').off('click');
+                $('body').off('scroll');
+                $('body').off('keyup');
+            });
 
             if (this.loading_process) {
                 this.loading_process.abort();
