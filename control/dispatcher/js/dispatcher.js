@@ -240,36 +240,34 @@ var View = function () {
         });
     };
 
+    this.showCars = function (cb) {
+        MC.View.resizeGrid(function () {
+            var i = 0,
+                l = $('.dispatcher .brick').length;
+
+            var interval = setInterval(function () {
+                $('.dispatcher .brick .item:eq(' + i + ')').animate({
+                    opacity: 1
+                }, 200).addClass('flipped');
+
+                i++;
+
+                if(i >= l){
+                    clearInterval(interval);
+                    if (cb) {
+                        cb();
+                    }
+                }
+            }, 70);
+        });
+    };
+
     this.gridInit = function () {
         $('.dispatcher .item .map').hover(function () {
             $(this).find('.leaflet-control-container').show();
         }, function () {
             $(this).find('.leaflet-control-container').fadeOut(150);
         });
-    };
-
-    this.showCars = function (cb) {
-        setTimeout(function () {
-            MC.View.resizeGrid(function () {
-                var i = 0,
-                    l = $('.dispatcher .brick').length;
-
-                var interval = setInterval(function () {
-                    $('.dispatcher .brick .item:eq(' + i + ')').animate({
-                        opacity: 1
-                    }, 200);
-
-                    i++;
-
-                    if(i >= l){
-                        clearInterval(interval);
-                        if (cb) {
-                            cb();
-                        }
-                    }
-                }, 70);
-            });
-        }, 300);
     };
 
     this.resizeGrid = function (cb) {
@@ -316,11 +314,23 @@ var View = function () {
     };
 
     this.destroyCarsGrid = function (cb) {
-        $('.dispatcher .brick').fadeOut(250, function () {
-            if (cb) {
-                cb();
+        var i = 0,
+            l = $('.dispatcher .brick').length;
+
+        var interval = setInterval(function () {
+            $('.dispatcher .brick .item:eq(' + i + ')').animate({
+                opacity: 0
+            }, 200).removeClass('flipped');
+
+            i++;
+
+            if(i >= l){
+                clearInterval(interval);
+                if (cb) {
+                    cb();
+                }
             }
-        });
+        }, 70);
 
         this.setFleetMenuIndicator(MC.Data.fleet, true);
     };
@@ -403,6 +413,7 @@ var View = function () {
  **/
 var Data = function () {
     this.cars = [];
+    this.devices = [];
     this.fleets = [];
     this.current_cars = [];
     this.auto_renew_blocker = false;
@@ -411,7 +422,7 @@ var Data = function () {
 
     /* Class constructor */
     this.__construct = function () {
-        this.getUserFleetsAndDevices(true);
+        this.getUserFleetsAndDevices();
 
         core.ticker.addIntervalMethod(function () {
             MC.Data.autoRenewStack();
@@ -427,7 +438,7 @@ var Data = function () {
         this.current_cars = [];
 
         MC.View.destroyCarsGrid(function () {
-            MC.Data.getUserFleetsAndDevices(false);
+            MC.Data.processLoadedDataSoft();
         });
     };
 
@@ -472,9 +483,8 @@ var Data = function () {
         this.current_cars = [];
 
         if (this.fleet == 'all' || !this.fleet) {
-            this.cars = cars.devices;
-
             for (var i = 0, l = cars.devices.length; i < l; i++) {
+                this.cars.push(cars.devices[i]);
                 this.current_cars.push(cars.devices[i].id);
             }
         } else {
@@ -490,6 +500,7 @@ var Data = function () {
     /* Postprocess cars and fleets data loader */
     this.processLoadedDataHard = function (data) {
         this.fleets = data.fleets;
+        this.devices = data.devices;
 
         MC.View.drawFleetMenu();
 
@@ -519,7 +530,12 @@ var Data = function () {
     };
 
     /* Postprocess cars and fleets data loader */
-    this.processLoadedDataSoft = function (data) {
+    this.processLoadedDataSoft = function () {
+        var data = {
+            fleets: this.fleets,
+            devices: this.devices
+        };
+
         this.createCarsCollection(data);
 
         MC.View.destroyCarsGrid();
@@ -527,6 +543,7 @@ var Data = function () {
 
         this.createCarsObjects();
         this.auto_renew_blocker = true;
+
         this.loadDynamicCarsData(true);
     };
 
@@ -548,7 +565,7 @@ var Data = function () {
     };
 
     //Load fleets and their cars data
-    this.getUserFleetsAndDevices = function (firstload) {
+    this.getUserFleetsAndDevices = function () {
         $.ajax({
             url: '/control/map/?ajax',
             data: {
@@ -562,12 +579,7 @@ var Data = function () {
             },
             success: function (data) {
                 core.loading.unsetGlobalLoading('getUserFleetsAndDevices');
-
-                if (firstload === true) {
-                    MC.Data.processLoadedDataHard(data);
-                } else {
-                    MC.Data.processLoadedDataSoft(data);
-                }
+                MC.Data.processLoadedDataHard(data);
             },
             error: function () {
                 core.loading.unsetGlobalLoading('getUserFleetsAndDevices');
@@ -631,7 +643,6 @@ var Data = function () {
     };
 
     this.autoRenewStack = function () {
-        console.log(this.auto_renew_blocker)
         if (this.auto_renew_blocker !== true) {
             MC.Data.loadDynamicCarsData(false);
         }

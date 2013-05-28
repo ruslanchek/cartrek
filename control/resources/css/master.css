@@ -51,13 +51,13 @@ p {
 -----------------------------------------------------------------------------*/
 .nav-top {
     list-style-type: none;
-    border: 3px solid #e5e5e5;
     -webkit-border-radius: 4px;
             border-radius: 4px;
-    margin: 0 0 1em;
+    margin: 0 0 1.1em;
     padding: 0;
     background: #e5e5e5 url(../img/white-gradient.png) repeat-x top;
     text-align: center;
+    text-shadow: 0 1px 0 #fff;
 }
 
 .nav-top i {
@@ -66,8 +66,8 @@ p {
     position: absolute;
     top: 0;
     left: 0;
-    height: 29px;
-    line-height: 29px;
+    height: 34px;
+    line-height: 34px;
     text-align: center;
     white-space: nowrap;
 
@@ -87,16 +87,16 @@ p {
 }
 
 .nav-top li {
-    height: 30px;
+    height: 35px;
     display: block;
     float: left;
     margin: 0;
 }
 
 .nav-top li a {
-    height: 30px;
+    height: 35px;
     display: block;
-    line-height: 30px;
+    line-height: 35px;
     padding: 0 2ex;
 }
 
@@ -3216,7 +3216,6 @@ footer a:active {
     margin-left: 2%;
     margin-bottom: 18px;
     float: left;
-    background: #eee;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
 }
@@ -3229,6 +3228,27 @@ footer a:active {
     background: #f6f6f6 url(../img/pattern_white.png);
     position: relative;
     opacity: 0;
+
+    -webkit-transition: -webkit-transform 450ms;
+             -moz-transition: -moz-transform 450ms;
+               -o-transition: -o-transform 450ms;
+                  transition: transform 450ms;
+          -webkit-transform-style: preserve-3d;
+             -moz-transform-style: preserve-3d;
+               -o-transform-style: preserve-3d;
+                  transform-style: preserve-3d;
+    -webkit-transform: rotateY( 180deg ) scale(0.5) rotateZ(20deg);
+             -moz-transform: rotateY( 180deg ) scale(0.5) rotateZ(20deg);
+               -o-transform: rotateY( 180deg ) scale(0.5) rotateZ(20deg);
+                  transform: rotateY( 180deg ) scale(0.5) rotateZ(20deg);
+
+}
+
+.dispatcher .item.flipped {
+    -webkit-transform: rotateY( 0deg );
+         -moz-transform: rotateY( 0deg );
+           -o-transform: rotateY( 0deg );
+              transform: rotateY( 0deg );
 }
 
 .dispatcher .item:hover {
@@ -3382,6 +3402,15 @@ footer a:active {
     -webkit-box-shadow:  0px 10px 35px 0px rgba(0, 0, 0, 0.4);
             box-shadow:  0px 10px 35px 0px rgba(0, 0, 0, 0.4);
     background: none;
+
+    -webkit-transition: -webkit-transform 250ms;
+             -moz-transition: -moz-transform 250ms;
+               -o-transition: -o-transform 250ms;
+                  transition: transform 250ms;
+          -webkit-transform-style: preserve-3d;
+             -moz-transform-style: preserve-3d;
+               -o-transform-style: preserve-3d;
+                  transform-style: preserve-3d;
 }
 
 .dispatcher .ui-sortable-placeholder {
@@ -3393,4 +3422,16 @@ footer a:active {
 
     -webkit-box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
             box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+
+    -webkit-transform: rotateY( 0deg ) rotateZ(0deg);
+                     -moz-transform: rotateY( 0deg ) rotateZ(0deg);
+                       -o-transform: rotateY( 0deg ) rotateZ(0deg);
+                          transform: rotateY( 0deg ) rotateZ(0deg);
+}
+
+.dispatcher .ui-sortable-helper {
+    -webkit-transform: rotateY( 5deg ) rotateZ(-3deg);
+                 -moz-transform: rotateY( 5deg ) rotateZ(-3deg);
+                   -o-transform: rotateY( 5deg ) rotateZ(-3deg);
+                      transform: rotateY( 5deg ) rotateZ(-3deg);
 }
