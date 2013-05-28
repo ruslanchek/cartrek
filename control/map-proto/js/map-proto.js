@@ -4,6 +4,8 @@
  *  View realisation
  **/
 var View = function () {
+    this.zoomed_on_car = false;
+
     /* Class constructor */
     this.__construct = function () {
         this.mapView();
@@ -353,12 +355,16 @@ var View = function () {
 
                 // Otherwise focus to single car if it present
             } else if (single) {
-                //MC.Map.setZoom(14);
+                if(this.zoomed_on_car !== true){
+                    this.zoomed_on_car = true;
+                    MC.Map.setZoom(14);
+                }
+
                 single.focus();
 
                 // Otherwise focus to map defaults
             } else {
-                //MC.Map.returnToRoots();
+                MC.Map.returnToRoots();
             }
 
             // Process focus scenery for single car on a map but if selected all
@@ -371,7 +377,11 @@ var View = function () {
             // If current car is on a map
             if (MC.Data.current_car.params.on_map === true) {
                 // Simply focus on a car
-                // MC.Map.setZoom(14);
+                if(this.zoomed_on_car !== true){
+                    this.zoomed_on_car = true;
+                    MC.Map.setZoom(14);
+                }
+
                 MC.Data.current_car.focus();
 
                 // Otherwise focus to map defaults
@@ -424,6 +434,8 @@ var Data = function () {
     /* Methods */
     /* Hard load - is cars and fleets data loader with binds starter methods */
     this.hardLoad = function () {
+        MC.View.zoomed_on_car = false;
+
         this.readOptionsFromCookies();
         this.setParamsFromHash();
         MC.View.bindMapOptionsController(true);
@@ -432,6 +444,8 @@ var Data = function () {
 
     /* Soft load - binds starter methods without cars and fleets data loader */
     this.softLoad = function () {
+        MC.View.zoomed_on_car = false;
+
         this.readOptionsFromCookies();
         this.setParamsFromHash();
         this.bindCurrentFleetAndCar();

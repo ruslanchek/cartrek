@@ -70,8 +70,8 @@ var Map = function (params) {
                 t.busy = false;
             }
 
-            $.cookie('map-lat', t.instance.getCenter().lat, core.options.cookie_options);
-            $.cookie('map-lng', t.instance.getCenter().lng, core.options.cookie_options);
+            //$.cookie('map-lat', t.instance.getCenter().lat, core.options.cookie_options);
+            //$.cookie('map-lng', t.instance.getCenter().lng, core.options.cookie_options);
         });
 
         this.instance.on('zoomend', function () {

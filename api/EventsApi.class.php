@@ -30,14 +30,12 @@ Class EventsApi extends Core
             {
                 $cond_where = ' && `active` = 1';
             }
-                ;
                 break;
 
             case 'readed' :
             {
                 $cond_where = ' && `active` = 0';
             }
-                ;
                 break;
 
             case 'error' :
@@ -51,29 +49,25 @@ Class EventsApi extends Core
             {
                 $cond_where = ' && `status` = 3';
             }
-                ;
                 break;
 
             case 'attention' :
             {
                 $cond_where = ' && `status` = 2';
             }
-                ;
                 break;
 
             case 'success' :
             {
                 $cond_where = ' && `status` = 4';
             }
-                ;
                 break;
 
             case 'all';
             default :
-                {
+            {
                 $cond_where = '';
-                }
-                ;
+            }
                 break;
         }
         ;

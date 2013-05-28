@@ -175,13 +175,7 @@ Class Devices extends Core
     public function getDynamicDevicesData($cars, $tm_flag)
     {
         if ($cars && count($cars) > 0) {
-            $in = '';
-
-            foreach ($cars as $car) {
-                $in .= intval($car) . ",";
-            }
-
-            $in = substr($in, 0, strlen($in) - 1);
+            $in = implode(',', $cars);
 
             $d = intval(substr($this->current_date, 0, 2));
             $m = intval(substr($this->current_date, 3, 2));

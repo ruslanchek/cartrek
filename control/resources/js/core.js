@@ -18,7 +18,7 @@ core.ajax = {
             success: function(data){
                 if(data.user_logged_in !== true){
                     var html =  'Вы не авторизованы, <a href="javascript:void(0)" onclick="document.location.reload()">войдите в систему</a> заново!<br><hr>' +
-                                'Это могло произойти, если закончилось время сессии. Или если кто-то авторизовался в Картреке под вашем логином в другом браузере или на другом компьютере.';
+                                '<em>Это могло произойти, если закончилось время сессии. Или если кто-то авторизовался в Картреке под вашем логином в другом браузере или на другом компьютере.</em>';
 
                     core.warning_modal.createModal(
                         'Сбой авторизации',
@@ -988,6 +988,10 @@ core.utilities = {
     },
 
     drawGId: function (val, size) {
+        if(!val){
+            return false;
+        }
+
         val = val.toLowerCase();
         val = this.filterGidStr(val);
 
@@ -1415,7 +1419,7 @@ core.modal = {
     modal_created: false,
 
     prepareCode: function (header, html) {
-        var code = '<div class="window" id="modal_window">' +
+        var code = '<div class="window modal" id="modal_window">' +
             '<a href="javascript:void(0)" id="modal_closer"></a>' +
             '<h1>' + header + '</h1>' +
             '<div class="message" title="Клик закроет это сообщение"></div>' +
@@ -1427,20 +1431,20 @@ core.modal = {
 
     setModalDimensions: function () {
         var that = this;
-        $('#modal_window').css({
+        $('#modal_window.modal').css({
             width: that.width,
             marginLeft: -that.width / 2
         });
     },
 
     setModalPosition: function () {
-        $('#modal_window').css({
-            marginTop: -$('#modal_window').height() / 2
+        $('#modal_window.modal').css({
+            marginTop: -$('#modal_window.modal').height() / 2
         });
     },
 
     unSetMessage: function () {
-        $('#modal_window .message').removeClass('ok').removeClass('error').html('').hide();
+        $('#modal_window.modal .message').removeClass('ok').removeClass('error').html('').hide();
     },
 
     setMessage: function (data) {
@@ -1454,34 +1458,34 @@ core.modal = {
             classname = 'error';
         }
 
-        $('#modal_window .message').addClass(classname).html(data.message).slideDown(100);
+        $('#modal_window.modal .message').addClass(classname).html(data.message).slideDown(100);
     },
 
     setLoading: function () {
         this.unSetLoading();
-        $('#modal_window').addClass('loading-bar');
+        $('#modal_window.modal').addClass('loading-bar');
     },
 
     unSetLoading: function () {
-        $('#modal_window').removeClass('loading-bar');
+        $('#modal_window.modal').removeClass('loading-bar');
     },
 
     createOverlay: function () {
-        $('body').prepend('<div id="fs_overlay"></div>');
-        $('#fs_overlay').css('background', 'black').show();
+        $('body').prepend('<div id="fs_overlay" class="modal"></div>');
+        $('#fs_overlay.modal').css('background', 'black').show();
     },
 
     createModal: function (header, html, width) {
-        this.destroyModal();
+        this.destroyModal(true);
 
         var that = this;
 
-        $('#modal_window, #fs_overlay').remove();
+        $('#modal_window.modal, #fs_overlay.modal').remove();
         this.width = width;
 
         $('body').prepend(this.prepareCode(header, html));
 
-        $('#modal_window .message').on('click', function () {
+        $('#modal_window.modal .message').on('click', function () {
             that.unSetMessage();
         });
 
@@ -1501,7 +1505,7 @@ core.modal = {
             that.setModalPosition();
         });
 
-        $('#modal_closer').on('click', function () {
+        $('#modal_closer.modal').on('click', function () {
             that.destroyModal();
         });
 
@@ -1514,17 +1518,24 @@ core.modal = {
         this.modal_created = true;
     },
 
-    destroyModal: function () {
+    destroyModal: function (instant) {
         if (this.modal_created === true) {
-            $('#modal_window, #fs_overlay').fadeOut(150, function () {
-                $('#modal_window, #fs_overlay').remove();
+            $(window).off('resize');
+            $(document).off('scroll');
 
-                $(window).off('resize');
-                $(document).off('scroll');
+            $('#modal_closer').off('click');
+            $('body').off('scroll');
+            $('body').off('keyup');
 
-                $('#modal_closer').off('click');
-                $('body').off('scroll');
-                $('body').off('keyup');
+            var s = 200;
+
+            if(instant === true){
+                s = 0;
+            }
+
+            $('#modal_window.modal, #fs_overlay.modal').fadeOut(s, function () {
+                $('#modal_window.modal, #fs_overlay.modal').remove();
+                core.warning_modal.modal_created = false;
             });
 
             if (this.loading_process) {
@@ -1541,7 +1552,7 @@ core.warning_modal = {
     modal_created: false,
 
     prepareCode: function (header, html) {
-        var code = '<div class="window" id="modal_window">' +
+        var code = '<div class="window w_modal" id="modal_window">' +
             '<h1>' + header + '</h1>' +
             '<div class="window_content">' + html + '</div>' +
             '</div>';
@@ -1551,37 +1562,37 @@ core.warning_modal = {
 
     setModalDimensions: function () {
         var that = this;
-        $('#modal_window').css({
+        $('#modal_window.w_modal').css({
             width: that.width,
             marginLeft: -that.width / 2
         });
     },
 
     setModalPosition: function () {
-        $('#modal_window').css({
-            marginTop: -$('#modal_window').height() / 2
+        $('#modal_window.w_modal').css({
+            marginTop: -$('#modal_window.w_modal').height() / 2
         });
     },
 
     createOverlay: function () {
-        $('body').prepend('<div id="fs_overlay"></div>');
-        $('#fs_overlay').css({
+        $('body').prepend('<div id="fs_overlay" class="w_modal"></div>');
+        $('#fs_overlay.w_modal').css({
             background: 'black',
             opacity: 0.8
         }).show();
     },
 
     createModal: function (header, html, width) {
-        this.destroyModal();
+        this.destroyModal(true);
 
         var that = this;
 
-        $('#modal_window, #fs_overlay').remove();
+        $('#modal_window.w_modal, #fs_overlay.w_modal').remove();
         this.width = width;
 
         $('body').prepend(this.prepareCode(header, html));
 
-        $('#modal_window .message').on('click', function () {
+        $('#modal_window.w_modal .message').on('click', function () {
             that.unSetMessage();
         });
 
@@ -1610,7 +1621,7 @@ core.warning_modal = {
         this.modal_created = true;
     },
 
-    destroyModal: function () {
+    destroyModal: function (instant) {
         if (this.modal_created === true) {
             $(window).off('resize');
             $(document).off('scroll');
@@ -1618,15 +1629,20 @@ core.warning_modal = {
             $('body').off('scroll');
             $('body').off('keyup');
 
-            $('#modal_window, #fs_overlay').fadeOut(150, function () {
-                $('#modal_window, #fs_overlay').remove();
-            })
+            var s = 200;
+
+            if(instant === true){
+                s = 0;
+            }
+
+            $('#modal_window.w_modal, #fs_overlay.w_modal').fadeOut(s, function () {
+                $('#modal_window.w_modal, #fs_overlay.w_modal').remove();
+                core.warning_modal.modal_created = false;
+            });
 
             if (this.loading_process) {
                 this.loading_process.abort();
             }
-
-            this.modal_created = false;
         }
     }
 };
