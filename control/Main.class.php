@@ -8,7 +8,7 @@ Class Main extends Core
 
         $this->init(array(
             'name' => 'main',
-            'title' => 'Пользователь',
+            'title' => 'Добро пожаловать в Картрек, '.$this->auth->user['data']['name'],
             'dir' => '/control'
         ));
     }

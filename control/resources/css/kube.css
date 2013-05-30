@@ -886,6 +886,7 @@ input.input-search {
 .quarter,
 .fifth,
 .sixth,
+.seventh,
 .twothird,
 .twofifth,
 .threefifth,
@@ -901,6 +902,7 @@ input.input-search {
 .quarter:first-child,
 .fifth:first-child,
 .sixth:first-child,
+.seventh:first-child,
 .twothird:first-child,
 .twofifth:first-child,
 .threefifth:first-child,
@@ -911,6 +913,9 @@ input.input-search {
 }
 .sixth {
   width: 14.007092198581558%;
+}
+.seventh {
+  width: 11.09422492471429%;
 }
 .fifth {
   width: 17.4468085106383%;

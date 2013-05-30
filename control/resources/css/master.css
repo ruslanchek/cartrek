@@ -376,13 +376,17 @@ footer {
 
 .top-panel .container .logo {
     position: absolute;
-    left: 50%;
+    left: 0;
     top: 50%;
     text-indent: -99999px;
     background: url(../img/sprite.png);
     width: 128px;
     height: 32px;
-    margin: -16px 0 0 -64px;
+    margin: -16px 0 0 0;
+}
+
+.top-panel .container .logo:hover {
+    opacity: 0.75;
 }
 
 .top-panel .container .loading-ball {
@@ -536,7 +540,7 @@ footer {
 }
 
 .top-panel .top-menu {
-    margin: 0;
+    margin: 0 0 0 150px;
     height: 46px;
 }
 
@@ -2245,7 +2249,7 @@ footer a:active {
 /* =Main
 -----------------------------------------------------------------------------*/
 .sections {
-    padding: 20px 0;
+    margin: 0;
 }
 
 .sections .item {
@@ -2253,13 +2257,13 @@ footer a:active {
 }
 
 .sections .item a.inner {
-    border: 2px solid #eee;
     display: block;
-    padding: 20px 10px;
+    padding: 5px 10px 5px;
     -webkit-border-radius: 8px;
     border-radius: 8px;
     text-align: center;
     color: #3C4E5A;
+    text-decoration: none;
 }
 
 .sections .item a.inner:hover {
@@ -2272,12 +2276,12 @@ footer a:active {
 }
 
 .sections .item .icon {
-    background-image: url(../img/icons-main-sprite.png);
+    background-image: url(../img/icons-64.png);
     background-repeat: no-repeat;
     display: block;
     margin: 0 auto 0.5em;
-    height: 32px;
-    width: 32px;
+    height: 64px;
+    width: 64px;
 }
 
 .sections .item .count {
@@ -2286,37 +2290,109 @@ footer a:active {
     background: #920000;
     color: #fff;
     position: absolute;
-    top: -5px;
-    right: -6px;
-    height: 20px;
-    min-width: 16px;
-    padding: 0 2px;
+    top: 22px;
+    left: 50%;
+    height: 18px;
+    line-height: 18px;
+    padding: 0 4px;
     display: block;
+    margin-left: 13px;
+    font-size: 11px;
 }
 
-.sections .item .icon.watch {
+.sections .item .icon.statistics {
     background-position: 0 0;
 }
 
-.sections .item .icon.events-active {
-    background-position: -32px 0;
-}
-
-.sections .item .icon.events-unactive {
+.sections .item .icon.check-list {
     background-position: -64px 0;
 }
 
-.sections .item .icon.dispatcher {
-    background-position: -155px 0;
+.sections .item .icon.browser {
+    background-position: -128px 0;
 }
 
-.sections .item .icon.geozones {
-    background-position: -185px 0;
+.sections .item .icon.events-unactive {
+    background-position: -192px 0;
 }
 
-.sections .item .icon.config {
-    background-position: -124px 0;
+.sections .item .icon.events-active {
+    background-position: -256px 0;
 }
+
+.sections .item .icon.clock {
+    background-position: -320px 0;
+}
+
+.sections .item .icon.lock {
+    background-position: -384px 0;
+}
+
+.sections .item .icon.chat {
+    background-position: -448px 0;
+}
+
+.sections .item .icon.compass {
+    background-position: -512px 0;
+}
+
+.sections .item .icon.map {
+    background-position: -576px 0;
+}
+
+.sections .item .icon.gauge {
+    background-position: -640px 0;
+}
+
+.sections .item .icon.spanner-screwdriver {
+    background-position: -704px 0;
+}
+
+.sections .item .icon.switch {
+    background-position: -768px 0;
+}
+
+.sections .item .icon.money {
+    background-position: -832px 0;
+}
+
+.sections .item .icon.truck {
+    background-position: -896px 0;
+}
+
+.sections .item .icon.gear {
+    background-position: -960px 0;
+}
+
+.sections .item .icon.house {
+    background-position: -1024px 0;
+}
+
+.sections .item .icon.dude {
+    background-position: -1088px 0;
+}
+
+.sections .item .icon.id {
+    background-position: -1152px 0;
+}
+
+.sections .item .icon.bullseye {
+    background-position: -1216px 0;
+}
+
+.sections .item .icon.trucks {
+    background-position: -1280px 0;
+}
+
+.sections .item .icon.trucks {
+    background-position: -1280px 0;
+}
+
+.sections .item .icon.key {
+    background-position: -1344px 0;
+}
+
+
 
 /* =Map types
 -----------------------------------------------------------------------------*/

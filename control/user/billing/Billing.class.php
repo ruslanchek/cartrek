@@ -12,7 +12,7 @@ Class Billing extends Core {
 
         $this->init(array(
             'name'  => 'user.billing',
-            'title' => 'Баланс',
+            'title' => 'Баланс и тарифы',
             'dir'   => '/control/user/billing'
         ));
     }
