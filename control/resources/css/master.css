@@ -385,6 +385,10 @@ footer {
     margin: -16px 0 0 0;
 }
 
+.wide .logo {
+    left: 20px !important;
+}
+
 .top-panel .container .logo:hover {
     opacity: 0.75;
 }

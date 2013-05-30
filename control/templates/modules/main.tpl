@@ -49,8 +49,12 @@
         </a>
     </div>
 </div>
-<hr>
+
+<hr style="margin: 20px 0 10px">
+
 <div class="row sections">
+    <div class="seventh item"></div>
+
     <div class="seventh item">
         <a href="/control/user/system/" class="inner">
             <i class="icon spanner-screwdriver"></i>
@@ -85,4 +89,6 @@
             Баланс и&nbsp;тарифы
         </a>
     </div>
+
+    <div class="seventh item"></div>
 </div>
