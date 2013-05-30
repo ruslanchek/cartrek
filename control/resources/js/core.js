@@ -1505,7 +1505,7 @@ core.modal = {
             that.setModalPosition();
         });
 
-        $('#modal_closer.modal').on('click', function () {
+        $('#modal_closer').on('click', function () {
             that.destroyModal();
         });
 
@@ -1610,12 +1610,6 @@ core.warning_modal = {
 
         $('body').on('scroll', function () {
             that.setModalPosition();
-        });
-
-        $('body').on('keyup', function (e) {
-            if (e.keyCode == 27) {
-                that.destroyModal();
-            }
         });
 
         this.modal_created = true;
