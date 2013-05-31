@@ -10,27 +10,31 @@ var core = {
 };
 
 core.ajax = {
-    errorHandler: function(){
+    errorHandler: function () {
         $.ajax({
             url: '/control/meta/?json',
             type: 'get',
             dataType: 'json',
-            success: function(data){
-                if(data.user_logged_in !== true){
-                    var html =  'Вы не авторизованы, <a href="javascript:void(0)" onclick="document.location.reload()">войдите в систему</a> заново!<br><hr>' +
-                                '<em>Это могло произойти, если закончилось время сессии. Или если кто-то авторизовался в Картреке под вашем логином в другом браузере или на другом компьютере.</em>';
+            success: function (data) {
+                if (data.user_logged_in !== true) {
+                    var html = 'Вы не авторизованы, <a href="javascript:void(0)" onclick="document.location.reload()">войдите в систему</a> заново!<br><hr>' +
+                        '<em>Это могло произойти, если закончилось время сессии. Или если кто-то авторизовался в Картреке под вашем логином в другом браузере или на другом компьютере.</em>';
 
-                    core.warning_modal.createModal(
+                    core.modal.createModal(
                         'Сбой авторизации',
                         html,
-                        400
+                        400,
+                        true
                     );
 
+                    // Сделать Destry all, преде чем открывать это окошко!!!
+
                     clearInterval(core.ticker.interval);
+                    clearInterval(core.afk.interval);
                 }
             },
-            error: function(){
-                core.modal.destroyModal();
+            error: function () {
+                core.modal.destroyModal('ajax');
             }
         })
     }
@@ -988,7 +992,7 @@ core.utilities = {
     },
 
     drawGId: function (val, size) {
-        if(!val){
+        if (!val) {
             return false;
         }
 
@@ -1418,9 +1422,15 @@ core.modal = {
     loading_process: null,
     modal_created: false,
 
-    prepareCode: function (header, html) {
+    prepareCode: function (header, html, peramnent) {
+        var close = '';
+
+        if(peramnent !== true){
+            close = '<a href="javascript:void(0)" id="modal_closer"></a>';
+        }
+
         var code = '<div class="window modal" id="modal_window">' +
-            '<a href="javascript:void(0)" id="modal_closer"></a>' +
+            close +
             '<h1>' + header + '</h1>' +
             '<div class="message" title="Клик закроет это сообщение"></div>' +
             '<div class="window_content">' + html + '</div>' +
@@ -1475,7 +1485,7 @@ core.modal = {
         $('#fs_overlay.modal').css('background', 'black').show();
     },
 
-    createModal: function (header, html, width) {
+    createModal: function (header, html, width, permanent) {
         this.destroyModal(true);
 
         var that = this;
@@ -1483,7 +1493,7 @@ core.modal = {
         $('#modal_window.modal, #fs_overlay.modal').remove();
         this.width = width;
 
-        $('body').prepend(this.prepareCode(header, html));
+        $('body').prepend(this.prepareCode(header, html, permanent));
 
         $('#modal_window.modal .message').on('click', function () {
             that.unSetMessage();
@@ -1505,15 +1515,18 @@ core.modal = {
             that.setModalPosition();
         });
 
-        $('#modal_closer').on('click', function () {
-            that.destroyModal();
-        });
-
-        $('body').on('keyup', function (e) {
-            if (e.keyCode == 27) {
+        if(permanent !== true){
+            $('#modal_closer').on('click', function () {
                 that.destroyModal();
-            }
-        });
+            });
+
+
+            $('body').on('keyup', function (e) {
+                if (e.keyCode == 27) {
+                    that.destroyModal();
+                }
+            });
+        }
 
         this.modal_created = true;
     },
@@ -1529,13 +1542,13 @@ core.modal = {
 
             var s = 200;
 
-            if(instant === true){
+            if (instant === true) {
                 s = 0;
             }
 
             $('#modal_window.modal, #fs_overlay.modal').fadeOut(s, function () {
                 $('#modal_window.modal, #fs_overlay.modal').remove();
-                core.warning_modal.modal_created = false;
+                core.modal.modal_created = false;
             });
 
             if (this.loading_process) {
@@ -1543,100 +1556,6 @@ core.modal = {
             }
 
             this.modal_created = false;
-        }
-    }
-};
-
-//Warning window class
-core.warning_modal = {
-    modal_created: false,
-
-    prepareCode: function (header, html) {
-        var code = '<div class="window w_modal" id="modal_window">' +
-            '<h1>' + header + '</h1>' +
-            '<div class="window_content">' + html + '</div>' +
-            '</div>';
-
-        return code;
-    },
-
-    setModalDimensions: function () {
-        var that = this;
-        $('#modal_window.w_modal').css({
-            width: that.width,
-            marginLeft: -that.width / 2
-        });
-    },
-
-    setModalPosition: function () {
-        $('#modal_window.w_modal').css({
-            marginTop: -$('#modal_window.w_modal').height() / 2
-        });
-    },
-
-    createOverlay: function () {
-        $('body').prepend('<div id="fs_overlay" class="w_modal"></div>');
-        $('#fs_overlay.w_modal').css({
-            background: 'black',
-            opacity: 0.8
-        }).show();
-    },
-
-    createModal: function (header, html, width) {
-        this.destroyModal(true);
-
-        var that = this;
-
-        $('#modal_window.w_modal, #fs_overlay.w_modal').remove();
-        this.width = width;
-
-        $('body').prepend(this.prepareCode(header, html));
-
-        $('#modal_window.w_modal .message').on('click', function () {
-            that.unSetMessage();
-        });
-
-        this.setModalDimensions();
-        this.setModalPosition();
-        this.createOverlay();
-
-        $(window).on('resize', function () {
-            that.setModalPosition();
-        });
-
-        $(document).on('scroll', function () {
-            that.setModalPosition();
-        });
-
-        $('body').on('scroll', function () {
-            that.setModalPosition();
-        });
-
-        this.modal_created = true;
-    },
-
-    destroyModal: function (instant) {
-        if (this.modal_created === true) {
-            $(window).off('resize');
-            $(document).off('scroll');
-
-            $('body').off('scroll');
-            $('body').off('keyup');
-
-            var s = 200;
-
-            if(instant === true){
-                s = 0;
-            }
-
-            $('#modal_window.w_modal, #fs_overlay.w_modal').fadeOut(s, function () {
-                $('#modal_window.w_modal, #fs_overlay.w_modal').remove();
-                core.warning_modal.modal_created = false;
-            });
-
-            if (this.loading_process) {
-                this.loading_process.abort();
-            }
         }
     }
 };
@@ -1797,36 +1716,46 @@ core.afk = {
     margin: 5000,
     startDate: null,
 
-    startInterval: function(){
+    startInterval: function () {
         this.startDate = new Date();
 
-        this.interval = setInterval(function(){
+        this.interval = setInterval(function () {
             core.afk.check();
         }, this.delay);
     },
 
-    stopInterval: function(){
+    stopInterval: function () {
         clearInterval(this.interval);
     },
 
-    resetInterval: function(){
+    resetInterval: function () {
         this.stopInterval();
         this.startInterval();
     },
 
-    check: function(){
+    check: function () {
         var now = new Date(),
-            dif = this.startDate.getTime() - now.getTime(),
-            seconds = dif / 1000,
-            result = Math.abs(seconds);
+            dif = now.getTime() - this.startDate.getTime();
 
-        console.log(result);
+        if (dif >= this.margin) {
+            var html = 'Передвиньте мышь или нажмите любую клавишу.<br><hr>' +
+                '<em>Это окно появляется, если долгое время не использовать систему.</em>';
+
+            core.modal.createModal(
+                'Пауза',
+                html,
+                400,
+                true
+            );
+        } else {
+            core.modal.destroyModal();
+        }
     },
 
-    init: function(){
+    init: function () {
         core.afk.startInterval();
 
-        $('body').on('click.afk mousemove.afk keydown.afk', function(){
+        $('body').on('click.afk mousemove.afk keydown.afk', function () {
             core.afk.resetInterval();
         });
     }
@@ -1846,9 +1775,10 @@ core.init = function () {
     //core.effects.breathe($('#global_events_counter'));
 }
 
-if(global_params && global_params.user_logged_in === true){
+if (global_params && global_params.user_logged_in === true) {
     //Object starter
     $(function () {
         core.init();
     });
-};
+}
+;
