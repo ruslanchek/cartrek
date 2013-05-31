@@ -1791,7 +1791,50 @@ core.events_api = {
     }
 };
 
+core.afk = {
+    interval: null,
+    delay: 1000,
+    margin: 5000,
+    startDate: null,
+
+    startInterval: function(){
+        this.startDate = new Date();
+
+        this.interval = setInterval(function(){
+            core.afk.check();
+        }, this.delay);
+    },
+
+    stopInterval: function(){
+        clearInterval(this.interval);
+    },
+
+    resetInterval: function(){
+        this.stopInterval();
+        this.startInterval();
+    },
+
+    check: function(){
+        var now = new Date(),
+            dif = this.startDate.getTime() - now.getTime(),
+            seconds = dif / 1000,
+            result = Math.abs(seconds);
+
+        console.log(result);
+    },
+
+    init: function(){
+        core.afk.startInterval();
+
+        $('body').on('click.afk mousemove.afk keydown.afk', function(){
+            core.afk.resetInterval();
+        });
+    }
+};
+
 core.init = function () {
+    core.afk.init();
+
     core.ui.init();
 
     core.ticker.startSystemInterval();
