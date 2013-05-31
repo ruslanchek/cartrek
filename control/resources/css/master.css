@@ -2294,13 +2294,13 @@ footer a:active {
     background: #920000;
     color: #fff;
     position: absolute;
-    top: 22px;
+    top: 14px;
     left: 50%;
     height: 18px;
     line-height: 18px;
     padding: 0 4px;
     display: block;
-    margin-left: 13px;
+    margin-left: 11px;
     font-size: 11px;
 }
 
