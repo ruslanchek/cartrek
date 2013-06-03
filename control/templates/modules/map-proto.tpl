@@ -12,7 +12,7 @@
     <div class="map-side-panel">
          {* Map data triggers block *}
         <div class="side-panel">
-            <div class="panel-content">
+            <div class="panel-content" data-step='1' data-intro='ччч'>
                 <div id="togglers">
                     <label class="third" title="Автообновление данных">
                         <input type="checkbox" class="slickswitch" id="auto-renew" />
@@ -36,7 +36,7 @@
 
         {* Fleet and car selection block *}
         <div class="side-panel">
-            <div class="panel-content" id="fleets-and-cars-menu-block">
+            <div class="panel-content" id="fleets-and-cars-menu-block"  data-step='2' data-intro='ччч'>
                 <div id="fleets-menu"></div>
                 <div class="clear"></div>
                 <div id="cars-menu"></div>

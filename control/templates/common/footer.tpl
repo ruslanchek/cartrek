@@ -13,6 +13,7 @@
         </div>
 
         <div class="third text-right">
+            <a href="#" class="tour-start">Помощь</a>
             <a href="/control/about">О Картреке</a>
             <a href="/control/about/feedback">Обратная связь</a>
         </div>

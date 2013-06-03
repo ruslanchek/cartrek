@@ -10,6 +10,8 @@ var core = {
 };
 
 core.ajax = {
+    unbeakable_error: false,
+
     errorHandler: function () {
         $.ajax({
             url: '/control/meta/?json',
@@ -29,12 +31,14 @@ core.ajax = {
 
                     // Сделать Destry all, преде чем открывать это окошко!!!
 
+                    core.ajax.unbeakable_error = true;
+
                     clearInterval(core.ticker.interval);
                     clearInterval(core.afk.interval);
                 }
             },
             error: function () {
-                core.modal.destroyModal('ajax');
+                // core.modal.destroyModal('ajax');
             }
         })
     }
@@ -618,12 +622,8 @@ core.utilities = {
 
 //2012-11-18 16:05:49 => Date() // TODO: Deprecated
     parseDateMysqlStrToDateOdject: function (str) {
-        var d_str = str.substring(0, 10).split('-'),
-            d = new Date();
-
-        d.setDate(d_str[2]);
-        d.setMonth(d_str[1] - 1);
-        d.setFullYear(d_str[0]);
+        var t = str.split(/[- :]/),
+            d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
 
         return d;
     },
@@ -1292,10 +1292,9 @@ core.ui = {
     windowFocus: function () {
         $(window).on('focus', function () {
             core.ui.window_focus = true;
-        })
-            .on('blur', function () {
-                core.ui.window_focus = false;
-            });
+        }).on('blur', function () {
+            core.ui.window_focus = false;
+        });
     },
 
     //Common functions
@@ -1713,7 +1712,7 @@ core.events_api = {
 core.afk = {
     interval: null,
     delay: 1000,
-    margin: 5000,
+    margin: 3600000,
     startDate: null,
 
     startInterval: function () {
@@ -1737,7 +1736,7 @@ core.afk = {
         var now = new Date(),
             dif = now.getTime() - this.startDate.getTime();
 
-        if (dif >= this.margin) {
+        if (dif >= this.margin && core.ajax.unbeakable_error !== true) {
             var html = 'Передвиньте мышь или нажмите любую клавишу.<br><hr>' +
                 '<em>Это окно появляется, если долгое время не использовать систему.</em>';
 
@@ -1747,7 +1746,7 @@ core.afk = {
                 400,
                 true
             );
-        } else {
+        } else if(core.ajax.unbeakable_error !== true) {
             core.modal.destroyModal();
         }
     },
@@ -1757,6 +1756,19 @@ core.afk = {
 
         $('body').on('click.afk mousemove.afk keydown.afk', function () {
             core.afk.resetInterval();
+
+            if(core.ajax.unbeakable_error !== true) {
+                core.modal.destroyModal(true);
+            }
+        });
+    }
+};
+
+core.tour = {
+    init: function(){
+        $('.tour-start').on('click', function(e){
+            e.preventDefault();
+            introJs().start();
         });
     }
 };
@@ -1766,19 +1778,20 @@ core.init = function () {
 
     core.ui.init();
 
+    core.tour.init();
+
     core.ticker.startSystemInterval();
 
     core.ticker.addIntervalMethod(function () {
         core.events_api.checkNewEvents();
     });
 
-    //core.effects.breathe($('#global_events_counter'));
+    // core.effects.breathe($('#global_events_counter'));
 }
 
-if (global_params && global_params.user_logged_in === true) {
-    //Object starter
-    $(function () {
+//Object starter
+$(function () {
+    if (global_params && global_params.user_logged_in === true) {
         core.init();
-    });
-}
-;
+    }
+});

@@ -16,16 +16,18 @@ Class Statistics extends Core
 
         if ($this->ajax_mode) {
             switch ($_GET['action']) {
-                case 'getDivicesPositions' :
+                case 'getUserFleetsAndDevices' :
                 {
                     header('Content-type: application/json');
-                    //print json_encode($this->devices->getUserDevices()); //TODO: можно оптимизировать!
+                    print json_encode($this->devices->getUserFleetsAndDevices());
                 }
                     break;
 
-                case 'setDivicesSorting' :
+                case 'getStatistics' :
                 {
-                    //$this->setDivicesSorting();
+                    header('Content-type: application/json');
+                    $this->devices->setCurrentDate($_GET['date']);
+                    print json_encode($this->devices->getPoints($_GET['device_id'], false));
                 }
                     break;
             }

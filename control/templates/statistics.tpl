@@ -16,7 +16,8 @@
         <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
         <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
 
-        <script src="/control/resources/js/prototypes.map.js"></script>
+        <script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
+        <script src="/control/resources/plugins/flot/jquery.flot.time.min.js"></script>
     </head>
 
     <body>
@@ -26,7 +27,7 @@
 
                 <div class="container h1">
                     <div class="container-padding">
-                        <h1>{$core->module.title}</h1>
+                        <h1>{$core->module.title}<span id="current-fleet-and-car"></span></h1>
                     </div>
                 </div>
 
