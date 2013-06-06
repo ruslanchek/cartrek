@@ -22,7 +22,8 @@ class Database extends Core
             $this->db_vars['host'],
             $this->db_vars['user'],
             $this->db_vars['pass'],
-            $this->db_vars['db']
+            $this->db_vars['db'],
+            $this->db_vars['port']
         );
 
         if (mysqli_connect_errno()) {
