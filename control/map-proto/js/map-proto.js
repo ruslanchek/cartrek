@@ -377,12 +377,13 @@ var View = function () {
             // If current car is on a map
             if (MC.Data.current_car.params.on_map === true) {
                 // Simply focus on a car
+
+                MC.Data.current_car.focus();
+
                 if(this.zoomed_on_car !== true){
                     this.zoomed_on_car = true;
                     MC.Map.setZoom(14);
                 }
-
-                MC.Data.current_car.focus();
 
                 // Otherwise focus to map defaults
             } else {
@@ -643,8 +644,8 @@ var Data = function () {
         this.cars_on_map = 0;
 
         for (var i = 0, l = this.cars.length; i < l; i++) {
-            this.cars[i].remove();
             this.cars[i].removePath();
+            this.cars[i].remove();
         }
     };
 
@@ -757,10 +758,12 @@ var Data = function () {
                 MC.Data.drawCars();
 
                 if (MC.Data.show_car_path === true && MC.Data.current_car) {
-                    MC.Data.current_car.drawPath();
-                }
-
-                if (firstload) {
+                    MC.Data.current_car.drawPath(function(){
+                        if (firstload === true) {
+                            MC.Data.current_car.focusOnPath();
+                        }
+                    });
+                }else if(MC.Data.show_car_path !== true && firstload === true) {
                     MC.View.focus();
                 }
             },

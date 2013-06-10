@@ -12,34 +12,38 @@ var View = function () {
     this.drawStatistics = function(){
         if(MC.Data.current_car && MC.Data.current_car.id && MC.Data.current_car.statistics && MC.Data.current_car.statistics.length >= 1){
             var data = MC.Data.current_car.statistics,
-                formatted_data = [];
-
-            $("#statistics").css({height: 700});
+                formatted_data_1 = [],
+                formatted_data_2 = [];
 
             for(var i = 0, l = data.length; i < l; i ++) {
-                var item = data[i];
-
-                formatted_data.push([
-                    core.utilities.parseDateMysqlStrToDateOdject(item.date),
-                    core.utilities.convertKnotsToKms(parseFloat(item.speed))
-                ]);
+                formatted_data_1.push(parseFloat(data[i].speed));
+                formatted_data_2.push(core.utilities.parseDateMysqlStrToDateOdject(data[i].date).getTime());
             }
 
-            var plot = $.plot("#statistics", [{data: formatted_data}], [{
-                series: {
-                    shadowSize: 1
-                },
-                yaxis: {
-                    show: true
-                },
-                xaxis: {
-                    show: true,
-                    mode: 'time',
-                    timeformat: "%Y-%m-%d %H:%M:%M"
-                }
-            }]);
+            $('#statistics').html('<canvas id="stats-canvas" height="450" width="1000"></canvas>');
 
-            plot.draw();
+            //Get context with jQuery - using jQuery's .get() method.
+            var ctx = $("#stats-canvas").get(0).getContext("2d");
+
+            //This will get the first returned node in the jQuery collection.
+            var myNewChart = new Chart(ctx);
+
+            console.log(formatted_data_1, formatted_data_2)
+
+            var data = {
+            	labels : formatted_data_2,
+            	datasets : [
+            		{
+            			fillColor : "rgba(220,220,220,0.5)",
+            			strokeColor : "rgba(220,220,220,1)",
+            			pointColor : "rgba(220,220,220,1)",
+            			pointStrokeColor : "#fff",
+            			data : formatted_data_1
+            		}
+            	]
+            }
+
+            myNewChart.Line(data);
         }
     };
 

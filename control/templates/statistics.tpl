@@ -16,8 +16,7 @@
         <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
         <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
 
-        <script src="/control/resources/plugins/flot/jquery.flot.min.js"></script>
-        <script src="/control/resources/plugins/flot/jquery.flot.time.min.js"></script>
+        <script src="/control/resources/plugins/chart/Chart.min.js"></script>
     </head>
 
     <body>

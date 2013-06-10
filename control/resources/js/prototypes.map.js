@@ -146,6 +146,10 @@ var Map = function (params) {
         this.instance.removeLayer(layer);
     };
 
+    this.getZoom = function(){
+        return this.instance.getZoom();
+    };
+
     /* Init actions */
     this.__construct();
 };
