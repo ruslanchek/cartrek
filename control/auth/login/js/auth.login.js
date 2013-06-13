@@ -3,6 +3,16 @@ var login = {
         $('#login').focus();
     },
 
+    bgMove: function(){
+        $('.login-body').on('mousemove', function(event) {
+            var posx = (2560 - $('.login-body').width()) / 2;
+
+            $('.login-body').css({
+                backgroundPosition: -posx - event.pageX / 15 + 'px ' + (- event.pageY / 15) + 'px'
+            });
+        });
+    },
+
     buttons: function () {
         $('.socials a').hover(function () {
             $(this).find('img').stop().animate({
@@ -51,6 +61,7 @@ var login = {
     init: function () {
         this.focus();
         this.buttons();
+        this.bgMove();
     }
 };
 
