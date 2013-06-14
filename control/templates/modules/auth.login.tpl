@@ -1,4 +1,6 @@
-<div class="hero-login">
+<a href="http://cartrek.ru" class="auth-logo{if !$core->module.form.message} preload-state transform-b-0{/if}">Картрек</a>
+
+<div class="hero-login{if !$core->module.form.message} preload-state transform-b-0{/if}">
     <h1>{$core->module.title}</h1>
 
     {if !$core->auth->user.status}

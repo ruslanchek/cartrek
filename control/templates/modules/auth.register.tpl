@@ -1,3 +1,5 @@
+<a href="http://cartrek.ru" class="auth-logo">Картрек</a>
+
 <div class="hero-login">
     <h1>{$core->module.title}</h1>
 

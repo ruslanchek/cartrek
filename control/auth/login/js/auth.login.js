@@ -8,7 +8,7 @@ var login = {
             var posx = (2560 - $('.login-body').width()) / 2;
 
             $('.login-body').css({
-                backgroundPosition: -posx - event.pageX / 15 + 'px ' + (- event.pageY / 15) + 'px'
+                backgroundPosition: -posx - event.pageX / 25 + 'px ' + (- event.pageY / 35) + 'px'
             });
         });
     },
@@ -67,4 +67,10 @@ var login = {
 
 $(function () {
     login.init();
+});
+
+$(window).on('load', function(){
+    setTimeout(function(){
+        $('.preload-state').removeClass('preload-state');
+    }, 250);
 });

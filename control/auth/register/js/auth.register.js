@@ -8,7 +8,7 @@ var register = {
             var posx = (2560 - $('.login-body').width()) / 2;
 
             $('.login-body').css({
-                backgroundPosition: -posx - event.pageX / 15 + 'px ' + (- event.pageY / 15) + 'px'
+                backgroundPosition: -posx - event.pageX / 25 + 'px ' + (- event.pageY / 35) + 'px'
             });
         });
     },

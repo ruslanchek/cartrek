@@ -6,7 +6,6 @@
 
     <body class="login-body">
         <div class="login-content">
-            <a href="http://cartrek.ru" class="auth-logo">Картрек</a>
             {include file="modules/`$core->module.name`.tpl"}
         </div>
     </body>

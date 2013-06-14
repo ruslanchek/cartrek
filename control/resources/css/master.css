@@ -2509,6 +2509,23 @@ footer a:active {
 
 /* =Animations
 -----------------------------------------------------------------------------*/
+.transform-b-0 {
+    -webkit-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1); /* older webkit */
+    -webkit-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
+       -moz-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
+        -ms-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
+         -o-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
+            transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255); /* custom */
+}
+
+.transform-b-1 {
+    -webkit-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
+       -moz-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
+        -ms-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
+         -o-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
+            transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980); /* custom */
+}
+
 @-webkit-keyframes rotate-z {
     from {
         -webkit-transform: rotateY(-180deg);
@@ -2836,6 +2853,20 @@ footer a:active {
 
 }
 
+.hero-login.preload-state {
+    opacity: 0;
+    -moz-transform:    scale(0);
+     -o-transform:      scale(0);
+     -webkit-transform: scale(0);
+     transform:         scale(0);
+
+    -webkit-transform: rotateY( 180deg ) scale(0) rotateZ(20deg);
+           -moz-transform: rotateY( 180deg ) scale(0) rotateZ(20deg);
+             -o-transform: rotateY( 180deg ) scale(0) rotateZ(20deg);
+                transform: rotateY( 180deg ) scale(0) rotateZ(20deg);
+
+}
+
 .hero-login {
     background: #eee url(../img/pattern_white.png);
     position: absolute;
@@ -2853,6 +2884,12 @@ footer a:active {
     text-align: center;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
     z-index: 4;
+
+    -webkit-transform-style: preserve-3d;
+       -moz-transform-style: preserve-3d;
+         -o-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+
 }
 
 .hero-login .ok_message {
@@ -2942,6 +2979,11 @@ footer a:active {
     margin-left: -219px;
     z-index: 3;
     text-indent: -99999px;
+}
+
+.auth-logo.preload-state {
+    opacity: 0;
+    margin-top: -200px;
 }
 
 .socials {
@@ -3515,3 +3557,4 @@ footer a:active {
                    -o-transform: rotateY( 5deg ) rotateZ(-3deg);
                       transform: rotateY( 5deg ) rotateZ(-3deg);
 }
+
