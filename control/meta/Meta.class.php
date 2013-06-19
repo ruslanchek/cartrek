@@ -32,6 +32,9 @@ Class Meta extends Core
 
             $global_params->user = new stdClass();
             $global_params->user->ui_settings = json_decode($this->auth->user['data']['ui_settings']);
+
+            $global_params->system = new stdClass();
+            $global_params->system->afk_margin = $this->config->settings->afk_margin;
         }
 
         if(isset($_GET['json'])){

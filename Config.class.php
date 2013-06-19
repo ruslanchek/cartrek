@@ -8,7 +8,8 @@ Class Config{
     public $db_vars = array();
 
     public $settings = array(
-        'allow_register' => false
+        'allow_register'    => false,
+        'afk_margin'        => 3600
     );
 
     public $default_user_settings = array(

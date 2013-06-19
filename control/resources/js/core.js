@@ -1710,7 +1710,7 @@ core.events_api = {
 core.afk = {
     interval: null,
     delay: 1000,
-    margin: 2000,
+    margin: (global_params && global_params.global_params && global_params.system.afk_margin) ? global_params.system.afk_margin : 3600,
     startDate: null,
     status: false,
 
@@ -1736,8 +1736,6 @@ core.afk = {
             dif = now.getTime() - this.startDate.getTime();
 
         if (dif >= this.margin && core.ajax.unbeakable_error !== true && this.status !== true) {
-            console.log(this.margin, core.ajax.unbeakable_error, this.status)
-
             var html =  '<i class="icon-64 snowflake"></i>' +
                         '<span class="header">Передвиньте мышь или нажмите любую клавишу</span>' +
                         '<span class="notice">Это окно появляется, если долгое время не использовать систему.</span>'

@@ -497,6 +497,13 @@ class Auth extends Core
 
     public function registerNewUser()
     {
+        if($this->config->settings->allow_register !== true){
+            return array(
+                'status' => false,
+                'message' => 'Извините, регистрация временно закрыта'
+            );
+        }
+
         //Check for email is not empty
         if (!isset($_POST['email']) || $_POST['email'] == '') {
             $result = array(
