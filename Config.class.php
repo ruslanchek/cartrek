@@ -9,7 +9,7 @@ Class Config{
 
     public $settings = array(
         'allow_register'    => false,
-        'afk_margin'        => 3600
+        'afk_margin'        => 3600000
     );
 
     public $default_user_settings = array(
