@@ -7,6 +7,10 @@ date_default_timezone_set('Europe/Moscow');
 Class Config{
     public $db_vars = array();
 
+    public $settings = array(
+        'allow_register' => false
+    );
+
     public $default_user_settings = array(
         'path_width'        => 5
     );
