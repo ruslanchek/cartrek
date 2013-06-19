@@ -1,0 +1,51 @@
+.tzCheckBox{
+	background:url('background-small.png') no-repeat right bottom;
+	display:inline-block;
+	min-width:51px;
+	height:22px;
+	white-space:nowrap;
+	position:relative;
+	cursor:pointer;
+	margin-left:10px;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.tzCheckBox.checked{
+	background-position:top left;
+	margin:0 10px 0 0;
+}
+
+.tzCheckBox .tzCBContent{
+	color: white;
+	line-height: 22px;
+	padding-right: 38px;
+	text-align: right;
+    font-weight: bold;
+    font-size: 14px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.45);
+}
+
+.tzCheckBox.checked .tzCBContent{
+	text-align:left;
+	padding:0 0 0 42px;
+}
+
+.tzCBPart{
+	background:url('background-small.png') no-repeat left bottom;
+	width:10px;
+	position:absolute;
+	top:0;
+	left:-10px;
+	height:22px;
+	overflow: hidden;
+}
+
+.tzCheckBox.checked .tzCBPart{
+	background-position:top right;
+	left:auto;
+	right:-10px;
+}

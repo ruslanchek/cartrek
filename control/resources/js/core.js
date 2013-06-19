@@ -623,7 +623,7 @@ core.utilities = {
 //2012-11-18 16:05:49 => Date() // TODO: Deprecated
     parseDateMysqlStrToDateOdject: function (str) {
         var t = str.split(/[- :]/),
-            d = new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+            d = new Date(t[0], t[1] - 1, t[2], t[3], t[4], t[5]);
 
         return d;
     },
@@ -1290,11 +1290,11 @@ core.ui = {
     window_focus: true,
 
     windowFocus: function () {
-        $(window).on('focus', function () {
+        $(window).on('focus',function () {
             core.ui.window_focus = true;
         }).on('blur', function () {
-            core.ui.window_focus = false;
-        });
+                core.ui.window_focus = false;
+            });
     },
 
     //Common functions
@@ -1424,7 +1424,7 @@ core.modal = {
     prepareCode: function (header, html, peramnent) {
         var close = '';
 
-        if(peramnent !== true){
+        if (peramnent !== true) {
             close = '<a href="javascript:void(0)" id="modal_closer"></a>';
         }
 
@@ -1514,11 +1514,10 @@ core.modal = {
             that.setModalPosition();
         });
 
-        if(permanent !== true){
+        if (permanent !== true) {
             $('#modal_closer').on('click', function () {
                 that.destroyModal();
             });
-
 
             $('body').on('keyup', function (e) {
                 if (e.keyCode == 27) {
@@ -1531,6 +1530,8 @@ core.modal = {
     },
 
     destroyModal: function (instant) {
+        console.trace();
+
         if (this.modal_created === true) {
             $(window).off('resize');
             $(document).off('scroll');
@@ -1539,16 +1540,13 @@ core.modal = {
             $('body').off('scroll');
             $('body').off('keyup');
 
-            var s = 200;
-
             if (instant === true) {
-                s = 0;
-            }
-
-            $('#modal_window.modal, #fs_overlay.modal').fadeOut(s, function () {
                 $('#modal_window.modal, #fs_overlay.modal').remove();
-                core.modal.modal_created = false;
-            });
+            } else {
+                $('#modal_window.modal, #fs_overlay.modal').fadeOut(200, function () {
+                    $('#modal_window.modal, #fs_overlay.modal').remove();
+                });
+            }
 
             if (this.loading_process) {
                 this.loading_process.abort();
@@ -1712,8 +1710,9 @@ core.events_api = {
 core.afk = {
     interval: null,
     delay: 1000,
-    margin: 3600000,
+    margin: 2000,
     startDate: null,
+    status: false,
 
     startInterval: function () {
         this.startDate = new Date();
@@ -1736,37 +1735,45 @@ core.afk = {
         var now = new Date(),
             dif = now.getTime() - this.startDate.getTime();
 
-        if (dif >= this.margin && core.ajax.unbeakable_error !== true) {
-            var html = 'Передвиньте мышь или нажмите любую клавишу.<br><hr>' +
-                '<em>Это окно появляется, если долгое время не использовать систему.</em>';
+        if (dif >= this.margin && core.ajax.unbeakable_error !== true && this.status !== true) {
+            console.log(this.margin, core.ajax.unbeakable_error, this.status)
 
-            core.modal.createModal(
-                'Пауза',
-                html,
-                400,
-                true
-            );
-        } else if(core.ajax.unbeakable_error !== true) {
-            core.modal.destroyModal();
+            var html =  '<i class="icon-64 snowflake"></i>' +
+                        '<span class="header">Передвиньте мышь или нажмите любую клавишу</span>' +
+                        '<span class="notice">Это окно появляется, если долгое время не использовать систему.</span>'
+
+            this.status = true;
+
+            $('body').prepend('<div class="afk"><div class="afk-inner">' + html + '</div></div>');
+
+            $('.afk').fadeIn(200);
+        }
+    },
+
+    exit: function () {
+        this.resetInterval();
+
+        if (core.ajax.unbeakable_error !== true && this.status === true) {
+            $('.afk').fadeOut(100, function(){
+                $('.afk').remove();
+            });
+
+            this.status = false;
         }
     },
 
     init: function () {
-        core.afk.startInterval();
+        this.startInterval();
 
         $('body').on('click.afk mousemove.afk keydown.afk', function () {
-            core.afk.resetInterval();
-
-            if(core.ajax.unbeakable_error !== true) {
-                core.modal.destroyModal(true);
-            }
+            core.afk.exit();
         });
     }
 };
 
 core.tour = {
-    init: function(){
-        $('.tour-start').on('click', function(e){
+    init: function () {
+        $('.tour-start').on('click', function (e) {
             e.preventDefault();
             introJs().start();
         });
@@ -1775,11 +1782,8 @@ core.tour = {
 
 core.init = function () {
     core.afk.init();
-
     core.ui.init();
-
     core.tour.init();
-
     core.ticker.startSystemInterval();
 
     core.ticker.addIntervalMethod(function () {

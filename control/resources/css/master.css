@@ -2275,17 +2275,8 @@ footer a:active {
     color: #5a7485;
 }
 
-.sections .item a.inner:hover .icon {
+.sections .item a.inner:hover .icon-64 {
     opacity: 0.75;
-}
-
-.sections .item .icon {
-    background-image: url(../img/icons-64.png);
-    background-repeat: no-repeat;
-    display: block;
-    margin: 0 auto 0.5em;
-    height: 64px;
-    width: 64px;
 }
 
 .sections .item .count {
@@ -2304,98 +2295,113 @@ footer a:active {
     font-size: 11px;
 }
 
-.sections .item .icon.statistics {
+.sections .item .icon-64 {
+    margin: 0 auto 0.5em;
+}
+
+.icon-64 {
+    background-image: url(../img/icons-64.png);
+    background-repeat: no-repeat;
+    display: block;
+    height: 64px;
+    width: 64px;
+}
+
+.icon-64.statistics {
     background-position: 0 0;
 }
 
-.sections .item .icon.check-list {
+.icon-64.check-list {
     background-position: -64px 0;
 }
 
-.sections .item .icon.browser {
+.icon-64.browser {
     background-position: -128px 0;
 }
 
-.sections .item .icon.events-unactive {
+.icon-64.events-unactive {
     background-position: -192px 0;
 }
 
-.sections .item .icon.events-active {
+.icon-64.events-active {
     background-position: -256px 0;
 }
 
-.sections .item .icon.clock {
+.icon-64.clock {
     background-position: -320px 0;
 }
 
-.sections .item .icon.lock {
+.icon-64.lock {
     background-position: -384px 0;
 }
 
-.sections .item .icon.chat {
+.icon-64.chat {
     background-position: -448px 0;
 }
 
-.sections .item .icon.compass {
+.icon-64.compass {
     background-position: -512px 0;
 }
 
-.sections .item .icon.map {
+.icon-64.map {
     background-position: -576px 0;
 }
 
-.sections .item .icon.gauge {
+.icon-64.gauge {
     background-position: -640px 0;
 }
 
-.sections .item .icon.spanner-screwdriver {
+.icon-64.spanner-screwdriver {
     background-position: -704px 0;
 }
 
-.sections .item .icon.switch {
+.icon-64.switch {
     background-position: -768px 0;
 }
 
-.sections .item .icon.money {
+.icon-64.money {
     background-position: -832px 0;
 }
 
-.sections .item .icon.truck {
+.icon-64.truck {
     background-position: -896px 0;
 }
 
-.sections .item .icon.gear {
+.icon-64.gear {
     background-position: -960px 0;
 }
 
-.sections .item .icon.house {
+.icon-64.house {
     background-position: -1024px 0;
 }
 
-.sections .item .icon.dude {
+.icon-64.dude {
     background-position: -1088px 0;
 }
 
-.sections .item .icon.id {
+.icon-64.id {
     background-position: -1152px 0;
 }
 
-.sections .item .icon.bullseye {
+.icon-64.bullseye {
     background-position: -1216px 0;
 }
 
-.sections .item .icon.trucks {
+.icon-64.trucks {
     background-position: -1280px 0;
 }
 
-.sections .item .icon.trucks {
+.icon-64.trucks {
     background-position: -1280px 0;
 }
 
-.sections .item .icon.key {
+.icon-64.key {
     background-position: -1344px 0;
 }
 
+.icon-64.snowflake {
+    background-position: -1408px 0;
+}
 
 
 /* =Map types
@@ -2832,7 +2838,7 @@ footer a:active {
 
 /* Login */
 .login-body {
-    background: #0e1c31 url(../img/login/space-bg.jpg) center top;
+    background: #000002 url(../img/login/earth-bg-1.jpg) center -400px;
     min-height: 500px;
 }
 
@@ -3087,6 +3093,55 @@ footer a:active {
 .socials a.twitter span.inner .label:hover {
     color: #004d58 !important;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+
+/* Afk */
+.afk {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 2998;
+    display: none;
+}
+
+.afk .icon-64 {
+    margin: 0 auto;
+}
+
+.afk .afk-inner {
+    width: 360px;
+    left: 50%;
+    top: 50%;
+    margin: -70px 0 0 -210px;
+    position: absolute;
+    z-index: 2999;
+    background: #eee;
+    padding: 15px 30px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+    text-align: center;
+
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 20px 30px 0px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 0px 20px 30px 0px rgba(0, 0, 0, 0.6);
+    box-shadow: 0px 20px 30px 0px rgba(0, 0, 0, 0.6);
+}
+
+.afk .header {
+    display: block;
+    line-height: 1.2em;
+    margin: 0 0 0.4em 0;
+    font-weight: bold;
+}
+
+.afk .notice {
+    font-size: 0.9em;
+    display: block;
+    font-style: italic;
+    line-height: 1.2em;
 }
 
 /* Modal */

@@ -8,7 +8,7 @@ var login = {
             var posx = (2560 - $('.login-body').width()) / 2;
 
             $('.login-body').css({
-                backgroundPosition: -posx - event.pageX / 25 + 'px ' + (- event.pageY / 35) + 'px'
+                backgroundPosition: -posx - ((event.pageX / 25) - 55) + 'px ' + ((- event.pageY / 35) - 400) + 'px'
             });
         });
     },
