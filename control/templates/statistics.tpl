@@ -24,13 +24,13 @@
             <div class="limiter">
                 {include file="common/top.tpl"}
 
-                <div class="container h1">
+                <div class="cont h1">
                     <div class="container-padding">
                         <h1>{$core->module.title}<span id="current-fleet-and-car"></span></h1>
                     </div>
                 </div>
 
-                <div class="container main-content">
+                <div class="cont main-content">
                     <div class="row container-padding">
                         {include file="modules/`$core->module.name`.tpl"}
                     </div>

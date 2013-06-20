@@ -16,8 +16,8 @@
                 {foreach $fleets as $item}
                     <tr class="group-row" rel="{$item.id}">
                         <td>
-                            <a rel="{$item.id}" class="group-edit" href="#" data-id="{$item.id}"
-                               data-name="{$item.name|escape}">{$item.name}</a>
+                            <strong><a rel="{$item.id}" class="group-edit" href="#" data-id="{$item.id}"
+                               data-name="{$item.name|escape}">{$item.name}</a></strong>
                         </td>
                         <td>{$item.cars}</td>
                         <td>

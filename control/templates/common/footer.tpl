@@ -1,4 +1,4 @@
-<div class="container {if isset($map) && $map == true}wide{/if}">
+<div class="cont {if isset($map) && $map == true}wide{/if}">
     <div class="container-padding">
         <div class="third">
             &copy; 2012&ndash;{date('Y')}, ГИС &laquo;Картрек&raquo;.

@@ -29,8 +29,8 @@ var user_groups = {
                     core.modal.setMessage(data);
                     core.modal.destroyModal();
 
-                    var html = '<tr>' +
-                        '<td><a rel="' + data.data.id + '" class="group-edit" href="#" data-id="' + data.data.id + '" data-name="' + data.data.name + '">' + data.data.name + '</a></td>' +
+                    var html = '<tr class="group-row" rel="' + data.data.id + '">' +
+                        '<td><strong><a rel="' + data.data.id + '" class="group-edit" href="#" data-id="' + data.data.id + '" data-name="' + data.data.name + '">' + data.data.name + '</a></strong></td>' +
                         '<td>0</td>' +
                         '<td>' +
                         '<a href="javascript:void(0)" class="btn red delete-btn group-delete" data-count="0" data-id="' + data.data.id + '" data-name="' + data.data.name + '">Удалить</a>' +
@@ -181,7 +181,25 @@ var user_groups = {
         $('#name').focus();
     },
 
+    editByHash: function () {
+        if (core.ui.getHashData() && core.ui.getHashData().fleet > 0) {
+            var edit_id = core.ui.getHashData().fleet;
+
+            if ($('.group-edit[rel="' + edit_id + '"]').length > 0) {
+                user_groups.editGroupModal($('.group-edit[rel="' + edit_id + '"]').data());
+            }
+        }
+    },
+
     binds: function () {
+        if (core.ui.getHashData() && core.ui.getHashData().fleet > 0) {
+            this.editByHash();
+        }
+
+        $(window).on('hashchange', function () {
+            user_groups.editByHash();
+        });
+
         $('#additional-button').off('click').on('click', function (e) {
             user_groups.addGroupModal();
             e.preventDefault();

@@ -54,7 +54,7 @@ p {
     -webkit-border-radius: 4px;
             border-radius: 4px;
     margin: 0 0 1.1em;
-    padding: 0;
+    padding: 5px;
     background: #e5e5e5 url(../img/white-gradient.png) repeat-x top;
     text-align: center;
     text-shadow: 0 1px 0 #fff;
@@ -90,14 +90,14 @@ p {
     height: 35px;
     display: block;
     float: left;
-    margin: 0;
+    margin: 0 15px 0 0;
 }
 
 .nav-top li a {
     height: 35px;
     display: block;
     line-height: 35px;
-    padding: 0 2ex;
+    padding: 0 1.2ex;
 }
 
 .nav-top li a:hover {
@@ -286,14 +286,14 @@ html, body {
     min-width: 1080px;
 }
 
-.container {
+.cont {
     width: 96%;
     min-width: 950px;
     margin: 0 auto;
     max-width: 1350px;
 }
 
-.container.wide {
+.cont.wide {
     max-width: none;
     padding: 0 20px;
     width: auto;
@@ -927,6 +927,17 @@ a.badge:active {
     right: 32px;
 }
 
+
+.h-panel {
+    background: #eee;
+    height: 50px;
+    width: 100%;
+    padding: 15px 20px;
+    margin: -20px 0 0 -20px;
+    -webkit-border-radius: 5px 5px 0px 0px;
+            border-radius: 5px 5px 0px 0px;
+}
+
 /* =Forms
 -----------------------------------------------------------------------------*/
 .forms {
@@ -1024,6 +1035,8 @@ input:disabled {
 
 .forms .color-chooser {
     margin: 0 0 1em;
+    padding-left: 170px;
+    width: 260px;
 }
 
 .forms .color-chooser ul {
@@ -2403,6 +2416,15 @@ footer a:active {
     background-position: -1408px 0;
 }
 
+.icon-64.warning {
+    background-position: -1408px 0;
+}
+
+.icon-64.error {
+    background-position: -1536px 0;
+}
+
+
 
 /* =Map types
 -----------------------------------------------------------------------------*/
@@ -2838,7 +2860,7 @@ footer a:active {
 
 /* Login */
 .login-body {
-    background: #000002 url(../img/login/earth-bg-1.jpg) center -400px;
+    background: #000002 url(../img/login/earth-bg-1.jpg) center -400px no-repeat;
     min-height: 500px;
 }
 
@@ -3097,7 +3119,7 @@ footer a:active {
 
 
 /* Afk */
-.afk {
+.warn-modal {
     position: fixed;
     height: 100%;
     width: 100%;
@@ -3106,11 +3128,11 @@ footer a:active {
     display: none;
 }
 
-.afk .icon-64 {
+.warn-modal .icon-64 {
     margin: 0 auto;
 }
 
-.afk .afk-inner {
+.warn-modal .warn-modal-inner {
     width: 360px;
     left: 50%;
     top: 50%;
@@ -3130,18 +3152,17 @@ footer a:active {
     box-shadow: 0px 20px 30px 0px rgba(0, 0, 0, 0.6);
 }
 
-.afk .header {
+.warn-modal .header {
     display: block;
     line-height: 1.2em;
     margin: 0 0 0.4em 0;
     font-weight: bold;
 }
 
-.afk .notice {
+.warn-modal .notice {
     font-size: 0.9em;
     display: block;
-    font-style: italic;
-    line-height: 1.2em;
+    line-height: 1.3em;
 }
 
 /* Modal */

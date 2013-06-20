@@ -16,7 +16,7 @@
                     {foreach $devices as $item}
                     <tr rel="{$item.id}" class="{if !$item.active}unactive_row{/if}" data-online="{if $item.online == 1 && $item.active}true{else}false{/if}">
                         <th width="1%" class="activity-cell"><i title="{if $item.online == 1}Онлайн{else}Офлайн{/if}" class="activity-icon {if $item.online == 1 && $item.active}active{else}unactive{/if}"></i></th>
-                        <td><a href="/control/fleet/{$item.id}"><strong>{$item.name}</strong></a></td>
+                        <td><a class="car-edit" href="/control/user/fleet/#car={$item.id}"><strong>{$item.name}</strong></a></td>
                         <td><strong>{$item.make}</strong> {$item.model}</td>
                         <td><span class="g_id">{$item.g_id}</span></td>
                         <td>{$item.fleet_name}</td>

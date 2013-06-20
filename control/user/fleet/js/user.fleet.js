@@ -26,12 +26,46 @@ var fleet = {
         });
     },
 
+    editCar: function(id){
+        var html = '<form id="edit-geozone-form" class="forms columnar white" method="POST">' +
+            '<div class="form_message"></div>' +
+
+            '<ul>' +
+
+            '<hr>' +
+
+            '<li class="push">' +
+            '<input type="submit" name="send" class="btn blue float-left" value="Сохранить" />' +
+            '</li>' +
+
+            '</ul>' +
+
+            '<div class="clear"></div>' +
+            '</form>';
+
+        core.modal.createModal(
+            'Редактирование машины',
+            html,
+            750
+        );
+    },
+
+    editByHash: function () {
+        if (core.ui.getHashData() && core.ui.getHashData().car > 0) {
+            var edit_id = core.ui.getHashData().car;
+
+            fleet.editCar(edit_id);
+        }
+    },
+
     binds: function(){
-        /*$('.activity-toggler').tzCheckbox({
-            onChange: function(item, checked){
-                fleet.toggleDevice(item.data('id'), checked);
-            }
-        });*/
+        if (core.ui.getHashData() && core.ui.getHashData().car > 0) {
+            this.editByHash();
+        }
+
+        $(window).on('hashchange', function () {
+            fleet.editByHash();
+        });
 
         $('.activity-toggler').slickswitch({
             toggled: function(item){

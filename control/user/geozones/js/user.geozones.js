@@ -147,7 +147,7 @@ var geozones = {
         }
 
         this.map.on('draw:created', function (e) {
-            if(geozones.create_trigger === true){
+            if (geozones.create_trigger === true) {
                 return false;
             }
 
@@ -548,11 +548,11 @@ var geozones = {
             }
 
             html += '<li class="' + classname + '">' +
-                        '<a id="gz-item-' + this.geozones.raw[i].id + '" data-id="' + this.geozones.raw[i].id + '" href="#">' +
-                            '<i title="Показать на карте" data-id="' + this.geozones.raw[i].id + '"></i>' +
-                            '<span title="Редактировать">' + this.geozones.raw[i].name + '</span>' +
-                        '</a>' +
-                    '</li>';
+                '<a id="gz-item-' + this.geozones.raw[i].id + '" data-id="' + this.geozones.raw[i].id + '" href="#">' +
+                '<i title="Показать на карте" data-id="' + this.geozones.raw[i].id + '"></i>' +
+                '<span title="Редактировать">' + this.geozones.raw[i].name + '</span>' +
+                '</a>' +
+                '</li>';
         }
 
         html += '</ul>';
@@ -608,7 +608,7 @@ var geozones = {
         });
     },
 
-    setResizer: function(){
+    setResizer: function () {
         $(window).off('resize').on('resize', function () {
             $('#map').css({
                 width: 0
@@ -622,6 +622,16 @@ var geozones = {
                 geozones.map.invalidateSize();
             }
         });
+    },
+
+    editByHash: function () {
+        if (core.ui.getHashData() && core.ui.getHashData().geozone > 0) {
+            var edit_id = core.ui.getHashData().geozone;
+
+            if (this.getGeozoneRaw(edit_id)) {
+                this.editGeozone(edit_id);
+            }
+        }
     },
 
     init: function () {
@@ -672,7 +682,16 @@ var geozones = {
             });
 
             geozones.setResizer();
-            geozones.drawData();
+
+            geozones.drawData(function(){
+                if (core.ui.getHashData() && core.ui.getHashData().geozone > 0) {
+                    geozones.editByHash();
+                }
+
+                $(window).on('hashchange', function () {
+                    geozones.editByHash();
+                });
+            });
         });
     }
 };

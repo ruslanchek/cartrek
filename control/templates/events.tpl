@@ -9,13 +9,13 @@
             <div class="limiter">
                 {include file="common/top.tpl"}
 
-                <div class="container h1">
+                <div class="cont h1">
                     <div class="container-padding">
                         <h1>События<span id="events_type_header_suffix"> / Непросмотренные</span></h1>
                     </div>
                 </div>
 
-                <div class="container main-content">
+                <div class="cont main-content">
                     <div class="row container-padding">
                         {include file="modules/`$core->module.name`.tpl"}
                     </div>

@@ -19,14 +19,13 @@ core.ajax = {
             dataType: 'json',
             success: function (data) {
                 if (data.user_logged_in !== true) {
-                    var html = 'Вы не авторизованы, <a href="javascript:void(0)" onclick="document.location.reload()">войдите в систему</a> заново!<br><hr>' +
+                    var html = '<p>Вы не авторизованы, <a href="javascript:void(0)" onclick="document.location.reload()">войдите в систему</a> заново!</p>' +
                         '<em>Это могло произойти, если закончилось время сессии. Или если кто-то авторизовался в Картреке под вашем логином в другом браузере или на другом компьютере.</em>';
 
-                    core.modal.createModal(
+                    core.warning.show(
                         'Сбой авторизации',
                         html,
-                        400,
-                        true
+                        'error'
                     );
 
                     // Сделать Destry all, преде чем открывать это окошко!!!
@@ -316,16 +315,24 @@ core.utilities = {
     getColorChooser: function (default_color) {
         var colors_html = '',
             colors = [
-                'b81616',
-                '4496de',
-                '9d1b1b',
-                '496b33',
-                '181917',
-                'df4f00',
-                '195b5f',
-                '2c349d',
-                '7a3185',
-                '228867'
+                '965581',
+                '645596',
+                '558696',
+                '559664',
+                '819655',
+                'beb146',
+                'd2a331',
+                'b55c21',
+                '8d2e00',
+                'ff6868',
+                'a340ff',
+                '00c0ff',
+                '76ff68',
+                'adff00',
+                'fff000',
+                'ffffff',
+                '999999',
+                '000000'
             ],
             classname;
 
@@ -1707,10 +1714,35 @@ core.events_api = {
     }
 };
 
+core.warning = {
+    show: function (header, notice, icon_class) {
+        if (core.ajax.unbeakable_error !== true) {
+            var html = '<i class="icon-64 ' + icon_class + '"></i>' +
+                '<span class="header">' + header + '</span>' +
+                '<span class="notice">' + notice + '</span>';
+
+            $('body').prepend('<div class="warn-modal"><div class="warn-modal-inner">' + html + '</div></div>');
+            $('.warn-modal').fadeIn(200);
+
+            $('.warn-modal-inner').css({
+                marginTop: - $('.warn-modal-inner').height() / 2 - 10
+            })
+        }
+    },
+
+    hide: function () {
+        if (core.ajax.unbeakable_error !== true) {
+            $('.warn-modal').fadeOut(100, function () {
+                $('.warn-modal').remove();
+            });
+        }
+    }
+};
+
 core.afk = {
     interval: null,
     delay: 1000,
-    margin: (global_params && global_params.global_params && global_params.system.afk_margin) ? global_params.system.afk_margin : 3600,
+    margin: (global_params && global_params.system && global_params.system.afk_margin) ? global_params.system.afk_margin : 3600000,
     startDate: null,
     status: false,
 
@@ -1736,15 +1768,12 @@ core.afk = {
             dif = now.getTime() - this.startDate.getTime();
 
         if (dif >= this.margin && core.ajax.unbeakable_error !== true && this.status !== true) {
-            var html =  '<i class="icon-64 snowflake"></i>' +
-                        '<span class="header">Передвиньте мышь или нажмите любую клавишу</span>' +
-                        '<span class="notice">Это окно появляется, если долгое время не использовать систему.</span>'
-
+            core.warning.show(
+                'Передвиньте мышь или нажмите любую клавишу',
+                '<em>Это окно появляется, если долгое время не использовать систему.</em>',
+                'snowflake'
+            );
             this.status = true;
-
-            $('body').prepend('<div class="afk"><div class="afk-inner">' + html + '</div></div>');
-
-            $('.afk').fadeIn(200);
         }
     },
 
@@ -1752,10 +1781,7 @@ core.afk = {
         this.resetInterval();
 
         if (core.ajax.unbeakable_error !== true && this.status === true) {
-            $('.afk').fadeOut(100, function(){
-                $('.afk').remove();
-            });
-
+            core.warning.hide();
             this.status = false;
         }
     },

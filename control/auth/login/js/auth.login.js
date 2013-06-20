@@ -3,12 +3,12 @@ var login = {
         $('#login').focus();
     },
 
-    bgMove: function(){
-        $('.login-body').on('mousemove', function(event) {
+    bgMove: function () {
+        $('.login-body').on('mousemove', function (event) {
             var posx = (2560 - $('.login-body').width()) / 2;
 
             $('.login-body').css({
-                backgroundPosition: -posx - ((event.pageX / 25) - 55) + 'px ' + ((- event.pageY / 35) - 400) + 'px'
+                backgroundPosition: -posx - ((event.pageX / 25) - 55) + 'px ' + ((-event.pageY / 35) - 400) + 'px'
             });
         });
     },
@@ -69,8 +69,8 @@ $(function () {
     login.init();
 });
 
-$(window).on('load', function(){
-    setTimeout(function(){
+$(window).on('load', function () {
+    setTimeout(function () {
         $('.preload-state').removeClass('preload-state');
     }, 250);
 });

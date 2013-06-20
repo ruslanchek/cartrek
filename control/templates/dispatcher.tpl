@@ -24,7 +24,7 @@
             <div class="limiter">
                 {include file="common/top.tpl"}
 
-                <div class="container h1">
+                <div class="cont h1">
                     <div class="container-padding">
                         <h1>{$core->module.title}</h1>
                     </div>
