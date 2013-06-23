@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <div class="container main-content">
+                <div class="cont main-content">
                     <div class="row container-padding">
                         {include file="modules/`$core->module.name`.tpl"}
                     </div>

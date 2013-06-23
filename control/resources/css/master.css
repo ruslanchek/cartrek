@@ -51,13 +51,8 @@ p {
 -----------------------------------------------------------------------------*/
 .nav-top {
     list-style-type: none;
-    -webkit-border-radius: 4px;
-            border-radius: 4px;
-    margin: 0 0 1.1em;
-    padding: 5px;
-    background: #e5e5e5 url(../img/white-gradient.png) repeat-x top;
     text-align: center;
-    text-shadow: 0 1px 0 #fff;
+    margin: 0;
 }
 
 .nav-top i {
@@ -66,10 +61,11 @@ p {
     position: absolute;
     top: 0;
     left: 0;
-    height: 34px;
-    line-height: 34px;
+    height: 27px;
+    line-height: 27px;
     text-align: center;
     white-space: nowrap;
+    font-style: normal;
 
     background: #3887b3 url(../img/white-gradient.png) repeat-x top;
     color: #fff;
@@ -87,16 +83,16 @@ p {
 }
 
 .nav-top li {
-    height: 35px;
+    height: 28px;
     display: block;
     float: left;
     margin: 0 15px 0 0;
 }
 
 .nav-top li a {
-    height: 35px;
+    height: 28px;
     display: block;
-    line-height: 35px;
+    line-height: 28px;
     padding: 0 1.2ex;
 }
 
@@ -104,6 +100,7 @@ p {
     background: #ccc url(../img/white-gradient.png) repeat-x top;
     -webkit-border-radius: 3px;
     border-radius: 3px;
+    text-decoration: none;
 }
 
 
@@ -369,12 +366,12 @@ footer {
     position: relative;
 }
 
-.top-panel .container {
+.top-panel .cont {
     position: relative;
     height: 46px;
 }
 
-.top-panel .container .logo {
+.top-panel .cont .logo {
     position: absolute;
     left: 0;
     top: 50%;
@@ -389,11 +386,11 @@ footer {
     left: 20px !important;
 }
 
-.top-panel .container .logo:hover {
+.top-panel .cont .logo:hover {
     opacity: 0.75;
 }
 
-.top-panel .container .loading-ball {
+.top-panel .cont .loading-ball {
     background: url(../img/sprite.png) 0 -32px;
     width: 16px;
     height: 16px;
@@ -709,7 +706,7 @@ table.hovered {
     padding: 0 20px;
 }
 
-.wide .container-padding {
+.wide .cont-padding {
     padding: 0;
 }
 
@@ -929,14 +926,46 @@ a.badge:active {
 
 
 .h-panel {
-    background: #eee;
-    height: 50px;
+    background: #ededed url(../img/white-gradient.png) repeat-x top;
     width: 100%;
     padding: 15px 20px;
-    margin: -20px 0 0 -20px;
+    margin: -20px 0 20px -20px;
     -webkit-border-radius: 5px 5px 0px 0px;
             border-radius: 5px 5px 0px 0px;
+    border-bottom: 1px solid #ddd;
 }
+
+.h-panel #fleets-menu,
+.h-panel #cars-menu{
+    margin-bottom: 0;
+    margin-left: 10px;
+}
+
+.h-panel .btn {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-right: 11px;
+    font-size: 1em;
+}
+
+.h-panel .btn-group {
+    margin-right: 11px;
+}
+
+.h-panel .btn-group .btn {
+    margin-right: 0;
+}
+
+.h-panel .b-core-ui-select *,
+.h-panel .b-core-ui-select,
+.h-panel .b-core-ui-select__dropdown {
+    font-size: 1em;
+}
+
+.jspContainer {
+    max-height: 186px !important;
+}
+
 
 /* =Forms
 -----------------------------------------------------------------------------*/
@@ -2261,6 +2290,43 @@ footer a:active {
 
 .side-panel .row strong {
     color: #555;
+}
+
+
+/* =Statistics
+-----------------------------------------------------------------------------*/
+.chart-container {
+    background: #fff;
+    border: 2px solid #eee;
+    border-top: none;
+}
+
+.chart-timeline {
+    background: #eee;
+    height: 22px;
+    margin: 0;
+    position: relative;
+    -webkit-border-radius: 2px;
+            border-radius: 2px;
+}
+
+.chart-timeline .arm {
+    cursor: move;
+    width: 100px;
+    height: 22px;
+    border: 2px solid #999;
+    display: block;
+    position: absolute;
+    top: -2px !important;
+    left: 0;
+    -webkit-border-radius: 2px;
+            border-radius: 2px;
+    z-index: 3;
+}
+
+.chart-timeline .arm:hover,
+.chart-timeline .arm:active {
+    border-color: #e87b00;
 }
 
 /* =Main

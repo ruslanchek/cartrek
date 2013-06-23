@@ -1,5 +1,5 @@
 {if $core->devices->devices_present}
-    <div id="fleets"></div>
+    <div class="h-panel" id="fleets"></div>
 
     <div class="dispatcher"></div>
 {else}

@@ -738,6 +738,14 @@ core.utilities = {
         return h + ':' + m + ':' + s;
     },
 
+    humanizeTimeFromDateObject: function (date) {
+        var r;
+
+        r = core.utilities.pad(date.getHours(), 2) + ':' + core.utilities.pad(date.getMinutes(), 2) + ':' + core.utilities.pad(date.getSeconds(), 2);
+
+        return r;
+    },
+
     humanizeDateTime: function (date, show_time) {
         var month_names = [
                 'января',
@@ -1375,21 +1383,18 @@ core.ui = {
         }
 
         if (options.items) {
+            var o;
+
             for (var i = 0, l = options.items.length; i < l; i++) {
+                if(options.inner_object){
+                    o = options.items[i][options.inner_object];
+                }else{
+                    o = options.items[i]
+                }
+
                 // TODO: Сделать проверку на exclude
-                if (
-                    !(
-                        options.exclude &&
-                            (
-                                options.items[i][options.inner_object][options.exclude.key_name] != options.exclude.value_name
-                                )
-                        )
-                    ) {
-                    if (options.inner_object) {
-                        html += '<option ' + ((options.default == options.items[i][options.inner_object][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.inner_object][options.key_name] + '">' + options.items[i][options.inner_object][options.value_name] + '</option>';
-                    } else {
-                        html += '<option ' + ((options.default == options.items[i][options.key_name]) ? 'selected="selected"' : '') + ' value="' + options.items[i][options.key_name] + '">' + options.items[i][options.value_name] + '</option>';
-                    }
+                if (!(options.exclude && (o[options.exclude.key_name] != options.exclude.value_name))) {
+                    html += '<option ' + ((options.default == o[options.key_name]) ? 'selected="selected"' : '') + ' value="' + o[options.key_name] + '">' + o[options.value_name] + '</option>';
                 }
             }
         }
@@ -1725,7 +1730,7 @@ core.warning = {
             $('.warn-modal').fadeIn(200);
 
             $('.warn-modal-inner').css({
-                marginTop: - $('.warn-modal-inner').height() / 2 - 10
+                marginTop: -$('.warn-modal-inner').height() / 2 - 10
             })
         }
     },

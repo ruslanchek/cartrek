@@ -1,12 +1,19 @@
 <div class="top-panel">
     <div class="cont {if isset($map) && $map == true}wide{/if}">
         <ul class="top-menu">
+            <li><a href="#" class="popup-menu"></a></li>
             <li>{if $core->module.name == 'map'}<b>Наблюдение</b>{else}<a href="/control/map">Наблюдение</a>{/if}</li>
             <li>{if $core->module.name == 'dispatcher'}<b>Диспетчер</b>{else}<a href="/control/dispatcher">Диспетчер</a>{/if}</li>
             <li>{if $core->module.name == 'statistics'}<b>Статистика</b>{else}<a href="/control/statistics">Статистика</a>{/if}</li>
 
             <li>
-                {if $core->module.name == 'events'}<b class="events-link"><span>События</span>{else}<a class="events-link" href="/control/events"><span>События</span>{/if}<sup id="global_events_counter" {if $core->auth->user.data.new_events_count <= 0}style="display: none"{/if}>{$core->auth->user.data.new_events_count}</sup>
+                {if $core->module.name == 'events'}
+                    <b class="events-link"><span>События</span>
+                {else}
+                    <a class="events-link" href="/control/events"><span>События</span>
+                {/if}
+
+                <sup id="global_events_counter" {if $core->auth->user.data.new_events_count <= 0}style="display: none"{/if}>{$core->auth->user.data.new_events_count}</sup>
 
                 {if $core->module.name == 'events'}
                     </b>

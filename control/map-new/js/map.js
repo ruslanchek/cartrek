@@ -560,7 +560,7 @@ core.map = {
                     '<td><span>' + core.utilities.convertKnotsToKms(device.last_registered_point.velocity) + ' км/ч</span></td>' +
                     '</tr>' +
                     '<tr>' +
-                    '<td>Высота</td>' +
+                    '<td>Альтитуда</td>' +
                     '<td><span>' + device.last_registered_point.altitude + ' м</span></td>' +
                     '</tr>' +
                     '<tr>' +
