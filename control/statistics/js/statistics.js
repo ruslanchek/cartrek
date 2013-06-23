@@ -110,6 +110,7 @@ var Charts = function () {
         $('.chart-timeline .arm').css({
             width: Math.floor(this.shown_percentage) - 2 + '%'
         }).draggable({
+                grid: [ Math.ceil($('.chart-timeline').width() / t.points_count), 0 ],
                 containment: 'parent',
                 drag: function (event, ui) {
                     var arm_start_percent = Math.ceil((ui.position.left / $('.chart-timeline').width()) * 100),
