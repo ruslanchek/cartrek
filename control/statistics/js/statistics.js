@@ -197,7 +197,9 @@ var View = function () {
 
     this.showTable = function (data) {
         var html = '<table class="width-100 hovered">',
-            data_r = data.reverse();
+            data_r = data.slice(0); // Clone Array hack
+
+        data_r.reverse();
 
         html += '<tr>' +
             '<th width="1%"><strong>№</strong></th>' +
