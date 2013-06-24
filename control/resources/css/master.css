@@ -2299,6 +2299,7 @@ footer a:active {
     background: #fff;
     border: 2px solid #eee;
     border-top: none;
+    padding: 10px 0 0 0;
 }
 
 .chart-timeline {
@@ -2306,27 +2307,32 @@ footer a:active {
     height: 22px;
     margin: 0;
     position: relative;
-    -webkit-border-radius: 2px;
-            border-radius: 2px;
+    -webkit-border-radius: 3px 3px 0px 0px;
+            border-radius: 3px 3px 0px 0px;
 }
 
 .chart-timeline .arm {
     cursor: move;
     width: 100px;
     height: 22px;
-    border: 2px solid #999;
     display: block;
     position: absolute;
-    top: -2px !important;
+    top: -1px;
     left: 0;
-    -webkit-border-radius: 2px;
-            border-radius: 2px;
-    z-index: 3;
+
+    -webkit-border-radius: 3px;
+            border-radius: 3px;
+
+    background: #3887b3 url(../img/white-gradient.png) repeat-x top;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.55);
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.55);
 }
 
 .chart-timeline .arm:hover,
 .chart-timeline .arm:active {
-    border-color: #e87b00;
+    background: #5796b9 url(../img/white-gradient.png) repeat-x top;
 }
 
 /* =Main

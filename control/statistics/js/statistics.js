@@ -196,23 +196,24 @@ var View = function () {
     };
 
     this.showTable = function (data) {
-        var html = '<table class="width-100 hovered">';
+        var html = '<table class="width-100 hovered">',
+            data_r = data.reverse();
 
         html += '<tr>' +
-            '<th width="1%"><strong>ID</strong></th>' +
+            '<th width="1%"><strong>№</strong></th>' +
             '<th width="20%"><strong>Время</strong></th>' +
             '<th width="15%"><strong>Скорость, км/ч</strong></th>' +
             '<th width="1%"><strong>Альтитуда</strong></th>' +
             '<th width="70%"><strong>Положение</strong></th>' +
             '</tr>';
 
-        for (var i = 0, l = data.length; i < l; i++) {
+        for (var i = 0, l = data_r.length; i < l; i++) {
             html += '<tr>' +
-                '<td>' + data[i].id + '</td>' +
-                '<td>' + core.utilities.humanizeTimeFromDateObject(core.utilities.parseDateMysqlStrToDateOdject(data[i].date)) + '</td>' +
-                '<td>' + core.utilities.convertKnotsToKms(data[i].speed) + '</td>' +
-                '<td>' + data[i].altitude + '</td>' +
-                '<td>' + data[i].id + '</td>' +
+                '<td>' + ((data_r.length) - i) + '</td>' +
+                '<td>' + core.utilities.humanizeTimeFromDateObject(core.utilities.parseDateMysqlStrToDateOdject(data_r[i].date)) + '</td>' +
+                '<td>' + core.utilities.convertKnotsToKms(data_r[i].speed) + '</td>' +
+                '<td>' + data_r[i].altitude + '</td>' +
+                '<td>' + data_r[i].id + '</td>' +
                 '</tr>';
         }
 
