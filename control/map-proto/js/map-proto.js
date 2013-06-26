@@ -9,8 +9,6 @@ var View = function () {
     /* Class constructor */
     this.__construct = function () {
         this.mapView();
-
-        core.loading.setLoadingToElementCenter('fleets-and-cars-menu-block', $('#fleets-and-cars-menu-block'), 10, false, true)
     };
 
     /* Methods */
@@ -75,12 +73,7 @@ var View = function () {
     this.mapView = function () {
         var resize = function () {
             $('#map, .map-container').css({
-                height: $('body').height() - $('.top-panel').height() - $('footer').height() - 20,
-                width: $('body').width() - $('.map-side-panel').width()
-            });
-
-            $('.map-full-sized-frame .h1').css({
-                width: $('body').width() - $('.map-side-panel').width()
+                height: $('body').height() - $('.map-container').offset().top - $('footer').height() - 44
             });
 
             $('.map-side-panel').css({
@@ -155,8 +148,6 @@ var View = function () {
                 document.location.hash = '#fleet=' + val + tm_hash;
             }
         });
-
-        core.loading.unsetLoading('fleets-and-cars-menu-block');
     };
 
     /* Bind map view options controller */
@@ -757,20 +748,14 @@ var Data = function () {
 
                 MC.Data.drawCars();
 
-                console.log('x')
-
                 if (MC.Data.show_car_path === true && MC.Data.current_car) {
-                    console.log('a')
                     MC.Data.current_car.drawPath(function(){
-                        console.log('z')
                         if (firstload === true) {
                             MC.Data.current_car.focusOnPath();
-                            console.log('y')
                         }
                     });
                 }else if(MC.Data.show_car_path !== true && firstload === true) {
                     MC.View.focus();
-                    console.log('f')
                 }
             },
             error: function () {
@@ -894,6 +879,6 @@ var MC = {
     }
 };
 
-$(function () {
+$(window).on('load', function(){
     MC.init();
 });

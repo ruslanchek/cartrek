@@ -587,12 +587,12 @@ var WpMarker = function (params, instance_map) {
             }
                 break;
 
-            case 'way' :
+            case 'time' :
             {
                 return L.icon({
-                    iconUrl: '/control/map/img/markers/waypoint.png',
-                    iconSize: [7, 7], // size of the icon
-                    iconAnchor: [3, 3], // point of the icon which will correspond to marker's location
+                    iconUrl: '/control/map/img/markers/waypoint-time.png',
+                    iconSize: [27, 18], // size of the icon
+                    iconAnchor: [0, 9], // point of the icon which will correspond to marker's location
                     popupAnchor: [0, -4] // point from which the popup should open relative to the iconAnchor
                 });
             }

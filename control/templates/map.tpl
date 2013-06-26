@@ -26,14 +26,22 @@
     <body>
         <div id="wrapper">
             <div class="limiter">
-                {include file="common/top.tpl" map=true}
+                {include file="common/top.tpl"}
 
-                {include file="modules/`$core->module.name`.tpl"}
+                <div class="cont h1">
+                    <div class="container-padding">
+                        <h1>{$core->module.title}<span id="current-fleet-and-car"></span></h1>
+                    </div>
+                </div>
+
+                <div class="cont main-content" style="padding: 0">
+                    {include file="modules/`$core->module.name`.tpl"}
+                </div>
             </div>
         </div>
 
         <footer>
-            {include file="common/footer.tpl" map=true}
+            {include file="common/footer.tpl"}
         </footer>
     </body>
 </html>

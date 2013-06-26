@@ -1,5 +1,5 @@
 <div class="top-panel">
-    <div class="cont {if isset($map) && $map == true}wide{/if}">
+    <div class="cont">
         <ul class="top-menu">
             <li><a href="#" class="popup-menu"></a></li>
             <li>{if $core->module.name == 'map'}<b>Наблюдение</b>{else}<a href="/control/map">Наблюдение</a>{/if}</li>
