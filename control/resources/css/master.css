@@ -2214,7 +2214,7 @@ footer a:active {
     z-index: 1;
     top: -11px;
     left: -15px;
-    background: url(/control/map/img/markers/heading/flat_shadow.png);
+    background: url(/control/map/img/markers/heading/flat-shadow.png);
 }
 
 .marker-with-info .g_id.small {

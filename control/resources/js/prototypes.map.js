@@ -579,7 +579,7 @@ var WpMarker = function (params, instance_map) {
             case 'stop' :
             {
                 return L.icon({
-                    iconUrl: '/control/map/img/markers/waypoint_stop.png',
+                    iconUrl: '/control/map/img/markers/waypoint-stop.png',
                     iconSize: [7, 7], // size of the icon
                     iconAnchor: [3, 3], // point of the icon which will correspond to marker's location
                     popupAnchor: [0, -4] // point from which the popup should open relative to the iconAnchor
@@ -588,6 +588,16 @@ var WpMarker = function (params, instance_map) {
                 break;
 
             case 'way' :
+            {
+                return L.icon({
+                    iconUrl: '/control/map/img/markers/waypoint.png',
+                    iconSize: [7, 7], // size of the icon
+                    iconAnchor: [3, 3], // point of the icon which will correspond to marker's location
+                    popupAnchor: [0, -4] // point from which the popup should open relative to the iconAnchor
+                });
+            }
+                break;
+
             default :
             {
                 return L.icon({

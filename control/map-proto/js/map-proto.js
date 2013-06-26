@@ -508,7 +508,7 @@ var Data = function () {
                 this.date = core.utilities.timestampToDateYearLast(this.hash.timemachine);
 
                 this.auto_renew = false;
-                this.show_car_path = false;
+                this.show_car_path = true;
             } else {
                 this.timemachine = false;
                 this.date = new Date();
@@ -757,14 +757,20 @@ var Data = function () {
 
                 MC.Data.drawCars();
 
+                console.log('x')
+
                 if (MC.Data.show_car_path === true && MC.Data.current_car) {
+                    console.log('a')
                     MC.Data.current_car.drawPath(function(){
+                        console.log('z')
                         if (firstload === true) {
                             MC.Data.current_car.focusOnPath();
+                            console.log('y')
                         }
                     });
                 }else if(MC.Data.show_car_path !== true && firstload === true) {
                     MC.View.focus();
+                    console.log('f')
                 }
             },
             error: function () {
