@@ -609,10 +609,11 @@ footer {
 .main-content {
     background: #fff;
     padding: 20px 0;
-    border: 1px solid #ddd;
-    border-bottom: 3px solid #ccc;
+    border-bottom: 3px solid #999;
     -webkit-border-radius: 5px;
     border-radius: 5px;
+    -webkit-box-shadow:  0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+            box-shadow:  0px 1px 3px 0px rgba(0, 0, 0, 0.3);
 }
 
 /* =16x16 icons
