@@ -2194,7 +2194,7 @@ footer a:active {
 }
 
 .marker-with-info .icon {
-    background-image: url(/control/map/img/markers/heading/heading-sprite.png);
+    background-image: url(/control/map-old/img/markers/heading/heading-sprite.png);
     width: 40px;
     height: 40px;
     position: absolute;
@@ -2210,7 +2210,7 @@ footer a:active {
     z-index: 1;
     top: -11px;
     left: -15px;
-    background: url(/control/map/img/markers/heading/flat-shadow.png);
+    background: url(/control/map-old/img/markers/heading/flat-shadow.png);
 }
 
 .marker-with-info .g_id.small {
@@ -2248,7 +2248,7 @@ footer a:active {
     position: absolute;
     top: -14px;
     left: -14px;
-    background: url(/control/map/img/markers/car-label-arm.png) no-repeat;
+    background: url(/control/map-old/img/markers/car-label-arm.png) no-repeat;
 }
 
 .marker-with-info .info-block .name {

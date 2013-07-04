@@ -18,7 +18,7 @@
             <div class="nav-collapse">
                 <ul class="nav">
                     {if $core->auth->user.status}
-                        <li{if $core->module.name == 'map'} class="active"{/if}><a href="/control/map">Карта</a></li>
+                        <li{if $core->module.name == 'map'} class="active"{/if}><a href="/control/map-old">Карта</a></li>
                         <li{if $core->module.name == 'dispatcher'} class="active"{/if}><a href="/control/dispatcher">Диспетчер</a></li>
                         <li class="divider-vertical"></li>
                         <li><a href="/control/help"><i class="icon-question-sign icon-white"></i> Помощь</a></li>

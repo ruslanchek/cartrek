@@ -7,9 +7,9 @@ Class Map extends Core
         parent::__construct();
 
         $this->init(array(
-            'name' => 'map-proto',
+            'name' => 'map',
             'title' => 'Наблюдение',
-            'dir' => '/control/map-proto'
+            'dir' => '/control/map'
         ));
 
         //If user have any actve devices

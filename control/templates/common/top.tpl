@@ -2,7 +2,7 @@
     <div class="cont">
         <ul class="top-menu">
             <li><a href="#" class="popup-menu"></a></li>
-            <li>{if $core->module.name == 'map'}<b>Наблюдение</b>{else}<a href="/control/map">Наблюдение</a>{/if}</li>
+            <li>{if $core->module.name == 'map'}<b>Наблюдение</b>{else}<a href="/control/map-old">Наблюдение</a>{/if}</li>
             <li>{if $core->module.name == 'dispatcher'}<b>Диспетчер</b>{else}<a href="/control/dispatcher">Диспетчер</a>{/if}</li>
             <li>{if $core->module.name == 'statistics'}<b>Статистика</b>{else}<a href="/control/statistics">Статистика</a>{/if}</li>
 
