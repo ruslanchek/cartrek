@@ -1,6 +1,6 @@
 <div class="h-panel" style="margin: 0; width: auto">
     <div class="row container">
-        <div class="third" data-step='1' data-intro='Автоматы'>
+        <div class="half" data-step='1' data-intro='Автоматы'>
             <div id="togglers">
                 <label title="Автообновление данных">
                     <input type="checkbox" class="slickswitch" id="auto-renew" />
@@ -21,15 +21,15 @@
             </div>
         </div>
 
-        <div class="third">
-        </div>
-
-        <div class="third">
+        <div class="half">
             <div class="row">
-                <div class="half">
+                <div class="third">
+                    <input type="text" id="datepicker" />
+                </div>
+                <div class="third">
                     <div id="fleets-menu"></div>
                 </div>
-                <div class="half">
+                <div class="third">
                     <div id="cars-menu"></div>
                 </div>
             </div>
