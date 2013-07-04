@@ -4,7 +4,7 @@
 /* =Typography
 -----------------------------------------------------------------------------*/
 body {
-    background: #eee url(../img/pattern_white.png) top center;
+    background: #eee url(../img/whitey.png) top center;
     font-family: 'Lucida Grande', Arial, Helvetica, sans-serif;
     color: #3C4E5A;
 }
@@ -102,7 +102,6 @@ p {
     border-radius: 3px;
     text-decoration: none;
 }
-
 
 .nav-side {
     margin: 0 0 2em 0;
@@ -304,13 +303,13 @@ html, body {
 }
 
 .limiter {
-    padding-bottom: 80px;
+    padding-bottom: 66px;
 }
 
 footer {
-    margin-top: -60px;
-    height: 40px;
-    padding: 20px 0 0 0;
+    margin-top: -46px;
+    height: 32px;
+    padding: 14px 0 0 0;
 }
 
 /* =Header
@@ -364,6 +363,7 @@ footer {
     height: 46px;
     margin: 0 0 20px;
     position: relative;
+    border-bottom: 1px solid #fff;
 }
 
 .top-panel .cont {
@@ -609,11 +609,11 @@ footer {
 .main-content {
     background: #fff;
     padding: 20px 0;
-    border-bottom: 3px solid #999;
+    border-bottom: 3px solid #ccc;
     -webkit-border-radius: 5px;
     border-radius: 5px;
-    -webkit-box-shadow:  0px 1px 3px 0px rgba(0, 0, 0, 0.3);
-            box-shadow:  0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.3);
 }
 
 /* =16x16 icons
@@ -925,7 +925,6 @@ a.badge:active {
     right: 32px;
 }
 
-
 .h-panel {
     background: #ededed url(../img/white-gradient.png) repeat-x top;
     width: 100%;
@@ -933,12 +932,12 @@ a.badge:active {
     padding: 15px 20px;
     margin: -20px 0 20px -20px;
     -webkit-border-radius: 5px 5px 0px 0px;
-            border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
     border-bottom: 1px solid #ddd;
 }
 
 .h-panel #fleets-menu,
-.h-panel #cars-menu{
+.h-panel #cars-menu {
     margin-bottom: 0;
     margin-left: 10px;
 }
@@ -967,7 +966,6 @@ a.badge:active {
 .jspContainer {
     max-height: 186px !important;
 }
-
 
 /* =Forms
 -----------------------------------------------------------------------------*/
@@ -1938,7 +1936,7 @@ footer a:active {
 .leaflet-control-attribution {
     margin: 0 10px 10px 0 !important;
     -webkit-border-radius: 5px;
-        border-radius: 5px;
+    border-radius: 5px;
     padding: 3px 5px !important;
     display: block;
 }
@@ -2218,7 +2216,7 @@ footer a:active {
     height: 19px !important;
     line-height: 19px;
     -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
-            box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
 }
 
 .marker-with-info .info-block {
@@ -2288,7 +2286,6 @@ footer a:active {
     color: #555;
 }
 
-
 /* =Statistics
 -----------------------------------------------------------------------------*/
 .chart-container {
@@ -2304,7 +2301,7 @@ footer a:active {
     margin: 0;
     position: relative;
     -webkit-border-radius: 3px 3px 0px 0px;
-            border-radius: 3px 3px 0px 0px;
+    border-radius: 3px 3px 0px 0px;
 }
 
 .chart-timeline .arm {
@@ -2317,7 +2314,7 @@ footer a:active {
     left: 0;
 
     -webkit-border-radius: 3px;
-            border-radius: 3px;
+    border-radius: 3px;
 
     background: #3887b3 url(../img/white-gradient.png) repeat-x top;
     font-weight: bold;
@@ -2492,8 +2489,6 @@ footer a:active {
     background-position: -1536px 0;
 }
 
-
-
 /* =Map types
 -----------------------------------------------------------------------------*/
 .map-types {
@@ -2511,7 +2506,7 @@ footer a:active {
     color: #3C4E5A;
     min-height: 42px;
     -webkit-border-radius: 3px;
-        border-radius: 3px;
+    border-radius: 3px;
 }
 
 .map-types .item:hover {
@@ -2608,18 +2603,18 @@ footer a:active {
 .transform-b-0 {
     -webkit-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1); /* older webkit */
     -webkit-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
-       -moz-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
-        -ms-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
-         -o-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
-            transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255); /* custom */
+    -moz-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
+    -ms-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
+    -o-transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255);
+    transition: all 500ms cubic-bezier(0.775, 0.030, 0.390, 1.255); /* custom */
 }
 
 .transform-b-1 {
     -webkit-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
-       -moz-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
-        -ms-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
-         -o-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
-            transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980); /* custom */
+    -moz-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
+    -ms-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
+    -o-transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980);
+    transition: all 700ms cubic-bezier(0.270, 0.450, 0.335, 0.980); /* custom */
 }
 
 @-webkit-keyframes rotate-z {
@@ -2703,12 +2698,12 @@ footer a:active {
     left: 50%;
 
     -webkit-border-radius: 5px;
-            border-radius: 5px;
+    border-radius: 5px;
 
     margin: 0 0 0 -312px;
 
-    -webkit-box-shadow:  0px 2px 8px 0px rgba(0, 0, 0, 0.4);
-            box-shadow:  0px 2px 8px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.4);
 }
 
 .player-timeline {
@@ -2963,15 +2958,15 @@ footer a:active {
 
 .hero-login.preload-state {
     opacity: 0;
-    -moz-transform:    scale(0);
-     -o-transform:      scale(0);
-     -webkit-transform: scale(0);
-     transform:         scale(0);
+    -moz-transform: scale(0);
+    -o-transform: scale(0);
+    -webkit-transform: scale(0);
+    transform: scale(0);
 
-    -webkit-transform: rotateY( 180deg ) scale(0) rotateZ(20deg);
-           -moz-transform: rotateY( 180deg ) scale(0) rotateZ(20deg);
-             -o-transform: rotateY( 180deg ) scale(0) rotateZ(20deg);
-                transform: rotateY( 180deg ) scale(0) rotateZ(20deg);
+    -webkit-transform: rotateY(180deg) scale(0) rotateZ(20deg);
+    -moz-transform: rotateY(180deg) scale(0) rotateZ(20deg);
+    -o-transform: rotateY(180deg) scale(0) rotateZ(20deg);
+    transform: rotateY(180deg) scale(0) rotateZ(20deg);
 
 }
 
@@ -2994,9 +2989,9 @@ footer a:active {
     z-index: 4;
 
     -webkit-transform-style: preserve-3d;
-       -moz-transform-style: preserve-3d;
-         -o-transform-style: preserve-3d;
-            transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
 
 }
 
@@ -3196,7 +3191,6 @@ footer a:active {
     color: #004d58 !important;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-
 
 /* Afk */
 .warn-modal {
@@ -3443,7 +3437,6 @@ footer a:active {
     background: #fff;
 }
 
-
 #phones-table .item {
     margin-bottom: 1em;
 }
@@ -3451,7 +3444,7 @@ footer a:active {
 #phones-table .item .phone-edit-link {
     color: #3C4E5A;
     text-decoration: none;
-    border-bottom:  1px dashed #3C4E5A;
+    border-bottom: 1px dashed #3C4E5A;
     font-weight: bold;
     padding-bottom: 0.01em;
     display: block;
@@ -3512,25 +3505,25 @@ footer a:active {
     opacity: 0;
 
     -webkit-transition: -webkit-transform 450ms;
-             -moz-transition: -moz-transform 450ms;
-               -o-transition: -o-transform 450ms;
-                  transition: transform 450ms;
-          -webkit-transform-style: preserve-3d;
-             -moz-transform-style: preserve-3d;
-               -o-transform-style: preserve-3d;
-                  transform-style: preserve-3d;
-    -webkit-transform: rotateY( 180deg ) scale(0.5) rotateZ(20deg);
-             -moz-transform: rotateY( 180deg ) scale(0.5) rotateZ(20deg);
-               -o-transform: rotateY( 180deg ) scale(0.5) rotateZ(20deg);
-                  transform: rotateY( 180deg ) scale(0.5) rotateZ(20deg);
+    -moz-transition: -moz-transform 450ms;
+    -o-transition: -o-transform 450ms;
+    transition: transform 450ms;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    -webkit-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
+    -moz-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
+    -o-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
+    transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
 
 }
 
 .dispatcher .item.flipped {
-    -webkit-transform: rotateY( 0deg );
-         -moz-transform: rotateY( 0deg );
-           -o-transform: rotateY( 0deg );
-              transform: rotateY( 0deg );
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    transform: rotateY(0deg);
 }
 
 .dispatcher .item:hover {
@@ -3681,18 +3674,18 @@ footer a:active {
 }
 
 .dispatcher .ui-sortable-helper {
-    -webkit-box-shadow:  0px 10px 35px 0px rgba(0, 0, 0, 0.4);
-            box-shadow:  0px 10px 35px 0px rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: 0px 10px 35px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 10px 35px 0px rgba(0, 0, 0, 0.4);
     background: none;
 
     -webkit-transition: -webkit-transform 250ms;
-             -moz-transition: -moz-transform 250ms;
-               -o-transition: -o-transform 250ms;
-                  transition: transform 250ms;
-          -webkit-transform-style: preserve-3d;
-             -moz-transform-style: preserve-3d;
-               -o-transform-style: preserve-3d;
-                  transform-style: preserve-3d;
+    -moz-transition: -moz-transform 250ms;
+    -o-transition: -o-transform 250ms;
+    transition: transform 250ms;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
 }
 
 .dispatcher .ui-sortable-placeholder {
@@ -3703,18 +3696,18 @@ footer a:active {
     visibility: visible !important;
 
     -webkit-box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
-            box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
 
-    -webkit-transform: rotateY( 0deg ) rotateZ(0deg);
-                     -moz-transform: rotateY( 0deg ) rotateZ(0deg);
-                       -o-transform: rotateY( 0deg ) rotateZ(0deg);
-                          transform: rotateY( 0deg ) rotateZ(0deg);
+    -webkit-transform: rotateY(0deg) rotateZ(0deg);
+    -moz-transform: rotateY(0deg) rotateZ(0deg);
+    -o-transform: rotateY(0deg) rotateZ(0deg);
+    transform: rotateY(0deg) rotateZ(0deg);
 }
 
 .dispatcher .ui-sortable-helper {
-    -webkit-transform: rotateY( 5deg ) rotateZ(-3deg);
-                 -moz-transform: rotateY( 5deg ) rotateZ(-3deg);
-                   -o-transform: rotateY( 5deg ) rotateZ(-3deg);
-                      transform: rotateY( 5deg ) rotateZ(-3deg);
+    -webkit-transform: rotateY(5deg) rotateZ(-3deg);
+    -moz-transform: rotateY(5deg) rotateZ(-3deg);
+    -o-transform: rotateY(5deg) rotateZ(-3deg);
+    transform: rotateY(5deg) rotateZ(-3deg);
 }
 

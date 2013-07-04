@@ -2,7 +2,7 @@
 
 Array.prototype.max = function () {
     return Math.max.apply(Math, this);
-}
+};
 
 var Charts = function () {
     this.data_raw = null;
@@ -139,7 +139,12 @@ var View = function () {
 
     /* Class constructor */
     this.__construct = function () {
+        this.bindDatepicker();
         this.bindViewModeSwithcher();
+    };
+
+    this.bindDatepicker = function(){
+        $('#datepicker').datepicker();
     };
 
     this.bindViewModeSwithcher = function () {

@@ -16,7 +16,9 @@
         <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
         <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
 
-        <script src="/control/resources/plugins/chart/Chart.min.js"></script>
+        <script src="/control/resources/plugins/chartjs/knockout-2.2.1.js"></script>
+        <script src="/control/resources/plugins/chartjs/globalize.min.js"></script>
+        <script src="/control/resources/plugins/chartjs/dx.chartjs.js"></script>
     </head>
 
     <body>
