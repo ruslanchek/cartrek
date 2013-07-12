@@ -21,17 +21,17 @@ Class Core
 
     // Классы API
     private $classes = array(
-        'utils' => 'Utilities.api',
-        'db' => 'Database.api',
-        'auth' => 'Auth.api',
-        'mail' => 'Mail.api',
-        'sms' => 'Sms.api',
-        'form' => 'Form.api',
-        'devices' => 'Devices.api',
-        'eventsApi' => 'Events.api',
-        'payment' => 'Payment.api',
-        'drivers' => 'Drivers.api',
-        'geozones' => 'Geozones.api'
+        'utils' => 'Utilities',
+        'db' => 'Database',
+        'auth' => 'Auth',
+        'mail' => 'Mail',
+        'sms' => 'Sms',
+        'form' => 'Form',
+        'devices' => 'Devices',
+        'eventsApi' => 'Events',
+        'payment' => 'Payment',
+        'drivers' => 'Drivers',
+        'geozones' => 'Geozones'
     );
 
     // Созданные объекты
@@ -63,7 +63,7 @@ Class Core
         $class = $this->classes[$name];
 
         // Подключаем его
-        include_once($_SERVER['DOCUMENT_ROOT'] . '/api/' . $class . '.class.php');
+        include_once($_SERVER['DOCUMENT_ROOT'] . '/api/' . $class . '.api.class.php');
 
         // Сохраняем для будущих обращений к нему
         self::$objects[$name] = new $class();
