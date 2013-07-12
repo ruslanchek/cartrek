@@ -21,15 +21,17 @@ Class Core
 
     // Классы API
     private $classes = array(
-        'utils' => 'Utilities',
-        'db' => 'Database',
-        'auth' => 'Auth',
-        'mail' => 'Mail',
-        'sms' => 'Sms',
-        'form' => 'Form',
-        'devices' => 'Devices',
-        'eventsApi' => 'EventsApi',
-        'payment' => 'Payment'
+        'utils' => 'Utilities.api',
+        'db' => 'Database.api',
+        'auth' => 'Auth.api',
+        'mail' => 'Mail.api',
+        'sms' => 'Sms.api',
+        'form' => 'Form.api',
+        'devices' => 'Devices.api',
+        'eventsApi' => 'Events.api',
+        'payment' => 'Payment.api',
+        'drivers' => 'Drivers.api',
+        'geozones' => 'Geozones.api'
     );
 
     // Созданные объекты

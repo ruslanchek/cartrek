@@ -76,18 +76,19 @@ Class Geozones extends Core
         $this->db->query($query);
     }
 
-    private function saveShapes (){
-        if(isset($_POST) && isset($_POST['shapes'])){
-            foreach($_POST['shapes'] as $item){
+    private function saveShapes()
+    {
+        if (isset($_POST) && isset($_POST['shapes'])) {
+            foreach ($_POST['shapes'] as $item) {
                 $p = json_encode($item['edges']);
 
                 $query = "
                     UPDATE
                         `geozones`
                     SET
-                        `points` = '".$this->db->quote($item['points'])."'
+                        `points` = '" . $this->db->quote($item['points']) . "'
                     WHERE
-                        `id` = ".intval($item['id'])." &&
+                        `id` = " . intval($item['id']) . " &&
                         `user_id` = " . intval($this->auth->user['data']['id']);
 
                 $this->db->query($query);
@@ -225,6 +226,6 @@ Class Geozones extends Core
                 'status' => false,
                 'message' => 'Достигнуто максимальное количество геозон &mdash; ' . $this->geozones_limit
             );
-        };
+        }
     }
 }

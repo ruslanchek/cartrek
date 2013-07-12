@@ -659,6 +659,10 @@ table {
     color: #999;
 }
 
+.unactive_row * {
+    opacity: 0.75;
+}
+
 table td,
 table th {
     padding: 8px 10px !important;

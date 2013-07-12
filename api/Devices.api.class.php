@@ -89,24 +89,17 @@ Class Devices extends Core
 
         $devices = $this->db->assocMulti($query);
 
-        $in = "";
-
-        foreach ($devices as $device) {
-            $in .= "'" . $this->db->quote($device['id']) . "', ";
-        }
-
-        $in = substr($in, 0, strlen($in) - 2);
-
         $query = "
                 SELECT
                     min(CONVERT_TZ(`datetime`, 'Europe/Moscow', '" . $this->db->quote(date('P')) . "')) AS `date`
                 FROM
                     `tracks`
                 WHERE
-                    `device_id` IN (" . $in . ")
+                    `device_id` IN (" . $this->db->quote(implode(',', $devices)) . ")
             ";
 
         $result = $this->db->assocItem($query);
+
         return $result['date'];
     }
 
@@ -242,6 +235,8 @@ Class Devices extends Core
             }
 
             return $devices;
+        }else{
+            return false;
         }
     }
 
