@@ -1,6 +1,6 @@
 <?php
     //Подключаем основные классы
-    require_once($_SERVER['DOCUMENT_ROOT'].'/api/Core.class.api.php');
+    require_once($_SERVER['DOCUMENT_ROOT'].'/api/Core.api.class.php');
 
     //Класс текущего модуля
     require_once('Security.class.php');
