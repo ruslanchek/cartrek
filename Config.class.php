@@ -7,16 +7,20 @@ date_default_timezone_set('Europe/Moscow');
 Class Config{
     public $db_vars = array();
 
-    public $settings = array(
-        'allow_register'    => false,
-        'afk_margin'        => 3600000
-    );
-
-    public $default_user_settings = array(
-        'path_width'        => 5
-    );
+    public
+        $settings,
+        $default_user_settings;
 
     public function __construct(){
+        $this->default_user_settings = (object) array(
+            'path_width'        => 5
+        );
+
+        $this->settings = (object) array(
+            'allow_register'    => false,
+            'afk_margin'        => 3600000
+        );
+
         /* App fog */
         /*$services_json = json_decode(getenv("VCAP_SERVICES"),true);
         $mysql_config = $services_json["mysql-5.1"][0]["credentials"];
