@@ -13,7 +13,9 @@
         <div class="half">
             <div class="row">
                 <div class="third">
-                    <input type="text" id="datepicker" />
+                    <label for="datepicker">
+                        <input type="text" id="datepicker" />
+                    </label>
                 </div>
                 <div class="third">
                     <div id="fleets-menu"></div>

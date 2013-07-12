@@ -8,76 +8,72 @@ var Charts = function () {
     this.data_raw = null;
     this.points_count = 0;
     this.data_parsed = null;
-    this.y_param_name = 'speed';
+    this.current_param = {
+        value: 'speed',
+        name: 'Скорость (Км/ч)'
+    };
     this.min_points = 10;
     this.max_points = 40;
     this.shown_percentage = 100;
     this.start = 0;
+    this.height = 551;
 
     this.parseData = function (data) {
-        var data_parsed = {
-            x: [],
-            y: []
-        };
+        var data_parsed = [];
 
         for (var i = 0, l = data.length; i < l; i++) {
-            data_parsed.x.push(core.utilities.humanizeTimeFromDateObject(core.utilities.parseDateMysqlStrToDateOdject(data[i].date)));
-            data_parsed.y.push(core.utilities.convertKnotsToKms(data[i][this.y_param_name]));
+            var obj = {
+                date: core.utilities.humanizeTimeFromDateObject(core.utilities.parseDateMysqlStrToDateOdject(data[i].date))
+            };
+
+            obj[this.current_param.value] = core.utilities.convertKnotsToKms(data[i][this.current_param.value]);
+
+            data_parsed.push(obj);
         }
 
         return data_parsed;
     };
 
-    this.draw = function (opts) {
-        var options = {
-                container_id: 'chart',
-                line_opts: {
-                    scaleFontSize: 11,
+    this.draw = function () {
+        console.log(this.data_parsed)
 
-                    //Boolean - If we show the scale above the chart data
-                    scaleOverlay: true,
-
-                    //Boolean - If we want to override with a hard coded scale
-                    scaleOverride: true,
-
-                    //** Required if scaleOverride is true **
-                    //Number - The number of steps in a hard coded scale
-                    scaleSteps: this.data_parsed.y.max() / 5,
-
-                    //Number - The value jump in the hard coded scale
-                    scaleStepWidth: 5,
-
-                    //Number - The scale starting value
-                    scaleStartValue: 0
+        $('#chart').css({height: this.height}).dxChart({
+            dataSource: this.data_parsed,
+            commonSeriesSettings: {
+                type: "stackedLine",
+                argumentField: "date"
+            },
+            commonAxisSettings: {
+                grid: {
+                    visible: true
                 }
             },
-            datasets = [],
-            x = [],
-            y = [];
-
-        for (var i = this.start, l = this.data_parsed.x.length; i < l && i < (this.max_points + this.start); i++) {
-            x.push(this.data_parsed.x[i]);
-            y.push(this.data_parsed.y[i]);
-        }
-
-        $.extend(true, options, opts);
-
-        $('#' + options.container_id).attr('width', 0).attr('width', $('#' + options.container_id).parent().width());
-
-        datasets.push({
-            fillColor: "rgba(151,187,205,0.5)",
-            strokeColor: "rgba(151,187,205,1)",
-            pointColor: "rgba(151,187,205,1)",
-            pointStrokeColor: "#fff",
-            data: y
+            argumentAxis:{
+                grid:{
+                    visible: true
+                }
+            },
+            series: [
+                {
+                    valueField: this.current_param.value,
+                    name: this.current_param.name
+                }
+            ],
+            tooltip:{
+                enabled: true
+            },
+            legend: {
+                verticalAlignment: "bottom",
+                horizontalAlignment: "center"
+            },
+            title: "Показатель " + this.current_param.name,
+            commonPaneSettings: {
+                border:{
+                    visible: true,
+                    bottom: true
+                }
+            }
         });
-
-        var line = {
-            labels: x,
-            datasets: datasets
-        };
-
-        var chart = new Chart(document.getElementById(options.container_id).getContext("2d")).Line(line, options.line_opts);
     };
 
     this.prepareData = function (data) {
@@ -92,20 +88,7 @@ var Charts = function () {
 
         var t = this;
 
-        this.draw({
-            line_opts: {
-                animation: true,
-                onAnimationComplete: function () {
-                    $(window).off('.chart').on('resize.chart', function () {
-                        t.draw({
-                            line_opts: {
-                                animation: false
-                            }
-                        });
-                    });
-                }
-            }
-        });
+        this.draw();
 
         $('.chart-timeline .arm').css({
             width: Math.floor(this.shown_percentage) - 2 + '%'
@@ -120,15 +103,11 @@ var Charts = function () {
                     t.data_parsed = t.parseData(t.data_raw);
                     t.start = points_start;
 
-                    t.draw({
-                        line_opts: {
-                            animation: false
-                        }
-                    });
+                    t.draw();
                 }
             });
     };
-}
+};
 
 /**
  *  View realisation
@@ -187,12 +166,9 @@ var View = function () {
             '</div>' +
             '<div class="chart-timeline">' +
                 '<i class="arm"></i>' +
-                '<div class="peaks">' +
-                    '<canvas id="chart-preview" width="700" height="42"></canvas>' +
-                '</div>' +
             '</div>' +
             '<div class="chart-container">' +
-                '<canvas id="chart" width="700" height="550"></canvas>' +
+                '<div id="chart"></div>' +
             '</div>';
 
         $('#statistics').html(html);

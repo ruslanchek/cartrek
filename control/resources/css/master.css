@@ -2296,7 +2296,7 @@ footer a:active {
     background: #fff;
     border: 2px solid #eee;
     border-top: none;
-    padding: 10px 0 0 0;
+    padding: 10px 20px 5px;
 }
 
 .chart-timeline {
