@@ -2308,14 +2308,26 @@ footer a:active {
     border-radius: 3px 3px 0px 0px;
 }
 
-.chart-timeline .arm {
-    cursor: move;
-    width: 100px;
+.chart-timeline>div {
+    position: relative;
+    height: 22px;
+}
+
+.chart-timeline .ui-slider-range {
+    height: 22px;
+    position: absolute;
+    background: #ccc;
+}
+
+.chart-timeline .ui-slider-handle {
+    width: 6px;
+    cursor: ew-resize;
     height: 22px;
     display: block;
     position: absolute;
     top: -1px;
     left: 0;
+    margin-left: -3px;
 
     -webkit-border-radius: 3px;
     border-radius: 3px;

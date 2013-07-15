@@ -21,7 +21,10 @@ var Charts = function () {
     this.parseData = function (data) {
         var data_parsed = [];
 
-        for (var i = 0, l = data.length; i < l; i++) {
+        console.log(this.start, this.max_points)
+
+        for (var i = this.start, l = this.max_points; i < l; i++) {
+
             var obj = {
                 date: core.utilities.humanizeTimeFromDateObject(core.utilities.parseDateMysqlStrToDateOdject(data[i].date))
             };
@@ -31,16 +34,16 @@ var Charts = function () {
             data_parsed.push(obj);
         }
 
+        console.log(data_parsed)
+
         return data_parsed;
     };
 
     this.draw = function () {
-        console.log(this.data_parsed)
-
-        $('#chart').css({height: this.height}).dxChart({
+        $('#chart').dxChart({
             dataSource: this.data_parsed,
             commonSeriesSettings: {
-                type: "stackedLine",
+                type: "spline",
                 argumentField: "date"
             },
             commonAxisSettings: {
@@ -72,7 +75,8 @@ var Charts = function () {
                     visible: true,
                     bottom: true
                 }
-            }
+            },
+            animation: true
         });
     };
 
@@ -80,32 +84,60 @@ var Charts = function () {
         this.data_raw = data;
         this.data_parsed = this.parseData(this.data_raw);
         this.points_count = data.length;
-        this.shown_percentage = data.length / this.max_points;
     };
 
     this.init = function (data) {
+        $('#chart').css({height: this.height});
+
         this.prepareData(data);
 
         var t = this;
 
         this.draw();
 
-        $('.chart-timeline .arm').css({
-            width: Math.floor(this.shown_percentage) - 2 + '%'
-        }).draggable({
-                grid: [ Math.ceil($('.chart-timeline').width() / t.points_count), 0 ],
-                containment: 'parent',
-                drag: function (event, ui) {
-                    var arm_start_percent = Math.ceil((ui.position.left / $('.chart-timeline').width()) * 100),
-                        points_per_percent = Math.ceil(t.points_count / 100),
-                        points_start = Math.ceil(points_per_percent * arm_start_percent);
+        var chart = $("#chart").dxChart("instance");
 
-                    t.data_parsed = t.parseData(t.data_raw);
-                    t.start = points_start;
+        $('.chart-timeline>div').slider({
+            step: 1,
+            range: true,
+            min: 0,
+            max: this.points_count,
+            values: [ 0, this.max_points ],
+            stop: function( event, ui ) {
+                var points_start = ui.value;
 
-                    t.draw();
+                console.log('points_start', points_start, 't.points_count', t.points_count, 't.max_points', t.max_points)
+
+                t.max_points = ui.values[ 1 ];
+                t.start = ui.values[ 0 ];
+                t.data_parsed = t.parseData(t.data_raw);
+
+                chart.option('dataSource', t.data_parsed);
+            }
+        });
+
+        /*.draggable({
+            grid: [ Math.ceil($('.chart-timeline').width() / t.points_count), 0 ],
+            containment: 'parent',
+            stop: function (event, ui) {
+                var arm_start_percent = Math.ceil((ui.position.left / $('.chart-timeline').width()) * 100),
+                    points_per_percent = Math.ceil(t.points_count / 100),
+                    points_start = Math.ceil(points_per_percent * arm_start_percent);
+
+                console.log('points_start', points_start, 'points_per_percent', points_per_percent, 't.points_count', t.points_count, 't.max_points', t.max_points)
+
+                if(points_start + t.max_points > t.points_count){
+                    points_start = t.points_count - t.max_points;
                 }
-            });
+
+                t.data_parsed = t.parseData(t.data_raw);
+                t.start = points_start;
+
+                t.draw({
+                    animation: false
+                });
+            }
+        });*/
     };
 };
 
@@ -165,7 +197,7 @@ var View = function () {
             '</nav>' +
             '</div>' +
             '<div class="chart-timeline">' +
-                '<i class="arm"></i>' +
+                '<div></div>' +
             '</div>' +
             '<div class="chart-container">' +
                 '<div id="chart"></div>' +
