@@ -19,27 +19,68 @@ var Charts = function () {
     this.height = 551;
 
     this.parseData = function (data) {
-        var data_parsed = [];
-
-        console.log(this.start, this.max_points)
+        var data_parsed = {
+            x: [],
+            y: []
+        };
 
         for (var i = this.start, l = this.max_points; i < l; i++) {
-
-            var obj = {
-                date: core.utilities.humanizeTimeFromDateObject(core.utilities.parseDateMysqlStrToDateOdject(data[i].date))
-            };
-
-            obj[this.current_param.value] = core.utilities.convertKnotsToKms(data[i][this.current_param.value]);
-
-            data_parsed.push(obj);
+            data_parsed.x.push(core.utilities.humanizeTimeFromDateObject(core.utilities.parseDateMysqlStrToDateOdject(data[i].date)));
+            data_parsed.y.push(core.utilities.convertKnotsToKms(data[i][this.current_param.value]));
         }
-
-        console.log(data_parsed)
 
         return data_parsed;
     };
 
-    this.draw = function () {
+    this.draw = function (animation) {
+        var options = {
+                container_id: 'chart',
+                line_opts: {
+                    scaleFontSize: 11,
+
+                    //Boolean - If we show the scale above the chart data
+                    scaleOverlay: true,
+
+                    //Boolean - If we want to override with a hard coded scale
+                    scaleOverride: true,
+
+                    //** Required if scaleOverride is true **
+                    //Number - The number of steps in a hard coded scale
+                    scaleSteps: this.data_parsed.y.max() / 5,
+
+                    //Number - The value jump in the hard coded scale
+                    scaleStepWidth: 5,
+
+                    //Number - The scale starting value
+                    scaleStartValue: 0,
+
+                    animation: animation
+                }
+            },
+            datasets = [],
+            x = this.data_parsed.x,
+            y = this.data_parsed.y;
+
+
+        $('#chart').attr('width', 0).attr('width', $('#chart').parent().width());
+
+        datasets.push({
+            fillColor: "rgba(151,187,205,0.5)",
+            strokeColor: "rgba(151,187,205,1)",
+            pointColor: "rgba(151,187,205,1)",
+            pointStrokeColor: "#fff",
+            data: y
+        });
+
+        var line = {
+            labels: x,
+            datasets: datasets
+        };
+
+        var chart = new Chart(document.getElementById('chart').getContext("2d")).Line(line, options.line_opts);
+    };
+
+    /*this.draw = function () {
         $('#chart').dxChart({
             dataSource: this.data_parsed,
             commonSeriesSettings: {
@@ -78,7 +119,7 @@ var Charts = function () {
             },
             animation: true
         });
-    };
+    };*/
 
     this.prepareData = function (data) {
         this.data_raw = data;
@@ -87,15 +128,13 @@ var Charts = function () {
     };
 
     this.init = function (data) {
-        $('#chart').css({height: this.height});
+        $('#chart').attr({height: this.height});
 
         this.prepareData(data);
 
         var t = this;
 
-        this.draw();
-
-        var chart = $("#chart").dxChart("instance");
+        this.draw(true);
 
         $('.chart-timeline>div').slider({
             step: 1,
@@ -112,8 +151,12 @@ var Charts = function () {
                 t.start = ui.values[ 0 ];
                 t.data_parsed = t.parseData(t.data_raw);
 
-                chart.option('dataSource', t.data_parsed);
+                t.draw(false);
             }
+        });
+
+        $(window).on('resize.chart', function(){
+            t.draw(false);
         });
 
         /*.draggable({
@@ -200,7 +243,7 @@ var View = function () {
                 '<div></div>' +
             '</div>' +
             '<div class="chart-container">' +
-                '<div id="chart"></div>' +
+                '<canvas id="chart"></canvas>' +
             '</div>';
 
         $('#statistics').html(html);
