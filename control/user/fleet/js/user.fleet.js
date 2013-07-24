@@ -67,7 +67,7 @@ var fleet = {
             fleet.editByHash();
         });
 
-        $('.activity-toggler').slickswitch({
+        /*$('.activity-toggler').slickswitch({
             toggled: function(item){
                 if($(item[0]).prop('checked') === false && confirm('Внимание! Картрек перестанет принимать какие-либо данные от этой машины, если ее отключить!')){
                     fleet.toggleDevice(item.data('id'), false);
@@ -111,7 +111,7 @@ var fleet = {
                     return false;
                 };
             }
-        });
+        });*/
     },
 
     init: function(){

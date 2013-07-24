@@ -1,45 +1,73 @@
-<div class="top-panel">
-    <div class="cont">
-        <ul class="top-menu">
-            <li><a href="#" class="popup-menu"></a></li>
-            <li>{if $core->module.name == 'map'}<b>Наблюдение</b>{else}<a href="/control/map">Наблюдение</a>{/if}</li>
-            <li>{if $core->module.name == 'dispatcher'}<b>Диспетчер</b>{else}<a href="/control/dispatcher">Диспетчер</a>{/if}</li>
-            <li>{if $core->module.name == 'statistics'}<b>Статистика</b>{else}<a href="/control/statistics">Статистика</a>{/if}</li>
+<div class="global-loading-bar"></div>
 
-            <li>
-                {if $core->module.name == 'events'}
-                    <b class="events-link"><span>События</span>
-                {else}
-                    <a class="events-link" href="/control/events"><span>События</span>
-                {/if}
+<div class="top-container">
+    <div class="container">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <div class="container">
+                    {if $core->module.name == 'main'}
+                        <span class="brand cartrek-logo"></span>
+                    {else}
+                        <a title="Картрек" class="brand cartrek-logo" href="/control"></a>
+                    {/if}
 
-                <sup id="global_events_counter" {if $core->auth->user.data.new_events_count <= 0}style="display: none"{/if}>{$core->auth->user.data.new_events_count}</sup>
+                    <ul class="nav">
+                        <li {if $core->module.name == 'map'}class="active"{/if}>
+                            <a href="/control/map">Наблюдение</a>
+                            <ul>
+                                <li><a href="/control/map">Наблюдение</a></li>
+                                <li><a href="/control/user/geozones">Геозоны</a></li>
+                            </ul>
+                        </li>
+                        <li {if $core->module.name == 'dispatcher'}class="active"{/if}><a href="/control/dispatcher">Диспетчер</a></li>
+                        <li {if $core->module.name == 'statistics'}class="active"{/if}><a href="/control/statistics">Статистика</a></li>
+                        <li {if $core->module.name == 'user.fleet'}class="active"{/if}>
+                            <a href="/control/user/fleet">Автопарк</a>
+                            <ul>
+                                <li><a href="/control/user/fleet">Автомобили</a></li>
+                                <li><a href="/control/user/groups">Группы</a></li>
+                                <li><a href="/control/user/drivers">Водители</a></li>
+                            </ul>
+                        </li>
+                        <li {if $core->module.name == 'user.diagnostics'}class="active"{/if}><a href="/control/user/diagnostics">Диагностика</a></li>
+                    </ul>
 
-                {if $core->module.name == 'events'}
-                    </b>
-                {else}
-                    </a>
-                {/if}
-            </li>
-        </ul>
+                    <ul class="nav pull-right">
+                        <li {if $core->module.name == 'events'}class="active"{/if}>
+                            <a href="/control/events" title="События">
+                                <span class="fui-mail"></span>
+                                <span class="hidden-desktop">События</span>
+                                <span class="navbar-new" {if $core->auth->user.data.new_events_count <= 0}style="display: none"{/if}>{$core->auth->user.data.new_events_count}</span>
+                            </a>
+                        </li>
 
-        {if $core->module.name == 'main'}
-            <span title="Картрек" class="logo">Картрек</span>
-        {else}
-            <a title="Картрек" class="logo" href="/control">Картрек</a>
-        {/if}
+                        <li {if $core->module.name == 'events'}class="active"{/if}>
+                            <a href="/control/user" title="Аккаунт">
+                                <span class="fui-user"></span>
+                                <span class="hidden-desktop">Аккаунт</span>
+                            </a>
 
-        <span class="loading-ball" title="Загрузка данных"></span>
+                            <ul>
+                                <li><a href="/control/user/notifications">Уведомления</a></li>
+                                <li><a href="/control/user/billing">Баланс и тарифы</a></li>
+                                <li><a href="/control/user/security">Пароль и авторизация</a></li>
+                                <li><a onclick="core.ui.exitUser()" href="javascript:void(0)">Выход</a></li>
+                            </ul>
+                        </li>
 
-        <div class="top-user-menu">
-            <a class="menu-exit" href="javascript:void(0)" onclick="core.ui.exitUser()" title="Выход"></a>
-            <a class="menu-button" href="/control/user/system" title="Личные данные и настройка"><i class="r"></i><i class="icon icon-gear"></i> <span class="mb-content" id="login-display">{$core->auth->user.data.login}</span></a>
+                        <li {if $core->module.name == 'events'}class="active"{/if}>
+                            <a href="/control/user/system" title="Настройка">
+                                <span class="fui-gear"></span>
+                                <span class="hidden-desktop">Настройка</span>
+                            </a>
+                        </li>
 
-            <div class="user-info"><a href="/control/user/billing" class="balance" title="Состояние счета: {$core->auth->user.data.balance|price} руб.{if $core->auth->user.data.balance > 0} - хватит еще на {floor($core->auth->user.data.balance / $core->auth->user.data.daily_pay_amount)} дн.{/if}">{$core->auth->user.data.balance|price} руб.</a></div>
+
+
+
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="global-loading-bar"></div>
 </div>
-
-{*<i id="loading_indicator"><i></i></i>*}

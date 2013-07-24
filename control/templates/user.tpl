@@ -1,30 +1,27 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        {include file="common/head.tpl"}
-    </head>
+<head>
+    {include file="common/head.tpl"}
+</head>
 
-    <body>
-        <div id="wrapper">
-            <div class="limiter">
-                {include file="common/top.tpl"}
+<body>
+<div class="wrapper">
+    {include file="common/top.tpl"}
 
-                <div class="cont h1">
-                    <div class="container-padding header-block">
-                        <h1>Настройка{if $core->module.title}<span> / {$core->module.title}</span>{/if}{$core->module.header_additional}</h1>
-                    </div>
+    <div class="middle-container">
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span9">
+                    {include file="modules/`$core->module.name`.tpl"}
                 </div>
-
-                <div class="cont main-content">
-                    <div class="row container-padding">
-                        {include file="modules/`$core->module.name`.tpl"}
-                    </div>
+                <div class="span3">
+                    {include file="modules/user.menu.tpl"}
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <footer>
-            {include file="common/footer.tpl"}
-        </footer>
-    </body>
+{include file="common/footer.tpl"}
+</body>
 </html>

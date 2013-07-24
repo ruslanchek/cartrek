@@ -9,12 +9,6 @@
             <div class="limiter">
                 {include file="common/top.tpl"}
 
-                <div class="cont h1">
-                    <div class="container-padding header-block">
-                        <h1>{$core->module.title}{$core->module.header_additional}</h1>
-                    </div>
-                </div>
-
                 <div class="row container-padding">
                     {include file="modules/`$core->module.name`.tpl"}
                 </div>

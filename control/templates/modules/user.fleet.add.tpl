@@ -1,4 +1,4 @@
-<div class="threequarter">
+
     {if isset($smarty.get.action) && $smarty.get.action == 'set_device'}
         <div class="row">
             <div class="half">
@@ -124,8 +124,3 @@
             });
         </script>
     {/if}
-</div>
-
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>

@@ -1,10 +1,13 @@
-<ul class="nav-side">
+{$core->module.header_additional}
+
+<ul class="nav nav-list nav-list-vivid">
+    <li class="nav-header"></li>
     <li{if $core->module.name == 'user.fleet' || $core->module.name == 'user.fleet.add'} class="active"{/if}><a href="/control/user/fleet">Автопарк</a></li>
     <li{if $core->module.name == 'user.groups'} class="active"{/if}><a href="/control/user/groups">Группы</a></li>
     <li{if $core->module.name == 'user.geozones'} class="active"{/if}><a href="/control/user/geozones">Геозоны</a></li>
-</ul>
 
-<ul class="nav-side">
+    <li class="divider"></li>
+
     <li{if $core->module.name == 'user'} class="active"{/if}><a href="/control/user">Настройка аккаунта</a></li>
     <li{if $core->module.name == 'user.security'} class="active"{/if}><a href="/control/user/security">Пароль и авторизация</a></li>
     <li{if $core->module.name == 'user.system'} class="active"{/if}><a href="/control/user/system">Настройка системы</a></li>

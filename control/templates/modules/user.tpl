@@ -1,5 +1,5 @@
-<div class="threequarter">
     <div class="form_message"></div>
+
     <div class="row">
         <div class="half">
             <form class="forms" id="user-form" action="/control/user/" method="POST">
@@ -69,11 +69,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>
 
 <script type="text/javascript">
     $(function () {

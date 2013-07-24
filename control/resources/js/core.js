@@ -1402,13 +1402,6 @@ core.ui = {
         html += '</select>';
 
         $(selector).html(html);
-
-        $('select#' + options.id).coreUISelect({
-            jScrollPane: true,
-            onChange: function (e) {
-                options.onChange($(e[0]).val());
-            }
-        });
     },
 
     init: function () {
@@ -1416,9 +1409,6 @@ core.ui = {
         this.getRawTitle();
         this.windowFocus();
 
-        $('.core-ui-select').coreUISelect({
-            jScrollPane: true
-        });
 
         $('.form_message').on('click', '.close', function () {
             $('.form_message').slideUp(150, function () {

@@ -1,4 +1,4 @@
-<div class="threequarter">
+
     <div class="table-wrapper">
         <div class="geozones">
             <div class="geozones-left">
@@ -16,7 +16,6 @@
             <div class="clear"></div>
         </div>
     </div>
-</div>
 
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/plugins/Leaflet.draw/dist/leaflet.draw.css" />
@@ -73,7 +72,3 @@
         geozones.init();
     })
 </script>
-
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>

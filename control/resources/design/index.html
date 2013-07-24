@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cartrek Flat UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Loading Bootstrap -->
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Loading Flat UI -->
+    <link href="css/flat-ui.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="wrapper">
+        <div class="top-container">
+            <div class="container">
+                <div class="navbar">
+                    <div class="navbar-inner">
+                        <div class="container">
+                            <a href="#" class="brand cartrek-logo"></a>
+
+                            <ul class="nav">
+                                <!-- Menu items go here -->
+                                <li>
+                                    <a href="#">Карта</a>
+                                    <ul>
+                                        <li><a href="#">Наблюдение</a></li>
+                                        <li><a href="#">Геозоны</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Диспетчер</a></li>
+                                <li class="active"><a href="#">Статистика</a></li>
+                                <li><a href="#">Диагностика</a></li>
+                                <li>
+                                    <a href="#">Автопарк</a>
+                                    <ul>
+                                        <li><a href="#">Автомобили</a></li>
+                                        <li><a href="#">Группы</a></li>
+                                    </ul>
+                                </li>
+                                <li><a href="#">Водители</a></li>
+                            </ul>
+
+                            <ul class="nav pull-right">
+                                <li>
+                                    <a href="#fakelink" title="События">
+                                        <span class="fui-mail"></span><span class="hidden-desktop">События</span>
+                                        <span class="navbar-new">1</span>
+                                    </a>
+                                </li>
+                                <li class="active">
+                                    <a href="#fakelink" title="Аккаунт">
+                                        <span class="fui-user"></span><span class="hidden-desktop">Аккаунт</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#fakelink" title="Настройка">
+                                        <span class="fui-gear"></span><span class="hidden-desktop">Настройка</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="middle-container">
+            <div class="container">
+                <div class="row-fluid">
+                    <div class="span9">
+                        <div class="messages">
+                            <div class="alert alert-success">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                Сообщение
+
+                                <span class="pull-right" style="opacity: 0.3; margin: 0 5px -2px 0">
+                                    22:00:15
+                                </span>
+                            </div>
+
+                            <div class="alert">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                Сообщение
+
+                                <span class="pull-right" style="opacity: 0.3; margin: 0 5px -2px 0">
+                                    22:00:15
+                                </span>
+                            </div>
+
+                            <div class="alert">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                Сообщение
+
+                                <span class="pull-right" style="opacity: 0.3; margin: 0 5px -2px 0">
+                                    22:00:15
+                                </span>
+                            </div>
+
+                            <div class="alert">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                Сообщение
+
+                                <span class="pull-right" style="opacity: 0.3; margin: 0 5px -2px 0">
+                                    22:00:15
+                                </span>
+                            </div>
+
+                            <div class="alert">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                Сообщение
+
+                                <span class="pull-right" style="opacity: 0.3; margin: 0 5px -2px 0">
+                                    22:00:15
+                                </span>
+                            </div>
+
+                            <div class="alert">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                Сообщение
+
+                                <span class="pull-right" style="opacity: 0.3; margin: 0 5px -2px 0">
+                                    22:00:15
+                                </span>
+                            </div>
+
+                            <div class="alert">
+                                <button type="button" class="close" data-dismiss="alert">×</button>
+                                Сообщение
+
+                                <span class="pull-right" style="opacity: 0.3; margin: 0 5px -2px 0">
+                                    22:00:15
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="span3">
+                        <div class="control-group">
+                            <div class="input-prepend input-datepicker">
+                                <button type="button" class="btn">
+                                    <span class="fui-calendar"></span>
+                                </button>
+                                <input type="text" class="span2" value="14 июля, 2013" id="datepicker-01" />
+                            </div>
+                        </div>
+
+                        <script type="text/javascript">
+                            $(function(){
+                                // jQuery UI Datepicker JS init
+                                var datepickerSelector = '#datepicker-01';
+                                $(datepickerSelector).datepicker({
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true,
+                                    dateFormat: "d MM, yy",
+                                    yearRange: '-1:+1'
+                                }).prev('.btn').on('click', function (e) {
+                                            e && e.preventDefault();
+                                            $(datepickerSelector).focus();
+                                        });
+
+                                // Now let's align datepicker with the prepend button
+                                $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSelector).prev('.btn').outerWidth() - 2});
+                            })
+                        </script>
+
+                        <ul class="nav nav-list nav-list-vivid">
+                            <li class="nav-header"></li>
+
+                            <li>
+                                <a href="#fakelink">
+                                    Все
+                                    <span class="nav-counter">19</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#fakelink">
+                                    Непрочитанные
+                                    <span class="nav-counter">19</span>
+                                </a>
+                            </li>
+                            <li class="active">
+                                <a href="#fakelink">
+                                    Прочитанные
+                                    <span class="nav-counter">130</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#fakelink">
+                                    Удаленные
+                                    <span class="nav-counter">9</span>
+                                </a>
+                            </li>
+
+
+                            <li class="divider"></li>
+
+
+                            <li class="nav-header">Тип</li>
+                            <li>
+                                <a href="#fakelink">
+                                    Система
+                                    <span class="nav-counter">69</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#fakelink">
+                                    Автомобили
+                                    <span class="nav-counter">21</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#fakelink">
+                                    Финансы
+                                    <span class="nav-counter">40</span>
+                                </a>
+                            </li>
+
+
+                            <li class="divider"></li>
+
+
+                            <li class="nav-header">Важность</li>
+                            <li>
+                                <a href="#fakelink">
+                                    Критические
+                                    <span class="nav-counter">69</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#fakelink">
+                                    Предупреждения
+                                    <span class="nav-counter">21</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#fakelink">
+                                    Прочее
+                                    <span class="nav-counter">40</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="bottom-menu bottom-menu-large mbl bottom-container">
+            <div class="container">
+                <div class="row">
+                    <div class="span2 brand">
+                        <a href="#fakelink" class="fui-flat"></a>
+                    </div>
+
+                    <div class="span2">
+                        <h5 class="title">About Us</h5>
+                        <ul class="bottom-links">
+                            <li><a href="#fakelink">Dashboard</a></li>
+                            <li><a href="#fakelink">Feed</a></li>
+                            <li><a href="#fakelink">Forums</a></li>
+                            <li><a href="#fakelink">Radio</a></li>
+                            <li><a href="#fakelink">Journal</a></li>
+                            <li><a href="#fakelink">Reader</a></li>
+                            <li><a href="#fakelink">Store</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="span2">
+                        <h5 class="title">Categories</h5>
+                        <ul class="bottom-links">
+                            <li><a href="#fakelink">Design</a></li>
+                            <li><a href="#fakelink">Freebies</a></li>
+                            <li><a href="#fakelink">Tutorials</a></li>
+                            <li><a href="#fakelink">Coding</a></li>
+                            <li><a href="#fakelink">Inspiration</a></li>
+                            <li><a href="#fakelink">WordPress</a></li>
+                            <li><a href="#fakelink">Resources</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="span2">
+                        <h5 class="title">Networks</h5>
+                        <ul class="bottom-links">
+                            <li><a href="#fakelink">Insight</a></li>
+                            <li><a href="#fakelink">Promotion</a></li>
+                            <li><a href="#fakelink">Production</a></li>
+                            <li><a href="#fakelink">Planning</a></li>
+                            <li><a href="#fakelink">Journal</a></li>
+                            <li><a href="#fakelink">Reader</a></li>
+                            <li><a href="#fakelink">Store</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="span2">
+                        <h5 class="title">Mainframe</h5>
+                        <ul class="bottom-links">
+                            <li><a href="#fakelink">Register / Login</a></li>
+                            <li class="active"><a href="#fakelink">Jobs</a></li>
+                            <li><a href="#fakelink">Contacts</a></li>
+                            <li><a href="#fakelink">Privacy</a></li>
+                            <li><a href="#fakelink">Terms of Use</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="span2">
+                        <h5 class="title">Follow Us</h5>
+                        <ul class="bottom-links">
+                            <li><a href="#fakelink">Facebook</a></li>
+                            <li><a href="#fakelink">Twitter</a></li>
+                            <li><a href="#fakelink">Youtube</a></li>
+                            <li><a href="#fakelink">Vimeo</a></li>
+                            <li><a href="#fakelink">Instagram</a></li>
+                            <li><a href="#fakelink">Vine <span class="label label-small label-primary">New</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load JS here for greater good =============================-->
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="js/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-select.js"></script>
+    <script src="js/bootstrap-switch.js"></script>
+    <script src="js/flatui-checkbox.js"></script>
+    <script src="js/flatui-radio.js"></script>
+    <script src="js/jquery.tagsinput.js"></script>
+    <script src="js/jquery.placeholder.js"></script>
+    <script src="js/jquery.stacktable.js"></script>
+</body>
+</html>
