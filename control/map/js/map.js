@@ -73,7 +73,7 @@ var View = function () {
     this.mapView = function () {
         var resize = function () {
             $('#map, .map-container').css({
-                height: $('body').height() - $('.map-container').offset().top - $('footer').height() - 44
+                height: $('body').height() -  $('footer').height()
             });
 
             $('.map-side-panel').css({

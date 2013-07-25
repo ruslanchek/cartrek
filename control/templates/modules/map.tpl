@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div class="map-container map-observer" data-step='2' data-intro='Карта'>
+<div class="map-full-sized-frame map-container map-observer" data-step='2' data-intro='Карта'>
     <div id="map"></div>
 
     <div id="player">
