@@ -1818,3 +1818,7 @@ $(function () {
         core.init();
     }
 });
+
+$(window).on('load.core', function(){
+    $('.middle-container').addClass('ready');
+});

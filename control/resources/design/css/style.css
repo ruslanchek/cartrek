@@ -5,6 +5,10 @@ body {
     height: 100%;
 }
 
+h1, h2 {
+    font-weight: 100;
+}
+
 
 /* Nav */
 .nav-list-vivid {
@@ -88,7 +92,7 @@ body {
 
 /* Forms */
 .btn {
-    font-weight: bold;
+    font-weight: 400;
     font-size: 1em;
 }
 
@@ -113,6 +117,34 @@ form {
 .row-fluid input[type="color"],
 .row-fluid .uneditable-input {
     height: 25px;
+}
+
+
+/* Main content */
+.middle-container {
+    opacity: 0;
+    -webkit-transition: all 250ms;
+    -moz-transition: all 250ms;
+    -o-transition: all 250ms;
+    transition: all 250ms;
+
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    -webkit-transform: rotateY(0deg) scale(0.9) rotateZ(0deg) rotateX(0deg);
+    -moz-transform: rotateY(0deg) scale(0.9) rotateZ(0deg) rotateX(0deg);
+    -o-transform: rotateY(0deg) scale(0.9) rotateZ(0deg) rotateX(0deg);
+    transform: rotateY(0deg) scale(0.9) rotateZ(0deg) rotateX(0deg);
+}
+
+.middle-container.ready {
+    -webkit-transform: rotateY(0deg) scale(1) rotateZ(0deg) rotateX(0deg);
+    -moz-transform: rotateY(0deg) scale(1) rotateZ(0deg) rotateX(0deg);
+    -o-transform: rotateY(0deg) scale(1) rotateZ(0deg) rotateX(0deg);
+    transform: rotateY(0deg) scale(1) rotateZ(0deg) rotateX(0deg);
+    opacity: 1;
 }
 
 
@@ -373,25 +405,24 @@ footer {
 }
 
 .map-types .item {
-    margin: 0 10px 5px 0;
+    margin: 0 10px 10px 0;
     padding: 5px;
     text-decoration: none;
     color: #3C4E5A;
     min-height: 67px;
-    -webkit-border-radius: 3px;
-    border-radius: 3px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
 }
 
 .map-types .item:hover {
     background: #eee;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
 }
 
 .map-types .item.active {
     color: white;
     cursor: default;
-    background: #3887b3 url(../img/white-gradient.png) repeat-x top;
-    font-weight: bold;
+    background: #1abc9c;
+    text-shadow: none;
 }
 
 .map-types .item .name {
@@ -409,8 +440,8 @@ footer {
     width: 55px;
     height: 55px;
     position: absolute;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
     border: 1px solid #ccc;
     overflow: hidden;
 }
@@ -702,6 +733,7 @@ footer {
     color: #fff;
     background: #444;
     border-color: #111;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .g_id.military span {
@@ -724,6 +756,7 @@ footer {
     background: #cb2028;
     text-transform: uppercase;
     border-color: #971e24;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
 }
 
 .g_id.diplomacy span {
