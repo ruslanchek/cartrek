@@ -10,14 +10,132 @@ h1, h2 {
     font-weight: 100;
 }
 
+p {
+    font-size: 14px !important;
+}
 
-/* Nav */
+
+/* =Modal
+-----------------------------------------------------------------------------*/
+#fs_overlay {
+    background: #000;
+    opacity: 0.5;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1999;
+}
+
+.window {
+    background: #fff;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 2000;
+    padding: 0;
+    border: none;
+}
+
+.window h1 {
+    font-size: 1.8em;
+    padding: 10px 40px 12px 20px;
+    background: #eee;
+    margin: 0 0 15px;
+    line-height: 1.2em;
+    position: relative;
+    font-weight: normal;
+    -webkit-border-top-left-radius: 5px;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-bottom-right-radius: 0px;
+    -webkit-border-bottom-left-radius: 0px;
+    -moz-border-radius-topleft: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-bottomright: 0px;
+    -moz-border-radius-bottomleft: 0px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.window .message {
+    display: none;
+    padding: 10px 20px;
+    color: #fff;
+    margin: -15px 0 15px;
+    cursor: pointer;
+}
+
+.window .message.ok {
+    background: #2ecc71;
+}
+
+.window .message.error {
+    background: #ec7063;
+}
+
+.window.loading-bar h1 {
+    background: #dcdcdc url(../img/modal-loading.gif) top;
+}
+
+.window .window_content {
+    padding: 0 20px 15px;
+}
+
+#modal_closer {
+    background: url(../img/close.png);
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    right: 15px;
+    z-index: 3;
+    top: 15px;
+    opacity: 0.6;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#modal_closer:hover {
+    opacity: 1;
+}
+
+
+/* =Nav
+-----------------------------------------------------------------------------*/
 .nav-list-vivid {
     border-bottom: 2px solid #ddd;
 }
 
 
-/* Tables */
+/* =Buttons
+-----------------------------------------------------------------------------*/
+.btn-delete {
+    height: 21px;
+    background: #E74C3C;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    color: #fff !important;
+    padding: 0 8px 0 8px;
+    display: block;
+}
+
+.btn-delete:hover {
+    background: #EC7063;
+}
+
+.btn-delete:active {
+    background: #C44133;
+}
+
+
+/* =Tables
+-----------------------------------------------------------------------------*/
 .table {
     margin: 0;
 }
@@ -49,7 +167,8 @@ h1, h2 {
 }
 
 
-/* Switch */
+/* =Switch
+-----------------------------------------------------------------------------*/
 .switch-small.has-switch {
     width: 46px !important;
 }
@@ -91,7 +210,19 @@ h1, h2 {
 }
 
 
-/* Forms */
+/* =Forms
+-----------------------------------------------------------------------------*/
+.form-vertical input[type="text"],
+.form-vertical input[type="email"],
+.form-vertical input[type="password"] {
+    width: 97%;
+    font-size: 1.3em;
+}
+
+.form-vertical label {
+    font-weight: bold;
+}
+
 .btn {
     font-weight: 400;
     font-size: 1em;
@@ -121,7 +252,53 @@ form {
 }
 
 
-/* Main content */
+.forms ul li {
+    margin: 0;
+}
+
+.control-group {
+    margin: 0 0 1em;
+}
+
+
+/* =Color chooser
+-----------------------------------------------------------------------------*/
+.color-chooser {
+    margin: 0 0 1em;
+}
+
+.color-chooser ul {
+    margin: 0;
+}
+
+.color-chooser ul li {
+    list-style-type: none;
+    float: left;
+    margin: 0 5px 5px 0;
+}
+
+.color-chooser ul li a {
+    display: block;
+    height: 19px;
+    width: 19px;
+    border: 2px solid #999;
+    background-position: top;
+    background-repeat: repeat-x;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+
+.color-chooser ul li a:hover {
+    border-color: #ccc;
+}
+
+.color-chooser ul li a.active {
+    border-color: #1abc9c;
+}
+
+
+/* =Main content
+-----------------------------------------------------------------------------*/
 .middle-container {
     opacity: 0;
     -webkit-transition: all 250ms;
@@ -149,7 +326,12 @@ form {
 }
 
 
-/* Misc */
+/* =Misc
+-----------------------------------------------------------------------------*/
+.clear {
+    clear: both;
+}
+
 .cartrek-logo {
     background: url(../img/sprite.png) 20px 16px;
     display: block;
@@ -166,8 +348,16 @@ form {
     padding: 0;
 }
 
+.navbar-new {
+    left: 35px;
+    position: absolute;
+    font-size: 9px;
+    width: 16px;
+}
 
-/* Footer */
+
+/* =Footer
+-----------------------------------------------------------------------------*/
 footer {
     height: 100px;
     margin: 0;
@@ -188,7 +378,8 @@ footer {
 }
 
 
-/* Layouts */
+/* =Layouts
+-----------------------------------------------------------------------------*/
 .wrapper {
     min-height: 100%;
     height: auto !important;
@@ -216,12 +407,15 @@ footer {
 }
 
 
-/* Datepicker */
+/* =Datepicker
+-----------------------------------------------------------------------------*/
 .input-datepicker {
     width: 100%;
 }
 
-/* Navbar */
+
+/* =Navbar
+-----------------------------------------------------------------------------*/
 .navbar {
     border-bottom: 3px solid #ddd;
     -webkit-border-radius: 7x;
@@ -518,7 +712,7 @@ footer {
 }
 
 .g_id .shade {
-    background: url(../img/g_id_shade.png) 0 0;
+    background: url(../img/gid-shade.png) 0 0;
     background-size: 100% 100%;
     opacity: 0.65;
     position: absolute;
@@ -834,6 +1028,99 @@ footer {
 .map-footer {
     position: relative;
     z-index: 3;
+}
+
+
+/* =Geozones
+-----------------------------------------------------------------------------*/
+.geozones {
+    background: #f7f9fa;
+    padding: 2px 3px 3px 2px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    border: 2px solid #e9ecef;
+}
+
+.geozones .geozones-left {
+    width: 72%;
+    float: left;
+}
+
+.geozones .geozones-right {
+    width: 28%;
+    float: right;
+}
+
+.geozones .geozones-menu {
+    overflow-y: auto;
+}
+
+.geozones .geozones-menu ul {
+    margin: 0 0 0 3px;
+}
+
+.geozones .geozones-menu ul li {
+    list-style-type: none;
+}
+
+.geozones .geozones-menu ul li a {
+    padding: 6px 10px 5px 28px;
+    display: block;
+    text-decoration: none;
+    position: relative;
+    color: #526476;
+}
+
+.geozones .geozones-menu ul li.unactive a {
+    color: #999;
+}
+
+.geozones .geozones-menu ul li a:hover {
+    background: #1abc9c;
+    color: #fff;
+}
+
+.geozones .geozones-menu ul li a i {
+    background: url(../img/sprite.png) -48px -158px;
+    display: block;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 6px;
+    top: 6px;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.geozones .geozones-menu ul li a i:hover {
+    opacity: 1;
+}
+
+/* Map geozones */
+.map-geozones {
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.map-geozones {
+
+}
+
+.map-container {
+    position: relative;
+}
+
+.map-container .ui-resizable-s {
+    height: 16px;
+    width: 139%;
+    background: #ccc;
+    cursor: ns-resize;
+    position: absolute;
+    z-index: 14;
+}
+
+.map-container .ui-resizable-s:hover {
+    background: #1abc9c;
 }
 
 

@@ -437,45 +437,44 @@ var geozones = {
                 break;
         }
 
-        var html = '<form id="edit-geozone-form" class="forms columnar white" method="POST">' +
+        var html = '<form id="edit-geozone-form" class="form-vertical" method="POST">' +
             '<div class="form_message"></div>' +
 
-            '<ul>' +
+            '<div class="control-group">' +
+                '<label class="checkbox">' +
+                    '<input id="active" name="active" type="checkbox" ' + active + ' value="1" /> Активность' +
+                '</label>' +
+            '</div>' +
 
-            '<li>' +
-            '<fieldset>' +
-            '<section class="bold"><label for="active">Активность</label></section>' +
-            '<input id="active" name="active" type="checkbox" ' + active + ' value="1" />' +
-            '</fieldset>' +
-            '</li>' +
+            '<div class="control-group">' +
+            '<label for="new_fleet_name" class="control-label">Название <span class="error"></span></label>' +
+            '<div class="controls">' +
+            '<input type="text" name="name" id="name" value="' + gz.name + '" />' +
+            '</div>' +
+            '</div>' +
 
-            '<li>' +
-            '<label for="name" class="bold">Название <span class="error"></span></label>' +
-            '<input class="text width-50" style="width: 50%" type="text" name="name" id="name" value="' + gz.name + '" />' +
-            '</li>' +
+            '<div class="control-group">' +
+                '<label for="new_fleet_name" class="control-label">Цвет <span class="error"></span></label>' +
+                '<input type="hidden" name="color" id="color" value="' + gz.color + '" />' +
+                '<div class="controls">' +
+                    core.utilities.getColorChooser(gz.color) +
+                '</div>' +
+            '</div>' +
 
-            '<li>' +
-            '<label for="color" class="bold">Цвет <span class="error"></span></label>' +
-            '<input type="hidden" name="color" id="color" value="' + gz.color + '" />' +
-            core.utilities.getColorChooser(gz.color) +
-            '</li>' +
+            '<div class="control-group">' +
+            '<label class="control-label">Уведомления</label>' +
+            '<label class="checkbox"><input id="sms" type="checkbox" checked data-toggle="switch" ' + sms + ' value="1" /> СМС</label>' +
+            '<label class="checkbox"><input id="email" type="checkbox" checked data-toggle="switch" ' + email + ' value="1" /> Электронная почта</label>' +
+            '</div>' +
 
-            '<li>' +
-            '<fieldset>' +
-            '<section class="bold">Уведомления</section>' +
-            '<label style="display: inline; margin: 0 15px 0 0"><input id="sms" type="checkbox" ' + sms + ' value="1" /> СМС</label>' +
-            '<label style="display: inline;"><input id="email" type="checkbox" ' + email + ' value="1" /> Электронная почта</label>' +
-            '</fieldset>' +
-            '</li>' +
+
 
             '<hr>' +
 
-            '<li class="push">' +
-            '<input type="submit" name="send" class="btn blue float-left" value="Сохранить" />' +
-            '<input type="button" id="delete-geozone" class="btn red float-left" value="Удалить" />' +
-            '</li>' +
-
-            '</ul>' +
+            '<div class="control-group">' +
+            '<input type="submit" name="send" class="btn btn-embossed btn-primary btn-info" value="Сохранить" />' +
+            '<input type="button" id="delete-geozone" class="btn btn-embossed btn-danger btn-info" value="Удалить" />' +
+            '</div>' +
 
             '<div class="clear"></div>' +
             '</form>';
@@ -549,7 +548,7 @@ var geozones = {
 
             html += '<li class="' + classname + '">' +
                 '<a id="gz-item-' + this.geozones.raw[i].id + '" data-id="' + this.geozones.raw[i].id + '" href="#">' +
-                '<i title="Показать на карте" data-id="' + this.geozones.raw[i].id + '"></i>' +
+                '<i class="fui-eye" title="Показать на карте" data-id="' + this.geozones.raw[i].id + '"></i>' +
                 '<span title="Редактировать">' + this.geozones.raw[i].name + '</span>' +
                 '</a>' +
                 '</li>';
@@ -609,13 +608,13 @@ var geozones = {
     },
 
     setResizer: function () {
-        $(window).off('resize').on('resize', function () {
+        $(window).off('resize.geozones-map').on('resize.geozones-map', function () {
             $('#map').css({
                 width: 0
             });
 
             $('#map').css({
-                width: $('.map-container').width() - 1
+                width: $('.map-container').width()
             });
 
             if (geozones.map) {

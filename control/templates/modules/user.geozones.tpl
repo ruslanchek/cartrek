@@ -1,21 +1,20 @@
-
-    <div class="table-wrapper">
-        <div class="geozones">
-            <div class="geozones-left">
-                <div class="map-container map-geozones">
-                    <div id="map"></div>
-                </div>
-            </div>
-
-            <div class="geozones-right">
-                <div class="geozones-menu">
-
-                </div>
-            </div>
-
-            <div class="clear"></div>
+<div class="geozones">
+    <div class="geozones-left">
+        <div class="map-container map-geozones">
+            <div id="map"></div>
         </div>
     </div>
+
+    <div class="geozones-right">
+        <div class="geozones-menu">
+
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+</div>
+
+
 
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/plugins/Leaflet.draw/dist/leaflet.draw.css" />

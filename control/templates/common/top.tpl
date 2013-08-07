@@ -41,7 +41,7 @@
                             </a>
                         </li>
 
-                        <li {if $core->module.name == 'events'}class="active"{/if}>
+                        <li {if $core->module.name == 'user'}class="active"{/if}>
                             <a href="/control/user" title="Аккаунт">
                                 <span class="fui-user"></span>
                                 <span class="hidden-desktop">Аккаунт</span>
@@ -55,7 +55,7 @@
                             </ul>
                         </li>
 
-                        <li {if $core->module.name == 'events'}class="active"{/if}>
+                        <li {if $core->module.name == 'user.system'}class="active"{/if}>
                             <a href="/control/user/system" title="Настройка">
                                 <span class="fui-gear"></span>
                                 <span class="hidden-desktop">Настройка</span>

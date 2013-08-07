@@ -181,7 +181,7 @@ core.loading = {
         }
 
         if (!set_relative) {
-            $(window).unbind('resize').bind('resize', function () {
+            $(window).unbind('resize.loading-elm-center').bind('resize.loading-elm-center', function () {
                 var obj_offset = obj.offset();
                 $loading.css({
                     top: obj_offset.top + obj.height() / 2,
@@ -1180,16 +1180,16 @@ core.map_tools = {
             ],
 
             ba: [
-                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "Aerial", maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
+                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "Aerial", culture: 'ru-RU', maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
                 // new L.TileLayer('http://{s}.tile.osmosnimki.ru/hyb/{z}/{x}/{y}.png', {attribution: '', maxZoom: 16})
             ],
 
             bal: [
-                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "AerialWithLabels", maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
+                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "AerialWithLabels", culture: 'ru-RU', maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
             ],
 
             br: [
-                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "Road", maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
+                new L.BingLayer("An3NTLOxxMQMjGKpIUPmOblfFuGHLrw7l1HH8kwQkaSj2_6j46iCS8rSOu_0fmrK", {type: "Road", culture: 'ru-RU', maxZoom: 21, minZoom: 1, errorTileUrl: "http://www.mapsmarker.com/wp-content/plugins/leaflet-maps-marker/inc/img/error-tile-image.png", detectRetina: true})
             ],
 
             gglsat: [
@@ -1304,6 +1304,37 @@ core.map_tools = {
 core.ui = {
     window_focus: true,
 
+    blocksToSharedHeight: function () {
+        $('.shared-height').css({
+            height: 'auto'
+        });
+
+        var rows = [],
+            row;
+
+        $('.shared-height').each(function () {
+            if (row != $(this).attr('row')) {
+                row = $(this).attr('row');
+                rows.push({num: row});
+            }
+        });
+
+        for (var i = 0, l = rows.length; i < l; i++) {
+            var row_sel = $('.shared-height[row="' + rows[i].num + '"]'),
+                h = 0;
+
+            row_sel.each(function () {
+                if (h < $(this).height()) {
+                    h = $(this).height();
+                }
+            });
+
+            row_sel.css({
+                height: h
+            });
+        }
+    },
+
     windowFocus: function () {
         $(window).on('focus',function () {
             core.ui.window_focus = true;
@@ -1408,7 +1439,11 @@ core.ui = {
         this.webkitNotificationsRequest();
         this.getRawTitle();
         this.windowFocus();
+        this.blocksToSharedHeight();
 
+        $(window).on('resize.ui-shared-height', function(){
+            core.ui.blocksToSharedHeight();
+        });
 
         $('.form_message').on('click', '.close', function () {
             $('.form_message').slideUp(150, function () {
@@ -1504,15 +1539,15 @@ core.modal = {
         this.setModalPosition();
         this.createOverlay();
 
-        $(window).on('resize', function () {
+        $(window).on('resize.modal-window', function () {
             that.setModalPosition();
         });
 
-        $(document).on('scroll', function () {
+        $(document).on('scroll.modal-window', function () {
             that.setModalPosition();
         });
 
-        $('body').on('scroll', function () {
+        $('body').on('scroll.modal-window', function () {
             that.setModalPosition();
         });
 
@@ -1521,7 +1556,7 @@ core.modal = {
                 that.destroyModal();
             });
 
-            $('body').on('keyup', function (e) {
+            $('body').on('keyup.modal-window', function (e) {
                 if (e.keyCode == 27) {
                     that.destroyModal();
                 }
@@ -1535,12 +1570,12 @@ core.modal = {
         console.trace();
 
         if (this.modal_created === true) {
-            $(window).off('resize');
-            $(document).off('scroll');
+            $(window).off('resize.modal-window');
+            $(document).off('scroll.modal-window');
 
             $('#modal_closer').off('click');
-            $('body').off('scroll');
-            $('body').off('keyup');
+            $('body').off('scroll.modal-window');
+            $('body').off('keyup.modal-window');
 
             if (instant === true) {
                 $('#modal_window.modal, #fs_overlay.modal').remove();

@@ -29,13 +29,19 @@ var user_groups = {
                     core.modal.setMessage(data);
                     core.modal.destroyModal();
 
+
+
                     var html = '<tr class="group-row" rel="' + data.data.id + '">' +
                         '<td><strong><a rel="' + data.data.id + '" class="group-edit" href="#" data-id="' + data.data.id + '" data-name="' + data.data.name + '">' + data.data.name + '</a></strong></td>' +
                         '<td>0</td>' +
                         '<td>' +
-                        '<a href="javascript:void(0)" class="btn red delete-btn group-delete" data-count="0" data-id="' + data.data.id + '" data-name="' + data.data.name + '">Удалить</a>' +
+                        '<a href="javascript:void(0)" title="Удалить" class="btn-delete group-delete" data-count="0" data-id="' + data.data.id + '" data-name="' + data.data.name + '">' +
+                            '<span class="fui-cross"></span>' +
+                        '</a>' +
                         '</td>' +
                         '</tr>';
+
+
 
                     $('#groups-table tbody').prepend(html);
 
@@ -108,23 +114,22 @@ var user_groups = {
     },
 
     addGroupModal: function () {
-        var html = '<form id="add-group-form" class="forms columnar white" method="POST">' +
+        var html = '<form id="add-group-form" class="form-vertical" method="POST">' +
             '<div class="form_message"></div>' +
 
-            '<ul>' +
-
-            '<li class="form-item">' +
-            '<label for="new_fleet_name" class="bold">Название <span class="error"></span></label>' +
-            '<input class="text width-50" style="width: 50%" type="text" name="new_fleet_name" id="new_fleet_name" value="Новая группа" />' +
-            '</li>' +
+            '<div class="control-group">' +
+                '<label for="new_fleet_name" class="control-label">Название <span class="error"></span></label>' +
+                '<div class="controls">' +
+                    '<input type="text" name="new_fleet_name" id="new_fleet_name" value="Новая группа" />' +
+                '</div>' +
+            '</div>' +
 
             '<hr>' +
 
-            '<li class="push">' +
-            '<input type="submit" name="send" class="btn blue float-left" value="Добавить" />' +
-            '</li>' +
+            '<div class="control-group">' +
+                '<input type="submit" name="send" class="btn btn-embossed btn-primary btn-info" value="Добавить" />' +
+            '</div>' +
 
-            '</ul>' +
 
             '<div class="clear"></div>' +
             '</form>';
@@ -145,23 +150,22 @@ var user_groups = {
     },
 
     editGroupModal: function (data) {
-        var html = '<form id="edit-group-form" class="forms columnar white" method="POST">' +
+        var html = '<form id="edit-group-form" class="form-vertical" method="POST">' +
             '<div class="form_message"></div>' +
 
-            '<ul>' +
-
-            '<li class="form-item">' +
-            '<label for="new_fleet_name" class="bold">Название <span class="error"></span></label>' +
-            '<input class="text width-50" style="width: 50%" type="text" name="name" id="name" value="' + data.name + '" />' +
-            '</li>' +
+            '<div class="control-group">' +
+            '<label for="new_fleet_name" class="control-label">Название <span class="error"></span></label>' +
+            '<div class="controls">' +
+            '<input type="text" name="name" id="name" value="' + data.name + '" />' +
+            '</div>' +
+            '</div>' +
 
             '<hr>' +
 
-            '<li class="push">' +
-            '<input type="submit" name="send" class="btn blue float-left" value="Сохранить" />' +
-            '</li>' +
+            '<div class="control-group">' +
+            '<input type="submit" name="send" class="btn btn-embossed btn-primary btn-info" value="Сохранить" />' +
+            '</div>' +
 
-            '</ul>' +
 
             '<div class="clear"></div>' +
             '</form>';

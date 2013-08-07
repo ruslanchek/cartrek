@@ -1,8 +1,11 @@
 
 <div class="row-fluid">
     <div class="span6">
-        <div class="alert alert-info">
+        <div class="alert alert-info shared-height" row="1">
             <h3>Привязка социальных сетей к вашему аккаунту</h3>
+
+            <br>
+
             <p>
                 Чтобы привязать сциальную сеть, кликните на&nbsp;соответствующую иконку, подтвердите запрос сервиса в&nbsp;открывшимся окне.
                 После прохождения процедуры привязки, вы&nbsp;сможете авторизоваться на&nbsp;Картреке с&nbsp;помощью социальных сетей.
@@ -23,7 +26,7 @@
     </div>
 
     <div class="span6">
-        <div class="alert alert-info">
+        <div class="alert alert-info shared-height" row="1">
             <h3>Изменение пароля</h3>
 
             <br>
@@ -31,8 +34,6 @@
             <div class="form_message"></div>
 
             <form id="password-change-form" class="forms" action="/control/user/security/" method="POST">
-
-
                 <div class="form-item">
                     <label for="old_password" class="bold">Старый пароль <span class="error"></span></label>
                     <input
