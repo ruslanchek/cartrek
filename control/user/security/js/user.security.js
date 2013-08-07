@@ -32,15 +32,15 @@ var security = {
                     $('#old_password, #new_password, #new_password_again').val('');
                 }else{
                     if(data.form_errors.old_password){
-                        $('#old_password').addClass('input-error').prev().find('.error').text(data.form_errors.old_password);
+                        $('#old_password').parent('.control-group').addClass('error').find('.error').text(data.form_errors.old_password);
                     };
 
                     if(data.form_errors.new_password){
-                        $('#new_password').addClass('input-error').prev().find('.error').text(data.form_errors.new_password);
+                        $('#new_password').parent('.control-group').addClass('error').find('.error').text(data.form_errors.new_password);
                     };
 
                     if(data.form_errors.new_password_again){
-                        $('#new_password_again').addClass('input-error').prev().find('.error').text(data.form_errors.new_password_again);
+                        $('#new_password_again').parent('.control-group').addClass('error').find('.error').text(data.form_errors.new_password_again);
                     };
                 };
 

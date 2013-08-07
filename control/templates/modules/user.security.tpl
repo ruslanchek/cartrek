@@ -1,4 +1,3 @@
-
 <div class="row-fluid">
     <div class="span6">
         <div class="alert alert-info shared-height" row="1">
@@ -33,44 +32,38 @@
 
             <div class="form_message"></div>
 
-            <form id="password-change-form" class="form-vertical" action="/control/user/security/" method="POST">
+            <form id="password-change-form" class="forms" action="/control/user/security/" method="POST">
                 <div class="control-group">
-                    <label for="old_password">Старый пароль <span class="error"></span></label>
-                    <div class="controls">
-                        <input
-                            type="password"
-                            name="old_password"
-                            id="old_password"
-                            {*autofocus="autofocus"*}
-                            value=""
-                            />
-                    </div>
+                    <label for="old_password" class="bold">Старый пароль <span class="error"></span></label>
+                    <input
+                        type="password"
+                        name="old_password"
+                        id="old_password"
+                        {*autofocus="autofocus"*}
+                        value=""
+                        />
                 </div>
 
                 <hr>
 
                 <div class="control-group">
-                    <label for="new_password">Новый пароль <span class="error"></span></label>
-                    <div class="controls">
-                        <input
-                            type="password"
-                            name="new_password"
-                            id="new_password"
-                            value=""
-                                />
-                    </div>
+                    <label for="new_password" class="bold">Новый пароль <span class="error"></span></label>
+                    <input
+                        type="password"
+                        name="new_password"
+                        id="new_password"
+                        value=""
+                            />
                 </div>
 
                 <div class="control-group">
-                    <label for="new_password_again">Новый пароль еще раз <span class="error"></span></label>
-                    <div class="controls">
-                        <input
+                    <label for="new_password_again" class="bold">Новый пароль еще раз <span class="error"></span></label>
+                    <input
                             type="password"
                             name="new_password_again"
                             id="new_password_again"
                             value=""
                             />
-                    </div>
                 </div>
 
                 <input type="submit" name="send" class="btn btn-embossed btn-primary btn-info" value="Сменить пароль" />

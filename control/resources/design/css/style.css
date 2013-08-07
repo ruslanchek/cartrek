@@ -8,6 +8,7 @@ body {
 
 h1, h2 {
     font-weight: 100;
+    font-family: PT Sans;
 }
 
 p {
@@ -212,6 +213,24 @@ p {
 
 /* =Forms
 -----------------------------------------------------------------------------*/
+.open > .dropdown-menu {
+    max-height: 266px !important;
+}
+
+label .error {
+    color: #c0392b;
+    float: right;
+}
+
+.control-group .btn-group.select {
+    width: 103.5%;
+}
+
+.control-group .dropdown-toggle {
+    width: 100%;
+    margin: 0;
+}
+
 .form-vertical input[type="text"],
 .form-vertical input[type="email"],
 .form-vertical input[type="password"] {
@@ -1102,15 +1121,11 @@ footer {
     padding-bottom: 15px;
 }
 
-.map-geozones {
-
-}
-
-.map-container {
+.map-geozones .map-container {
     position: relative;
 }
 
-.map-container .ui-resizable-s {
+.map-geozones .map-container .ui-resizable-s {
     height: 16px;
     width: 139%;
     background: #ccc;
@@ -1119,7 +1134,7 @@ footer {
     z-index: 14;
 }
 
-.map-container .ui-resizable-s:hover {
+.map-geozones .map-container .ui-resizable-s:hover {
     background: #1abc9c;
 }
 

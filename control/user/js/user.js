@@ -32,17 +32,19 @@ var user = {
 
                     $('#login-display').html(data.form_data.login);
                     $('#login').val(data.form_data.login);
+
+                    $('.control-group').removeClass('error').find('.error').remove();
                 } else {
                     if (data.form_errors.login) {
-                        $('#login').parent().parent().addClass('error').find('.error').text(data.form_errors.login);
+                        $('#login').parent('.control-group').addClass('error').find('.error').text(data.form_errors.login);
                     }
 
                     if (data.form_errors.email) {
-                        $('#email').parent().parent().addClass('error').find('.error').text(data.form_errors.email);
+                        $('#email').parent('.control-group').addClass('error').find('.error').text(data.form_errors.email);
                     }
 
                     if (data.form_errors.name) {
-                        $('#name').parent().parent().addClass('error').find('.error').text(data.form_errors.name);
+                        $('#name').parent('.control-group').addClass('error').find('.error').text(data.form_errors.name);
                     }
 
                     $('#login').val(data.form_data.login);
@@ -293,7 +295,7 @@ var user = {
                 }
             });
 
-            $('.phone-activity-toggler').slickswitch({
+            /*$('.phone-activity-toggler').slickswitch({
                 toggled: function (item) {
                     var $p = item.parent().parent(),
                         index = $p.data('index'),
@@ -304,7 +306,7 @@ var user = {
 
                     user.phones.toggle(index, active, phone);
                 }
-            });
+            });*/
         }
     },
 

@@ -1435,11 +1435,19 @@ core.ui = {
         $(selector).html(html);
     },
 
+    drawFlatUiSelects: function(){
+        $("select").selectpicker({
+            style: 'btn-primary',
+            menuStyle: 'dropdown-inverse'
+        });
+    },
+
     init: function () {
         this.webkitNotificationsRequest();
         this.getRawTitle();
         this.windowFocus();
         this.blocksToSharedHeight();
+        this.drawFlatUiSelects();
 
         $(window).on('resize.ui-shared-height', function(){
             core.ui.blocksToSharedHeight();
@@ -1854,6 +1862,7 @@ $(function () {
     }
 });
 
+// Starter animation
 $(window).on('load.core', function(){
     $('.middle-container').addClass('ready');
 });

@@ -23,6 +23,8 @@
 
 <script src="/control/resources/design/js/flatui-checkbox.js"></script>
 <script src="/control/resources/design/js/flatui-radio.js"></script>
+<script src="/control/resources/design/js/flatui-radio.js"></script>
+
 <script src="/control/resources/design/js/jquery.tagsinput.js"></script>
 <script src="/control/resources/design/js/jquery.placeholder.js"></script>
 <script src="/control/resources/design/js/jquery.stacktable.js"></script>
