@@ -34,15 +34,15 @@ var user = {
                     $('#login').val(data.form_data.login);
                 } else {
                     if (data.form_errors.login) {
-                        $('#login').addClass('input-error').prev().find('.error').text(data.form_errors.login);
+                        $('#login').parent().parent().addClass('error').find('.error').text(data.form_errors.login);
                     }
 
                     if (data.form_errors.email) {
-                        $('#email').addClass('input-error').prev().find('.error').text(data.form_errors.email);
+                        $('#email').parent().parent().addClass('error').find('.error').text(data.form_errors.email);
                     }
 
                     if (data.form_errors.name) {
-                        $('#name').addClass('input-error').prev().find('.error').text(data.form_errors.name);
+                        $('#name').parent().parent().addClass('error').find('.error').text(data.form_errors.name);
                     }
 
                     $('#login').val(data.form_data.login);
