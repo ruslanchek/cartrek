@@ -258,22 +258,25 @@ var user = {
             var html = '';
 
             if (this.phones && this.phones.length > 0) {
-                html += '<div class="table-wrapper"><table class="hovered">';
-
                 for (var i = 0, l = this.phones.length; i < l; i++) {
                     if (this.phones[i].phone) {
-                        html += '<tr rel="' + i + '" class="item ' + ((this.phones[i].active === true) ? '' : 'unactive_row') + '" data-index="' + i + '" data-phone="' + this.phones[i].phone + '" data-active="' + this.phones[i].active + '">' +
-                            '<th class="activity-cell" width="1%"><input class="phone-activity-toggler slickswitch" type="checkbox" ' + ((this.phones[i].active === true) ? 'checked' : '') + ' /></th>' +
-                            '<td>' + core.utilities.formatPhoneStr(this.phones[i].phone, 7) + '</td>' +
-                            '<td width="1%"><a class="phone-delete-link btn red delete-btn" href="#">Удалить</a></td>' +
-                            '</tr>';
+                        html += '<div rel="' + i + '" class="control-group item ' + ((this.phones[i].active === true) ? '' : 'unactive_row') + '" data-index="' + i + '" data-phone="' + this.phones[i].phone + '" data-active="' + this.phones[i].active + '">' +
+                                    '<div class="input-append">' +
+                                        //'<input class="phone-activity-toggler slickswitch" type="checkbox" ' + ((this.phones[i].active === true) ? 'checked' : '') + ' />' +
+                                        '<input type="text" value="' + core.utilities.formatPhoneStr(this.phones[i].phone, 7) + '"</td>' +
+                                        '<div class="btn-group">' +
+                                            '<button class="btn phone-delete-link"><span class="fui-check-inverted"></span></button>' +
+                                            '<button class="btn phone-delete-link"><span class="fui-cross"></span></button>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</div>';
                     }
                 }
-
-                html += '</table></div>';
             }
 
-            html += '<input type="button" id="add-phone" href="javascript:void(0)" class="btn gray" value="Добавить номер">';
+            html += '<div class="control-group">' +
+                        '<input type="btn btn-embossed btn-primary btn-info" id="add-phone" href="javascript:void(0)" class="btn gray" value="Добавить номер">' +
+                    '</div>';
 
             $('#phones-table').html(html);
 
