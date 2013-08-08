@@ -97,7 +97,7 @@ var user = {
                 '</li>' +
 
 
-                '<li>' +
+                '<li class="input-prepend-wrapper">' +
                 '<label for="phone" class="bold">Номер <span class="error"></span></label>' +
                 '<span class="input-prepend">+7</span>' +
                 '<input class="text" style="width: 25%" type="text" name="phone" id="phone" value="" maxlength="15" />' +

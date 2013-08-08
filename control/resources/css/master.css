@@ -961,10 +961,11 @@ a.badge:active {
     margin-right: 0;
 }
 
-.h-panel .b-core-ui-select *,
-.h-panel .b-core-ui-select,
-.h-panel .b-core-ui-select__dropdown {
-    font-size: 1em;
+.b-core-ui-select *,
+.b-core-ui-select,
+.b-core-ui-select__dropdown,
+b-core-ui-select__dropdown__list {
+    font-size: 14px !important;
 }
 
 .jspContainer {
@@ -1038,6 +1039,13 @@ a.badge:active {
     width: 97%;
 }
 
+.forms input[type="text"],
+.forms input[type="password"],
+.forms input[type="email"] {
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
 .forms.columnar input.text {
     margin: 0 0 0.2em;
 }
@@ -1055,6 +1063,20 @@ input:disabled {
 
 .forms input.btn {
     margin-top: 0.6em;
+}
+
+.input-prepend {
+    z-index: 3;
+    position: relative;
+    width: 15px;
+    top: 1px;
+    -webkit-border-radius: 4px 0px 0px 4px;
+    border-radius: 4px 0px 0px 4px;
+}
+
+.input-prepend-wrapper input {
+    -webkit-border-radius: 0px 4px 4px 0px !important;
+    border-radius: 0px 4px 4px 0px !important;
 }
 
 .select-label {
@@ -1290,29 +1312,31 @@ footer a:active {
 /* =GID's
 -----------------------------------------------------------------------------*/
 .g_id {
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
     position: relative;
     display: block;
-    padding: 2px;
-    width: 13.5ex;
+    padding: 0;
+    width: 14.5ex;
     font-family: Tahoma, Arial, sans-serif;
-    /*-webkit-box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);
-            box-shadow: 0px 1px 3px 0px rgba(0, 0, 0, 0.5);*/
+    border-bottom: 0.2em solid;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .g_id .shade {
     background: url(../img/g_id_shade.png) 0 0;
     background-size: 100% 100%;
+    opacity: 0.65;
     position: absolute;
     top: 0;
-    left: 1px;
-    width: 99%;
-    height: 99%;
+    left: 0;
+    width: 100%;
+    height: 100%;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
+    z-index: 2;
 }
 
 .g_id span {
@@ -1321,50 +1345,54 @@ footer a:active {
 
 .g_id .id {
     position: absolute;
-    left: 1px;
-    top: 1px;
+    left: 0;
+    top: 0;
     text-align: center;
-    border-left: 1px solid transparent;
-    border-right: none;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
     -webkit-border-radius: 2px 0px 0px 2px;
     border-radius: 2px 0px 0px 2px;
-}
-
-.g_id .region {
-    position: absolute;
-    right: 1px;
-    top: 1px;
-    text-align: center;
-    border-left: 1px solid transparent;
-    border-right: 1px solid transparent;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    -webkit-border-radius: 0px 2px 2px 0px;
-    border-radius: 0px 2px 2px 0px;
-}
-
-.g_id .region i label {
-    background: url(../img/rf.png) no-repeat;
-    background-size: 100% 100%;
-    position: absolute;
-    display: block;
-}
-
-.g_id .id {
-    width: 9ex;
-    height: 1.7em;
-    line-height: 1.8em;
+    width: 10ex;
+    height: 1.9em;
+    line-height: 1.9em;
     text-transform: uppercase;
     letter-spacing: 0.14ex;
 }
 
 .g_id .region {
-    width: 4ex;
-    height: 1.7em;
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-align: center;
+    border-left: 1px solid transparent;
+    -webkit-border-radius: 0px 2px 2px 0px;
+    border-radius: 0px 2px 2px 0px;
+    width: 4.4ex;
+    height: 1.9em;
     padding-left: 0.3em;
     text-align: center;
+}
+
+.g_id .region i label {
+    background: url(../img/rf.png) no-repeat;
+    background-size: 50% 50%;
+    position: absolute;
+    display: block;
+    top: -0.25em !important;
+    right: -1.2ex !important;
+    opacity: 0.65;
+}
+
+.g_id.small .region i label {
+    width: 5.1ex;
+    height: 2.2em;
+    top: -0.6em;
+    right: 1ex;
+}
+
+.g_id.big .region i label {
+    width: 3ex;
+    height: 1em;
+    top: -0.35em;
+    right: 0.8em;
 }
 
 .g_id .region b {
@@ -1373,7 +1401,7 @@ footer a:active {
     font-size: 0.9em !important;
     height: 0.85em;
     line-height: 0.85em;
-    top: 0.2em;
+    top: 0.3em;
     width: inherit;
     display: block;
     text-align: center;
@@ -1389,7 +1417,7 @@ footer a:active {
     font-size: 0.45em !important;
     height: 0.4em;
     line-height: 0.4em;
-    top: 2.75em;
+    top: 3em;
     font-style: normal;
     width: inherit;
     display: block;
@@ -1403,8 +1431,8 @@ footer a:active {
 
 .g_id.small {
     font-size: 13px !important;
-    line-height: 1.7em;
-    height: 1.7em;
+    line-height: 1.9em;
+    height: 1.9em;
 }
 
 .g_id.small .region em {
@@ -1414,8 +1442,6 @@ footer a:active {
 /* GID Styles - default */
 .g_id.default {
     background: #fff;
-    color: #111;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 .g_id.default span.id {
@@ -1427,13 +1453,12 @@ footer a:active {
 
 /* GID Styles - standart */
 .g_id.standart {
-    background: #fff;
-    color: #111;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+    background: #eee;
+    border-color: #999;
 }
 
 .g_id.standart span {
-    border-color: #666;
+    border-color: #c9c9c9;
 }
 
 .g_id.standart .region {
@@ -1444,56 +1469,27 @@ footer a:active {
     padding-left: 0;
 }
 
-.g_id.small.standart .region i label {
-    width: 3.1ex;
-    height: 1.2em;
-    top: -0.6em;
-    right: 1ex;
-}
-
-.g_id.big.standart .region i label {
-    width: 3ex;
-    height: 1em;
-    top: -0.35em;
-    right: 0.8em;
-}
-
 .g_id.standart .region b {
     margin-left: -0.2em;
 }
 
 /* GID Styles - tranzit */
 .g_id.tranzit {
-    background: #fff;
-    color: #111;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+    background: #eee;
+    border-color: #999;
 }
 
 .g_id.tranzit span {
-    border-color: #666;
+    border-color: rgba(0,0,0, 0.2);
 }
 
 .g_id.tranzit .region {
     text-align: left;
-    background: #fcff00;
+    background: #eae200;
 }
 
 .g_id.tranzit .region i {
     padding-left: 0;
-}
-
-.g_id.small.tranzit .region i label {
-    width: 3.1ex;
-    height: 1.2em;
-    top: -0.6em;
-    right: 1ex;
-}
-
-.g_id.big.tranzit .region i label {
-    width: 3ex;
-    height: 1em;
-    top: -0.35em;
-    right: 0.8em;
 }
 
 .g_id.tranzit .region b {
@@ -1502,13 +1498,12 @@ footer a:active {
 
 /* GID Styles - commercial */
 .g_id.commercial {
-    background: #ffed24;
-    color: #111;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+    background: #f1c40f;
+    border-color: #a98805;
 }
 
 .g_id.commercial span {
-    border-color: #666;
+    border-color: rgba(0,0,0, 0.15);
 }
 
 .g_id.commercial .region {
@@ -1525,7 +1520,6 @@ footer a:active {
 .g_id.police {
     color: #fff;
     background: #064db9;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
 }
 
 .g_id.police span {
@@ -1545,12 +1539,13 @@ footer a:active {
 /* GID Styles - military */
 .g_id.military {
     color: #fff;
-    background: #1f1a17;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background: #444;
+    border-color: #111;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
 }
 
 .g_id.military span {
-    border-color: #fff;
+    border-color: rgba(255,255,255, 0.2);
 }
 
 .g_id.military .region {
@@ -1566,13 +1561,14 @@ footer a:active {
 /* GID Styles - diplomacy */
 .g_id.diplomacy {
     color: #fff;
-    background: #df0000;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    background: #cb2028;
     text-transform: uppercase;
+    border-color: #971e24;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
 }
 
 .g_id.diplomacy span {
-    border-color: #fff;
+    border-color: rgba(255,255,255, 0.4);
 }
 
 .g_id.diplomacy .region {
@@ -1588,12 +1584,10 @@ footer a:active {
 /* GID Styles - federal */
 .g_id.federal {
     background: #fff;
-    color: #111;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 .g_id.federal span {
-    border-color: #666;
+    border-color: rgba(0,0,0, 0.2);
 }
 
 .g_id.federal .region {
@@ -1617,14 +1611,10 @@ footer a:active {
 }
 
 .g_id.federal .region i label {
-    width: 99%;
-    height: 100%;
-    left: 0;
-    top: 0;
-}
-
-#g_id_preview {
-
+    width: 99% !important;
+    height: 100% !important;
+    left: 0 !important;
+    top: 0 !important;
 }
 
 /* =Heading
@@ -1762,6 +1752,11 @@ footer a:active {
 
 /* =Buttons
 -----------------------------------------------------------------------------*/
+.btn {
+    font-family: "PT Sans";
+    font-size: 16px !important;
+}
+
 .btn.blue {
     width: 180px;
     padding: 10px 10px;
