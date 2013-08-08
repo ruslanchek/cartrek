@@ -6,13 +6,36 @@ body {
     background: #fff;
 }
 
+body, td, th {
+    font-family: PT Sans;
+    font-size: 16px;
+}
+
+
+/* =Typography
+-----------------------------------------------------------------------------*/
 h1, h2 {
     font-weight: 100;
-    font-family: PT Sans;
 }
 
 p {
-    font-size: 14px !important;
+    font-size: 1em;
+}
+
+
+/* =Font sizes
+-----------------------------------------------------------------------------*/
+.navbar .nav > li > a {
+    font-size: 1.05em;
+}
+
+.nav-list-vivid > li > a {
+    font-size: 1em;
+}
+
+table th,
+table td {
+    font-size: 1.1em;
 }
 
 
@@ -86,6 +109,10 @@ p {
 
 .window .window_content {
     padding: 0 20px 15px;
+}
+
+.window .btn {
+    margin-right: 20px;
 }
 
 #modal_closer {
@@ -379,6 +406,22 @@ form {
     width: 16px;
 }
 
+#phones-table .item {
+    padding-right: 86px;
+}
+
+#phones-table .item .input-append {
+    width: 100%;
+}
+
+#phones-table .input-append .btn + .btn {
+    border: none;
+}
+
+#phones-table .btn-info {
+    margin-top: 5px;
+}
+
 
 /* =Footer
 -----------------------------------------------------------------------------*/
@@ -390,13 +433,11 @@ footer {
 .bottom-menu {
     margin: 0;
     height: 20px;
-
 }
 
 .bottom-menu .brand .cartrek-logo {
     background-position: 0 -41px !important;
     width: 170px;
-    margin-left: 20px;
     height: 41px;
     margin-top: -6px;
 }
@@ -1130,16 +1171,16 @@ footer {
     position: relative;
 }
 
-.map-geozones .map-container .ui-resizable-s {
+.map-container .ui-resizable-s {
     height: 16px;
     width: 139%;
-    background: #ccc;
+    background: #eee;
     cursor: ns-resize;
     position: absolute;
     z-index: 14;
 }
 
-.map-geozones .map-container .ui-resizable-s:hover {
+.map-container .ui-resizable-s:hover {
     background: #1abc9c;
 }
 

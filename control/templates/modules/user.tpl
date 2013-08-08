@@ -1,3 +1,9 @@
+<h2>Стиль карты</h2>
+
+<p>Выбранный стиль карты, будет испозьзоваться Картреком как сандартный.</p>
+
+<hr>
+
 <div class="form_message"></div>
 
 <div class="row-fluid">
@@ -65,7 +71,6 @@
 
                     <div id="phones-table"></div>
 
-                    <br>
                     <hr>
 
                     <em>

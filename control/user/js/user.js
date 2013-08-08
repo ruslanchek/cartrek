@@ -265,8 +265,8 @@ var user = {
                                         //'<input class="phone-activity-toggler slickswitch" type="checkbox" ' + ((this.phones[i].active === true) ? 'checked' : '') + ' />' +
                                         '<input type="text" value="' + core.utilities.formatPhoneStr(this.phones[i].phone, 7) + '"</td>' +
                                         '<div class="btn-group">' +
-                                            '<button class="btn phone-delete-link"><span class="fui-check-inverted"></span></button>' +
-                                            '<button class="btn phone-delete-link"><span class="fui-cross"></span></button>' +
+                                            '<button class="btn btn-success phone-delete-link"><span class="fui-check-inverted"></span></button>' +
+                                            '<button class="btn btn-danger phone-delete-link"><span class="fui-cross"></span></button>' +
                                         '</div>' +
                                     '</div>' +
                                 '</div>';
@@ -275,7 +275,7 @@ var user = {
             }
 
             html += '<div class="control-group">' +
-                        '<input type="btn btn-embossed btn-primary btn-info" id="add-phone" href="javascript:void(0)" class="btn gray" value="Добавить номер">' +
+                        '<input type="button" id="add-phone" href="javascript:void(0)" class="btn btn-embossed btn-primary btn-info" value="Добавить номер">' +
                     '</div>';
 
             $('#phones-table').html(html);

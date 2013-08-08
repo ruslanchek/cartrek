@@ -1,3 +1,7 @@
+<h2>Геозоны</h2>
+
+<hr>
+
 <div class="geozones">
     <div class="geozones-left">
         <div class="map-container map-geozones">
