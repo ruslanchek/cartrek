@@ -3766,6 +3766,11 @@ footer a:active {
 
 }
 
+.ui-datepicker .ui-datepicker-title {
+    padding: 3px 0;
+    display: block;
+}
+
 .ui-datepicker .ui-state-active {
     color: white;
     cursor: default;
