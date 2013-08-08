@@ -3722,3 +3722,57 @@ footer a:active {
     transform: rotateY(5deg) rotateZ(-3deg);
 }
 
+
+/* Datepicker */
+.ui-datepicker {
+    display: none;
+    padding: 5px 0;
+    background: #fff;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+}
+
+.ui-datepicker table {
+    margin: 0;
+}
+
+.ui-datepicker table th,
+.ui-datepicker table td {
+    padding: 2px 3px !important;
+    border: none;
+}
+
+
+.ui-datepicker table span,
+.ui-datepicker table a {
+    display: block;
+    padding: 2px 3px;
+    border: 1px solid transparent;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+
+.ui-datepicker table a:hover {
+    background: #ddd;
+}
+
+
+.ui-datepicker .ui-state-highlight {
+    border-color: #bbb;
+
+}
+
+.ui-datepicker .ui-state-active {
+    color: white;
+    cursor: default;
+    border: none;
+    padding: 3px 4px;
+    background: #3887b3 url(../img/white-gradient.png) repeat-x top !important;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.4);
+}

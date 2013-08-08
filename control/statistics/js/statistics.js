@@ -198,7 +198,18 @@ var View = function () {
     };
 
     this.bindDatepicker = function(){
-        $('#datepicker').datepicker();
+        $('#datepicker').datepicker({
+            firstDay: 1,
+            minDate: '-30d',
+            maxDate: '+0d',
+            prevText: 'Назад',
+            nextText: 'Вперед',
+            dayNames: [ "Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" ],
+            dayNamesMin: [ "Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб" ],
+            dayNamesShort: [ "Вос", "Пон", "Вто", "Сре", "Чет", "Пят", "Суб" ],
+            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+            monthNamesShort: [ "Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек" ]
+        });
     };
 
     this.bindViewModeSwithcher = function () {
