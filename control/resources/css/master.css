@@ -1915,10 +1915,11 @@ footer a:active {
 
 }
 
-.map-full-sized-frame .map-container {
+.map-observer.map-container {
     position: absolute;
     left: 0;
-    top: 0;
+    top: 46px;
+    width: 100%;
 }
 
 /* Map misc */

@@ -1,4 +1,4 @@
-<div class="h-panel" style="margin: 0; width: auto">
+{*<div class="h-panel" style="margin: 0; width: auto">
     <div class="row container">
         <div class="half" data-step='1' data-intro='Автоматы'>
             <div id="togglers">
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>*}
 
 <div class="map-container map-observer" data-step='2' data-intro='Карта'>
     <div id="map"></div>
