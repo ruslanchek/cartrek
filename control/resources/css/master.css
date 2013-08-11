@@ -1932,6 +1932,26 @@ footer a:active {
     display: block;
 }
 
+.leaflet-bar {
+    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3) !important;
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3) !important;
+}
+
+.leaflet-bar a:first-child {
+    -webkit-border-radius: 2px 2px 0px 0px !important;
+    border-radius: 2px 2px 0px 0px !important;
+}
+
+.leaflet-bar a:last-child {
+    -webkit-border-radius: 0px 0px 2px 2px !important;
+    border-radius: 0px 0px 2px 2px !important;
+}
+
+.leaflet-bar a:last-child:first-child {
+    -webkit-border-radius: 2px !important;
+    border-radius: 2px !important;
+}
+
 .g_id-spacer {
     width: 16.5ex;
     font-size: 13px;
@@ -1947,11 +1967,15 @@ footer a:active {
     box-shadow: 0px 5px 30px 0px rgba(0, 0, 0, 0.5);
     top: 50%;
     left: 50%;
-    width: 42%;
-    margin-left: -21%;
+    width: 420px;
+    margin-left: -210px;
     -webkit-border-radius: 5px;
     border-radius: 5px;
     text-align: center;
+}
+
+.map-notice i.icon-64 {
+    margin: 0 auto 0.75em;
 }
 
 .map-notice .mn-inner {
@@ -2485,7 +2509,7 @@ footer a:active {
 }
 
 .icon-64.warning {
-    background-position: -1408px 0;
+    background-position: -1472px 0;
 }
 
 .icon-64.error {

@@ -29,9 +29,9 @@ var View = function () {
     this.showMapMessage = function (message) {
         $('.map-container .map-notice').remove();
 
-        message = '<p>' + message + '</p>';
+        message = '<i class="icon-64 warning"></i>' + message;
 
-        message += '<a id="hide-map-notice" href="javascript:void(0)" class="btn">Закрыть</a>';
+        //message += '<a id="hide-map-notice" href="javascript:void(0)" class="btn">Закрыть</a>';
 
         $('.map-container').append('<div class="map-notice"><div class="mn-inner">' + message + '</div></div>');
 
