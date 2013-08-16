@@ -11,7 +11,7 @@
 
                 <div class="cont h1">
                     <div class="container-padding header-block">
-                        <h1>{$core->module.title}{$core->module.header_additional}</h1>
+                        <h1>{$core->module.title}</h1>
                     </div>
                 </div>
 

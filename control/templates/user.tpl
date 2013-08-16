@@ -11,7 +11,7 @@
 
                 <div class="cont h1">
                     <div class="container-padding header-block">
-                        <h1>Настройка{if $core->module.title}<span> / {$core->module.title}</span>{/if}{$core->module.header_additional}</h1>
+                        <h1>Настройка{if $core->module.title}<span> / {$core->module.title}</span>{/if}</h1>
                     </div>
                 </div>
 

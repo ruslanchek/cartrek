@@ -319,7 +319,7 @@ var View = function () {
         }
 
         // Process focus scenery for multiple cars
-        if (MC.Data.current_cars.length > 1 && MC.Data.car == 'all') {
+        if (MC.Data.current_cars.length > 1 && MC.Data.car === 'all') {
             var bounds = [],
                 single = null;
 

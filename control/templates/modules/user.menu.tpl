@@ -1,3 +1,5 @@
+{$core->module.additional_button}
+
 <ul class="nav-side">
     <li{if $core->module.name == 'user.fleet' || $core->module.name == 'user.fleet.add'} class="active"{/if}><a href="/control/user/fleet">Автопарк</a></li>
     <li{if $core->module.name == 'user.groups'} class="active"{/if}><a href="/control/user/groups">Группы</a></li>

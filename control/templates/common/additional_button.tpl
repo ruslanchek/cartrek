@@ -1,1 +1,1 @@
-<a href="{$additional_button->href}" class="btn" id="additional-button">{$additional_button->name}</a>
+<a href="{$additional_button->href}" class="btn blue" id="additional-button">{$additional_button->name}</a>

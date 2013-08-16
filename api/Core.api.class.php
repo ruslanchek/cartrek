@@ -5,13 +5,13 @@ Class Core
     protected
         $template = 'main.tpl',
         $ajax_mode = false;
-
+        
     public
         $config,
         $params,
         $module = array(
         'form' => false, // TODO: Нужен ли этот индекс? Вроде больше нигде не используется
-        'header_additional' => false
+        'additional_button' => false
     ),
         $main_menu = array(
         array('name' => 'settings', 'title' => 'Настройка'),
@@ -155,6 +155,6 @@ Class Core
         $additional_button_data->href = $href;
 
         $this->smarty->assign('additional_button', $additional_button_data);
-        $this->module['header_additional'] = $this->smarty->fetch('common/additional_button.tpl');
+        $this->module['additional_button'] = $this->smarty->fetch('common/additional_button.tpl');
     }
 }
