@@ -41,7 +41,7 @@ Class Groups extends Core
 
             exit;
         } else {
-            $this->createAdditionalButton('Добавить группу', '#');
+            $this->createAdditionalButton('Создать группу', '#');
         }
     }
 

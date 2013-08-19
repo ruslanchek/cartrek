@@ -143,10 +143,9 @@ p {
 }
 
 .nav-side li.active a {
-    background: #3887b3 url(../img/white-gradient.png) repeat-x top;
-    color: #fff;
+    background: #E5E5E5;
     font-weight: bold;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
     cursor: default;
     position: relative;
     z-index: 2;
@@ -1380,10 +1379,14 @@ footer a:active {
 }
 
 .g_id.big .region i label {
-    width: 3ex;
-    height: 1em;
-    top: -0.35em;
-    right: 0.8em;
+    width: 6ex;
+    height: 2.2em;
+    top: -0.5em !important;
+    right: 0.6em;
+}
+
+.g_id.big .id {
+    line-height: 1.85em;
 }
 
 .g_id .region b {
@@ -1746,6 +1749,8 @@ footer a:active {
 .btn {
     font-family: "PT Sans";
     font-size: 16px !important;
+    line-height: 1.28em;
+    border: none;
 }
 
 .btn.blue {
@@ -1754,16 +1759,15 @@ footer a:active {
 
     display: block;
 
-    background: #5cb6e7;
+    background: #317cd7;
     background: -moz-linear-gradient(top, #5cb6e7, #317cd7);
     background: -webkit-linear-gradient(top, #5cb6e7, #317cd7);
     background: linear-gradient(top, #5cb6e7, #317cd7);
     color: white;
     font-weight: bold;
-    border-color: #0c67a5;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1px 0 rgba(6, 68, 110, 0.8);
 
     font-size: 15px;
 }
@@ -1773,6 +1777,14 @@ footer a:active {
     background: -moz-linear-gradient(top, #89d0f2, #388ee5);
     background: -webkit-linear-gradient(top, #89d0f2, #388ee5);
     background: linear-gradient(top, #89d0f2, #388ee5);
+}
+
+.btn.blue:active {
+    background: #388ee5;
+    background: -moz-linear-gradient(top, #388ee5, #89d0f2);
+    background: -webkit-linear-gradient(top, #388ee5, #89d0f2);
+    background: linear-gradient(top, #388ee5, #89d0f2);
+    box-shadow: 0 -1px 0 rgba(6, 68, 110, 0.75);
 }
 
 .btn.gray {
@@ -1791,7 +1803,7 @@ footer a:active {
     border-color: #ccc;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.75);
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 1px 0 rgba(170, 170, 170, 0.85);
 
     font-size: 15px;
 }
@@ -1801,6 +1813,14 @@ footer a:active {
     background: -moz-linear-gradient(top, #efefef, #eee);
     background: -webkit-linear-gradient(top, #efefef, #eee);
     background: linear-gradient(top, #efefef, #eee);
+}
+
+.btn.gray:active {
+    background: #ddd;
+    background: -moz-linear-gradient(top, #ddd, #eee);
+    background: -webkit-linear-gradient(top, #ddd, #eee);
+    background: linear-gradient(top, #ddd, #eee);
+    box-shadow: 0 -1px 0 rgba(170, 170, 170, 0.85);
 }
 
 .btn.red {
@@ -1817,8 +1837,8 @@ footer a:active {
     font-weight: bold;
     border-color: #a50c0c;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
-    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    -webkit-box-shadow: 0 1px 0 rgba(156, 35, 35, 0.75);
+    box-shadow: 0 1px 0 rgba(156, 35, 35, 1);
 
     font-size: 15px;
 }
@@ -1829,6 +1849,16 @@ footer a:active {
     background: -moz-linear-gradient(top, #f28989, #e53838);
     background: -webkit-linear-gradient(top, #f28989, #e53838);
     background: linear-gradient(top, #f28989, #e53838);
+}
+
+.btn.red:active {
+    color: #fff;
+    background: #f28989;
+    background: -moz-linear-gradient(top, #e53838, #f28989);
+    background: -webkit-linear-gradient(top, #e53838, #f28989);
+    background: linear-gradient(top, #e53838, #f28989);
+    -webkit-box-shadow: 0 -1px 0 rgba(156, 35, 35, 0.75);
+    box-shadow: 0 -1px 0 rgba(156, 35, 35, 0.9);
 }
 
 .delete-btn {
@@ -1854,6 +1884,13 @@ footer a:active {
     border-radius: 0px 4px 4px 0px !important;
     border-left: none;
     margin-left: 0 !important;
+}
+
+#additional-button {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0 0 1em;
 }
 
 /* =Map
