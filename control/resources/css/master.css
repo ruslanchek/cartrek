@@ -3799,6 +3799,14 @@ footer a:active {
     border: none;
 }
 
+.ui-datepicker table thead th:first-child {
+    
+}
+
+.ui-datepicker table thead th:first-child {
+
+}
+
 
 .ui-datepicker table span,
 .ui-datepicker table a {

@@ -80,6 +80,8 @@ Class FleetAdd extends Core
 
             $this->smarty->assign('new_device_data', $this->devices->getUserDevice($cs->id));
 
+            unset($_SESSION['new_car_data'], $_SESSION['code_approved']);
+
         } else {
             header('Location:/control/user/fleet/add/');
         }
@@ -139,7 +141,7 @@ Class FleetAdd extends Core
             $no_errors = false;
 
         }elseif($code == '014007892203'){
-            $form_errors->code = 'Nice try! :-)';
+            $form_errors->code = 'Хорошая попытка! :-)';
             $no_errors = false;
 
         } else {
