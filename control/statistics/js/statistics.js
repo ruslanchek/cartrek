@@ -193,17 +193,17 @@ var View = function () {
 
     /* Class constructor */
     this.__construct = function () {
-        this.bindDatepicker();
         this.bindViewModeSwithcher();
     };
 
-    this.bindDatepicker = function(){
+    this.bindDatepicker = function(date){
         $('#datepicker').datepicker({
             firstDay: 1,
             minDate: '-30d',
             maxDate: '+0d',
             prevText: 'Назад',
             nextText: 'Вперед',
+            defaultDate: date,
             dayNames: [ "Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" ],
             dayNamesMin: [ "Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб" ],
             dayNamesShort: [ "Вос", "Пон", "Вто", "Сре", "Чет", "Пят", "Суб" ],
@@ -398,6 +398,7 @@ var Data = function () {
     this.hardLoad = function () {
         this.setParamsFromHash();
         this.getUserFleetsAndDevices();
+        MC.View.bindDatepicker(this.date);
     };
 
     this.softLoad = function () {
