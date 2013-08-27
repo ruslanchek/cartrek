@@ -199,6 +199,7 @@ var View = function () {
     this.bindDatepicker = function(date){
         $('#datepicker').datepicker({
             firstDay: 1,
+            dateFormat: 'd MM, yy',
             minDate: '-30d',
             maxDate: '+0d',
             prevText: 'Назад',
@@ -210,6 +211,8 @@ var View = function () {
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
             monthNamesShort: [ "Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек" ]
         });
+
+        $('.ui-datepicker').append('<i class="dp-top-arrow"></i>');
     };
 
     this.bindViewModeSwithcher = function () {
