@@ -34,5 +34,5 @@
 <script src="{$core->module.dir}/js/{$core->module.name}.js"></script>
 
 <!--[if lt IE 9]>
-<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<script src="/control/resources/libs/html5.js"></script>
 <![endif]-->
