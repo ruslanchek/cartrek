@@ -1,0 +1,13 @@
+<VirtualHost *:80>
+    DocumentRoot /home/cartrek/www/dev.cartrek.ru
+    ServerName cartrek.ru
+
+    ServerAdmin admin@cartrek.ru
+
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule (/control/*) https://%{SERVER_NAME}%{REQUEST_URI}
+
+    ErrorLog /home/cartrek/www/logs/dev.cartrek.ru.a2error.log
+    CustomLog /home/cartrek/www/logs/dev.cartrek.ru.a2access.log common
+</VirtualHost>
