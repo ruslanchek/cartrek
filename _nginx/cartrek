@@ -1,0 +1,51 @@
+server {
+    listen       80;
+    server_name  www.cartrek.ru;
+    return       301 $scheme://cartrek.ru$request_uri;
+}
+
+server {
+	listen 80;
+	server_name cartrek.ru;
+	root /home/carerek/www/dev.cartrek.ru;
+
+	access_log /home/cartrek/www/logs/dev.cartrek.ru.nginx.access.log;
+	error_log /home/cartrek/www/logs/dev.cartrek.ru.nginx.error.log;
+
+	client_max_body_size 30M;
+
+	location /control {
+		if ( $scheme = "http" ) {
+		 	rewrite ^/(.*)$ https://$host/$1 permanent;
+		}
+	}
+	
+	location / {
+		proxy_pass http://127.0.0.1:8080;
+		expires           0;
+    	add_header        Cache-Control private;
+	}
+}
+
+server {
+	listen 443;
+
+	ssl         on;
+	ssl_protocols       SSLv3 TLSv1;
+	ssl_certificate     /etc/ssl/certs/cartrek_ru.crt;
+	ssl_certificate_key /etc/ssl/private/cartrek_ru.key;
+	
+	server_name cartrek.ru;
+	root /home/carerek/www/dev.cartrek.ru;
+
+	access_log /home/cartrek/www/logs/dev.cartrek.ru.nginx.SSL.access.log;
+	error_log /home/cartrek/www/logs/dev.cartrek.ru.nginx.SSL.error.log;
+
+	client_max_body_size 30M;
+	
+	location / {
+		proxy_pass http://127.0.0.1:8080;
+		expires           0;
+    	add_header        Cache-Control private;
+	}
+}
