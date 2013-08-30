@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
     <head>
         {include file="common/head.tpl"}
 
@@ -38,8 +38,6 @@
             </div>
         </div>
 
-        <footer>
-            {include file="common/footer.tpl"}
-        </footer>
+        {include file="common/footer.tpl"}
     </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
     <head>
         {include file="common/head.tpl"}
 
@@ -16,7 +16,7 @@
         <script src="/control/resources/mapping-tools/leaflet/plugins/proto/proto.js"></script>
         <script src="/control/resources/mapping-tools/leaflet/plugins/leaflet-fullscreen/Control.FullScreen.js"></script>
 
-        <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
+        <script src="https://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
         <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
         <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
 
@@ -40,8 +40,6 @@
             </div>
         </div>
 
-        <footer>
-            {include file="common/footer.tpl"}
-        </footer>
+        {include file="common/footer.tpl"}
     </body>
 </html>

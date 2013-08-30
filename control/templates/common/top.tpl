@@ -1,4 +1,4 @@
-<div class="top-panel">
+<header class="top-panel{if $core->module.name == 'map'} shadow{/if}">
     <div class="cont">
         <ul class="top-menu">
             <li><a href="#" class="popup-menu"></a></li>
@@ -40,6 +40,6 @@
     </div>
 
     <div class="global-loading-bar"></div>
-</div>
+</header>
 
 {*<i id="loading_indicator"><i></i></i>*}
