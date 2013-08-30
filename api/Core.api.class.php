@@ -111,6 +111,11 @@ Class Core
             $this->module['name'] != 'auth.remember_pass'
         ) {
             $return = '?return='.urlencode($_SERVER['REQUEST_URI']);
+
+            if($_SERVER['REQUEST_URI'] == '/control/' || $_SERVER['REQUEST_URI'] == '/control'){
+                $return = '';
+            }
+
             header('Location: /control/auth/login' . $return);
         }
     }
