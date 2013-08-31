@@ -1,24 +1,7 @@
-
 server {
-	listen 80;
-	
-	server_name cartrek.ru;
-	root /home/carerek/www/cartrek.ru;
-
-	access_log /home/cartrek/www/logs/cartrek.ru.nginx.access.log;
-	error_log /home/cartrek/www/logs/cartrek.ru.nginx.error.log;
-
-	client_max_body_size 30M;
-	
-	location / {
-		proxy_pass http://127.0.0.1:8080;
-	}
-
-	location /control {
-		if ( $scheme = "http" ) {
-		 	rewrite ^/(.*)$ https://$host/control/$2 permanent;
-		}
-	}
+	listen      80;
+    server_name cartrek.ru;
+    rewrite     ^ https://$server_name$request_uri? permanent;
 }
 
 server {
