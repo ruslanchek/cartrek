@@ -1,7 +1,23 @@
 server {
+	listen 80;
+	
+	server_name cartrek.ru;
+	root /home/cartrek/www/cartrek.ru;
+
+	access_log /home/cartrek/www/logs/cartrek.ru.nginx.SSL.access.log;
+	error_log /home/cartrek/www/logs/cartrek.ru.nginx.SSL.error.log;
+
+	client_max_body_size 30M;
+	
+	location /control {
+		proxy_pass 	http://127.0.0.1:8080;
+	}
+}
+
+server {
     listen       80;
-    server_name  www.cartrek.ru;
-    return       301 https://cartrek.ru$request_uri;
+    server_name  control.cartrek.ru;
+    return       301 https://control.cartrek.ru$request_uri;
 }
 
 server {
@@ -12,11 +28,11 @@ server {
 	ssl_certificate     /etc/ssl/certs/cartrek_ru.crt;
 	ssl_certificate_key /etc/ssl/private/cartrek_ru.key;
 	
-	server_name cartrek.ru;
-	root /home/carerek/www/dev.cartrek.ru;
+	server_name control.cartrek.ru;
+	root /home/carerek/www/control.cartrek.ru;
 
-	access_log /home/cartrek/www/logs/dev.cartrek.ru.nginx.SSL.access.log;
-	error_log /home/cartrek/www/logs/dev.cartrek.ru.nginx.SSL.error.log;
+	access_log /home/cartrek/www/logs/control.cartrek.ru.nginx.SSL.access.log;
+	error_log /home/cartrek/www/logs/control.cartrek.ru.nginx.SSL.error.log;
 
 	client_max_body_size 30M;
 	
@@ -27,6 +43,6 @@ server {
 	}
 
 	location / {
-		rewrite ^(/)(.*)$ https://cartrek.ru/control permanent;
+		rewrite ^(/)(.*)$ https://control.cartrek.ru/control permanent;
 	}
 }
