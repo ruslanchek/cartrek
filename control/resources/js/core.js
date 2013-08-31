@@ -1403,10 +1403,10 @@ core.ui = {
 
         $(selector).html(html);
 
-        $('select#' + options.id).coreUISelect({
-            jScrollPane: true,
-            onChange: function (e) {
-                options.onChange($(e[0]).val());
+        $('select#' + options.id).customSelector({
+            maxLines: 8,
+            onSelect: function (key, val) {
+                options.onChange(key);
             }
         });
     },

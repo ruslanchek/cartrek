@@ -10,7 +10,7 @@
 
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/meow/jquery.meow.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-core-ui-select/css/jquery.scrollpane.css" />
-<link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-core-ui-select/css/core-ui-select.css" />
+<link rel="stylesheet" type="text/css" href="/control/resources/plugins/select/jquery-select.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/slickswitch/css/slickswitch.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/intro.js-0.4.0/introjs.css" />
 
@@ -26,9 +26,9 @@
 
 <script src="/control/resources/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
 <script src="/control/resources/plugins/meow/jquery.meow.js"></script>
-<script src="/control/resources/plugins/jquery-core-ui-select/js/jquery.core-ui-select.js"></script>
-<script src="/control/resources/plugins/slickswitch/js/jquery.slickswitch.js" type="text/javascript"></script>
-<script src="/control/resources/plugins/intro.js-0.4.0/intro.js" type="text/javascript"></script>
+<script src="/control/resources/plugins/select/jquery-select.js"></script>
+<script src="/control/resources/plugins/slickswitch/js/jquery.slickswitch.js"></script>
+<script src="/control/resources/plugins/intro.js-0.4.0/intro.js"></script>
 
 <script src="/control/resources/js/core.js"></script>
 <script src="{$core->module.dir}/js/{$core->module.name}.js"></script>
