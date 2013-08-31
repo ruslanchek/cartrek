@@ -172,8 +172,7 @@ var user = {
                                 $('#submit-block').hide(150);
 
                                 user.phones.draw();
-
-                                setTimeout(function(){core.modal.destroyModal();}, 650);
+                                core.modal.destroyModal(false, 500);
                             }
                         }
                     },

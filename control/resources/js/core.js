@@ -1479,7 +1479,15 @@ core.modal = {
             classname = 'error';
         }
 
-        $('#modal_window.modal .message').addClass(classname).html(data.message).slideDown(100);
+        $('#modal_window.modal .message').addClass(classname).html(data.message).slideDown(150, function(){
+            if(classname == 'error'){
+                $('#modal_window.modal').addClass('shake');
+
+                setTimeout(function(){
+                    $('#modal_window.modal').removeClass('shake');
+                }, 500);
+            }
+        });
     },
 
     setLoading: function () {
@@ -1506,6 +1514,10 @@ core.modal = {
 
         $('body').prepend(this.prepareCode(header, html, permanent));
 
+        setTimeout(function(){
+            $('.modal').addClass('open-animation');
+        }, 100);
+
         $('#modal_window.modal .message').on('click', function () {
             that.unSetMessage();
         });
@@ -1528,12 +1540,12 @@ core.modal = {
 
         if (permanent !== true) {
             $('#modal_closer').on('click', function () {
-                that.destroyModal();
+                that.destroyModal(false);
             });
 
             $('body').on('keyup', function (e) {
                 if (e.keyCode == 27) {
-                    that.destroyModal();
+                    that.destroyModal(false);
                 }
             });
         }
@@ -1541,8 +1553,16 @@ core.modal = {
         this.modal_created = true;
     },
 
-    destroyModal: function (instant) {
-        console.trace();
+    destroyModal: function (instant, timeout) {
+        timeout = parseInt(timeout);
+
+        if(timeout > 0){
+            setTimeout(function(){
+                core.modal.destroyModal(instant, 0);
+            }, timeout)
+
+            return;
+        }
 
         if (this.modal_created === true) {
             $(window).off('resize');
@@ -1555,7 +1575,8 @@ core.modal = {
             if (instant === true) {
                 $('#modal_window.modal, #fs_overlay.modal').remove();
             } else {
-                $('#modal_window.modal, #fs_overlay.modal').fadeOut(200, function () {
+                $('#modal_window.modal').addClass('close-animation');
+                $('#modal_window.modal, #fs_overlay.modal').fadeOut(250, function () {
                     $('#modal_window.modal, #fs_overlay.modal').remove();
                 });
             }
@@ -1722,12 +1743,17 @@ core.events_api = {
 core.warning = {
     show: function (header, notice, icon_class) {
         if (core.ajax.unbeakable_error !== true) {
+            $('.warn-modal').remove();
+
             var html = '<i class="icon-64 ' + icon_class + '"></i>' +
                 '<span class="header">' + header + '</span>' +
                 '<span class="notice">' + notice + '</span>';
 
             $('body').prepend('<div class="warn-modal"><div class="warn-modal-inner">' + html + '</div></div>');
-            $('.warn-modal').fadeIn(200);
+
+            setTimeout(function(){
+                $('.warn-modal-inner').addClass('open-animation');
+            }, 100);
 
             $('.warn-modal-inner').css({
                 marginTop: -$('.warn-modal-inner').height() / 2 - 10
@@ -1737,7 +1763,8 @@ core.warning = {
 
     hide: function () {
         if (core.ajax.unbeakable_error !== true) {
-            $('.warn-modal').fadeOut(100, function () {
+            $('.warn-modal-inner').addClass('close-animation');
+            $('.warn-modal').fadeOut(250, function () {
                 $('.warn-modal').remove();
             });
         }

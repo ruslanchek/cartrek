@@ -18,7 +18,7 @@ Class Sms extends Core
 
     public function send($phones, $message)
     {
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/proto/Sms.proto.php';
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/proto/Sms.proto.class.php';
 
         $api = new LittleSMS($this->user, $this->key, $this->ssl);
 

@@ -38,6 +38,11 @@
 </div>*}
 
 <div class="map-container map-observer" data-step='2' data-intro='Карта'>
+    <div class="map-tools-top-right">
+        <div id="fleets-menu"></div>
+        <div id="cars-menu"></div>
+    </div>
+
     <div id="map"></div>
 
     <div id="player">

@@ -27,7 +27,7 @@ var user_groups = {
 
                 if (data.status === true) {
                     core.modal.setMessage(data);
-                    core.modal.destroyModal();
+                    core.modal.destroyModal(false, 500);
 
                     var html = '<tr class="group-row" rel="' + data.data.id + '">' +
                         '<td><strong><a rel="' + data.data.id + '" class="group-edit" href="#" data-id="' + data.data.id + '" data-name="' + data.data.name + '">' + data.data.name + '</a></strong></td>' +

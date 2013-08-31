@@ -17,12 +17,12 @@ var View = function () {
         var speed;
 
         if (animation === true) {
-            speed = 150;
+            speed = 250;
         } else {
             speed = 0;
         }
 
-        $('.map-notice').fadeOut(speed, function () {
+        $('.map-notice').addClass('close-animation').fadeOut(speed, function () {
             $('.map-notice').remove();
         });
     };
@@ -47,7 +47,7 @@ var View = function () {
         });
 
         setTimeout(function(){
-            $('.map-container .map-notice').addClass('map-notice-ready');
+            $('.map-container .map-notice').addClass('open-animation');
         }, 100);
 
         $('#hide-map-notice').on('click', function () {
