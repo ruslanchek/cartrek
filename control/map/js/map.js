@@ -5,6 +5,7 @@
  **/
 var View = function () {
     this.zoomed_on_car = false;
+    this.no_points_message = false;
 
     /* Class constructor */
     this.__construct = function () {
@@ -26,12 +27,18 @@ var View = function () {
         });
     };
 
-    this.showMapMessage = function (message) {
+    this.showMapMessage = function (options) {
         $('.map-container .map-notice').remove();
 
-        message = '<i class="icon-64 warning"></i>' + message;
+        var message = '',
+            icon = 'warning';
 
-        //message += '<a id="hide-map-notice" href="javascript:void(0)" class="btn">Закрыть</a>';
+        if(options.icon){
+            icon = options.icon;
+        }
+
+        message = '<i class="icon-64 ' + icon + '"></i><p>' + options.message + '</p>';
+        message += '<a id="hide-map-notice" href="javascript:void(0)" class="btn">Закрыть</a>';
 
         $('.map-container').append('<div class="map-notice"><div class="mn-inner">' + message + '</div></div>');
 
@@ -39,8 +46,12 @@ var View = function () {
             marginTop: -$('.map-container .map-notice').height() / 2
         });
 
+        setTimeout(function(){
+            $('.map-container .map-notice').addClass('map-notice-ready');
+        }, 100);
+
         $('#hide-map-notice').on('click', function () {
-            MC.View.hideMapMessage();
+            MC.View.hideMapMessage(true);
         });
     };
 
@@ -355,7 +366,7 @@ var View = function () {
 
                 // Otherwise focus to map defaults
             } else {
-                MC.Map.returnToRoots();
+                //MC.Map.returnToRoots();
             }
 
             // Process focus scenery for single car on a map but if selected all
@@ -427,6 +438,7 @@ var Data = function () {
     /* Hard load - is cars and fleets data loader with binds starter methods */
     this.hardLoad = function () {
         MC.View.zoomed_on_car = false;
+        MC.View.no_points_message = false;
 
         this.readOptionsFromCookies();
         this.setParamsFromHash();
@@ -437,6 +449,7 @@ var Data = function () {
     /* Soft load - binds starter methods without cars and fleets data loader */
     this.softLoad = function () {
         MC.View.zoomed_on_car = false;
+        MC.View.no_points_message = false;
 
         this.readOptionsFromCookies();
         this.setParamsFromHash();
@@ -562,7 +575,10 @@ var Data = function () {
 
             if (!this.current_car) {
                 this.car = 'all';
-                MC.View.showMapMessage('Ошибка, машины с ID ' + this.car + ' не существует!');
+                MC.View.showMapMessage({
+                    icon: 'warning',
+                    message: 'Ошибка, машины с ID ' + this.car + ' не существует!'
+                });
             }
         }
 
@@ -571,7 +587,10 @@ var Data = function () {
 
             if (!this.current_fleet) {
                 this.fleet = 'all';
-                MC.View.showMapMessage('Ошибка, группы с ID ' + this.fleet + ' не существует!');
+                MC.View.showMapMessage({
+                    icon: 'warning',
+                    message: 'Ошибка, группы с ID ' + this.fleet + ' не существует!'
+                });
             }
         }
     };
@@ -641,7 +660,7 @@ var Data = function () {
     };
 
     this.presenceStatusAndMessages = function () {
-        MC.View.hideMapMessage();
+        //MC.View.hideMapMessage(false);
 
         if (this.cars_on_map < 1) {
             var day, message = false;
@@ -697,9 +716,14 @@ var Data = function () {
                     '<a href="' + hash + '">' + core.utilities.humanizeDateTime(this.current_car.params.last_point_date, false) + '</a>';
             }
 
-            if (message) {
-                MC.View.hideMapMessage();
-                MC.View.showMapMessage(message);
+            if (message && MC.View.no_points_message === false) {
+                MC.View.no_points_message = true;
+
+                MC.View.hideMapMessage(false);
+                MC.View.showMapMessage({
+                    icon: 'warning',
+                    message: message
+                });
             }
         }
     }
