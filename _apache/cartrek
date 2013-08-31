@@ -1,14 +1,4 @@
 <VirtualHost *:8080>
-    DocumentRoot /home/cartrek/www/control.cartrek.ru
-    ServerName control.cartrek.ru
-
-    ServerAdmin admin@cartrek.ru
-
-    ErrorLog /home/cartrek/www/logs/control.cartrek.ru.a2.error.log
-    CustomLog /home/cartrek/www/logs/control.cartrek.ru.a2.access.log common
-</VirtualHost>
-
-<VirtualHost *:8080>
     DocumentRoot /home/cartrek/www/cartrek.ru
     ServerName cartrek.ru
 
