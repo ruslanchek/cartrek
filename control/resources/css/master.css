@@ -401,7 +401,7 @@ footer {
 
 .top-panel .top-user-menu {
     position: absolute;
-    right: 20px;
+    right: 0;
     top: 50%;
     margin-top: -14px;
     height: 28px;
@@ -1952,12 +1952,10 @@ footer a:active {
     height: 100% !important;
 }
 
-.leaflet-control-zoom-fullscreen {
-    background-image: url(../mapping-tools/leaflet/plugins/leaflet-fullscreen/icon-fullscreen.png);
-}
-
-.leaflet-control-zoom-fullscreen.last {
-
+.map-tools-top-right {
+    position: absolute;
+    top: 20px;
+    right: 20px;
 }
 
 .map-observer.map-container {
@@ -1976,6 +1974,28 @@ footer a:active {
     display: inline-block;
     position: absolute;
     bottom: 1px;
+}
+
+
+/* Leaflet */
+.leaflet-control-zoom-fullscreen {
+    background-image: url(../mapping-tools/leaflet/plugins/leaflet-fullscreen/icon-fullscreen.png);
+}
+
+.leaflet-control-zoom-fullscreen.last {
+
+}
+
+.leaflet-control a {
+    color: #3C4E5A !important;
+}
+
+.leaflet-control a:hover {
+    color: #5c738c !important;
+}
+
+.leaflet-control-zoom-fullscreen {
+
 }
 
 .leaflet-control-attribution {

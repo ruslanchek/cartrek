@@ -14,6 +14,8 @@ var View = function () {
 
     /* Methods */
     this.hideMapMessage = function (animation) {
+        var d = $.Deferred();
+
         var speed;
 
         if (animation === true) {
@@ -23,11 +25,16 @@ var View = function () {
         }
 
         $('.map-notice').addClass('close-animation').fadeOut(speed, function () {
+            MC.View.map_notice_deferred.resolve();
             $('.map-notice').remove();
         });
+
+        return d;
     };
 
     this.showMapMessage = function (options) {
+        var d = $.Deferred();
+
         $('.map-container .map-notice').remove();
 
         var message = '',
@@ -53,6 +60,8 @@ var View = function () {
         $('#hide-map-notice').on('click', function () {
             MC.View.hideMapMessage(true);
         });
+
+        return d;
     };
 
     /* Set header texts */
@@ -439,6 +448,7 @@ var Data = function () {
     this.hardLoad = function () {
         MC.View.zoomed_on_car = false;
         MC.View.no_points_message = false;
+        MC.View.hideMapMessage(false);
 
         this.readOptionsFromCookies();
         this.setParamsFromHash();
@@ -450,6 +460,7 @@ var Data = function () {
     this.softLoad = function () {
         MC.View.zoomed_on_car = false;
         MC.View.no_points_message = false;
+        MC.View.hideMapMessage(false);
 
         this.readOptionsFromCookies();
         this.setParamsFromHash();
