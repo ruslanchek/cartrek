@@ -935,12 +935,6 @@ a.badge:active {
     border-bottom: 1px solid #ddd;
 }
 
-.h-panel #fleets-menu,
-.h-panel #cars-menu {
-    margin-bottom: 0;
-    margin-left: 10px;
-}
-
 .h-panel .btn {
     padding-top: 6px;
     padding-bottom: 6px;
@@ -1356,7 +1350,11 @@ footer a:active {
     height: 1.9em;
     line-height: 2.05em;
     text-transform: uppercase;
-    letter-spacing: 0.14ex;
+    letter-spacing: 0.16ex;
+}
+
+.g_id.small .id {
+    font-size: 1em;
 }
 
 .g_id .region {
@@ -1956,13 +1954,68 @@ footer a:active {
     position: absolute;
     top: 20px;
     right: 20px;
+    z-index: 5;
+    opacity: 0.9;
+    width: 900px;
 }
+
+.map-tools-top-right .arrow-separator {
+    background: url(../img/sprite.png) -156px -161px;
+    display: block;
+    position: relative;
+    top: 2px;
+    width: 18px;
+    margin: 0 8px;
+    height: 24px;
+    z-index: 2;
+    opacity: 0.9;
+    float: right;
+}
+
+.map-tools-top-right #date-menu {
+    background: #fff;
+    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    height: 27px;
+
+    width: 210px;
+    position: relative;
+    float: right;
+    top: 0;
+}
+
+.map-tools-top-right #date-menu input {
+    font-family: "PT Sans";
+    line-height: 27px;
+    height: 27px;
+    border: none;
+    width: 210px;
+    background: none;
+    padding: 0;
+    -webkit-border-radius: 2px;
+        border-radius: 2px;
+    text-align: center;
+    font-size: 15px !important;
+    -webkit-border-radius: 2px !important;
+    border-radius: 2px !important;
+}
+
+.map-tools-top-right #fleets-menu,
+.map-tools-top-right #cars-menu {
+    top: 0;
+    position: relative;
+    float: right;
+}
+
 
 .map-observer.map-container {
     position: absolute;
     left: 0;
     top: 46px;
     width: 100%;
+    min-width: 1080px;
 }
 
 /* Map misc */
@@ -1976,11 +2029,91 @@ footer a:active {
     bottom: 1px;
 }
 
+.g_id-spacer {
+    width: 16.5ex;
+    font-size: 13px;
+    display: inline-block;
+}
+
+
 
 /* Leaflet */
-.leaflet-control-zoom-fullscreen {
-    background-image: url(../mapping-tools/leaflet/plugins/leaflet-fullscreen/icon-fullscreen.png);
+.leaflet-control-container {
+    opacity: 0.9;
 }
+
+.leaflet-control-locate a {
+    background-image: url(../img/map-controls.png) !important;
+    background-position: 0 0 !important;
+}
+
+.leaflet-control-locate a:hover {
+    background-position: -26px 0 !important;
+}
+
+.leaflet-control-locate.requesting a {
+    background-position: -52px 0 !important;
+    cursor: default;
+}
+
+.leaflet-control-locate.active a {
+    background-position: -78px 0 !important;
+}
+
+
+.leaflet-control-zoom-fullscreen {
+    background-image: url(../img/map-controls.png) !important;
+    background-position: 0 -26px !important;
+}
+
+.leaflet-control-zoom-fullscreen:hover {
+    background-position: -26px -26px !important;
+}
+
+
+.leaflet-draw-draw-polygon {
+    background-image: url(../img/map-controls.png) !important;
+    background-position: 0 -52px !important;
+}
+
+.leaflet-draw-draw-polygon:hover {
+    background-position: -26px -52px !important;
+}
+
+
+.leaflet-draw-edit-edit {
+    background-image: url(../img/map-controls.png) !important;
+    background-position: 0 -78px !important;
+}
+
+.leaflet-draw-edit-edit:hover {
+    background-position: -26px -78px !important;
+}
+
+
+.leaflet-control-zoom-in {
+    text-indent: -99999px;
+    background-image: url(../img/map-controls.png) !important;
+    background-position: 0 -104px !important;
+}
+
+.leaflet-control-zoom-in:hover {
+    background-position: -26px -104px !important;
+}
+
+
+
+.leaflet-control-zoom-out {
+    text-indent: -99999px;
+    background-image: url(../img/map-controls.png) !important;
+    background-position: 0 -130px !important;
+}
+
+.leaflet-control-zoom-out:hover {
+    background-position: -26px -130px !important;
+}
+
+
 
 .leaflet-control-zoom-fullscreen.last {
 
@@ -1999,11 +2132,30 @@ footer a:active {
 }
 
 .leaflet-control-attribution {
-    margin: 0 10px 10px 0 !important;
     -webkit-border-radius: 2px;
     border-radius: 2px;
     padding: 3px 5px !important;
     display: block;
+}
+
+.map-observer .leaflet-control-attribution {
+    margin: 0 20px 20px 0 !important;
+}
+
+.map-geozones .leaflet-control-attribution {
+    margin: 0 10px 10px 0 !important;
+}
+
+.map-observer .leaflet-control-scale {
+    margin-bottom: 20px !important;
+    margin-left: 20px !important;
+}
+
+
+
+.map-geozones .leaflet-control-scale {
+    margin-bottom: 10px !important;
+    margin-left: 10px !important;
 }
 
 .leaflet-bar {
@@ -2026,10 +2178,37 @@ footer a:active {
     border-radius: 2px !important;
 }
 
-.g_id-spacer {
-    width: 16.5ex;
-    font-size: 13px;
-    display: inline-block;
+.leaflet-control-scale-line {
+    border-color: #3C4E5A !important;
+    font-family: inherit !important;
+    color: #3C4E5A !important;
+    text-shadow: none !important;
+    font-weight: bold;
+    line-height: 14px !important;
+    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3) !important;
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3) !important;
+}
+
+.leaflet-draw-actions {
+    left: 25px;
+    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3) !important;
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3) !important;
+    -webkit-border-radius: 0px 2px 2px 0px !important;
+            border-radius: 0px 2px 2px 0px !important;
+}
+
+.leaflet-draw-actions a {
+    background: #fff !important;
+}
+
+.leaflet-draw-actions a:hover {
+    background: #eee !important;
+}
+
+.leaflet-draw-section .leaflet-draw-toolbar.leaflet-bar .leaflet-draw-toolbar-button-enabled {
+    background-color: #eee !important;
+    -webkit-border-radius: 2px 0 0 2px !important;
+            border-radius: 2px 0 0 2px !important;
 }
 
 
@@ -2048,6 +2227,8 @@ footer a:active {
     border-radius: 3px;
     text-align: center;
 
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+
     -webkit-transform: scale(0);
     -moz-transform: scale(0);
     -o-transform: scale(0);
@@ -2063,27 +2244,6 @@ footer a:active {
 }
 
 /* Map top panel */
-.map-top-panel {
-    margin-bottom: 1em;
-}
-
-.map-instruments {
-    margin-bottom: 5px;
-}
-
-.map-instruments .btn-icon {
-    padding: 5px 6px;
-}
-
-#fleets-menu {
-    margin-bottom: 1em;
-    margin-right: 4px;
-}
-
-#cars-menu {
-    margin-right: 4px;
-}
-
 #togglers {
     height: 21px;
     margin-top: 4px;
@@ -3434,7 +3594,7 @@ footer a:active {
     z-index: 2999;
     background: #eee;
     padding: 15px 30px;
-    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
     text-align: center;
 
     -webkit-transform: scale(0);
@@ -3458,9 +3618,12 @@ footer a:active {
 }
 
 .warn-modal .notice {
-    font-size: 0.9em;
     display: block;
     line-height: 1.3em;
+}
+
+.warn-modal .icon-64 {
+    margin: 0 auto 0.75em;
 }
 
 /* Modal */
@@ -3725,27 +3888,31 @@ footer a:active {
     margin-left: 2%;
     margin-bottom: 18px;
     float: left;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
 }
 
 .dispatcher .item {
-    border: 3px solid #e5e5e5;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
     background: #f6f6f6 url(../img/pattern_white.png);
     position: relative;
     opacity: 0;
+
+    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
 
     -webkit-transition: -webkit-transform 450ms;
     -moz-transition: -moz-transform 450ms;
     -o-transition: -o-transform 450ms;
     transition: transform 450ms;
+
     -webkit-transform-style: preserve-3d;
     -moz-transform-style: preserve-3d;
     -o-transform-style: preserve-3d;
     transform-style: preserve-3d;
+
     -webkit-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
     -moz-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
     -o-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);

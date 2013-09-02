@@ -198,8 +198,17 @@ var View = function () {
 
     this.bindDatepicker = function(date){
         $('#datepicker').datepicker({
+            beforeShow: function(){
+                var interval = setInterval(function(){
+                    if( $('.ui-datepicker').find('.dp-top-arrow').length <= 0){
+                        $('.ui-datepicker').append('<i class="dp-top-arrow"></i>');
+                    }else{
+                        clearInterval(interval);
+                    }
+                }, 5);
+            },
             firstDay: 1,
-            dateFormat: 'd MM, yy',
+            dateFormat: 'd M, yy',
             minDate: '-30d',
             maxDate: '+0d',
             prevText: 'Назад',
@@ -209,10 +218,8 @@ var View = function () {
             dayNamesMin: [ "Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб" ],
             dayNamesShort: [ "Вос", "Пон", "Вто", "Сре", "Чет", "Пят", "Суб" ],
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
-            monthNamesShort: [ "Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек" ]
+            monthNamesShort: [ "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря" ]
         });
-
-        $('.ui-datepicker').append('<i class="dp-top-arrow"></i>');
     };
 
     this.bindViewModeSwithcher = function () {

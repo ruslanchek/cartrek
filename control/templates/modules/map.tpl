@@ -39,8 +39,15 @@
 
 <div class="map-container map-observer" data-step='2' data-intro='Карта'>
     <div class="map-tools-top-right">
-        <div id="fleets-menu"></div>
         <div id="cars-menu"></div>
+
+        <i class="arrow-separator"></i>
+        <div id="fleets-menu"></div>
+
+        <i class="arrow-separator"></i>
+        <div id="date-menu">
+            <input type="datetime" id="datepicker" />
+        </div>
     </div>
 
     <div id="map"></div>

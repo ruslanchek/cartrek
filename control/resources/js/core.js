@@ -23,7 +23,7 @@ core.ajax = {
                         '<em>Это могло произойти, если закончилось время сессии. Или если кто-то авторизовался в Картреке под вашем логином в другом браузере или на другом компьютере.</em>';
 
                     core.warning.show(
-                        'Сбой авторизации',
+                        'Сессия авторизации завершена',
                         html,
                         'error'
                     );
@@ -241,11 +241,17 @@ core.loading = {
             $('div.global-loading-bar').animate({
                 height: 0,
                 opacity: 0
-            }, 200, 'easeOutQuad', function () {
-                core.loading.c = 0;
+            }, {
+                duration: 200,
+                specialEasing: {
+                    height: 'easeInQuart'
+                },
+                complete: function(){
+                    core.loading.c = 0;
 
-                if (core.loading.global_loading_interval) {
-                    clearInterval(core.loading.global_loading_interval);
+                    if (core.loading.global_loading_interval) {
+                        clearInterval(core.loading.global_loading_interval);
+                    }
                 }
             });
         }, 650);
@@ -264,13 +270,18 @@ core.loading = {
 
         this.global_loading_interval = setInterval(function () {
             core.loading.c += 2;
-            $('div.global-loading-bar').css("backgroundPosition", "0 " + core.loading.c + "px");
-        }, 8);
+            $('div.global-loading-bar').css("backgroundPosition", core.loading.c + "px 0");
+        }, 9);
 
         $('div.global-loading-bar').animate({
             height: 5,
             opacity: 1
-        }, 200, 'easeInQuad');
+        }, {
+            duration: 200,
+            specialEasing: {
+                height: 'easeOutQuart'
+            }
+        });
     }
 };
 
@@ -480,7 +491,7 @@ core.utilities = {
         }
     },
 
-// TODO: Попробовать заменить везде core.utilities.pad() вместо этого метода (или наоборот лучше даже)
+    // TODO: Попробовать заменить везде core.utilities.pad() вместо этого метода (или наоборот лучше даже)
     leadingZero: function (value, length) {
         var s = value + "";
         while (s.length < length) s = "0" + s;
@@ -1403,12 +1414,21 @@ core.ui = {
 
         $(selector).html(html);
 
-        $('select#' + options.id).customSelector({
-            maxLines: 8,
-            onSelect: function (key, val) {
-                options.onChange(key);
-            }
-        });
+        if(options.type == 'customSelector'){
+            $('select#' + options.id).customSelector({
+                maxLines: 8,
+                onSelect: function (key, val) {
+                    options.onChange(key);
+                }
+            });
+        }else{
+            $('select#' + options.id).coreUISelect({
+                jScrollPane: true,
+                onChange: function (e) {
+                    options.onChange($(e[0]).val());
+                }
+            });
+        }
     },
 
     init: function () {
@@ -1526,15 +1546,15 @@ core.modal = {
         this.setModalPosition();
         this.createOverlay();
 
-        $(window).on('resize', function () {
+        $(window).on('resize.modal', function () {
             that.setModalPosition();
         });
 
-        $(document).on('scroll', function () {
+        $(document).on('scroll.modal', function () {
             that.setModalPosition();
         });
 
-        $('body').on('scroll', function () {
+        $('body').on('scroll.modal', function () {
             that.setModalPosition();
         });
 
@@ -1543,7 +1563,7 @@ core.modal = {
                 that.destroyModal(false);
             });
 
-            $('body').on('keyup', function (e) {
+            $('body').on('keyup.modal', function (e) {
                 if (e.keyCode == 27) {
                     that.destroyModal(false);
                 }
@@ -1565,12 +1585,12 @@ core.modal = {
         }
 
         if (this.modal_created === true) {
-            $(window).off('resize');
-            $(document).off('scroll');
+            $(window).off('resize.modal');
+            $(document).off('scroll.modal');
 
             $('#modal_closer').off('click');
-            $('body').off('scroll');
-            $('body').off('keyup');
+            $('body').off('scroll.modal');
+            $('body').off('keyup.modal');
 
             if (instant === true) {
                 $('#modal_window.modal, #fs_overlay.modal').remove();
@@ -1745,9 +1765,9 @@ core.warning = {
         if (core.ajax.unbeakable_error !== true) {
             $('.warn-modal').remove();
 
-            var html = '<i class="icon-64 ' + icon_class + '"></i>' +
-                '<span class="header">' + header + '</span>' +
-                '<span class="notice">' + notice + '</span>';
+            var html =  '<i class="icon-64 ' + icon_class + '"></i>' +
+                        '<span class="header">' + header + '</span>' +
+                        '<span class="notice">' + notice + '</span>';
 
             $('body').prepend('<div class="warn-modal"><div class="warn-modal-inner">' + html + '</div></div>');
 

@@ -14,8 +14,6 @@ var View = function () {
 
     /* Methods */
     this.hideMapMessage = function (animation) {
-        var d = $.Deferred();
-
         var speed;
 
         if (animation === true) {
@@ -25,16 +23,39 @@ var View = function () {
         }
 
         $('.map-notice').addClass('close-animation').fadeOut(speed, function () {
-            MC.View.map_notice_deferred.resolve();
             $('.map-notice').remove();
         });
 
-        return d;
+        $('body').off('keyup.showMapMessage');
+    };
+
+    this.bindDatepicker = function(date){
+        $('#datepicker').datepicker({
+            beforeShow: function(){
+                var interval = setInterval(function(){
+                    if( $('.ui-datepicker').find('.dp-top-arrow').length <= 0){
+                        $('.ui-datepicker').append('<i class="dp-top-arrow"></i>');
+                    }else{
+                        clearInterval(interval);
+                    }
+                }, 5);
+            },
+            firstDay: 1,
+            dateFormat: 'd M, yy',
+            minDate: '-30d',
+            maxDate: '+0d',
+            prevText: 'Назад',
+            nextText: 'Вперед',
+            defaultDate: date,
+            dayNames: [ "Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота" ],
+            dayNamesMin: [ "Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб" ],
+            dayNamesShort: [ "Вос", "Пон", "Вто", "Сре", "Чет", "Пят", "Суб" ],
+            monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
+            monthNamesShort: [ "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря" ]
+        });
     };
 
     this.showMapMessage = function (options) {
-        var d = $.Deferred();
-
         $('.map-container .map-notice').remove();
 
         var message = '',
@@ -61,7 +82,11 @@ var View = function () {
             MC.View.hideMapMessage(true);
         });
 
-        return d;
+        $('body').off('keyup.showMapMessage').on('keyup.showMapMessage', function(e){
+            if(e.keyCode == 27){
+                MC.View.hideMapMessage(true);
+            }
+        });
     };
 
     /* Set header texts */
@@ -69,7 +94,7 @@ var View = function () {
         var html = '',
             hash = core.ui.getHashData();
 
-        if (hash && hash.timemachine) {
+        if (hash && hash.timemachine) {r
             html += '<span class="header-timemeachine"> / ' + core.utilities.humanizeDate(core.utilities.parseDateStrToDateOdject(hash.timemachine)) + '</span>';
         }
 
@@ -125,6 +150,7 @@ var View = function () {
         }
 
         core.ui.createSelect('#cars-menu', {
+            type: 'customSelector',
             id: 'cars-menu-select',
             default_opt: {
                 val: 'all',
@@ -149,6 +175,7 @@ var View = function () {
 
         //Groups select
         core.ui.createSelect('#fleets-menu', {
+            type: 'customSelector',
             id: 'fleets-menu-select',
             default_opt: {
                 val: 'all',
@@ -454,6 +481,8 @@ var Data = function () {
         this.setParamsFromHash();
         MC.View.bindMapOptionsController(true);
         this.getUserFleetsAndDevices();
+
+        MC.View.bindDatepicker(this.date);
     };
 
     /* Soft load - binds starter methods without cars and fleets data loader */
