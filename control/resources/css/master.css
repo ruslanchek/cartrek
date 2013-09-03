@@ -270,7 +270,7 @@ a.black-link:hover {
 -----------------------------------------------------------------------------*/
 html, body {
     height: 100%;
-    min-width: 1080px;
+    min-width: 1080px !important;
 }
 
 .cont {
@@ -1955,13 +1955,17 @@ footer a:active {
     top: 20px;
     right: 20px;
     z-index: 5;
-    opacity: 0.9;
     width: 900px;
+}
+
+.map-tools-top-right.init {
+    transform: translate(1000px);
+    -moz-transform: translate(1000px);
+    -webkit-transform: translate(1000px);
 }
 
 .map-tools-top-right .arrow-separator {
     background: url(../img/sprite.png) -156px -161px;
-    display: block;
     position: relative;
     top: 2px;
     width: 18px;
@@ -1979,21 +1983,53 @@ footer a:active {
     -webkit-border-radius: 2px;
     border-radius: 2px;
     height: 27px;
-
     width: 210px;
     position: relative;
     float: right;
     top: 0;
 }
 
-.map-tools-top-right #date-menu input {
-    font-family: "PT Sans";
+.map-tools-top-right #date-menu,
+.map-tools-top-right #date-menu * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.map-tools-top-right #date-menu .icon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 5px;
+    left: 6px;
+    background: url(../img/sprite.png);
+}
+
+.map-tools-top-right #date-menu.active .icon,
+.map-tools-top-right #date-menu:hover .icon {
+    opacity: 0.8;
+}
+
+.map-tools-top-right #date-menu .icon.calendar {
+    background-position: -198px -166px;
+}
+
+.map-tools-top-right #date-menu .icon.timemachine {
+    background-position: -176px -166px;
+}
+
+.map-tools-top-right #date-menu {
+    cursor: pointer;
+    background: #fff;
     line-height: 27px;
     height: 27px;
-    border: none;
     width: 210px;
-    background: none;
-    padding: 0;
+    display: block;
+    padding: 0 0;
     -webkit-border-radius: 2px;
         border-radius: 2px;
     text-align: center;
@@ -2002,13 +2038,54 @@ footer a:active {
     border-radius: 2px !important;
 }
 
+.map-tools-top-right #date-menu:hover,
+.map-tools-top-right #date-menu.active {
+    box-shadow: 0 0 0 2px rgba(70, 161, 231, 0.3);
+    color: #5c738c !important;
+}
+
+.datepicker {
+    position: absolute;
+    width: 260px;
+    left: 50%;
+    top: 40px;
+    margin: 0 0 0 -128px;
+    display: none;
+}
+
+.datepicker .dp-top-arrow {
+    background: url(../img/sprite.png) -112px -165px;
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    display: block;
+    left: 50%;
+    top: -19px;
+    margin: 0 0 0 -20px;
+}
+
 .map-tools-top-right #fleets-menu,
-.map-tools-top-right #cars-menu {
-    top: 0;
+.map-tools-top-right #cars-menu,
+.map-tools-top-right .arrow-separator {
     position: relative;
     float: right;
 }
 
+.map-tools-info-block {
+    position: absolute;
+    background: #fff;
+    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    width: 230px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+
+#current-info {
+    padding: 10px 0;
+    top: 45px;
+    right: 0;
+}
 
 .map-observer.map-container {
     position: absolute;
@@ -2016,6 +2093,7 @@ footer a:active {
     top: 46px;
     width: 100%;
     min-width: 1080px;
+    overflow: hidden;
 }
 
 /* Map misc */
@@ -2039,7 +2117,7 @@ footer a:active {
 
 /* Leaflet */
 .leaflet-control-container {
-    opacity: 0.9;
+
 }
 
 .leaflet-control-locate a {
@@ -2867,6 +2945,22 @@ footer a:active {
 
 /* =Animations
 -----------------------------------------------------------------------------*/
+.slide-animation {
+    -webkit-transition: all 650ms cubic-bezier(0.390, 0.575, 0.000, 1); /* older webkit */
+    -webkit-transition: all 650ms cubic-bezier(0.390, 0.575, 0.000, 1.005);
+    -moz-transition: all 650ms cubic-bezier(0.390, 0.575, 0.000, 1.005);
+    -ms-transition: all 650ms cubic-bezier(0.390, 0.575, 0.000, 1.005);
+    -o-transition: all 650ms cubic-bezier(0.390, 0.575, 0.000, 1.005);
+    transition: all 650ms cubic-bezier(0.390, 0.575, 0.000, 1.005); /* custom */
+
+    -webkit-transition-timing-function: cubic-bezier(0.390, 0.575, 0.000, 1); /* older webkit */
+    -webkit-transition-timing-function: cubic-bezier(0.390, 0.575, 0.000, 1.005);
+    -moz-transition-timing-function: cubic-bezier(0.390, 0.575, 0.000, 1.005);
+    -ms-transition-timing-function: cubic-bezier(0.390, 0.575, 0.000, 1.005);
+    -o-transition-timing-function: cubic-bezier(0.390, 0.575, 0.000, 1.005);
+    transition-timing-function: cubic-bezier(0.390, 0.575, 0.000, 1.005); /* custom */
+}
+
 .open-animation {
     -webkit-transition: -webkit-transform 250ms cubic-bezier(0.175, 0.885, 0.340, 1); /* older webkit */
     -webkit-transition: -webkit-transform 250ms cubic-bezier(0.175, 0.885, 0.340, 1.330);
@@ -4113,28 +4207,26 @@ footer a:active {
 
 
 /* Datepicker */
-.ui-datepicker {
+.ui-datepicker-trigger {
     display: none;
-    padding: 5px 0;
+}
+
+#ui-datepicker-div {
+    display: none;
+}
+
+div.ui-datepicker {
+    padding: 5px 0 0;
     background: #fff;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 3px;
-    -webkit-box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.15);
-    box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.15);
-    margin-top: 25px !important;
-    margin-left: -50px;
+    -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
 }
 
-.ui-datepicker .dp-top-arrow {
-    background: url(../img/sprite.png) -112px -165px;
-    position: absolute;
-    width: 40px;
-    height: 20px;
-    display: block;
-    left: 50%;
-    top: -20px;
-    margin: 0 0 0 -20px;
+div.ui-datepicker * {
+    font-size: 15px;
 }
 
 .ui-datepicker table {
@@ -4143,8 +4235,13 @@ footer a:active {
 
 .ui-datepicker table th,
 .ui-datepicker table td {
-    padding: 2px 3px !important;
+    padding: 2px 2px !important;
     border: none;
+}
+
+.ui-datepicker table th {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 
 .ui-datepicker table thead th:first-child {
@@ -4198,7 +4295,7 @@ footer a:active {
 }
 
 .ui-datepicker .ui-datepicker-header .ui-state-disabled {
-    opacity: 0.5 !important;
+    opacity: 0.3 !important;
     cursor: default;
 }
 

@@ -364,7 +364,7 @@ var View = function () {
     };
 
     /* Set header texts */
-    this.setHeaderTexts = function () {
+    this.renewCurrentStatusViews = function () {
         var html = '';
 
         if (MC.Data.current_fleet) {
@@ -415,7 +415,7 @@ var Data = function () {
         this.setParamsFromHash();
         this.bindCurrentFleetAndCar();
 
-        MC.View.setHeaderTexts();
+        MC.View.renewCurrentStatusViews();
         MC.View.createCarsAndFleetsMenu();
 
         this.getStatistics();
@@ -494,7 +494,7 @@ var Data = function () {
 
         this.bindCurrentFleetAndCar();
 
-        MC.View.setHeaderTexts();
+        MC.View.renewCurrentStatusViews();
         MC.View.createCarsAndFleetsMenu();
 
         this.getStatistics();

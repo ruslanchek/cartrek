@@ -30,15 +30,37 @@ var View = function () {
     };
 
     this.bindDatepicker = function(date){
-        $('#datepicker').datepicker({
-            beforeShow: function(){
-                var interval = setInterval(function(){
-                    if( $('.ui-datepicker').find('.dp-top-arrow').length <= 0){
-                        $('.ui-datepicker').append('<i class="dp-top-arrow"></i>');
-                    }else{
-                        clearInterval(interval);
+        $('.datepicker .widget').datepicker({
+            onSelect: function(text, obj){
+                var car = MC.Data.car,
+                    fleet = MC.Data.fleet,
+                    h = '#';
+
+                if(fleet){
+                    h += 'fleet=' + fleet;
+                }
+
+                if(car){
+                    if(fleet){
+                        h += '&';
                     }
-                }, 5);
+
+                    h += 'car=' + car;
+                }
+
+                if(!car && !fleet){
+                    h += '#';
+                }else{
+                    h += '&';
+                }
+
+                h += 'timemachine=' + obj.selectedDay + '-' + obj.selectedMonth + '-' + obj.selectedYear;
+
+                document.location.hash = h;
+
+                /*selectedDay: 3
+                selectedMonth: 8
+                selectedYear: 2013*/
             },
             firstDay: 1,
             dateFormat: 'd M, yy',
@@ -90,28 +112,27 @@ var View = function () {
     };
 
     /* Set header texts */
-    this.setHeaderTexts = function () {
-        var html = '',
-            hash = core.ui.getHashData();
+    this.renewCurrentStatusViews = function () {
+        var current_info_html = '';
 
-        if (hash && hash.timemachine) {r
-            html += '<span class="header-timemeachine"> / ' + core.utilities.humanizeDate(core.utilities.parseDateStrToDateOdject(hash.timemachine)) + '</span>';
+        if (core.utilities.compareDates(MC.Data.date, new Date()) === true) {
+            $('#date-menu .icon').removeClass('timemachine').addClass('calendar').attr('title', 'Выбрать дату для машины времени');
+        }else{
+            $('#date-menu .icon').removeClass('calendar').addClass('timemachine').attr('title', 'Машина времени активна (' + core.utilities.humanizeDate(MC.Data.date) + ')');
         }
 
-        if (MC.Data.current_fleet) {
-            html += ' / ' + MC.Data.current_fleet.name;
-        }
 
         if (MC.Data.current_car) {
-            html += ' / ' + MC.Data.current_car.params.name + ' ' + core.utilities.drawGId(MC.Data.current_car.params.g_id, 'small');
-            html += '<span class="g_id-spacer"></span>';
+            current_info_html += ' / ' + MC.Data.current_car.params.name + ' ' + core.utilities.drawGId(MC.Data.current_car.params.g_id, 'small');
+            current_info_html += '<span class="g_id-spacer"></span>';
         } else if (MC.Data.current_fleet) {
-            html += ' <span class="badge">' + MC.Data.current_fleet.cars + ' ' + core.utilities.plural(MC.Data.current_fleet.cars, 'машина', 'машины', 'машин') + '</span>';
+            current_info_html += ' <span class="badge">' + MC.Data.current_fleet.cars + ' ' + core.utilities.plural(MC.Data.current_fleet.cars, 'машина', 'машины', 'машин') + '</span>';
         } else {
-            html += ' <span class="badge">' + MC.Data.cars.length + ' ' + core.utilities.plural(MC.Data.cars.length, 'машина', 'машины', 'машин') + '</span>';
+            current_info_html += ' <span class="badge">' + MC.Data.cars.length + ' ' + core.utilities.plural(MC.Data.cars.length, 'машина', 'машины', 'машин') + '</span>';
         }
 
-        $('#current-fleet-and-car').html(html);
+        $('#current-date').html(core.utilities.humanizeDate(MC.Data.date));
+        $('#current-info').html(current_info_html);
     };
 
     /* Set map and side tools sizes */
@@ -195,6 +216,8 @@ var View = function () {
                 document.location.hash = '#fleet=' + val + tm_hash;
             }
         });
+
+        $('.map-tools-top-right').removeClass('init');
     };
 
     /* Bind map view options controller */
@@ -350,6 +373,20 @@ var View = function () {
 
             MC.View.focusOnPath();
         });
+
+        $('.map-tools-top-right .icon, #current-date').off('click').on('click', function(){
+            if($('.datepicker').data('showed') == true){
+                $('.map-tools-top-right #date-menu').removeClass('active');
+                $('.datepicker').data('showed', false).fadeOut(100);
+            }else{
+                $('.map-tools-top-right #date-menu').addClass('active');
+                $('.datepicker').data('showed', true).fadeIn(100);
+            }
+        });
+
+        $('.map-tools-top-right #date-menu input').on('focus blur change', function(){
+            return;
+        });
     };
 
     /* Focus on current showed path */
@@ -498,8 +535,10 @@ var Data = function () {
         this.loadDynamicCarsData(true);
 
         MC.View.bindMapOptionsController();
-        MC.View.setHeaderTexts();
+        MC.View.renewCurrentStatusViews();
         MC.View.createCarsAndFleetsMenu();
+
+        MC.View.bindDatepicker(this.date);
     };
 
     /* Read map view options */
@@ -601,7 +640,7 @@ var Data = function () {
         this.createCarsObjects();
         this.bindCurrentFleetAndCar();
 
-        MC.View.setHeaderTexts();
+        MC.View.renewCurrentStatusViews();
         MC.View.createCarsAndFleetsMenu();
     };
 

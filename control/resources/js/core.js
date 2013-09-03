@@ -286,6 +286,12 @@ core.loading = {
 };
 
 core.utilities = {
+    compareDates: function(date_1, date_2){
+        if(date_1.getDate() == date_2.getDate() && date_1.getMonth() == date_2.getMonth() && date_1.getFullYear() == date_2.getFullYear()){
+            return true;
+        }
+    },
+
     hexDec: function (hex_string) {
         hex_string = (hex_string + '').replace(/[^a-f0-9]/gi, '');
         return parseInt(hex_string, 16);
@@ -797,7 +803,7 @@ core.utilities = {
     timestampToDateYearLast: function (str) {
         if (str) {
             var t = str.split(/[- :]/);
-            return new Date(t[2], t[1] - 1, t[0], t[3] || 0, t[4] || 0, t[5] || 0);
+            return new Date(t[2], t[1], t[0], t[3] || 0, t[4] || 0, t[5] || 0);
         }
     },
 

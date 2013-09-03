@@ -38,7 +38,7 @@
 </div>*}
 
 <div class="map-container map-observer" data-step='2' data-intro='Карта'>
-    <div class="map-tools-top-right">
+    <div class="map-tools-top-right slide-animation init">
         <div id="cars-menu"></div>
 
         <i class="arrow-separator"></i>
@@ -46,7 +46,17 @@
 
         <i class="arrow-separator"></i>
         <div id="date-menu">
-            <input type="datetime" id="datepicker" />
+            <i class="icon calendar" title="Открыть календарь"></i>
+            <div id="current-date"></div>
+
+            <div class="datepicker">
+                <i class="dp-top-arrow"></i>
+                <div class="widget"></div>
+            </div>
+        </div>
+
+        <div class="map-tools-info-block" id="current-info">
+
         </div>
     </div>
 
