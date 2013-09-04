@@ -2525,7 +2525,7 @@ footer a:active {
 }
 
 .marker-with-info .icon {
-    background-image: url(/control/map-old/img/markers/heading/heading-sprite.png);
+    background-image: url(/control/map/img/markers/heading/heading-sprite.png);
     width: 40px;
     height: 40px;
     position: absolute;
@@ -2541,28 +2541,24 @@ footer a:active {
     z-index: 1;
     top: -11px;
     left: -15px;
-    background: url(/control/map-old/img/markers/heading/flat-shadow.png);
+    background: url(/control/map/img/markers/heading/flat-shadow.png);
 }
 
 .marker-with-info .g_id.small {
     font-size: 11px !important;
-    height: 19px !important;
-    line-height: 19px;
-    -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
-    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.5);
 }
 
 .marker-with-info .info-block {
-    background: rgba(255, 255, 255, 0.85);
-    -webkit-box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.5);
-    box-shadow: 0px 3px 14px 0px rgba(0, 0, 0, 0.5);
-    padding: 2px;
-    -webkit-border-radius: 0px 5px 5px 5px;
-    border-radius: 0px 5px 5px 5px;
+    background: #fff;
+    -webkit-box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 3px 10px 0px rgba(0, 0, 0, 0.5);
+    padding: 5px;
+    -webkit-border-radius: 0px 3px 3px 3px;
+    border-radius: 0px 3px 3px 3px;
     position: absolute;
     top: 12px;
     left: 12px;
-    opacity: 0.80;
+    opacity: 0.8;
     transition: opacity, background 100ms linear;
     -webkit-transition: opacity, background 100ms linear;
 }
@@ -2579,16 +2575,12 @@ footer a:active {
     position: absolute;
     top: -14px;
     left: -14px;
-    background: url(/control/map-old/img/markers/car-label-arm.png) no-repeat;
+    background: url(/control/map/img/markers/car-label-arm.png) no-repeat;
 }
 
 .marker-with-info .info-block .name {
-    margin: 0 0 0.2em 0;
-    text-shadow: 0 1px 0 #fff;
-    font-size: 0.85em;
-    line-height: 1.3em;
-    padding: 1px 1px 0;
-    color: #000;
+    margin: 0 0 0.4em 0;
+    padding: 1px 0 0;
     font-weight: bold;
     white-space: nowrap;
 }

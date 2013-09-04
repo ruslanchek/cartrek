@@ -48,13 +48,21 @@ var View = function () {
                     h += 'car=' + car;
                 }
 
-                if(!car && !fleet){
-                    h += '#';
-                }else{
-                    h += '&';
-                }
+                var tm_date = new Date();
 
-                h += 'timemachine=' + obj.selectedDay + '-' + obj.selectedMonth + '-' + obj.selectedYear;
+                tm_date.setDate(obj.selectedDay);
+                tm_date.setMonth(obj.selectedMonth - 1);
+                tm_date.setFullYear(obj.selectedYear);
+
+                if(core.utilities.compareDates(MC.Data.date, tm_date) !== true){
+                    if(!car && !fleet){
+                        h += '#';
+                    }else{
+                        h += '&';
+                    }
+
+                    h += 'timemachine=' + obj.selectedDay + '-' + obj.selectedMonth + '-' + obj.selectedYear;
+                }
 
                 document.location.hash = h;
 
