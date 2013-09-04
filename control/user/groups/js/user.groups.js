@@ -220,6 +220,8 @@ var user_groups = {
                         dataType: 'json',
                         type: 'get',
                         beforeSend: function () {
+                            $('.group-row[rel="' + id + '"]').remove();
+
                             if (user_groups.loading_process) {
                                 user_groups.loading_process.abort();
                                 core.loading.unsetGlobalLoading();
@@ -229,7 +231,6 @@ var user_groups = {
                         },
                         success: function (data) {
                             core.loading.unsetGlobalLoading();
-                            $('.group-row[rel="' + data.id + '"]').remove();
                         },
                         error: function () {
                             core.loading.unsetGlobalLoading();

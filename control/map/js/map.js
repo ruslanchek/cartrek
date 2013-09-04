@@ -30,6 +30,8 @@ var View = function () {
     };
 
     this.bindDatepicker = function(date){
+        $('.datepicker .widget').datepicker( "setDate", core.utilities.humanizeDate(date) );
+
         $('.datepicker .widget').datepicker({
             onSelect: function(text, obj){
                 var car = MC.Data.car,
@@ -51,7 +53,7 @@ var View = function () {
                 var tm_date = new Date();
 
                 tm_date.setDate(obj.selectedDay);
-                tm_date.setMonth(obj.selectedMonth - 1);
+                tm_date.setMonth(obj.selectedMonth);
                 tm_date.setFullYear(obj.selectedYear);
 
                 if(core.utilities.compareDates(MC.Data.date, tm_date) !== true){
@@ -61,7 +63,7 @@ var View = function () {
                         h += '&';
                     }
 
-                    h += 'timemachine=' + obj.selectedDay + '-' + obj.selectedMonth + '-' + obj.selectedYear;
+                    h += 'timemachine=' + obj.selectedDay + '-' + (obj.selectedMonth + 1) + '-' + obj.selectedYear;
                 }
 
                 document.location.hash = h;
@@ -133,10 +135,10 @@ var View = function () {
         if (MC.Data.current_car) {
             current_info_html += ' / ' + MC.Data.current_car.params.name + ' ' + core.utilities.drawGId(MC.Data.current_car.params.g_id, 'small');
             current_info_html += '<span class="g_id-spacer"></span>';
-        } else if (MC.Data.current_fleet) {
-            current_info_html += ' <span class="badge">' + MC.Data.current_fleet.cars + ' ' + core.utilities.plural(MC.Data.current_fleet.cars, 'машина', 'машины', 'машин') + '</span>';
+        } else if (MC.Data.current_fleet || (!MC.Data.current_fleet && !MC.Data.current_car)){
+            current_info_html += 'Выбрано &mdash; <span class="badge">' + MC.Data.current_fleet.cars + '</span> ' + core.utilities.plural(MC.Data.current_fleet.cars, 'машина', 'машины', 'машин') + ',<br> из них на карте &mdash; <span class="badge">' + MC.Data.getCarsOnMap().length + '</span>';
         } else {
-            current_info_html += ' <span class="badge">' + MC.Data.cars.length + ' ' + core.utilities.plural(MC.Data.cars.length, 'машина', 'машины', 'машин') + '</span>';
+            current_info_html += 'Выбрано &mdash; <span class="badge">' + MC.Data.current_cars.length + '</span> ' + core.utilities.plural(MC.Data.current_cars.length, 'машина', 'машины', 'машин') + ',<br> из них на карте &mdash; <span class="badge">' + MC.Data.getCarsOnMap().length + '</span>';
         }
 
         $('#current-date').html(core.utilities.humanizeDate(MC.Data.date));
@@ -549,6 +551,12 @@ var Data = function () {
         MC.View.bindDatepicker(this.date);
     };
 
+    this.getCarsOnMap = function(){
+        return $.grep(this.cars, function (e) {
+            return e.params.on_map == true;
+        });
+    };
+
     /* Read map view options */
     this.readOptionsFromCookies = function () {
         // Проверяем на наличие отключенного автообновления в куках
@@ -642,6 +650,9 @@ var Data = function () {
 
     /* Postprocess cars and fleets data loader */
     this.processLoadedData = function (data) {
+        this.cars = [];
+        this.fleets = [];
+
         this.cars = data.devices;
         this.fleets = data.fleets;
 

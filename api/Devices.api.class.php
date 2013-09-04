@@ -373,7 +373,7 @@ Class Devices extends Core
                 LEFT JOIN
                     `devices` `d`
                 ON
-                    `d`.`fleet_id` = `f`.`id`
+                    `d`.`fleet_id` = `f`.`id` && `d`.`active` = 1 && `d`.`activated` = 1
                 WHERE
                     `f`.`user_id`  = " . intval($this->auth->user['data']['id']) . "
                 GROUP BY

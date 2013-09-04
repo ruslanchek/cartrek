@@ -10,7 +10,7 @@
     border-radius: 2px;
     height: 27px;
     line-height: 27px;
-    width: 230px;
+    width: 250px;
     position: relative;
 }
 
@@ -89,7 +89,7 @@
     line-height: 27px;
     padding: 0 10px;
     overflow: hidden;
-    width: 210px;
+    width: 230px;
     text-overflow: ellipsis;
 }
 

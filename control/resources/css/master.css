@@ -737,7 +737,6 @@ table.hovered {
 }
 
 .badge {
-    border: 1px solid #415561;
     background: #506877;
     background: -webkit-gradient(linear, left top, left bottom, from(#6a8ca1), to(#506877));
     background: -webkit-linear-gradient(top, #6a8ca1, #506877);
@@ -750,14 +749,15 @@ table.hovered {
     -moz-border-radius: 0.5ex;
     border-radius: 0.5ex;
     font-weight: 100 !important;
-    -webkit-box-shadow: rgba(255, 255, 255, 0.4) 0 1px 0, inset rgba(255, 255, 255, 0.2) 0 1px 0;
-    -moz-box-shadow: rgba(255, 255, 255, 0.4) 0 1px 0, inset rgba(255, 255, 255, 0.2) 0 1px 0;
+    -webkit-box-shadow: rgba(255, 255, 255, 0.4) 0 1px 0, inset rgba(255, 255, 255, 0.2) 0 -1px 0;
+    -moz-box-shadow: rgba(255, 255, 255, 0.4) 0 1px 0, inset rgba(255, 255, 255, 0.2) 0 -1px 0;
     box-shadow: rgba(255, 255, 255, 0.4) 0 1px 0, inset rgba(255, 255, 255, 0.2) 0 1px 0;
     text-shadow: #314754 0 -1px 0;
     color: #ffffff;
     font-size: 1em;
     font-family: inherit;
     text-decoration: none;
+    margin: 0 0.1ex;
 }
 
 a.badge {
@@ -2046,7 +2046,7 @@ footer a:active {
 
 .datepicker {
     position: absolute;
-    width: 260px;
+    width: 261px;
     left: 50%;
     top: 40px;
     margin: 0 0 0 -128px;
@@ -2079,10 +2079,10 @@ footer a:active {
     width: 230px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
+    padding: 10px;
 }
 
 #current-info {
-    padding: 10px 0;
     top: 45px;
     right: 0;
 }
