@@ -613,8 +613,6 @@ var Data = function () {
 
     /* Soft load - binds starter methods without cars and fleets data loader */
     this.softLoad = function () {
-        this.removeCars();
-
         MC.View.zoomed_on_car = false;
         MC.View.no_points_message = false;
         MC.View.hideMapMessage(false);
@@ -910,6 +908,10 @@ var Data = function () {
 
     /* Get cars metrics */
     this.loadDynamicCarsData = function (firstload) {
+        if(firstload === true){
+            MC.Data.removeCars();
+        }
+
         if (this.current_cars.length <= 0) {
             return;
         }
@@ -946,7 +948,7 @@ var Data = function () {
 
                 MC.Data.mergeCarsData(data);
 
-                if (firstload !== true) {
+                if (firstload === true) {
                     MC.Data.removeCars();
                 }
 
