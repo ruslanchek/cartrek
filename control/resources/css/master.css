@@ -2071,16 +2071,73 @@ footer a:active {
     float: right;
 }
 
+
+
+/* Map tools info block */
 .map-tools-info-block {
     position: absolute;
     background: #fff;
     -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
     box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
-    width: 230px;
+    width: 250px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
-    padding: 10px;
 }
+
+.map-tools-info-block .block-separator {
+    height: 30px;
+    font-size: 30px;
+    line-height: 42px;
+    text-align: center;
+    color: #ccc;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.status-info-table-block {
+    margin: 0;
+    border-bottom: none;
+    width: 100%;
+}
+
+.status-info-table-block .status-block {
+    font-size: 11px;
+}
+
+.status-info-table-block .status-block .item {
+    width: 22%;
+    margin-left: 3%;
+    float: left;
+}
+
+.status-info-table-block .status-block .item:first-child {
+    margin-left: 0;
+    width: 25%;
+}
+
+.status-info-table-block table {
+    margin: 0;
+}
+
+.status-info-table-block table tr:last-child td {
+    border-bottom: none;
+}
+
+.status-info-table-block .g_id {
+    font-size: 11px !important;
+    float: right;
+}
+
+.status-info-table-block table tr {
+
+}
+
+.status-info-table-block table td {
+
+}
+
+
+
 
 #current-info {
     top: 45px;
@@ -4335,3 +4392,4 @@ div.ui-datepicker * {
     -webkit-border-radius: 4px !important;
     -moz-border-radius: 4px !important;
 }
+

@@ -1629,7 +1629,7 @@ core.effects = {
 
 core.ticker = {
     interval: null,
-    delay: 1000,
+    delay: 100000,
     interval_methods: [],
 
     processSystemInterval: function () {
