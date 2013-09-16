@@ -78,7 +78,7 @@ class Auth extends Core
     //User authenticate
     public function forceLogin($data)
     {
-        $hash = md5($this->utils->getUniqueCode(10));
+        $hash = md5('STATIC'); //$this->utils->getUniqueCode(10));
 
         $query = "
             UPDATE
@@ -343,7 +343,6 @@ class Auth extends Core
 
                 if ($ti > 300) {
                     $code = md5($this->utils->getUniqueCode($this->password_length));
-
 
                     $query = "
                         UPDATE
