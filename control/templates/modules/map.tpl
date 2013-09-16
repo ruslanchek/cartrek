@@ -39,6 +39,25 @@
 
 <div class="map-container map-observer" data-step='2' data-intro='Карта'>
     <div class="map-tools-top-right slide-animation init">
+        <div id="togglers">
+            <label style="width: 45px;" title="Автообновление данных">
+                <input type="checkbox" class="slickswitch" id="auto-renew" />
+                Авто
+            </label>
+
+            <label style="width: 54px;">
+                <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
+                <a href="javascript:void(0)" id="focus-toggler" title="Показать текущее положение">Фокус</a>
+            </label>
+
+            <label style="width: 45px;" title="Показывать пройденный путь">
+                <input type="checkbox" class="slickswitch" id="show-path" />
+                <a href="javascript:void(0)" id="path-toggler" title="Показать текущий путь">Путь</a>
+            </label>
+
+            <div class="clear"></div>
+        </div>
+        
         <div id="cars-menu"></div>
 
         <i class="arrow-separator"></i>

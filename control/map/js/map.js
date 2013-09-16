@@ -128,7 +128,7 @@ var View = function () {
             multiple                = false,
             selected                = 0,
             viewed                  = 0,
-            cars_on_map             = MC.Data.getCarsOnMap();
+            cars_on_map             = MC.Data.current_cars_obj;
 
         if (core.utilities.compareDates(MC.Data.date, new Date()) === true) {
             $('#date-menu .icon').removeClass('timemachine').addClass('calendar').attr('title', 'Выбрать дату для машины времени');
@@ -137,16 +137,72 @@ var View = function () {
         }
 
         if (MC.Data.current_car) {
-            current_info_html += MC.Data.current_car.params.name + ' ' + core.utilities.drawGId(MC.Data.current_car.params.g_id, 'small');
+            var status = '',
+                speed = '',
+                hdop = '',
+                csq = '',
+                name = '';
+
+            if (MC.Data.current_car.params.metrics && MC.Data.current_car.params.metrics.online === true) {
+                status = '<span class="status-text green">Онлайн</span>';
+                hdop = core.utilities.getHDOPIndicator(MC.Data.current_car.params.metrics.hdop, MC.Data.current_car.params.sat_count, true);
+                csq = core.utilities.getCSQIndicator(MC.Data.current_car.params.metrics.csq, true);
+                name = '<a href="#">' + MC.Data.current_car.params.name + '</a>';
+            }else{
+                status = '<span class="status-text gray">Офлайн</span>';
+                name = '<span>' + MC.Data.current_car.params.name + '</span>';
+            }
+
+            if(MC.Data.current_car.params.metrics.speed > 0 && MC.Data.current_car.params.metrics.online === true){
+                speed = '<span class="status-text green">' + core.utilities.convertKnotsToKms(MC.Data.current_car.params.metrics.speed) + '</span>';
+            }else if ( MC.Data.current_car.params.metrics.online === true ){
+                speed = '<span class="status-text gray">0 км/ч</span>';
+            }
+
+            current_info_html +=
+                '<div class="status-info-table-block">' +
+                    '<table>' +
+                        '<tr>' +
+                            '<td>' +
+                                '<div>' + core.utilities.drawGId(MC.Data.current_car.params.g_id, 'small') + '</div>' +
+                                name +
+
+                                '<div class="clear"></div>' +
+
+                                '<div class="status-block">' +
+
+                                    '<div class="item">' +
+                                        status +
+                                    '</div>' +
+
+                                    '<div class="item">' +
+                                        speed +
+                                    '</div>' +
+
+                                    '<div class="item">' +
+                                        csq +
+                                    '</div>' +
+
+                                    '<div class="item">' +
+                                        hdop +
+                                    '</div>' +
+
+                                    '<div class="clear"></div>' +
+
+                                '</div>' +
+                            '</td>' +
+                        '</tr>';
+                    '</table>' +
+                '</div>';
 
         } else if (MC.Data.current_fleet){
             multiple    = true;
             selected    = MC.Data.current_fleet.cars;
-            viewed      = cars_on_map.length;
+            viewed      = MC.Data.getCarsOnMap().length;
         } else {
             multiple    = true;
             selected    = MC.Data.current_cars.length;
-            viewed      = cars_on_map.length;
+            viewed      = MC.Data.getCarsOnMap().length;
         }
 
         if(multiple === true){
@@ -169,53 +225,60 @@ var View = function () {
                     var status = '',
                         speed = '',
                         hdop = '',
-                        csq = '';
+                        csq = '',
+                        name = '';
 
                     if (cars_on_map[i].params.metrics && cars_on_map[i].params.metrics.online === true) {
                         status = '<span class="status-text green">Онлайн</span>';
                         hdop = core.utilities.getHDOPIndicator(cars_on_map[i].params.metrics.hdop, cars_on_map[i].params.sat_count, true);
                         csq = core.utilities.getCSQIndicator(cars_on_map[i].params.metrics.csq, true);
+                        name = '<a href="#">' + cars_on_map[i].params.name + '</a>';
                     }else{
                         status = '<span class="status-text gray">Офлайн</span>';
+                        name = '<span>' + cars_on_map[i].params.name + '</span>';
                     }
 
-                    if(cars_on_map[i].params.metrics.speed > 0){
+                    if(cars_on_map[i].params.metrics.speed > 0 && cars_on_map[i].params.metrics.online === true){
                         speed = '<span class="status-text green">' + core.utilities.convertKnotsToKms(cars_on_map[i].params.metrics.speed) + '</span>';
-                    }else{
+                    }else if ( cars_on_map[i].params.metrics.online === true ){
                         speed = '<span class="status-text gray">0 км/ч</span>';
                     }
 
                     current_cars_list_html +=   '<tr>' +
                                                 '<td>' +
                                                     '<div>' + core.utilities.drawGId(cars_on_map[i].params.g_id, 'small') + '</div>' +
-                                                    '<a href="#">' + cars_on_map[i].params.name + '</a>' +
+                                                    name +
                                                     '<div class="clear"></div>' +
 
                                                     '<div class="status-block">' +
                                                         '<div class="item">' +
                                                             status +
                                                         '</div>' +
+
                                                         '<div class="item">' +
                                                             speed +
                                                         '</div>' +
+
                                                         '<div class="item">' +
                                                             csq +
                                                         '</div>' +
+
                                                         '<div class="item">' +
                                                             hdop +
                                                         '</div>' +
+
                                                         '<div class="clear"></div>' +
                                                     '</div>' +
                                                 '</td>' +
                                                 '</tr>';
                 }
 
-                current_info_html += '<div class="block-separator">* * *</div>';
+                current_info_html += '<div class="block-separator"></div>';
                 current_info_html +=
                     '<div class="status-info-table-block">' +
-                    '<table>' +
-                        current_cars_list_html +
-                    '</table>' +
+                        '<table>' +
+                            current_cars_list_html +
+                        '</table>' +
                     '</div>';
             }
         }
@@ -580,6 +643,7 @@ var Data = function () {
     this.auto_focus = true;
     this.show_car_path = false;
     this.current_cars = [];
+    this.current_cars_obj = [];
     this.auto_renew_blocker = false;
     this.cars_on_map = 0;
 
@@ -775,6 +839,7 @@ var Data = function () {
     /* Get-set curent cars to process */
     this.getSetCurrentCars = function () {
         this.current_cars = [];
+        this.current_cars_obj = [];
 
         var cars;
 
@@ -795,6 +860,7 @@ var Data = function () {
 
         for (var i = 0, l = cars.length; i < l; i++) {
             this.current_cars.push(cars[i].params.id);
+            this.current_cars_obj.push(cars[i]);
         }
     };
 
