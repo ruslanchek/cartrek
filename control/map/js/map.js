@@ -677,6 +677,10 @@ var Data = function () {
 
     /* Soft load - binds starter methods without cars and fleets data loader */
     this.softLoad = function () {
+        if(this.current_car){
+            this.current_car.resetPathPoints();
+        }
+
         MC.View.zoomed_on_car = false;
         MC.View.no_points_message = false;
         MC.View.hideMapMessage(false);
