@@ -34,10 +34,10 @@ Class Config{
         );*/
 
         $this->db_vars = array(
-            'host'  => 'localhost',
+            'host'  => '62.76.40.244',
             'db'    => 'cartrek',
-            'user'  => 'root',
-            'pass'  => '123',
+            'user'  => 'cartrek',
+            'pass'  => 'Tukzara',
             'port'  => '3306'
         );
     }

@@ -4401,3 +4401,157 @@ div.ui-datepicker * {
     -moz-border-radius: 4px !important;
 }
 
+
+/* Car info */
+.car-info {
+    z-index: 1500;
+    position: absolute;
+    width: 640px;
+    height: 340px;
+    left: 50%;
+    top: 50%;
+    margin: -170px 0 0 -320px;
+    background: #fff;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+
+/* 3d accelerometer */
+.bar-3d {
+    background: url(../img/xyz-grid.png) no-repeat center -65px;
+    width: 100%;
+    height: 100%;
+}
+
+.tridiv {
+    -webkit-perspective: 800px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    font-size: 150%;
+}
+.face {
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.4);
+}
+.scene, .shape, .face, .face-wrapper, .cr {
+    position: absolute;
+    -webkit-transform-style: preserve-3d;
+}
+.scene {
+    width: 80em;
+    height: 80em;
+    top: 50%;
+    left: 50%;
+    margin: -40em 0 0 -40em;
+
+    -webkit-transform: rotateX(-25deg) rotateY(-45deg) rotateZ(0deg);
+    -moz-transform: rotateX(-25deg) rotateY(-45deg) rotateZ(0deg);
+    -ms-transform: rotateX(-25deg) rotateY(-45deg) rotateZ(0deg);
+    transform: rotateX(-25deg) rotateY(-45deg) rotateZ(0deg);
+}
+.shape {
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    -webkit-transform-origin: 50%;
+}
+.face, .face-wrapper {
+    overflow: hidden;
+    -webkit-transform-origin: 0 0;
+    -webkit-backface-visibility: hidden;
+    /* hidden by default, prevent blinking and other weird rendering glitchs */
+}
+.face {
+    background-size: 100% 100%!important;
+    background-position: center;
+}
+.face-wrapper .face {
+    left: 100%;
+    width: 100%;
+    height: 100%
+}
+.photon-shader {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%
+}
+.side {
+    left: 50%;
+}
+.cr, .cr .side {
+    height: 100%;
+}
+[class*="cuboid"] .ft, [class*="cuboid"] .bk {
+    width: 100%;
+    height: 100%;
+}
+[class*="cuboid"] .bk {
+    left: 100%;
+}
+[class*="cuboid"] .rt {
+    -webkit-transform: rotateY(-90deg) translateX(-50%);
+}
+[class*="cuboid"] .lt {
+    -webkit-transform: rotateY(90deg) translateX(-50%);
+}
+[class*="cuboid"] .tp {
+    -webkit-transform: rotateX(90deg) translateY(-50%);
+}
+[class*="cuboid"] .bm {
+    -webkit-transform: rotateX(-90deg) translateY(-50%);
+}
+[class*="cuboid"] .lt {
+    left: 100%;
+}
+[class*="cuboid"] .bm {
+    top: 100%;
+}
+/* .cub-1 styles */
+.cub-1 {
+    -webkit-transform:translate3D(0em, 0em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    -moz-transform:translate3D(0em, 0em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    -ms-transform:translate3D(0em, 0em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    transform:translate3D(0em, 0em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    opacity:0.8;
+    width:4em;
+    height:2em;
+    margin:-1em 0 0 -2em;
+
+    -webkit-transition: all 500ms cubic-bezier(0.860, 0.000, 0.070, 1.000);
+    -moz-transition: all 500ms cubic-bezier(0.860, 0.000, 0.070, 1.000);
+    -ms-transition: all 500ms cubic-bezier(0.860, 0.000, 0.070, 1.000);
+    -o-transition: all 500ms cubic-bezier(0.860, 0.000, 0.070, 1.000);
+    transition: all 500ms cubic-bezier(0.860, 0.000, 0.070, 1.000); /* easeInOutQuint */
+
+    -webkit-transition-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+    -moz-transition-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+    -ms-transition-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+    -o-transition-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+    transition-timing-function: cubic-bezier(0.860, 0.000, 0.070, 1.000); /* easeInOutQuint */
+}
+.cub-1 .ft {
+    -webkit-transform:translateZ(4em);
+}
+.cub-1 .bk {
+    -webkit-transform:translateZ(-4em) rotateY(180deg);
+}
+.cub-1 .rt, .cub-1 .lt {
+    width:8em;
+    height:2em;
+}
+.cub-1 .tp, .cub-1 .bm {
+    width:4em;
+    height:8em;
+}
+.cub-1 .face {
+    background-color:#ffffff;
+}

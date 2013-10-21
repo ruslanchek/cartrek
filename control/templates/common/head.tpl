@@ -33,6 +33,7 @@
 <script src="/control/resources/plugins/intro.js-0.4.0/intro.js"></script>
 
 <script src="/control/resources/js/core.js"></script>
+<script src="/control/resources/js/prototypes.car.js"></script>
 <script src="{$core->module.dir}/js/{$core->module.name}.js"></script>
 
 <!--[if lt IE 9]>
