@@ -1,43 +1,32 @@
-<!DOCTYPE HTML>
-<html>
+<!DOCTYPE html>
+<html style="background: #2e2c30;">
     <head>
-        {include file="common/head.tpl"}
+        <title>Title</title>
 
-        <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        <!--[if lte IE 8]>
-        <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.ie.css" />
-        <![endif]-->
+        <link rel="stylesheet" href="/control/resources/css/main.css" />
 
-        <script src="/control/resources/mapping-tools/leaflet/dist/leaflet.js"></script>
-        <script src="/control/resources/mapping-tools/leaflet/plugins/proto/proto.js"></script>
-
-        <script src="https://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
-        <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
-        <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
-
-        <script src="/control/resources/js/prototypes.map.js"></script>
+        <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="/control/resources/plugins/select/select.js"></script>
     </head>
 
     <body>
-        <div id="wrapper">
-            <div class="limiter">
-                {include file="common/top.tpl"}
+        {include file="common/header.tpl"}
 
-                <div class="cont h1">
-                    <div class="container-padding">
-                        <h1>{$core->module.title}</h1>
-                    </div>
+        <div class="main-frame">
+            <div class="nav-tools">
+                {include file="common/menu.tpl"}
+            </div>
+
+            <div class="content-block">
+                <div class="content-header">
+                    <h1>{$core->module.title}</h1>
                 </div>
 
-                <div class="cont main-content">
-                    <div class="row container-padding">
-                        {include file="modules/`$core->module.name`.tpl"}
-                    </div>
-                </div>
+                {include file="common/breadcrumbs.tpl"}
             </div>
         </div>
-
-        {include file="common/footer.tpl"}
     </body>
 </html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html style="background: #2e2c30;">
+	<head>
+		<title>Title</title>
+	
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="/resources/fontello/css/fontello.css">
+        <link rel="stylesheet" href="/resources/fontello/css/animation.css">
+		<link rel="stylesheet" href="/resources/kube/css/kube.css" />
+		<link rel="stylesheet" href="/resources/css/main.css" />
+        <link rel="stylesheet" href="/resources/plugins/select/select.css" />
+	
+		<script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="/resources/plugins/select/select.js"></script>
+	</head>
+	<body>
+		<header class="header">
+            <div class="limiter">
+                <a class="logo" href="#"></a>
+
+                <div class="tools">
+                    <span class="global-loading animate-spin">
+                        <i class="icon-spin1" title="Загрузка данных"></i>
+                    </span>
+
+                    <nav>
+                        <a href="#"><i class="f-icon icon-off color-red"></i> Выход</a>
+                    </nav>
+
+                    <nav>
+                        <a href="#"><i class="f-icon icon-user"></i> Руслан Шашков</a>
+                        <a href="#"><i class="f-icon icon-mail"><i class="count">79</i></i> Сообщения</a>
+                        <a href="#" class="active"><i class="f-icon icon-cog-2"></i> Настройка</a>
+                    </nav>
+                </div>
+            </div>
+		</header>
+
+        <div class="main-frame">
+            <div class="nav-tools">
+                <nav class="nav-main">
+                    <a href="#"><i class="f-icon icon-globe-1"></i>Наблюдение</a>
+                    <a href="#" class="active"><i class="f-icon icon-desktop"></i>Диспетчер<span class="arrow-active"></span></a>
+                    <a href="#"><i class="f-icon icon-chart-bar"></i>Статистика</a>
+                    <a href="#"><i class="f-icon icon-target-4"></i>Геозоны</a>
+                    <a href="#"><i class="f-icon icon-th-large-1"></i>Группы</a>
+                    <a href="#"><i class="f-icon icon-truck"></i>Машины</a>
+                    <a href="#"><i class="f-icon icon-steering-wheel"></i>Водители</a>
+                </nav>
+            </div>
+
+            <div class="content-block">
+                <div class="content-header">
+                    <h1>Диспетчер</h1>
+
+                    <div class="status-blocks">
+                        <div class="item">
+                            <div class="value"><i class="f-icon icon-wifi color-green"></i> 18</div>
+                            <div class="title">Машин онлайн</div>
+                        </div>
+
+                        <div class="item">
+                            <div class="value"><i class="f-icon icon-wifi color-gray-light"></i> 4</div>
+                            <div class="title">Машин офлайн</div>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="breadcrumbs">
+                    <a href="#"><i class="icon-home"></i> Главная</a> <i class="icon-right-dir"></i>
+                    <a href="#">Диспетчер</a> <i class="icon-right-dir"></i>
+                    Настройка
+                </nav>
+
+                <div class="content-padding">
+                    <nav class="nav-controls">
+                        <div class="left">
+                            <a class="marked" href="#"><i class="f-icon icon-plus"></i> Создать</a>
+                            <a href="#"><i class="f-icon icon-plus"></i> Создать</a>
+                            <a href="#"><i class="f-icon icon-plus"></i> Создать</a>
+                        </div>
+
+                        <div class="right">
+                        </div>
+                    </nav>
+
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                            <nav class="nav-options">
+                                <a href="#"><i class="f-icon icon-cog-2"></i></a>
+                            </nav>
+
+                            <nav class="nav-tabs">
+                                <a class="active" href="#">Tab 1</a>
+                                <a href="#">Tab 2</a>
+                                <a href="#">Tab 3</a>
+                                <a href="#">Tab 4</a>
+                            </nav>
+                        </div>
+
+                        <div class="widget-content widget-content-padding">
+                            xxx
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-padding">
+                    <div class="units-row-end">
+                        <div class="unit-50">
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                                    <div class="counter">
+                                        <i>36</i>
+                                    </div>
+                                </div>
+
+                                <div class="widget-content widget-content-padding">
+                                    <form action="" class="forms">
+                                        <label>
+                                            Default
+                                            <input class="width-100" type="text" placeholder="Имя" />
+                                        </label>
+
+                                        <div class="widget-separator"></div>
+
+                                        <label>
+                                            Success
+                                            <input class="width-100 input-success" type="text" placeholder="Имя" />
+                                        </label>
+
+                                        <label>
+                                            Error
+                                            <input class="width-100 input-error" type="text" placeholder="Имя" />
+                                        </label>
+
+                                        <label>
+                                            Message
+                                            <textarea class="width-100"></textarea>
+                                        </label>
+
+                                        <label>
+                                            Селект
+                                            <select class="basic">
+                                                <option value="">Select something…</option>
+                                                <option>Lorem</option>
+                                                <option>Ipsum</option>
+                                                <option>Dolor</option>
+                                                <option>Sit</option>
+                                                <option>Amet</option>
+                                            </select>
+
+                                            <script>
+                                                $('.basic').fancySelect();
+                                            </script>
+                                        </label>
+
+                                        <div class="widget-separator"></div>
+
+                                        <input class="btn btn-blue" type="submit" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="unit-50">
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                                    <nav class="nav-options">
+                                        <a href="#"><i class="f-icon icon-cog-2"></i></a>
+                                    </nav>
+                                </div>
+
+                                <div class="widget-content widget-content-padding">
+                                    xyz
+                                </div>
+                            </div>
+
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                                    <nav class="nav-options">
+                                        <a href="#"><i class="f-icon icon-cog-2"></i></a>
+                                    </nav>
+                                </div>
+
+                                <div class="widget-content widget-content-padding">
+                                    xyz
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-padding">
+                    <div class="units-row-end">
+                        <div class="unit-33">
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                                    <nav class="nav-options">
+                                        <a href="#"><i class="f-icon icon-cog-2"></i></a>
+                                    </nav>
+                                </div>
+
+                                <div class="widget-content widget-content-padding">
+                                    xyz
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="unit-33">
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                                    <nav class="nav-options">
+                                        <a href="#"><i class="f-icon icon-cog-2"></i></a>
+                                    </nav>
+                                </div>
+
+                                <div class="widget-content widget-content-padding">
+                                    xyz
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="unit-33">
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                                    <nav class="nav-options">
+                                        <a href="#"><i class="f-icon icon-cog-2"></i></a>
+                                    </nav>
+                                </div>
+
+                                <div class="widget-content widget-content-padding">
+                                    xyz
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="units-row-end">
+                        <div class="unit-33">
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                                    <nav class="nav-options">
+                                        <a href="#"><i class="f-icon icon-cog-2"></i></a>
+                                    </nav>
+                                </div>
+
+                                <div class="widget-content widget-content-padding">
+                                    xyz
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="unit-66">
+                            <div class="widget">
+                                <div class="widget-header">
+                                    <h2 class="title"><i class="f-icon icon-chart-line"></i>Статистика</h2>
+
+                                    <nav class="nav-options">
+                                        <a href="#"><i class="f-icon icon-cog-2"></i></a>
+                                    </nav>
+                                </div>
+
+                                <div class="widget-content widget-content-padding">
+                                    xyz
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</body>
+</html>

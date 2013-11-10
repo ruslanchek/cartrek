@@ -1,0 +1,704 @@
+@import url(../fontello/css/fontello.css);
+@import url(../fontello/css/animation.css);
+@import url(../kube/css/kube.css);
+@import url(../plugins/select/select.css);
+
+/* @group Main
+---------------------------------------------------- */
+html, body {
+    background: #2e2c30 url(../img/patterns/body.png) !important;
+    color: #37343b;
+}
+
+body {
+	font-family: Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+    min-width: 1024px;
+    font-size: 12px;
+}
+/* @end */
+
+
+/* @group Typo
+---------------------------------------------------- */
+h1, h2, h3, h4, h5 {
+    font-family: Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+    color: #37343b;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+h3 {
+    font-size: 16px;
+}
+
+h4 {
+    font-size: 12px;
+}
+
+h5 {
+    font-size: 12px;
+    color: #666;
+}
+/* @end */
+
+
+/* @group Misc
+---------------------------------------------------- */
+.width-100 {
+    width: 100% !important;
+}
+/* @end */
+
+
+/* @group Colors
+---------------------------------------------------- */
+.color-green {
+    color: #83a854;
+}
+/* @end */
+
+
+/* @group Colors
+---------------------------------------------------- */
+.forms {
+	margin: 0;	
+}
+
+.forms input[type=text],
+.forms input[type=email],
+.forms input[type=password],
+.forms textarea {
+    border-radius: 3px;
+    padding: 5px 3px;
+    display: block;
+    font-size: 12px;
+    font-family: Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+}
+
+.forms label {
+    margin: 0 0 10px;
+    color: #656268;
+}
+/* @end */
+
+
+/* @group Buttons
+---------------------------------------------------- */
+.btn {
+    font-family: Arial, "Helvetica Neue", Helvetica, Tahoma, sans-serif;
+    font-size: 14px;
+    border-radius: 4px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 1px 0 rgba(255, 255, 255, 1);
+    height: 32px;
+    line-height: 30px;
+    padding: 0 15px;
+    margin: 0;
+}
+
+.btn-blue {
+    background: #52afd0;
+    background: linear-gradient(to bottom, #52afd0 0%,#447eb0 100%);
+    border-color: #3b7db6;
+    border-bottom-color: #29577e;
+    color: #fff;
+}
+
+.btn-blue:hover {
+	background: #6bb8d3;
+    background: linear-gradient(to bottom, #6bb8d3 0%, #6395c1 100%);
+	border-color: #3b7db6;
+    border-bottom-color: #29577e;
+    color: #fff;
+}
+
+.btn-blue:active {
+	background: #6395c1;
+    background: linear-gradient(to bottom, #6395c1 0%, #6bb8d3 100%);
+	border-color: #3b7db6;
+    border-bottom-color: #3b7db6;
+    color: #fff;
+    line-height: 33px;
+}
+/* @end */
+
+
+/* @group Layout
+---------------------------------------------------- */
+.main-frame {
+    padding: 0px 30px 20px 240px;
+    position: relative;
+    min-width: 740px;
+    max-width: 1200px;
+}
+/* @end */
+
+
+/* @group Header
+---------------------------------------------------- */ 
+.header {
+	background: #3e3a43 url(../img/patterns/top-menu.png) repeat-x;
+    height: 52px;
+    border-bottom: 1px solid #010101;
+    box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.25);
+    position: relative;
+    min-width: 940px;
+}
+
+.header .limiter {
+    max-width: 1470px;
+    position: relative;
+}
+
+.header .logo {
+    background: url(../img/logos/cartrek.png) 0 0 no-repeat;
+    display: block;
+    position: absolute;
+    left: 27px;
+    top: 0;
+    width: 136px;
+    height: 52px;
+}
+/* @end */
+
+
+/* @group Header tools & nav
+---------------------------------------------------- */
+.header .tools {
+    position: absolute;
+    right: 30px;
+    height: 52px;
+}
+
+.header .tools .global-loading {
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    line-height: 52px;
+    font-size: 14px;
+    text-align: center;
+    display: block;
+    color: #00deff;
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.4), 0 1px 12px rgba(0, 222, 255, 0.5);
+    left: -50px;
+}
+
+.header .tools nav {
+    height: 32px;
+    border: 1px solid #302d33;
+    border-radius: 4px;
+    margin: 9px 0 9px 10px;
+    background: #343137;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.11);
+    position: relative;
+    float: right;
+}
+
+.header .tools nav a {
+    height: 32px;
+    line-height: 32px;
+    display: block;
+    float: left;
+    padding: 0 12px 0 8px;
+    background: url(../img/sprites/nav-top.png) repeat-x 0 -32px;
+    color: #9f9da3;
+    text-decoration: none;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.header .tools nav a .f-icon {
+    font-size: 14px;
+    position: relative;
+}
+
+.header .tools nav a .f-icon.color-red {
+    text-shadow: 0 1px 8px rgba(239, 100, 101, 0.45);
+}
+
+.header .tools nav a .count {
+    top: -4px;
+    left: -4px;
+    height: 11px;
+    font-size: 10px;
+    font-style: normal;
+    line-height: 12px;
+    padding: 0 2px;
+    position: absolute;
+    z-index: 2;
+    background: #54b2d5; /* Old browsers */
+    background: linear-gradient(to bottom, #54b2d5 0%,#4183b9 100%);
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    color: #fff;
+}
+
+.header .tools nav a:hover {
+    background-position: 0 -64px;
+}
+
+.header .tools nav a.active {
+    background-position: 0 0;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 3;
+    margin-left: -1px;
+    color: #fff;
+}
+
+.header .tools nav a.active:before,
+.header .tools nav a.active:after {
+    display: none !important;
+}
+
+.header .tools nav a:before {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 32px;
+    width: 1px;
+    background: url(../img/sprites/nav-top.png) repeat-x 0 -96px;
+    top: 0;
+    left: 0;
+}
+
+.header .tools nav a:after {
+    content: "";
+    display: block;
+    position: absolute;
+    height: 32px;
+    width: 2px;
+    background: url(../img/sprites/nav-top.png) repeat-x 0 -96px;
+    top: 0;
+    right: 0;
+}
+
+.header .tools nav a:first-of-type {
+    border-radius: 3px 0px 0px 3px;
+}
+
+.header .tools nav a:last-of-type {
+    border-radius: 0px 3px 3px 0px;
+}
+
+.header .tools nav a:first-of-type:last-of-type  {
+    border-radius: 3px;
+}
+
+.header .tools nav a:first-of-type:before {
+    display: none;
+}
+
+.header .tools nav a:last-of-type:after {
+    display: none;
+}
+/* @end */
+
+
+/* @group Nav & tools
+---------------------------------------------------- */
+.nav-tools {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 240px;
+}
+/* @end */
+
+
+/* @group Main nav
+---------------------------------------------------- */
+.nav-tools .nav-main {
+    margin-top: 20px;
+    font-size: 14px;
+    border-bottom: 1px solid #010101;
+}
+
+.nav-tools .nav-main .f-icon {
+    font-size: 16px;
+    margin: 0 8px -2px -3px;
+    font-weight: normal;
+    color: #ebeaed;
+}
+
+.nav-tools .nav-main a {
+    position: relative;
+    display: block;
+    height: 42px;
+    line-height: 42px;
+    padding: 0 30px 0 30px;
+    color: #9f9da3;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+    text-decoration: none;
+    background: url(../img/sprites/nav-main.png) repeat-x 0 -42px;
+}
+
+.nav-tools .nav-main a:hover {
+    background-position: 0 -84px;
+}
+
+.nav-tools .nav-main a .arrow-sub {
+    position: absolute;
+    background: url(../img/sprites/nav-main.png) -8px -168px;
+    width: 10px;
+    height: 8px;
+    display: block;
+    top: 50%;
+    right: 25px;
+    margin-top: -3px;
+    opacity: 0.6;
+}
+
+.nav-tools .nav-main nav a {
+    padding-left: 60px;
+    background-position: 0 -126px;
+}
+
+.nav-tools .nav-main a.active {
+    background-position: 0 0;
+    color: #fff !important;
+}
+
+.nav-tools .nav-main a.active span.arrow-active {
+    width: 8px;
+    height: 10px;
+    display: block;
+    position: absolute;
+    z-index: 3;
+    right: -1px;
+    top: 50%;
+    margin-top: -5px;
+    background: url(../img/sprites/nav-main.png) 0 -168px;
+}
+/* @end */
+
+
+/* @group Content
+---------------------------------------------------- */
+.content-block {
+    border-radius: 8px;
+    background: #edeaf0 url(../img/patterns/concrete-gray.png);
+    position: relative;
+    z-index: 2;
+    min-height: 500px;
+    box-shadow: -5px 5px 25px rgba(0, 0, 0, 0.65), inset 0 0 0 1px rgba(255, 255, 255, 1);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+.content-block .content-padding {
+    padding: 0 18px;
+}
+/* @end */
+
+
+/* @group Content header
+---------------------------------------------------- */
+.content-block .content-header {
+    border-bottom: 1px solid #f4f2f6;
+    height: 56px;
+    position: relative;
+}
+
+.content-block .content-header h1 {
+    padding: 15px 18px;
+    margin: 0;
+}
+/* @end */
+
+
+/* @group Content header status blocks
+---------------------------------------------------- */
+.content-block .content-header .status-blocks {
+    height: 56px;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.content-block .content-header .status-blocks .item {
+    border-left: 1px solid #d1ced3;
+    height: 45px;
+    float: left;
+    padding: 12px 18px 0;
+    position: relative;
+    color: #37343b;
+}
+
+.content-block .content-header .status-blocks .item:before {
+    height: 56px;
+    width: 1px;
+    background: #f4f2f6;
+    position: absolute;
+    content: '';
+    left: -2px;
+    top: 0;
+}
+
+.content-block .content-header .status-blocks .item .value {
+    font-size: 18px;
+    font-weight: bold;
+    top: 14px;
+    left: 48px;
+}
+/* @end */
+
+
+/* @group Content breadcrumbs
+---------------------------------------------------- */
+.content-block .breadcrumbs {
+    background: #e6e6e6;
+    padding: 2px 18px;
+    min-height: 22px;
+    line-height: 22px;
+    font-size: 12px;
+    color: #8d8a92;
+    border-top: 1px solid #d1d1d1;
+    border-bottom: 1px solid #d1d1d1;
+    box-shadow: 0 1px 1px rgba(255, 255, 255, 1), inset 0 1px 1px 0 rgba(0, 0, 0, 0.03);
+    margin: 0 1px 18px;
+}
+
+.content-block .breadcrumbs a {
+    color: #5b585f;
+    text-decoration: none;
+}
+
+.content-block .breadcrumbs a:hover {
+    color: #7e7b82;
+}
+/* @end */
+
+
+/* @group Content nav controls
+---------------------------------------------------- */
+.content-block .nav-controls {
+    border-radius: 4px;
+    border: 1px solid #d1ced3;
+    height: 44px;
+    margin: 0 0 18px 0;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.035), inset 0 1px 1px rgba(255, 255, 255, 1);
+    background: #efeeef;
+    background: linear-gradient(to bottom, #efeeef 0%,#e0dde0 100%);
+}
+
+.content-block .nav-controls .left {
+    float: left;
+    height: 44px;
+}
+
+.content-block .nav-controls .right {
+    float: right;
+    height: 44px;
+}
+
+.content-block .nav-controls .left a {
+    display: block;
+    height: 44px;
+    line-height: 44px;
+    float: left;
+    padding: 0 10px;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+    color: #656268;
+    position: relative;
+}
+
+.content-block .nav-controls .left a.marked {
+    color: #4695c4;
+}
+
+.content-block .nav-controls .left a:after {
+    position: absolute;
+    display: block;
+    content: '';
+    height: 44px;
+    width: 0px;
+    top: 0;
+    right: -1px;
+    border-right: 1px solid #d1d1d1;
+    border-left: 1px solid #eeedee;
+}
+
+.content-block .nav-controls .left a:first-child {
+    border-radius: 3px 0px 0px 3px;
+}
+
+.content-block .nav-controls a:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.content-block .nav-controls a:active {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+    line-height: 46px;
+}
+
+.content-block .nav-controls a:active:before,
+.content-block .nav-controls a:active:after {
+    border-right: 1px solid #d1d1d1;
+    border-left: none;
+}
+/* @end */
+
+
+/* @group Content widget
+---------------------------------------------------- */
+.content-block .widget {
+    margin: 0 0 18px;
+    border: 1px solid #d1ced3;
+    background: #f7f7f7;
+    border-radius: 4px;
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.035);
+    position: relative;
+    padding: 35px 0 0;
+}
+
+.content-block .widget .widget-separator {
+    width: 100%;
+    padding: 0 10px;
+    height: 0;
+    border-top: 1px solid #e6e3e7;
+    border-bottom: 1px solid #ffffff;
+    margin: 0 0 10px -10px;
+}
+
+.content-block .widget .widget-header {
+    background: #f2f0f2;
+    background: linear-gradient(to bottom, #f2f0f2 0%,#edeaf0 100%);
+    height: 34px;
+    border-bottom: 1px solid #d1ced3;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    border-radius: 3px 3px 0px 0px;
+    color: #656268;
+}
+
+.content-block .widget .widget-header .title {
+    padding: 10px;
+    font-size: 14px;
+    color: #656268;
+    float: left;
+}
+
+.content-block .widget .widget-header .title .f-icon {
+    margin-right: 5px;
+}
+
+.content-block .widget .widget-header .nav-tabs {
+    height: 30px;
+    float: right;
+    position: relative;
+    bottom: -3px;
+    border: none;
+}
+
+.content-block .widget .widget-header .nav-tabs a {
+    height: 31px;
+    padding: 0 10px;
+    line-height: 28px;
+    float: left;
+    text-decoration: none;
+    color: #656268;
+    position: relative;
+}
+
+.content-block .widget .widget-header .nav-tabs a:before {
+    position: absolute;
+    bottom: -2px;
+    left: -2px;
+    width: 2px;
+    height: 34px;
+    background: url(../img/sprites/widget-tabs-separator.png);
+    display: block;
+    content: '';
+    z-index: 1;
+}
+
+.content-block .widget .widget-header .nav-tabs a:hover {
+    color: #7e7b82;
+}
+
+.content-block .widget .widget-header .nav-tabs a.active {
+    background: #f7f7f7;
+    border: 1px solid #d4d1d6;
+    border-bottom: none;
+    font-weight: bold;
+    color: #37343b;
+    border-radius: 3px 3px 0px 0px;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 1);
+    cursor: default;
+    position: relative;
+    z-index: 2;
+}
+
+.content-block .widget .widget-header .nav-tabs a.active:before {
+    display: none;
+}
+
+.content-block .widget .widget-header .nav-options {
+    height: 34px;
+    float: right;
+    border-left: 1px solid #d1ced3;
+    position: relative;
+}
+
+.content-block .widget .widget-header .nav-options:before {
+    height: 34px;
+    width: 1px;
+    display: block;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -2px;
+    background: #fefefe;
+}
+
+.content-block .widget .widget-header .nav-options a {
+    padding: 0 10px;
+    line-height: 34px;
+    height: 34px;
+    color: #656268;
+}
+
+.content-block .widget .widget-header .nav-options a:hover {
+    color: #7e7b82;
+}
+
+.content-block .widget .widget-header .counter {
+    float: right;
+    margin: 8px 10px;
+}
+
+.content-block .widget .widget-header .counter i {
+    background: #52aed3;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 1), inset 0 1px 1px rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    font-size: 11px;
+    font-style: normal;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    color: #fff;
+    display: inline-block;
+    padding: 0 7px;
+    height: 18px;
+    line-height: 18px;
+}
+
+.content-block .widget .widget-content {
+    border-radius: 0px 0px 4px 4px;
+}
+
+.content-block .widget .widget-content-padding {
+    padding: 10px;
+}
+/* @end */
