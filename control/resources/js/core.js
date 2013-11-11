@@ -238,14 +238,10 @@ core.loading = {
                 return;
             }
 
-            $('div.global-loading-bar').animate({
-                height: 0,
+            $('.global-loading-circle').animate({
                 opacity: 0
             }, {
                 duration: 200,
-                specialEasing: {
-                    height: 'easeInQuart'
-                },
                 complete: function(){
                     core.loading.c = 0;
 
@@ -254,7 +250,7 @@ core.loading = {
                     }
                 }
             });
-        }, 650);
+        }, 450);
     },
 
     setGlobalLoading: function (ns) {
@@ -264,23 +260,11 @@ core.loading = {
 
         this.c = 0;
 
-        if (this.global_loading_interval) {
-            clearInterval(this.global_loading_interval);
-        }
-
-        this.global_loading_interval = setInterval(function () {
-            core.loading.c += 2;
-            $('div.global-loading-bar').css("backgroundPosition", core.loading.c + "px 0");
-        }, 9);
-
-        $('div.global-loading-bar').animate({
+        $('.global-loading-circle').animate({
             height: 5,
             opacity: 1
         }, {
-            duration: 200,
-            specialEasing: {
-                height: 'easeOutQuart'
-            }
+            duration: 200
         });
     }
 };

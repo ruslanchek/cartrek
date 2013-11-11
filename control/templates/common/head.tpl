@@ -5,7 +5,6 @@
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="icon" type="image/ico" href="/favicon.ico" />
 
-<link rel="stylesheet" type="text/css" href="/control/resources/css/kube.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/css/master.css" />
 
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/meow/jquery.meow.css" />
