@@ -1,0 +1,11 @@
+.leaflet-control-locate a {
+	background-image: url(images/locate.png);
+}
+
+.leaflet-control-locate.requesting a {
+    background-image: url(images/spinner.gif);
+}
+
+.leaflet-control-locate.active a {
+    background-image: url(images/locate_active.png);
+}

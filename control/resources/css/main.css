@@ -388,7 +388,6 @@ h5 {
     background: #edeaf0 url(../img/patterns/concrete-gray.png);
     position: relative;
     z-index: 2;
-    min-height: 500px;
     box-shadow: -5px 5px 25px rgba(0, 0, 0, 0.65), inset 0 0 0 1px rgba(255, 255, 255, 1);
     text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
 }
@@ -554,7 +553,7 @@ h5 {
 ---------------------------------------------------- */
 .content-block .widget {
     margin: 0 0 18px;
-    border: 1px solid #d1ced3;
+    border: 1px solid #ddd;
     background: #f7f7f7;
     border-radius: 4px;
     box-shadow: 0 2px 3px rgba(0, 0, 0, 0.035);
@@ -702,3 +701,239 @@ h5 {
     padding: 10px;
 }
 /* @end */
+
+
+/* Dispatcher */
+.dispatcher {
+    overflow: hidden;
+    height: 0;
+    margin: 0 0 18px;
+}
+
+.dispatcher .third {
+    width: 31.985673758865245%;
+    margin-left: 2%;
+}
+
+.dispatcher .row .third:first-child {
+    margin-left: 0;
+}
+
+.dispatcher .row .quarter {
+    width: 23.85%;
+    margin-left: 1.5%;
+}
+
+.dispatcher .row .quarter:first-child {
+    margin-left: 0;
+}
+
+.dispatcher .brick {
+    padding-top: 0;
+    margin-bottom: 0;
+}
+
+.dispatcher .item {
+    position: relative;
+    opacity: 0;
+
+    -webkit-transition: -webkit-transform 450ms;
+    -moz-transition: -moz-transform 450ms;
+    -o-transition: -o-transform 450ms;
+    transition: transform 450ms;
+
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+
+    -webkit-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
+    -moz-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
+    -o-transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
+    transform: rotateY(180deg) scale(0.5) rotateZ(20deg);
+}
+
+.dispatcher .item.flipped {
+    -webkit-transform: rotateY(0deg);
+    -moz-transform: rotateY(0deg);
+    -o-transform: rotateY(0deg);
+    transform: rotateY(0deg);
+}
+
+.dispatcher .item:hover {
+
+}
+
+.dispatcher .item .head {
+    cursor: move;
+}
+
+.dispatcher .item .head .g_id {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    font-size: 11px !important;
+}
+
+.dispatcher .item:hover .head {
+    background-color: #e8e8e8;
+}
+
+.dispatcher .item .head h2 {
+    font-size: 1.1em;
+    font-weight: bold;
+    margin: 0;
+    width: 100%;
+    overflow: hidden;
+    height: 1em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dispatcher .item .head .make_model {
+    font-size: 0.8em;
+    color: #888;
+    width: 100%;
+    overflow: hidden;
+    height: 1.6em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.dispatcher .item .map-hider {
+    height: 152px;
+    position: absolute;
+    width: 100%;
+    top: 22px;
+    left: 0;
+    z-index: 2;
+    background: #eee;
+}
+
+.dispatcher .item .map-hider i {
+    width: 96px;
+    height: 96px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -48px 0 0 -48px;
+}
+
+.dispatcher .item .map {
+    height: 150px;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #d5d5d5;
+}
+
+.dispatcher .item .foot {
+    text-shadow: 0 1px 0 #fff;
+}
+
+.dispatcher .item .params {
+    padding: 6px 0 0 8px;
+    font-size: 11px;
+    border-top: 1px solid #fff;
+    line-height: 1.3em;
+}
+
+.dispatcher .item .params.offline * {
+    color: #999;
+}
+
+.dispatcher .item .params .separator {
+    clear: both;
+    margin-bottom: 6px;
+    width: 100%;
+    padding: 6px 0 0 8px;
+    margin-left: -8px;
+}
+
+.dispatcher .item .params .separated-block {
+    background: #eee;
+    margin-bottom: 6px;
+    width: 100%;
+    padding: 6px 0 0 8px;
+    margin-left: -8px;
+    border-bottom: 1px solid #fff;
+    border-top: 1px solid #d2d2d2;
+}
+
+.dispatcher .item .params .param {
+    float: left;
+    width: 50%;
+    padding-bottom: 6px;
+    border-radius: 5px;
+
+}
+
+.dispatcher .item .params .param .status-text {
+    font-size: 1.1em;
+}
+
+.dispatcher .item .params .param .key {
+    width: 42%;
+    margin-right: 8%;
+    float: left;
+    color: #999;
+}
+
+.dispatcher .item .params .param .value {
+    width: 42%;
+    margin-right: 8%;
+    float: left;
+}
+
+.dispatcher .item .params .param.one-col .key,
+.dispatcher .item .params .param.one-col .value {
+    width: 95%;
+    float: none;
+    margin-right: 5%;
+}
+
+.dispatcher .item .map .leaflet-control-container {
+    display: none;
+}
+
+.dispatcher .item .map .leaflet-control-container .leaflet-bar a {
+    height: 22px;
+    width: 20px;
+}
+
+.dispatcher .ui-sortable-helper {
+    -webkit-box-shadow: 0px 10px 35px 0px rgba(0, 0, 0, 0.4);
+    box-shadow: 0px 10px 35px 0px rgba(0, 0, 0, 0.4);
+    background: none;
+
+    -webkit-transition: -webkit-transform 250ms;
+    -moz-transition: -moz-transform 250ms;
+    -o-transition: -o-transform 250ms;
+    transition: transform 250ms;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    -o-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+
+.dispatcher .ui-sortable-placeholder {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    background: #eee url(../img/pattern_white.png);
+    visibility: visible !important;
+
+    -webkit-box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 10px 200px 0px rgba(0, 0, 0, 0.1), inset 0px 2px 8px 0px rgba(0, 0, 0, 0.2);
+
+    -webkit-transform: rotateY(0deg) rotateZ(0deg);
+    -moz-transform: rotateY(0deg) rotateZ(0deg);
+    -o-transform: rotateY(0deg) rotateZ(0deg);
+    transform: rotateY(0deg) rotateZ(0deg);
+}
+
+.dispatcher .ui-sortable-helper {
+    -webkit-transform: rotateY(5deg) rotateZ(-3deg);
+    -moz-transform: rotateY(5deg) rotateZ(-3deg);
+    -o-transform: rotateY(5deg) rotateZ(-3deg);
+    transform: rotateY(5deg) rotateZ(-3deg);
+}

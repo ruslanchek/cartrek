@@ -68,14 +68,14 @@ var DCar = function (params) {
         var t = this;
 
         this.dom_object.find('.map-hider').css({
-            top: this.dom_object.find('.head').height() + 11
+            top: this.dom_object.find('.head').height() + 1
         }).fadeIn(150, function () {
-                t.dom_object.find('.map').css({
-                    visibility: 'hidden'
-                });
-
-                t = null;
+            t.dom_object.find('.map').css({
+                visibility: 'hidden'
             });
+
+            t = null;
+        });
     };
 
     this.drawData = function () {
@@ -91,7 +91,7 @@ var DCar = function (params) {
         if (this.params.metrics && this.params.metrics.online === true) {
             html += '<div class="param">' +
                 '<div class="key">' +
-                '<span class="status-text green">Онлайн</span>' +
+                '<span class="status-text color-green">Онлайн</span>' +
                 '</div>' +
                 '<div class="value"></div>' +
                 '</div>';
@@ -111,7 +111,7 @@ var DCar = function (params) {
         } else {
             html += '<div class="param">' +
                 '<div class="key">' +
-                '<span class="status-text gray-light">Офлайн</span>' +
+                '<span class="status-text color-gray-light">Офлайн</span>' +
                 '</div>' +
                 '<div class="value"></div>' +
                 '</div>';
@@ -199,45 +199,11 @@ var View = function () {
 
     /* Methods */
     this.setFleetMenuIndicator = function (i, instant) {
-        var $item = $('#fleets li[rel="' + i + '"]'),
-            s = 150;
 
-        if (instant === true) {
-            s = 0;
-        }
-
-        $('#fleets i').text($item.text()).animate({
-            top: $item.offset().top,
-            left: $item.offset().left,
-            width: $item.width()
-        }, s, function () {
-            if (instant !== true) {
-                document.location.hash = '#fleet=' + i;
-            }
-        });
-
-        MC.Data.fleet = i;
     };
 
     this.drawFleetMenu = function () {
-        if (MC.Data.fleets.length > 0) {
-            var html = '<ul class="nav-top" id="fleets"><i></i><li rel="all" class="active"><a href="#fleet=all">Все группы</a></li>';
 
-            for (var i = 0, l = MC.Data.fleets.length; i < l; i++) {
-                html += '<li rel="' + MC.Data.fleets[i].id + '"><a href="#fleet=' + MC.Data.fleets[i].id + '">' + MC.Data.fleets[i].name + '</a></li>';
-            }
-
-            html += '<div class="clear"></div></ul>';
-
-            $('#fleets').html(html);
-        }
-
-        $('#fleets a').on('click', function (e) {
-            MC.View.setFleetMenuIndicator($(this).parent().attr('rel'), false);
-            e.preventDefault();
-
-            MC.Data.reset();
-        });
     };
 
     this.showCars = function (cb) {
@@ -273,7 +239,7 @@ var View = function () {
     this.resizeGrid = function (cb) {
         var h = 0,
             hb = 0,
-            k = 4,
+            k = 3,
             items_k = $('.dispatcher .brick .item:visible').length;
 
         $('.dispatcher .brick .item').each(function () {
@@ -303,7 +269,7 @@ var View = function () {
         var gi = Math.floor(items_k / k);
 
         $('.dispatcher').animate({
-            height: hb * gi + ((18 * gi) - 18)
+            height: hb * gi + ((18 * gi))
         }, 200, function () {
             MC.View.setFleetMenuIndicator(MC.Data.fleet, true);
 
@@ -336,16 +302,17 @@ var View = function () {
     };
 
     this.drawCarsGrid = function () {
-        var html = '';
+        var html = '<div class="units-row-end">';
+
+        var ii = 0;
 
         for (var i = 0, l = MC.Data.cars.length; i < l; i++) {
             var c = MC.Data.cars[i];
 
-            html += '<div class="brick">' +
-                '<div class="item" id="item_' + c.id + '" data-id="' + c.id + '">' +
-                '<div class="head">' +
-                '<h2>' + c.name + '</h2>' +
-                '<div class="make_model">' + ((c.make) ? c.make : '') + ' ' + ((c.model) ? c.model : '') + '</div>' +
+            html += '<div class="brick unit-33">' +
+                '<div class="item widget" id="item_' + c.id + '" data-id="' + c.id + '">' +
+                '<div class="head widget-header">' +
+                '<h2 class="title" title="' + ((c.make) ? c.make : '') + ' ' + ((c.model) ? c.model : '') + '">' + c.name + '</h2>' +
                 core.utilities.drawGId(c.g_id) +
                 '</div>' +
 
@@ -354,7 +321,17 @@ var View = function () {
                 '<div class="foot"></div>' +
                 '</div>' +
                 '</div>';
+
+            ii++;
+
+            if(ii == 3){
+                ii = 0;
+
+                html += '</div><div class="units-row-end">';
+            }
         }
+
+        html += '</div>';
 
         $('.dispatcher').html(html);
 

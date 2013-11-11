@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html style="background: #2e2c30;">
     <head>
-        <title>Title</title>
+        {include file="common/head.tpl"}
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.css" />
 
-        <link rel="stylesheet" href="/control/resources/css/main.css" />
+        <!--[if lte IE 8]>
+        <link rel="stylesheet" href="/control/resources/mapping-tools/leaflet/dist/leaflet.ie.css" />
+        <![endif]-->
 
-        <script src="http://code.jquery.com/jquery.min.js"></script>
-        <script src="/control/resources/plugins/select/select.js"></script>
+        <script src="/control/resources/mapping-tools/leaflet/dist/leaflet.js"></script>
+        <script src="/control/resources/mapping-tools/leaflet/plugins/proto/proto.js"></script>
+
+        <script src="https://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
+        <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Google.js"></script>
+        <script src="/control/resources/mapping-tools/leaflet/plugins/tiles/Bing.js"></script>
+
+        <script src="/control/resources/js/prototypes.map.js"></script>
     </head>
 
     <body>
@@ -26,6 +33,8 @@
                 </div>
 
                 {include file="common/breadcrumbs.tpl"}
+
+                {include file="modules/`$core->module.name`.tpl"}
             </div>
         </div>
     </body>

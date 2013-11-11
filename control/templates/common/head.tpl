@@ -2,11 +2,15 @@
 
 <meta charset="utf-8">
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
 <link rel="icon" type="image/ico" href="/favicon.ico" />
 
-<link rel="stylesheet" type="text/css" href="/control/resources/css/kube.css" />
-<link rel="stylesheet" type="text/css" href="/control/resources/css/master.css" />
+<link rel="stylesheet" href="/control/resources/css/main.css" />
+
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="/control/resources/plugins/select/select.js"></script>
 
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/meow/jquery.meow.css" />
 <link rel="stylesheet" type="text/css" href="/control/resources/plugins/jquery-core-ui-select/css/jquery.scrollpane.css" />

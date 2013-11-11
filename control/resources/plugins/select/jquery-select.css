@@ -1,0 +1,123 @@
+.customSelector-select {
+    display: none;
+}
+
+.customSelector {
+    background: #fff;
+    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    height: 27px;
+    line-height: 27px;
+    width: 250px;
+    position: relative;
+}
+
+.customSelector *,
+.customSelector {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: -moz-none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.customSelector:hover .customSelector-current,
+.customSelectorActive .customSelector-current {
+    box-shadow: 0 0 0 2px rgba(70, 161, 231, 0.3);
+}
+
+.customSelector .customSelector-current {
+    padding: 0 10px;
+    color: #3C4E5A;
+    cursor: pointer;
+
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+}
+
+.customSelector:hover .customSelector-current {
+    color: #5c738c !important;
+}
+
+.customSelector .customSelector-arrow {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: block;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 7px 6px 0 6px;
+    border-color: #3C4E5A transparent transparent transparent;
+}
+
+.customSelector:hover .customSelector-arrow {
+    border-style: solid;
+    border-width: 7px 6px 0 6px;
+    border-color: #5c738c transparent transparent transparent;
+}
+.customSelector .customSelector-list {
+    border-top: 1px solid #ddd;
+    background: #fff;
+    width: 100%;
+    z-index: 1112;
+    position: absolute;
+    display: none;
+
+    top: 26px;
+    padding: 0;
+
+    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+
+    -webkit-border-radius: 0px 0px 2px 2px;
+    border-radius: 0px 0px 2px 2px;
+}
+
+.customSelector .customSelector-list ul {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    list-style: none;
+}
+
+.customSelector .customSelector-list ul li:last-child,
+.customSelector .customSelector-list ul li:last-child a {
+    -webkit-border-radius: 0px 0px 2px 2px;
+            border-radius: 0px 0px 2px 2px;
+}
+
+.customSelector .customSelector-list ul li a {
+    color: #3C4E5A;
+    text-decoration: none;
+    display: block;
+    height: 27px;
+    line-height: 27px;
+    padding: 0 10px;
+    overflow: hidden;
+    width: 230px;
+    text-overflow: ellipsis;
+}
+
+.customSelector .customSelector-list ul li a:hover {
+    background: #eee;
+}
+
+.customSelector .customSelector-list ul li a.active {
+    background: #3C4E5A;
+    color: #fff;
+}
+
+.customSelector .customSelector-current .arrow {
+    position: absolute;
+    display: block;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 7px 6px 0 6px;
+    border-color: #007bff transparent transparent transparent;
+}
