@@ -1,6 +1,6 @@
 <div class="row sections">
     <div class="seventh item" data-step='1' data-intro='Раздел &laquo;Наблюдение&raquo; представляет из себя карту, на которой отображены все ваши машины, с возможностью просматривать их местонахождение в реальном времени, просматривать трек по выбранной дате, а так же текущие параметры, такие, как скорость, пройденный путь, состояние, уровень топлива и т. д.'>
-        <a href="/control/map-old/" class="inner">
+        <a href="/control/map/" class="inner">
             <i class="icon-64 map"></i>
             Наблюдение
         </a>
@@ -49,8 +49,6 @@
         </a>
     </div>
 </div>
-
-<hr style="margin: 20px 0 10px">
 
 <div class="row sections">
     <div class="seventh item">

@@ -3,7 +3,6 @@
     <button class="btn" id="load_more">Показать еще</button>
 </div>
 
-
 <div class="quarter">
     <ul class="nav-side">
         <li class="active"><a data-action="unreaded" class="action_menu_item" href="javascript:void(0)">Непросмотренные</a></li>

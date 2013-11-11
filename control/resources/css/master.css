@@ -59,17 +59,75 @@ p {
 /* =Global
 -----------------------------------------------------------------------------*/
 .global-left {
-    width: 136px;
-    padding: 30px;
+    width: 186px;
     position: absolute;
     background: #333 url(../img/patterns/low_contrast_linen.png);
-    height: 800px;
     top: 53px;
     box-shadow: inset -5px 5px 8px rgba(0, 0, 0, 0.3);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overflow-style: move;
+}
+
+.global-left .jspContainer {
+    max-height: none !important;
+    margin-top: 3px;
+}
+
+.global-left .jspTrack {
+    background: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.global-left .jspDrag {
+    width: 5px;
+    background: rgba(255, 255, 255, 0.175);
+    border: none;
+    opacity: 0.6;
+    left: -2px;
+}
+
+.global-left:hover .jspDrag {
+    opacity: 1;
 }
 
 .global-right {
-    margin-left: 196px;
+    margin-left: 186px;
+}
+
+.global-menu {
+    width: 136px;
+    margin: 0 auto;
+    padding: 15px 0;
+}
+
+.global-menu a {
+    color: #b5b3b9;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    padding: 2px 0 8px;
+    border-radius: 5px;
+    margin: 0 0 10px;
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.7);
+}
+
+.global-menu a:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 -1px 0 rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.global-menu a.active,
+.global-menu a:active {
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.075);
+    color: #fff;
+}
+
+.global-menu a .icon-64 {
+    display: block;
+    margin: 0 auto;
 }
 
 
@@ -93,6 +151,7 @@ html, body {
 .cont {
     min-width: 950px;
     margin: 0 30px;
+    position: relative;
 }
 
 .cont.wide {
@@ -113,28 +172,29 @@ html, body {
 }
 
 footer {
-    margin-top: -46px;
-    height: 32px;
+    margin-top: -50px;
+    height: 36px;
     padding: 14px 0 0 0;
 }
 
 /* @group Header
 ---------------------------------------------------- */
-.header {
+header.header {
     background: #3e3a43 url(../img/patterns/top-menu.png) repeat-x;
     height: 52px;
-    box-shadow: 0 3px 15px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.25);
     position: relative;
     min-width: 940px;
     margin: 0 0 25px;
     border-bottom: 1px solid #111;
+    z-index: 5;
 }
 
-.header .limiter {
+header.header .limiter {
     position: relative;
 }
 
-.header .logo {
+header.header .logo {
     background: url(../img/logos/cartrek.png) 0 0 no-repeat;
     display: block;
     position: absolute;
@@ -148,13 +208,13 @@ footer {
 
 /* @group Header tools & nav
 ---------------------------------------------------- */
-.header .tools {
+header.header .tools {
     position: absolute;
     right: 30px;
     height: 52px;
 }
 
-.header .tools .global-loading-circle {
+header.header .tools .global-loading-circle {
     opacity: 0;
     position: absolute;
     width: 52px;
@@ -168,7 +228,7 @@ footer {
     left: -50px;
 }
 
-.header .tools nav {
+header.header .tools nav {
     height: 32px;
     border: 1px solid #302d33;
     border-radius: 4px;
@@ -179,7 +239,7 @@ footer {
     float: right;
 }
 
-.header .tools nav a {
+header.header .tools nav a {
     height: 32px;
     line-height: 32px;
     display: block;
@@ -192,16 +252,16 @@ footer {
     position: relative;
 }
 
-.header .tools nav a .f-icon {
+header.header .tools nav a .f-icon {
     font-size: 14px;
     position: relative;
 }
 
-.header .tools nav a .f-icon.color-red {
+header.header .tools nav a .f-icon.color-red {
     text-shadow: 0 1px 8px rgba(239, 100, 101, 0.45);
 }
 
-.header .tools nav a .count {
+header.header .tools nav a .count {
     top: -4px;
     left: -4px;
     height: 14px;
@@ -219,12 +279,12 @@ footer {
     color: #fff;
 }
 
-.header .tools nav a:hover {
+header.header .tools nav a:hover {
     background-position: 0 -64px;
 }
 
-.header .tools nav a.active,
-.header .tools nav a:active {
+header.header .tools nav a.active,
+header.header .tools nav a:active {
     background-position: 0 0;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
     position: relative;
@@ -232,16 +292,16 @@ footer {
     color: #fff;
 }
 
-.header .tools nav a.active {
+header.header .tools nav a.active {
     margin-left: -1px;
 }
 
-.header .tools nav a.active:before,
-.header .tools nav a.active:after {
+header.header .tools nav a.active:before,
+header.header .tools nav a.active:after {
     display: none !important;
 }
 
-.header .tools nav a:before {
+header.header .tools nav a:before {
     content: "";
     display: block;
     position: absolute;
@@ -252,7 +312,7 @@ footer {
     left: 0;
 }
 
-.header .tools nav a:after {
+header.header .tools nav a:after {
     content: "";
     display: block;
     position: absolute;
@@ -263,26 +323,27 @@ footer {
     right: 0;
 }
 
-.header .tools nav a:first-of-type {
+header.header .tools nav a:first-of-type {
     border-radius: 3px 0px 0px 3px;
 }
 
-.header .tools nav a:last-of-type {
+header.header .tools nav a:last-of-type {
     border-radius: 0px 3px 3px 0px;
 }
 
-.header .tools nav a:first-of-type:last-of-type  {
+header.header .tools nav a:first-of-type:last-of-type  {
     border-radius: 3px;
 }
 
-.header .tools nav a:first-of-type:before {
+header.header .tools nav a:first-of-type:before {
     display: none;
 }
 
-.header .tools nav a:last-of-type:after {
+header.header .tools nav a:last-of-type:after {
     display: none;
 }
 /* @end */
+
 
 /* =Content
 -----------------------------------------------------------------------------*/
@@ -688,6 +749,14 @@ b-core-ui-select__dropdown__list {
     display: block;
 }
 
+.forms hr {
+    width: 100%;
+    padding: 0 20px;
+    height: 0;
+    margin-left: -20px;
+    border-bottom: 1px solid #fff;
+}
+
 .forms .form-item {
     position: relative;
 }
@@ -981,12 +1050,13 @@ footer a:active {
 .bottom-logo {
     position: absolute;
     left: 50%;
-    top: 50%;
+    top: 0;
+    top: 0;
     text-indent: -99999px;
     background: url(../img/sprite.png) -130px 0 no-repeat;
     width: 128px;
     height: 32px;
-    margin: -16px 0 0 -64px;
+    margin: -5px 0 0 -64px;
 }
 
 /* =GID's
@@ -1825,11 +1895,24 @@ footer a:active {
 
 .map-observer.map-container {
     position: absolute;
-    left: 0;
-    top: 46px;
+    left: -30px;
+    top: -25px;
     width: 100%;
-    min-width: 1080px;
+    min-width: 1150px;
     overflow: hidden;
+}
+
+.map-observer.map-container:before {
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    background: #ffffff;
+    display: block;
+    content: '';
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0.13;
 }
 
 /* Map misc */
@@ -2423,6 +2506,12 @@ footer a:active {
 
 .sections .item {
     position: relative;
+    margin-bottom: 20px;
+}
+
+.sections .item:hover {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 5px;
 }
 
 .sections .item a.inner {

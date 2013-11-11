@@ -24,15 +24,21 @@
             <div class="limiter">
                 {include file="common/top.tpl"}
 
-                <div class="cont h1">
-                    <div class="container-padding">
-                        <h1>{$core->module.title}<span id="current-fleet-and-car"></span></h1>
-                    </div>
+                <div class="global-left">
+                    {include file="common/side-menu.tpl"}
                 </div>
 
-                <div class="cont main-content">
-                    <div class="row container-padding">
-                        {include file="modules/`$core->module.name`.tpl"}
+                <div class="global-right">
+                    <div class="cont h1">
+                        <div class="container-padding">
+                            <h1>{$core->module.title}<span id="current-fleet-and-car"></span></h1>
+                        </div>
+                    </div>
+
+                    <div class="cont main-content">
+                        <div class="row container-padding">
+                            {include file="modules/`$core->module.name`.tpl"}
+                        </div>
                     </div>
                 </div>
             </div>

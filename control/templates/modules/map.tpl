@@ -37,6 +37,8 @@
     </div>
 </div>*}
 
+<span id="current-fleet-and-car"></span>
+
 <div class="map-container map-observer" data-step='2' data-intro='Карта'>
     <div class="map-tools-top-right slide-animation init">
         <div id="togglers">

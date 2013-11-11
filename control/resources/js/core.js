@@ -1421,10 +1421,55 @@ core.ui = {
         }
     },
 
+    resizeLeftGlobalMenu: function(){
+        $('.global-left').css({
+            height: 0
+        }).css({
+            height: $('body').height() - $('header.header').height() - $('.footer').height() - 47
+        });
+
+        $('.jspContainer').css({
+            height: 0
+        }).css({
+            height: $('body').height() - $('header.header').height() - $('.footer').height() - 47
+        });
+
+        $('.global-left').jScrollPane();
+    },
+
+    closeLeftGlobalMenu: function(){
+        $('.global-left').animate({
+            marginLeft: -186
+        }, 300);
+
+        $('.global-menu').animate({
+            opacity: 0
+        }, 350);
+
+        $('.global-right').animate({
+            marginLeft: 0
+        }, 300);
+    },
+
+    openLeftGlobalMenu: function(){
+        $('.global-left').animate({
+            marginLeft: 0
+        }, 300);
+
+        $('.global-menu').animate({
+            opacity: 1
+        }, 350);
+
+        $('.global-right').animate({
+            marginLeft: 186
+        }, 300);
+    },
+
     init: function () {
         this.webkitNotificationsRequest();
         this.getRawTitle();
         this.windowFocus();
+        this.resizeLeftGlobalMenu();
 
         $('.core-ui-select').coreUISelect({
             jScrollPane: true
@@ -1435,6 +1480,12 @@ core.ui = {
                 $('.form_message').html('');
             });
         });
+
+        $(window).on('resize.globalMenu', function () {
+            core.ui.resizeLeftGlobalMenu();
+        });
+
+        $('.global-left').jScrollPane();
     }
 };
 

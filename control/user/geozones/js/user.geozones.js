@@ -609,7 +609,7 @@ var geozones = {
     },
 
     setResizer: function () {
-        $(window).off('resize').on('resize', function () {
+        $(window).off('resize.geozones').on('resize', function () {
             $('#map').css({
                 width: 0
             });

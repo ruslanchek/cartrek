@@ -10,7 +10,7 @@
                 {include file="common/top.tpl"}
 
                 <div class="global-left">
-x
+                    {include file="common/side-menu.tpl"}
                 </div>
 
                 <div class="global-right">
