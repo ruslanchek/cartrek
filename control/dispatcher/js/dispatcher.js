@@ -303,7 +303,7 @@ var View = function () {
         var gi = Math.floor(items_k / k);
 
         $('.dispatcher').animate({
-            height: hb * gi + ((18 * gi) - 18)
+            height: hb * gi + ((18 * gi) - 10)
         }, 200, function () {
             MC.View.setFleetMenuIndicator(MC.Data.fleet, true);
 
