@@ -1,4 +1,4 @@
-<?php
+<?
 
 Class EventsApi extends Core
 {

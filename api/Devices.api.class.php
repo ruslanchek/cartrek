@@ -1,4 +1,4 @@
-<?php
+<?
 
 Class Devices extends Core
 {

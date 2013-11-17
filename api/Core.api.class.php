@@ -1,4 +1,4 @@
-<?php
+<?
 
 Class Core
 {
@@ -10,13 +10,13 @@ Class Core
         $config,
         $params,
         $module = array(
-        'form' => false, // TODO: Нужен ли этот индекс? Вроде больше нигде не используется
-        'additional_button' => false
-    ),
+            'form' => false, // TODO: Нужен ли этот индекс? Вроде больше нигде не используется
+            'additional_button' => false
+        ),
         $main_menu = array(
-        array('name' => 'settings', 'title' => 'Настройка'),
-        array('name' => 'map', 'title' => 'Карта')
-    ),
+            array('name' => 'settings', 'title' => 'Настройка'),
+            array('name' => 'map', 'title' => 'Карта')
+        ),
         $uri;
 
     // Классы API
@@ -28,7 +28,7 @@ Class Core
         'sms' => 'Sms',
         'form' => 'Form',
         'devices' => 'Devices',
-        'eventsApi' => 'Events',
+        'eventsApi' => 'EventsApi',
         'payment' => 'Payment',
         'drivers' => 'Drivers',
         'geozones' => 'Geozones'
