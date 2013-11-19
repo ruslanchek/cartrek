@@ -21,17 +21,11 @@ Class Config{
             'afk_margin'        => 3600000
         );
 
-        /* App fog */
-        /*$services_json = json_decode(getenv("VCAP_SERVICES"),true);
-        $mysql_config = $services_json["mysql-5.1"][0]["credentials"];
-
-        $this->db_vars = array(
-            'host'  => $mysql_config["hostname"],
-            'db'    => $mysql_config["name"],
-            'user'  => $mysql_config["username"],
-            'pass'  => $mysql_config["password"],
-            'port'  => $mysql_config["port"]
-        );*/
+        $this->device_types = array(
+            array('id' => 1, 'name' => 'light', 'title' => 'Легковой'),
+            array('id' => 2, 'name' => 'suv', 'title' =>  'Внедорожник'),
+            array('id' => 3, 'name' => 'heavy', 'title' =>  'Глузовик')
+        );
 
         $this->db_vars = array(
             'host'  => '62.76.40.244',

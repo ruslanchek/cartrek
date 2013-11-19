@@ -76,8 +76,8 @@
             </div>
         </div>
 
-        <div class="map-tools-info-block" id="current-info">
-
+        <div class="map-tools-info-block">
+            <div id="current-info"></div>
         </div>
     </div>
 

@@ -1,4 +1,4 @@
-<footer {if $core->module.name == 'map'}class="shadow"{/if}>
+<footer {if $core->module.name == 'map'}class="footer-for-map"{/if}>
     <div class="cont">
         <div class="container-padding">
             <div class="third">

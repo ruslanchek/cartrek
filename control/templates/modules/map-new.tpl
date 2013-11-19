@@ -42,7 +42,7 @@
             </div>
 
             <div class="pull-right">
-                <button id="where_is_my_car" class="btn btn-info" title="Показать машины/путь"><i class="icon-screenshot icon-white"></i></button>
+                <button id="where_is_my_car" class="btn btn-info" title="Показать автомобили/путь"><i class="icon-screenshot icon-white"></i></button>
             </div>
 
             <div class="clear"></div>

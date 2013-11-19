@@ -10,7 +10,7 @@ Class FleetAdd extends Core
 
         $this->init(array(
             'name' => 'user.fleet.add',
-            'title' => 'Добавление машины',
+            'title' => 'Добавление автомобиля',
             'dir' => '/control/user/fleet/add'
         ));
 

@@ -26,7 +26,7 @@
 
     <a href="/control/user/fleet" {if $core->module.name == 'user.fleet'}class="active"{/if}>
         <i class="icon-64 truck"></i>
-        Машины
+        Автомобили
     </a>
 
     {*<a href="/control/user/groups/">

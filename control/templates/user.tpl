@@ -16,7 +16,7 @@
                 <div class="global-right">
                     <div class="cont h1">
                         <div class="container-padding header-block">
-                            <h1>Настройка{if $core->module.title}<span> / {$core->module.title}</span>{/if}</h1>
+                            <h1>{$core->module.title}</h1>
                         </div>
                     </div>
 

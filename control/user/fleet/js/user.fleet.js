@@ -44,7 +44,7 @@ var fleet = {
             '</form>';
 
         core.modal.createModal(
-            'Редактирование машины',
+            'Редактирование автомобиля',
             html,
             750
         );
@@ -69,7 +69,7 @@ var fleet = {
 
         $('.activity-toggler').slickswitch({
             toggled: function(item){
-                if($(item[0]).prop('checked') === false && confirm('Внимание! Картрек перестанет принимать какие-либо данные от этой машины, если ее отключить!')){
+                if($(item[0]).prop('checked') === false && confirm('Внимание! Картрек перестанет принимать какие-либо данные от этого автомобиля, если его отключить!')){
                     fleet.toggleDevice(item.data('id'), false);
 
                     var $item = $('#fleet-table tr[rel="'+item.data('id')+'"]');

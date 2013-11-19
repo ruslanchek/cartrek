@@ -30,7 +30,7 @@ var View = function () {
     };
 
     this.bindDatepicker = function(date){
-        $('.datepicker .widget').datepicker( "setDate", core.utilities.humanizeDate(date) );
+        $('.datepicker .widget').datepicker('setDate', core.utilities.humanizeDate(date) );
 
         $('.datepicker .widget').datepicker({
             onSelect: function(text, obj){
@@ -210,7 +210,7 @@ var View = function () {
                 '<div class="status-info-table-block">' +
                 '<table>' +
                 '<tr>' +
-                '<td width="99%">Выбрано машин</td>' +
+                '<td width="99%">Выбрано автомобилей</td>' +
                 '<td width="1%"><span class="badge">' + selected + '</span></td>' +
                 '</tr>' +
                 '<tr>' +
@@ -285,29 +285,46 @@ var View = function () {
 
         $('#current-date').html(core.utilities.humanizeDate(MC.Data.date));
         $('#current-info').html(current_info_html);
+
+        this.mapView();
     };
 
     /* Set map and side tools sizes */
     this.mapView = function () {
         var resize = function () {
             $('#map, .map-container').css({
+                height: 0
+            }).css({
                 height: $('body').height() - $('header.header').height() - $('footer').height() - 15,
                 width: $('.map-container').parent().width() + 60
             });
 
-            $('.map-side-panel').css({
-                minHeight: $('.map-container').height()
+            var ib_height = $('.map-container').height() - 120;
+
+            if(ib_height > $('#current-info').height()){
+                ib_height = $('#current-info').height();
+            }
+
+            $('.map-tools-info-block').css({
+                minHeight: ib_height,
+                maxHeight: ib_height
             });
 
             if (MC.Map.instance) {
                 MC.Map.instance.invalidateSize();
             }
+
+            $('.map-tools-info-block').jScrollPane();
         };
 
         resize();
 
-        $(window).on('resize', function () {
+        $(window).off('resize.map').on('resize.map', function () {
             resize();
+
+            setTimeout(function(){
+                $(window).trigger('resize');
+            }, 200);
         });
     };
 
@@ -328,7 +345,7 @@ var View = function () {
             id: 'cars-menu-select',
             default_opt: {
                 val: 'all',
-                name: 'Все машины'
+                name: 'Все автомобили'
             },
             default: MC.Data.car,
             key_name: 'id',
@@ -823,7 +840,7 @@ var Data = function () {
                 this.car = 'all';
                 MC.View.showMapMessage({
                     icon: 'warning',
-                    message: 'Ошибка, машины с ID ' + this.car + ' не существует!'
+                    message: 'Ошибка, автомобиля с ID ' + this.car + ' не существует!'
                 });
             }
         }
@@ -921,10 +938,10 @@ var Data = function () {
             }
 
             if (this.car == 'all') {
-                message = 'На ' + day + ' не зарегистрированно ни одной отметки, ни для одной машины';
+                message = 'На ' + day + ' не зарегистрированно ни одной отметки, ни для одного автомобиля';
 
             } else if (this.car != 'all' && this.current_car && !this.current_car.params.last_point_date) {
-                message = 'Для машины &laquo;' + this.current_car.params.name + '&raquo; нет ни одной отметки';
+                message = 'Для автомобиля &laquo;' + this.current_car.params.name + '&raquo; нет ни одной отметки';
 
             } else if (
                 this.car != 'all' &&
@@ -959,7 +976,7 @@ var Data = function () {
                     (parseInt(MC.Data.current_car.params.last_point_date.getMonth()) + 1) + '-' +
                     MC.Data.current_car.params.last_point_date.getFullYear();
 
-                message = 'На ' + day + ' не зарегистрированно ни одной отметки для машины &laquo;' +
+                message = 'На ' + day + ' не зарегистрированно ни одной отметки для автомобиля &laquo;' +
                     this.current_car.params.name +
                     '&raquo;. Последняя отметка была зарегистрированна ' +
                     '<a href="' + hash + '">' + core.utilities.humanizeDateTime(this.current_car.params.last_point_date, false) + '</a>';

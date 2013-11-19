@@ -135,6 +135,7 @@ Class Devices extends Core
                 	`d`.`online`,
                 	`d`.`g_id`,
                 	`d`.`color`,
+                	`d`.`type`,
                 	`d`.`active`,
                 	`d`.`fleet_id`,
                 	`d`.`extensions`,

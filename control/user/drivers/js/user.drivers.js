@@ -207,7 +207,7 @@ var user_groups = {
 
         $('.group-delete').off('click').on('click', function (e) {
             if ($(this).data('count') > 0) {
-                alert('Невозможно удалить группу, пока в ней состоит хотя бы одна машина!');
+                alert('Невозможно удалить группу, пока в ней состоит хотя бы один автомобиль!');
             } else {
                 if (confirm('Удалить группу «' + $(this).data('name') + '»?')) {
                     var id = $(this).data('id');

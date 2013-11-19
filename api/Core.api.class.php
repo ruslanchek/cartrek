@@ -152,6 +152,7 @@ Class Core
         $this->uri_chain = explode('/', trim($this->uri, '/'));
     }
 
+    // Common methods
     public function createAdditionalButton($name, $href)
     {
         $additional_button_data = new stdClass();
@@ -161,5 +162,17 @@ Class Core
 
         $this->smarty->assign('additional_button', $additional_button_data);
         $this->module['additional_button'] = $this->smarty->fetch('common/additional_button.tpl');
+    }
+
+    public function getDeviceTypeData($id, $key = false){
+        foreach($this->config->device_types as $item){
+            if($id == $item['id']){
+                if($key === false){
+                    return (object) $item;
+                }else{
+                    return $item[$key];
+                }
+            }
+        }
     }
 }

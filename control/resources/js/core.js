@@ -1309,8 +1309,8 @@ core.ui = {
         $(window).on('focus',function () {
             core.ui.window_focus = true;
         }).on('blur', function () {
-                core.ui.window_focus = false;
-            });
+            core.ui.window_focus = false;
+        });
     },
 
     //Common functions
@@ -1423,15 +1423,19 @@ core.ui = {
 
     resizeLeftGlobalMenu: function(){
         $('.global-left').css({
-            height: 0
+            height: 0,
+            minHeight: 0
         }).css({
-            height: $('body').height() - $('header.header').height() - $('footer').height() - 15
+            height: $('body').height() - $('header.header').height() - $('footer').height() - 15,
+            minHeight: $('.global-right').height() + 41
         });
 
-        $('.jspContainer').css({
-            height: 0
+        $('.global-left .jspContainer').css({
+            height: 0,
+            minHeight: 0
         }).css({
-            height: $('body').height() - $('header.header').height() - $('footer').height() - 15
+            height: $('body').height() - $('header.header').height() - $('footer').height() - 15,
+            minHeight: $('.global-right').height() + 41
         });
 
         $('.global-left').jScrollPane();

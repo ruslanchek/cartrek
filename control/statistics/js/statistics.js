@@ -250,7 +250,7 @@ var View = function () {
     };
 
     this.showNoSelectedCar = function () {
-        $('#statistics').html('Выберите машину из списка.');
+        $('#statistics').html('Выберите автомобиль из списка.');
     };
 
     this.showChart = function (data) {
@@ -310,9 +310,9 @@ var View = function () {
             }
 
         } else if (MC.Data.current_car) {
-            $('#statistics').html('Данных для машины &laquo;' + MC.Data.current_car.name + '&raquo; на выбранную дату нет, выберите другую дату.');
+            $('#statistics').html('Данных для автомобиля &laquo;' + MC.Data.current_car.name + '&raquo; на выбранную дату нет, выберите другую дату.');
         } else {
-            $('#statistics').html('Выберите машину из списка.');
+            $('#statistics').html('Выберите автомобиль из списка.');
         }
     };
 
@@ -432,7 +432,7 @@ var Data = function () {
             if (!this.current_car) {
                 this.car = 'none';
                 MC.View.showNoSelectedCar();
-                // MC.View.showMapMessage('Ошибка, машины с ID ' + this.car + ' не существует!');
+                // MC.View.showMapMessage('Ошибка, автомобиля с ID ' + this.car + ' не существует!');
             }
         }
 

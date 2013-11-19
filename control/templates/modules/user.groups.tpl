@@ -7,7 +7,7 @@
                 <thead class="thead-gray">
                 <tr>
                     <th width="98%">Название</th>
-                    <th width="1%">Машин</th>
+                    <th width="1%">Автомобилей</th>
                     <th width="1%"></th>
                 </tr>
                 </thead>
