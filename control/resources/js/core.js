@@ -1425,13 +1425,13 @@ core.ui = {
         $('.global-left').css({
             height: 0
         }).css({
-            height: $('body').height() - $('header.header').height() - $('.footer').height() - 47
+            height: $('body').height() - $('header.header').height() - $('footer').height() - 15
         });
 
         $('.jspContainer').css({
             height: 0
         }).css({
-            height: $('body').height() - $('header.header').height() - $('.footer').height() - 47
+            height: $('body').height() - $('header.header').height() - $('footer').height() - 15
         });
 
         $('.global-left').jScrollPane();

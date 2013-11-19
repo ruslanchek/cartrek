@@ -291,7 +291,7 @@ var View = function () {
     this.mapView = function () {
         var resize = function () {
             $('#map, .map-container').css({
-                height: $('body').height() - 99,
+                height: $('body').height() - $('header.header').height() - $('footer').height() - 15,
                 width: $('.map-container').parent().width() + 60
             });
 
