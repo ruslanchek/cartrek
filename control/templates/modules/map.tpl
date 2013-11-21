@@ -72,7 +72,14 @@
 
             <div class="datepicker">
                 <i class="dp-top-arrow"></i>
-                <div class="widget"></div>
+                <div class="datepicker-content">
+                    <div class="widget"></div>
+
+                    <div class="datepicker-actions">
+                        <a class="btn" href="#" title="Закрыть календарь">Закрыть</a>
+                        <a id="trigger-today" class="btn" href="#" title="Перейти к сегодняшней дате и времени">Сегодня</a>
+                    </div>
+                </div>
             </div>
         </div>
 

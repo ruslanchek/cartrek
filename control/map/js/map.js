@@ -29,9 +29,12 @@ var View = function () {
         $('body').off('keyup.showMapMessage');
     };
 
-    this.bindDatepicker = function(date){
-        $('.datepicker .widget').datepicker('setDate', core.utilities.humanizeDate(date) );
+    this.setDatepickerCurrents = function(){
+        $('.datepicker .widget').datepicker('setDate', core.utilities.humanizeDate(MC.Data.date));
+        $('#current-date').html(core.utilities.humanizeDate(MC.Data.date));
+    };
 
+    this.bindDatepicker = function(date){
         $('.datepicker .widget').datepicker({
             onSelect: function(text, obj){
                 var car = MC.Data.car,
@@ -71,6 +74,8 @@ var View = function () {
                 /*selectedDay: 3
                 selectedMonth: 8
                 selectedYear: 2013*/
+
+                $('#current-date').html(core.utilities.humanizeDate(MC.Data.date));
             },
             firstDay: 1,
             dateFormat: 'd M, yy',
@@ -84,6 +89,12 @@ var View = function () {
             dayNamesShort: [ "Вос", "Пон", "Вто", "Сре", "Чет", "Пят", "Суб" ],
             monthNames: [ "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь" ],
             monthNamesShort: [ "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря" ]
+        });
+
+        $('#trigger-today').off('click').on('click', function(e){
+            document.location.hash = '#fleet=' + MC.Data.fleet + '&car=' + MC.Data.car;
+            MC.View.setDatepickerCurrents();
+            e.preventDefault();
         });
     };
 
@@ -323,7 +334,7 @@ var View = function () {
             resize();
 
             setTimeout(function(){
-                $(window).trigger('resize');
+                resize();
             }, 200);
         });
     };
