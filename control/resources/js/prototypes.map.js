@@ -988,8 +988,11 @@ var Car = function (params, instance_map) {
 
     this.resetPathPoints = function() {
         this.params.last_path_point_id = null;
-        this.path.points = [];
-        this.path.instance.spliceLatLngs(0);
+
+        if(this.path){
+            this.path.points = [];
+            this.path.instance.spliceLatLngs(0);
+        }
     };
 
     this.drawPath = function (callback) {

@@ -47,7 +47,7 @@
                 Авто
             </label>
 
-            <label style="width: 54px;">
+            <label style="width: 55px;">
                 <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
                 <a href="javascript:void(0)" id="focus-toggler" title="Показать текущее положение">Фокус</a>
             </label>

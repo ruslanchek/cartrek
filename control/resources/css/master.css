@@ -149,7 +149,7 @@ html, body {
 }
 
 .cont {
-    min-width: 950px;
+    min-width: 834px;
     margin: 0 30px;
     position: relative;
 }
@@ -1863,10 +1863,10 @@ footer a:active {
     background: #fff;
     -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
     box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
-    width: 250px;
+    width: 260px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
-    top: 45px;
+    top: 80px;
     right: 0;
 }
 
@@ -1910,14 +1910,12 @@ footer a:active {
 }
 
 .status-info-table-block .status-block .item {
-    width: 22%;
-    margin-left: 3%;
     float: left;
+    margin-left: 6px;
 }
 
 .status-info-table-block .status-block .item:first-child {
     margin-left: 0;
-    width: 25%;
 }
 
 .status-info-table-block table {
@@ -1946,7 +1944,7 @@ footer a:active {
     left: -30px;
     top: -25px;
     width: 100%;
-    min-width: 1150px;
+    min-width: 889px;
     overflow: hidden;
 }
 
@@ -2192,8 +2190,8 @@ footer a:active {
 
 /* Map top panel */
 #togglers {
-    top: 0;
-    right: 810px;
+    top: 40px;
+    right: 0;
     position: absolute;
     background: #fff;
     -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
@@ -2201,7 +2199,7 @@ footer a:active {
     -webkit-border-radius: 2px;
     border-radius: 2px;
     padding: 3px 0 3px 5px;
-    width: 253px;
+    width: 255px;
 }
 
 #togglers label {

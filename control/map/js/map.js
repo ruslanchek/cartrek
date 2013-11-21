@@ -97,8 +97,8 @@ var View = function () {
         $('#trigger-today').off('click').on('click', function(e){
             document.location.hash = '#fleet=' + MC.Data.fleet + '&car=' + MC.Data.car;
             MC.View.setDatepickerCurrents();
-            $('.datepicker').data('showed', false).fadeOut(100);
 
+            $('.datepicker').data('showed', false).fadeOut(100);
             $('.datepicker-actions').hide();
 
             e.preventDefault();
@@ -152,10 +152,10 @@ var View = function () {
             viewed                  = 0,
             cars_on_map             = MC.Data.current_cars_obj;
 
-        if (core.utilities.compareDates(MC.Data.date, new Date()) === true) {
-            $('#date-menu .icon').removeClass('timemachine').addClass('calendar').attr('title', 'Выбрать дату для машины времени');
-        }else{
+        if (MC.Data.timemachine === true) {
             $('#date-menu .icon').removeClass('calendar').addClass('timemachine').attr('title', 'Машина времени активна (' + core.utilities.humanizeDate(MC.Data.date) + ')');
+        }else{
+            $('#date-menu .icon').removeClass('timemachine').addClass('calendar').attr('title', 'Выбрать дату для машины времени');
         }
 
         if (MC.Data.current_car) {
@@ -230,68 +230,57 @@ var View = function () {
         if(multiple === true){
             current_info_html +=
                 '<div class="status-info-table-block">' +
-                '<table>' +
-                '<tr>' +
-                '<td width="99%">Выбрано автомобилей</td>' +
-                '<td width="1%"><span class="badge">' + selected + '</span></td>' +
-                '</tr>' +
-                '<tr>' +
-                '<td>Из них на карте</td>' +
-                '<td><span class="badge">' + viewed + '</span></td>' +
-                '</tr>' +
-                '</table>' +
+                    '<table>' +
+                        '<tr>' +
+                            '<td width="99%">Выбрано автомобилей</td>' +
+                            '<td width="1%"><span class="badge">' + selected + '</span></td>' +
+                        '</tr>' +
+                        '<tr>' +
+                            '<td>Из них на карте</td>' +
+                            '<td><span class="badge">' + viewed + '</span></td>' +
+                        '</tr>' +
+                    '</table>' +
                 '</div>';
 
             if(cars_on_map.length > 0){
                 for(var i = 0, l = cars_on_map.length; i < l; i++){
-                    var status = '',
-                        speed = '',
-                        hdop = '',
-                        csq = '',
-                        name = '';
+                    var status  = '',
+                        speed   = '',
+                        hdop    = '',
+                        csq     = '',
+                        name    = '';
 
-                    if (cars_on_map[i].params.metrics && cars_on_map[i].params.metrics.online === true) {
-                        status = '<span class="status-text green">Онлайн</span>';
-                        hdop = core.utilities.getHDOPIndicator(cars_on_map[i].params.metrics.hdop, cars_on_map[i].params.sat_count, true);
-                        csq = core.utilities.getCSQIndicator(cars_on_map[i].params.metrics.csq, true);
-                        name = '<a href="#">' + cars_on_map[i].params.name + '</a>';
+                    if (cars_on_map[i].params.metrics && cars_on_map[i].params.metrics.online === true){
+                        status  = '<i class="green icon-signal-1" title="Онлайн"></i>';
+                        hdop    = core.utilities.getHDOPIndicator(cars_on_map[i].params.metrics.hdop, cars_on_map[i].params.sat_count, true);
+                        csq     = core.utilities.getCSQIndicator(cars_on_map[i].params.metrics.csq, true);
+                        name    = '<a href="#">' + cars_on_map[i].params.name + '</a>';
                     }else{
-                        status = '<span class="status-text gray">Офлайн</span>';
-                        name = '<span>' + cars_on_map[i].params.name + '</span>';
+                        status  = '<i class="gray icon-signal-1" title="Офлайн"></i>';
+                        name    = '<span>' + cars_on_map[i].params.name + '</span>';
                     }
 
                     if(cars_on_map[i].params.metrics.speed > 0 && cars_on_map[i].params.metrics.online === true){
-                        speed = '<span class="status-text green">' + core.utilities.convertKnotsToKms(cars_on_map[i].params.metrics.speed) + '</span>';
+                        speed   = '<span class="status-text green">' + core.utilities.convertKnotsToKms(cars_on_map[i].params.metrics.speed) + '</span>';
                     }else if ( cars_on_map[i].params.metrics.online === true ){
-                        speed = '<span class="status-text gray">0 км/ч</span>';
+                        speed   = '<span class="status-text gray" title="Скорость движения">0 км/ч</span>';
                     }
 
                     current_cars_list_html +=   '<tr>' +
-                                                '<td>' +
-                                                    '<div>' + core.utilities.drawGId(cars_on_map[i].params.g_id, 'small') + '</div>' +
-                                                    name +
-                                                    '<div class="clear"></div>' +
-
-                                                    '<div class="status-block">' +
-                                                        '<div class="item">' +
-                                                            status +
-                                                        '</div>' +
-
-                                                        '<div class="item">' +
-                                                            speed +
-                                                        '</div>' +
-
-                                                        '<div class="item">' +
-                                                            csq +
-                                                        '</div>' +
-
-                                                        '<div class="item">' +
-                                                            hdop +
-                                                        '</div>' +
-
+                                                    '<td>' +
+                                                        '<div>' + core.utilities.drawGId(cars_on_map[i].params.g_id, 'small') + '</div>' +
+                                                        name +
                                                         '<div class="clear"></div>' +
-                                                    '</div>' +
-                                                '</td>' +
+
+                                                        '<div class="status-block">' +
+                                                            '<div class="item">' + status + '</div>' +
+                                                            '<div class="item">' + speed + '</div>' +
+                                                            '<div class="item">' + csq + '</div>' +
+                                                            '<div class="item">' + hdop + '</div>' +
+
+                                                            '<div class="clear"></div>' +
+                                                        '</div>' +
+                                                    '</td>' +
                                                 '</tr>';
                 }
 
