@@ -30,8 +30,10 @@ var View = function () {
     };
 
     this.setDatepickerCurrents = function(){
-        $('.datepicker .widget').datepicker('setDate', core.utilities.humanizeDate(MC.Data.date));
-        $('#current-date').html(core.utilities.humanizeDate(MC.Data.date));
+        var tm_date = new Date();
+
+        $('.datepicker .widget').datepicker('setDate', core.utilities.humanizeDate(tm_date));
+        $('#current-date').html(core.utilities.humanizeDate(tm_date));
     };
 
     this.bindDatepicker = function(date){
@@ -75,7 +77,8 @@ var View = function () {
                 selectedMonth: 8
                 selectedYear: 2013*/
 
-                $('#current-date').html(core.utilities.humanizeDate(MC.Data.date));
+                $('#current-date').html(core.utilities.humanizeDate(tm_date));
+                $('.datepicker-actions').show();
             },
             firstDay: 1,
             dateFormat: 'd M, yy',
@@ -94,7 +97,15 @@ var View = function () {
         $('#trigger-today').off('click').on('click', function(e){
             document.location.hash = '#fleet=' + MC.Data.fleet + '&car=' + MC.Data.car;
             MC.View.setDatepickerCurrents();
+            $('.datepicker').data('showed', false).fadeOut(100);
+
+            $('.datepicker-actions').hide();
+
             e.preventDefault();
+        });
+
+        $('#trigger-datepicker').off('click').on('click', function(e){
+            $('.datepicker').data('showed', false).fadeOut(100);
         });
     };
 
