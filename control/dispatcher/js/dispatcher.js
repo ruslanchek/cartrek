@@ -666,7 +666,7 @@ var MC = {
     }
 }
 
-core.ticker.delay = 10000;
+core.ticker.delay = 100000;
 
 $(function () {
     MC.init();

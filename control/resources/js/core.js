@@ -806,7 +806,7 @@ core.utilities = {
             style = 'width: ' + width;
         }
 
-        return '<span class="signal-indicator" style="' + style + '" title="GSM: ' + csq.level_name + dbm + '"><span class="' + csq.level_class + '" style="width: ' + csq.percentage + '%"></span></span>';
+        return '<span class="signal-indicator signal-indicator-w-icon" style="' + style + '" title="GSM: ' + csq.level_name + dbm + '"><i class="icon-signal-2"></i><span class="' + csq.level_class + '" style="width: ' + csq.percentage + '%"></span></span>';
     },
 
     getHDOPIndicator: function (hdop, sat_count, width) {
@@ -824,7 +824,7 @@ core.utilities = {
             style = 'width: ' + width;
         }
 
-        return '<span class="signal-indicator" style="' + style + '" title="GPS: ' + hdop.level_name + sats + '"><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
+        return '<span class="signal-indicator signal-indicator-w-icon" style="' + style + '" title="GPS: ' + hdop.level_name + sats + '"><i class="icon-rss-1"></i><span class="' + hdop.level_class + '" style="width: ' + hdop.percentage + '%"></span></span>';
     },
 
     calculateFLSLevel: function (volts, capacity, type) {
@@ -1668,7 +1668,7 @@ core.effects = {
 
 core.ticker = {
     interval: null,
-    delay: 1000,
+    delay: 100000,
     interval_methods: [],
 
     processSystemInterval: function () {

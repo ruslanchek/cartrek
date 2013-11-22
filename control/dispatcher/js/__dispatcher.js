@@ -283,7 +283,7 @@ core.dispatcher = {
         this.createMaps();
         this.createSortable();
 
-        core.ticker.delay = 2000;
+        core.ticker.delay = 100000;
         core.utilities.transformToGID($('.g_id'), 'small');
     }
 };

@@ -266,6 +266,9 @@ var View = function () {
                         speed   = '<span class="status-text gray" title="Скорость движения">0 км/ч</span>';
                     }
 
+
+                    console.log(hdop)
+
                     current_cars_list_html +=   '<tr>' +
                                                     '<td>' +
                                                         '<div>' + core.utilities.drawGId(cars_on_map[i].params.g_id, 'small') + '</div>' +
@@ -1120,7 +1123,7 @@ var Data = function () {
 
 var MC = {
     init: function () {
-        core.ticker.delay = 1000;
+        core.ticker.delay = 100000;
 
         this.Map = new Map();
         this.View = new View();
