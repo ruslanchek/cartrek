@@ -163,7 +163,9 @@ var View = function () {
                 speed = '',
                 hdop = '',
                 csq = '',
-                name = '';
+                name = '',
+                ignition = '<i class="icon-flash-2 gray" title="Зажигание включено"></i>',
+                fuel = '';
 
             if (MC.Data.current_car.params.metrics && MC.Data.current_car.params.metrics.online === true) {
                 status = '<span class="status-text green">Онлайн</span>';
@@ -178,7 +180,11 @@ var View = function () {
             if(MC.Data.current_car.params.metrics.speed > 0 && MC.Data.current_car.params.metrics.online === true){
                 speed = '<span class="status-text green">' + core.utilities.convertKnotsToKms(MC.Data.current_car.params.metrics.speed) + '</span>';
             }else if ( MC.Data.current_car.params.metrics.online === true ){
-                speed = '<span class="status-text gray">0 км/ч</span>';
+                speed = '<span class="status-text gray"><i class="icon-gauge-1"></i> 0 км/ч</span>';
+            }
+
+            if (MC.Data.current_car.params.metrics && MC.Data.current_car.params.metrics.params && MC.Data.current_car.params.metrics.params.fls === true && (MC.Data.current_car.params.metrics.params.fuel || MC.Data.current_car.params.metrics.params.fuel === 0)) {
+                fuel = core.utilities.getFuelIndicator(MC.Data.current_car.params.metrics.params.fuel, MC.Data.current_car.params.metrics.params.fuel_tank_capacity, true);
             }
 
             current_info_html +=
@@ -193,21 +199,12 @@ var View = function () {
 
                                 '<div class="status-block">' +
 
-                                    '<div class="item">' +
-                                        status +
-                                    '</div>' +
-
-                                    '<div class="item">' +
-                                        speed +
-                                    '</div>' +
-
-                                    '<div class="item">' +
-                                        csq +
-                                    '</div>' +
-
-                                    '<div class="item">' +
-                                        hdop +
-                                    '</div>' +
+                                    '<div class="item">' + status + '</div>' +
+                                    '<div class="item">' + ignition + '</div>' +
+                                    '<div class="item">' + csq + '</div>' +
+                                    '<div class="item">' + hdop + '</div>' +
+                                    '<div class="item">' + fuel + '</div>' +
+                                    '<div class="item">' + speed + '</div>' +
 
                                     '<div class="clear"></div>' +
 
@@ -248,7 +245,9 @@ var View = function () {
                         speed   = '',
                         hdop    = '',
                         csq     = '',
-                        name    = '';
+                        name    = '',
+                        ignition = '<i class="icon-flash-2 gray" title="Зажигание включено"></i>',
+                        fuel = '';
 
                     if (cars_on_map[i].params.metrics && cars_on_map[i].params.metrics.online === true){
                         status  = '<i class="green icon-signal-1" title="Онлайн"></i>';
@@ -263,11 +262,12 @@ var View = function () {
                     if(cars_on_map[i].params.metrics.speed > 0 && cars_on_map[i].params.metrics.online === true){
                         speed   = '<span class="status-text green">' + core.utilities.convertKnotsToKms(cars_on_map[i].params.metrics.speed) + '</span>';
                     }else if ( cars_on_map[i].params.metrics.online === true ){
-                        speed   = '<span class="status-text gray" title="Скорость движения">0 км/ч</span>';
+                        speed   = '<span class="status-text gray" title="Скорость движения"><i class="icon-gauge-1"></i> 0 км/ч</span>';
                     }
 
-
-                    console.log(hdop)
+                    if (cars_on_map[i].params.metrics && cars_on_map[i].params.metrics.params && cars_on_map[i].params.metrics.params.fls === true && (cars_on_map[i].params.metrics.params.fuel || cars_on_map[i].params.metrics.params.fuel === 0)) {
+                        fuel = core.utilities.getFuelIndicator(cars_on_map[i].params.metrics.params.fuel, cars_on_map[i].params.metrics.params.fuel_tank_capacity, true);
+                    }
 
                     current_cars_list_html +=   '<tr>' +
                                                     '<td>' +
@@ -277,9 +277,11 @@ var View = function () {
 
                                                         '<div class="status-block">' +
                                                             '<div class="item">' + status + '</div>' +
-                                                            '<div class="item">' + speed + '</div>' +
+                                                            '<div class="item">' + ignition + '</div>' +
                                                             '<div class="item">' + csq + '</div>' +
                                                             '<div class="item">' + hdop + '</div>' +
+                                                            '<div class="item">' + fuel + '</div>' +
+                                                            '<div class="item">' + speed + '</div>' +
 
                                                             '<div class="clear"></div>' +
                                                         '</div>' +

@@ -871,7 +871,7 @@ core.utilities = {
             style = 'width: ' + width;
         }
 
-        return '<span class="signal-indicator" style="' + style + '" title="~' + current_percent + '% (' + Math.round(((total_liters / 100) * current_percent)) + ' из ' + total_liters + ' л)"><span class="' + level_class + '" style="width: ' + current_percent + '%"></span></span>';
+        return '<span class="signal-indicator signal-indicator-w-icon" style="' + style + '" title="~' + current_percent + '% (' + Math.round(((total_liters / 100) * current_percent)) + ' из ' + total_liters + ' л)"><i class="icon-tint-1"></i><span class="' + level_class + '" style="width: ' + current_percent + '%"></span></span>';
     },
 
     getVoltsIndicator: function (v, warning_value) {
