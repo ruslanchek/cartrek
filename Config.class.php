@@ -28,7 +28,7 @@ Class Config{
         );
 
         $this->db_vars = array(
-            'host'  => '62.76.40.244',
+            'host'  => 'cartrek.ru',
             'db'    => 'cartrek',
             'user'  => 'cartrek',
             'pass'  => 'Tukzara',

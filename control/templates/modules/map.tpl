@@ -75,7 +75,7 @@
                 <div class="datepicker-content">
                     <div class="widget"></div>
 
-                    <div class="datepicker-actions">
+                    <div class="datepicker-actions" style="display none">
                         {*<a id="trigger-datepicker" class="close" href="#" title="Закрыть календарь">Закрыть</a>*}
                         <a id="trigger-today" class="btn" href="#" title="Перейти к сегодняшней дате и времени">Отключить машину времени</a>
                     </div>

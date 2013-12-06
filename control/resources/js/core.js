@@ -1304,6 +1304,7 @@ core.map_tools = {
 
 core.ui = {
     window_focus: true,
+    global_menu_opened: true,
 
     windowFocus: function () {
         $(window).on('focus',function () {
@@ -1444,7 +1445,7 @@ core.ui = {
     closeLeftGlobalMenu: function(){
         $('.global-left').animate({
             marginLeft: -186
-        }, 300);
+        }, 350);
 
         $('.global-menu').animate({
             opacity: 0
@@ -1452,13 +1453,26 @@ core.ui = {
 
         $('.global-right').animate({
             marginLeft: 0
-        }, 300);
+        }, 350);
+
+        $('.map-observer .leaflet-left').animate({
+            left: 10
+        }, 350);
+
+        var i = setInterval(function(){
+            $(window).resize();
+        }, 50);
+
+        setTimeout(function(){
+            $(window).resize();
+            clearInterval(i);
+        }, 350);
     },
 
     openLeftGlobalMenu: function(){
         $('.global-left').animate({
             marginLeft: 0
-        }, 300);
+        }, 350);
 
         $('.global-menu').animate({
             opacity: 1
@@ -1466,14 +1480,59 @@ core.ui = {
 
         $('.global-right').animate({
             marginLeft: 186
-        }, 300);
+        }, 350);
+
+        $('.map-observer .leaflet-left').animate({
+            left: 0
+        }, 350);
+
+        var i = setInterval(function(){
+            $(window).resize();
+        }, 50);
+
+        setTimeout(function(){
+            $(window).resize();
+            clearInterval(i);
+        }, 350);
+    },
+
+    initLeftGlobalMenu: function(){
+        this.resizeLeftGlobalMenu();
+
+        $(window).on('resize.globalMenu', function () {
+            setTimeout(function(){
+                core.ui.resizeLeftGlobalMenu();
+            }, 200);
+        });
+
+        $('.global-left').jScrollPane();
+
+        var html =  '<div class="tools-panel">' +
+                        '<a class="item toggle-global-menu" href="#">' +
+                            '<i class="icon-left-open"></i>' +
+                        '</a>' +
+
+                        '<a class="item toggle-menu-settings" href="#">' +
+                            '<i class="icon-th"></i>' +
+                        '</a>' +
+                    '</div>';
+
+        $('.global-left').append(html);
+
+        $('.toggle-global-menu').on('click', function(){
+            if(core.ui.global_menu_opened === true){
+                core.ui.closeLeftGlobalMenu();
+            }else{
+                core.ui.openLeftGlobalMenu();
+            }
+        });
     },
 
     init: function () {
         this.webkitNotificationsRequest();
         this.getRawTitle();
         this.windowFocus();
-        this.resizeLeftGlobalMenu();
+        this.initLeftGlobalMenu();
 
         $('.core-ui-select').coreUISelect({
             jScrollPane: true
@@ -1484,12 +1543,6 @@ core.ui = {
                 $('.form_message').html('');
             });
         });
-
-        $(window).on('resize.globalMenu', function () {
-            core.ui.resizeLeftGlobalMenu();
-        });
-
-        $('.global-left').jScrollPane();
     }
 };
 

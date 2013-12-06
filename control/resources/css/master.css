@@ -92,14 +92,71 @@ p {
     opacity: 1;
 }
 
+.global-left .tools-panel {
+    position: absolute;
+    bottom: 0;
+    width: 186px;
+    height: 40px;
+    left: 0;
+    background: rgba(255, 255, 255, 0.13);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.global-left .tools-panel .item {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 18px;
+    float: left;
+    position: relative;
+    height: 40px;
+    width: 93px;
+    line-height: 40px;
+    text-align: center;
+    display: block;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+}
+
+.global-left .tools-panel .item i {
+    margin: 0 auto;
+    display: block;
+    height: 40px;
+}
+
+.global-left .tools-panel .item:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    text-shadow:  0 -1px 0 rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.global-left .tools-panel .item:first-of-type:before,
+.global-left .tools-panel .item:first-of-type:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    display: block;
+}
+
+.global-left .tools-panel .item:first-of-type:before {
+    right: 1px;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+
+
 .global-right {
     margin-left: 186px;
 }
+
 
 .global-menu {
     width: 136px;
     margin: 0 auto;
     padding: 15px 0;
+    position: relative;
 }
 
 .global-menu a {
@@ -1928,7 +1985,7 @@ footer a:active {
 
 .status-info-table-block .status-block .item .signal-indicator {
     margin-right: 6px;
-    width: 26px !important;
+    width: 23px !important;
 }
 
 .status-info-table-block .status-block .item .signal-indicator i {
