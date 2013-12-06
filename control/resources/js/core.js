@@ -1513,7 +1513,7 @@ core.ui = {
                         '</a>' +
 
                         '<a class="item toggle-menu-settings" href="#">' +
-                            '<i class="icon-th"></i>' +
+                            '<i class="icon-th-large-1"></i>' +
                         '</a>' +
                     '</div>';
 
