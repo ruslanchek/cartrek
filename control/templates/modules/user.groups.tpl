@@ -1,4 +1,4 @@
-<div class="threequarter">
+
     {$fleets = $core->devices->getFleetsList()}
 
     {if $fleets}
@@ -35,8 +35,3 @@
             У вас нет групп, но вы можете их <a href="#" class="add_fleet">создать</a>.
         </div>
     {/if}
-</div>
-
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>

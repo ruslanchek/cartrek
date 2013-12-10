@@ -1,4 +1,4 @@
-<div class="threequarter">
+
     <div class="form_message"></div>
     <div class="row">
         <div class="half">
@@ -67,8 +67,3 @@
             </form>
         </div>
     </div>
-</div>
-
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>

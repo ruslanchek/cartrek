@@ -78,7 +78,7 @@ var View = function () {
                 selectedYear: 2013*/
 
                 $('#current-date').html(core.utilities.humanizeDate(tm_date));
-                $('.datepicker-actions').show();
+                $('.datepicker-actions').slideDown(250);
             },
             firstDay: 1,
             dateFormat: 'd M, yy',
@@ -99,7 +99,7 @@ var View = function () {
             MC.View.setDatepickerCurrents();
 
             $('.datepicker').data('showed', false).fadeOut(100);
-            $('.datepicker-actions').hide();
+            $('.datepicker-actions').slideUp(250);
 
             e.preventDefault();
         });
@@ -154,8 +154,10 @@ var View = function () {
 
         if (MC.Data.timemachine === true) {
             $('#date-menu .icon').removeClass('calendar').addClass('timemachine').attr('title', 'Машина времени активна (' + core.utilities.humanizeDate(MC.Data.date) + ')');
+            $('.datepicker-actions').slideDown(250);
         }else{
             $('#date-menu .icon').removeClass('timemachine').addClass('calendar').attr('title', 'Выбрать дату для машины времени');
+            $('.datepicker-actions').slideUp(250);
         }
 
         if (MC.Data.current_car) {
@@ -168,20 +170,22 @@ var View = function () {
                 fuel = '';
 
             if (MC.Data.current_car.params.metrics && MC.Data.current_car.params.metrics.online === true) {
-                status = '<span class="status-text green">Онлайн</span>';
+                status = '<i class="green icon-signal-1" title="Онлайн"></i>';
                 hdop = core.utilities.getHDOPIndicator(MC.Data.current_car.params.metrics.hdop, MC.Data.current_car.params.sat_count, true);
                 csq = core.utilities.getCSQIndicator(MC.Data.current_car.params.metrics.csq, true);
                 name = '<a href="#">' + MC.Data.current_car.params.name + '</a>';
             }else{
-                status = '<span class="status-text gray">Офлайн</span>';
+                status = '<i class="gray icon-signal-1" title="Офлайн"></i>';
                 name = '<span>' + MC.Data.current_car.params.name + '</span>';
             }
+
 
             if(MC.Data.current_car.params.metrics.speed > 0 && MC.Data.current_car.params.metrics.online === true){
                 speed = '<span class="status-text green">' + core.utilities.convertKnotsToKms(MC.Data.current_car.params.metrics.speed) + '</span>';
             }else if ( MC.Data.current_car.params.metrics.online === true ){
                 speed = '<span class="status-text gray"><i class="icon-gauge-1"></i> 0 км/ч</span>';
             }
+
 
             if (MC.Data.current_car.params.metrics && MC.Data.current_car.params.metrics.params && MC.Data.current_car.params.metrics.params.fls === true && (MC.Data.current_car.params.metrics.params.fuel || MC.Data.current_car.params.metrics.params.fuel === 0)) {
                 fuel = core.utilities.getFuelIndicator(MC.Data.current_car.params.metrics.params.fuel, MC.Data.current_car.params.metrics.params.fuel_tank_capacity, true);
@@ -193,7 +197,8 @@ var View = function () {
                         '<tr>' +
                             '<td>' +
                                 '<div>' + core.utilities.drawGId(MC.Data.current_car.params.g_id, 'small') + '</div>' +
-                                name +
+
+                                '<div class="car-name">' + name + '</div>' +
 
                                 '<div class="clear"></div>' +
 
@@ -269,10 +274,12 @@ var View = function () {
                         fuel = core.utilities.getFuelIndicator(cars_on_map[i].params.metrics.params.fuel, cars_on_map[i].params.metrics.params.fuel_tank_capacity, true);
                     }
 
-                    current_cars_list_html +=   '<tr>' +
+                    current_cars_list_html +=   '<tr class="car-item">' +
                                                     '<td>' +
                                                         '<div>' + core.utilities.drawGId(cars_on_map[i].params.g_id, 'small') + '</div>' +
-                                                        name +
+
+                                                        '<div class="car-name">' + name + '</div>' +
+
                                                         '<div class="clear"></div>' +
 
                                                         '<div class="status-block">' +
@@ -302,6 +309,8 @@ var View = function () {
         $('#current-date').html(core.utilities.humanizeDate(MC.Data.date));
         $('#current-info').html(current_info_html);
 
+        $('#current-info .car-item:odd').addClass('odd');
+
         this.mapView();
     };
 
@@ -315,13 +324,13 @@ var View = function () {
                 width: $('.map-container').parent().width() + 60
             });
 
-            var ib_height = $('.map-container').height() - 120;
+            var ib_height = $('.map-container').height() - 131;
 
             if(ib_height > $('#current-info').height()){
                 ib_height = $('#current-info').height();
             }
 
-            $('.map-tools-info-block').css({
+            $('.map-tools-info-block .scroll-block').css({
                 minHeight: ib_height,
                 maxHeight: ib_height
             });
@@ -330,7 +339,7 @@ var View = function () {
                 MC.Map.instance.invalidateSize();
             }
 
-            $('.map-tools-info-block').jScrollPane();
+            $('.map-tools-info-block .scroll-block').jScrollPane();
         };
 
         resize();

@@ -41,31 +41,13 @@
 
 <div class="map-container map-observer" data-step='2' data-intro='Карта'>
     <div class="map-tools-top-right slide-animation init">
-        <div id="togglers">
-            <label style="width: 45px;" title="Автообновление данных">
-                <input type="checkbox" class="slickswitch" id="auto-renew" />
-                Авто
-            </label>
-
-            <label style="width: 55px;">
-                <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
-                <a href="javascript:void(0)" id="focus-toggler" title="Показать текущее положение">Фокус</a>
-            </label>
-
-            <label style="width: 45px;" title="Показывать пройденный путь">
-                <input type="checkbox" class="slickswitch" id="show-path" />
-                <a href="javascript:void(0)" id="path-toggler" title="Показать текущий путь">Путь</a>
-            </label>
-
-            <div class="clear"></div>
-        </div>
-        
         <div id="cars-menu"></div>
 
         <i class="arrow-separator"></i>
         <div id="fleets-menu"></div>
 
         <i class="arrow-separator"></i>
+
         <div id="date-menu">
             <i class="icon calendar" title="Открыть календарь"></i>
             <div id="current-date"></div>
@@ -75,7 +57,9 @@
                 <div class="datepicker-content">
                     <div class="widget"></div>
 
-                    <div class="datepicker-actions" style="display none">
+                    <div class="clear"></div>
+
+                    <div class="datepicker-actions" style="display: none">
                         {*<a id="trigger-datepicker" class="close" href="#" title="Закрыть календарь">Закрыть</a>*}
                         <a id="trigger-today" class="btn" href="#" title="Перейти к сегодняшней дате и времени">Отключить машину времени</a>
                     </div>
@@ -84,7 +68,30 @@
         </div>
 
         <div class="map-tools-info-block">
-            <div id="current-info"></div>
+            <div id="togglers">
+                <label style="width: 40px;" title="Автообновление данных">
+                    <input type="checkbox" class="slickswitch" id="auto-renew" />
+                    Авто
+                </label>
+
+                <label style="width: 49px;">
+                    <input type="checkbox" class="slickswitch" id="auto-focus" title="Автоматическое перемещение карты при обновлении данных" />
+                    <a href="javascript:void(0)" id="focus-toggler" title="Показать текущее положение">Фокус</a>
+                </label>
+
+                <label style="width: 40px;" title="Показывать пройденный путь">
+                    <input type="checkbox" class="slickswitch" id="show-path" />
+                    <a href="javascript:void(0)" id="path-toggler" title="Показать текущий путь">Путь</a>
+                </label>
+
+                <div class="clear"></div>
+            </div>
+
+            <div class="block-separator"></div>
+
+            <div class="scroll-block">
+                <div id="current-info"></div>
+            </div>
         </div>
     </div>
 

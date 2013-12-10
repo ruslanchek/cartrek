@@ -485,12 +485,12 @@ table .activity-icon {
 }
 
 table .active.activity-icon {
-    color: #04ABC8;
-    text-shadow: 0 1px 10px rgba(89, 230, 255, 0.7), 0 1px 0 rgba(255, 255, 255, 1);
+    color: #2FA929;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1);
 }
 
 table .unactive.activity-icon {
-    color: #888;
+    color: #999;
 }
 
 table.hovered {
@@ -552,7 +552,7 @@ table.hovered {
     background: -ms-linear-gradient(top, #6a8ca1, #506877);
     background: -o-linear-gradient(top, #6a8ca1, #506877);
     background-image: -ms-linear-gradient(top, #6a8ca1 0%, #506877 100%);
-    padding: 0.06em 0.7ex 0.07em;
+    padding: 0.15em 1ex 0.25em;
     -webkit-border-radius: 0.5ex;
     -moz-border-radius: 0.5ex;
     border-radius: 0.5ex;
@@ -1046,6 +1046,10 @@ input:disabled {
 
 .tooltip-content h3 {
     margin: 0 15px 0.2em 0 !important;
+    width: 310px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .tooltip-content em {
@@ -1059,17 +1063,21 @@ input:disabled {
 
 .tooltip-content .indicators {
     float: right;
-    width: 100px;
+    width: 200px;
     text-align: right;
 }
 
 .tooltip-content .indicators .signal-indicator {
-    margin-left: 5px;
-    width: 45px;
+    margin-left: 25px;
+    width: 50px;
 }
 
 .tooltip-content .make-model {
     float: left;
+    width: 105px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .leaflet-container a.leaflet-popup-close-button {
@@ -1079,6 +1087,11 @@ input:disabled {
 .leaflet-popup-content-wrapper {
     -webkit-border-radius: 5px !important;
     border-radius: 5px !important;
+}
+
+.leaflet-popup-content {
+    margin: 12px 14px !important;
+    width: 330px !important;
 }
 
 /* =Footer
@@ -1894,7 +1907,7 @@ footer a:active {
 }
 
 .datepicker .widget {
-    margin: 0 0 10px;
+    margin: 0;
     width: 261px;
 }
 
@@ -1935,13 +1948,13 @@ footer a:active {
     width: 260px;
     -webkit-border-radius: 2px;
     border-radius: 2px;
-    top: 80px;
+    top: 50px;
     right: 0;
 }
 
 .map-tools-info-block .block-separator {
     height: 0;
-    border-top: 4px solid #eee;
+    border-top: 3px solid #eee;
     border-bottom: 1px solid #eee;
 }
 
@@ -1976,16 +1989,25 @@ footer a:active {
 
 .status-info-table-block .status-block {
     font-size: 11px;
+    padding-top: 2px;
 }
 
 .status-info-table-block .status-block .item {
     float: left;
-    margin-left: 4px;
+    margin-right: 6px;
+}
+
+.status-info-table-block .car-item.odd td {
+    background: #F9F9F9 !important;
+}
+
+.status-info-table-block .car-name {
+
 }
 
 .status-info-table-block .status-block .item .signal-indicator {
     margin-right: 6px;
-    width: 23px !important;
+    width: 33px !important;
 }
 
 .status-info-table-block .status-block .item .signal-indicator i {
@@ -1998,6 +2020,14 @@ footer a:active {
 
 .status-info-table-block table {
     margin: 0;
+}
+
+.status-info-table-block td {
+    font-size: 0.9em;
+}
+
+.status-info-table-block .badge {
+    font-size: 0.9em;
 }
 
 .status-info-table-block table tr:last-child td {
@@ -2159,6 +2189,7 @@ footer a:active {
     display: block;
     -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3) !important;
     box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3) !important;
+    right: 10px;
 }
 
 .map-observer .leaflet-control-attribution {
@@ -2268,22 +2299,15 @@ footer a:active {
 
 /* Map top panel */
 #togglers {
-    top: 40px;
-    right: 0;
-    position: absolute;
-    background: #fff;
-    -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
-    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.3);
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    padding: 3px 0 3px 5px;
-    width: 255px;
+    height: 30px;
+    padding: 7px 11px 0;
 }
 
 #togglers label {
     float: left;
     position: relative;
     padding-left: 36px;
+    font-size: 0.9em;
 }
 
 #togglers .slickswitch {

@@ -1,4 +1,3 @@
-<div class="threequarter">
     <div class="map-types forms">
         <h2>Стиль карты</h2>
 
@@ -34,8 +33,3 @@
             <a class="quarter item" href="#" rel="gglsat"><i><img src="/control/resources/img/map-previews/gglsat.png" alt=""></i><span class="name">Карты Google <sup class="beta" title="Бета (возможны проблемы с производительностью)">&beta;</sup> <span class="sup">спутник</span></span></a>
         </div>
     </div>
-</div>
-
-<div class="quarter">
-    {include file="modules/user.menu.tpl"}
-</div>

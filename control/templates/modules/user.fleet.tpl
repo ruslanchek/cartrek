@@ -3,7 +3,6 @@
         <table class="width-100 hovered" id="fleet-table">
             <thead class="thead-gray">
                 <tr>
-
                     <th width="1%"></th>
                     <th width="1%" class="text-centered"><i title="Вкл/выкл" class="icon-off"></i></th>
                     <th width="23%">Название</th>
@@ -11,7 +10,6 @@
                     <th width="20%">Марка/модель</th>
                     <th width="20%">Тип</th>
                     <th width="20%">Группа</th>
-
                 </tr>
             </thead>
             <tbody>

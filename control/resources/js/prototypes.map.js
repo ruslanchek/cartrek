@@ -477,6 +477,7 @@ var PosMarker = function (params, instance_map) {
         html += '<span class="indicators">';
 
         if (this.params.metrics && this.params.metrics.online === true) {
+            html += '<i class="green icon-signal-1" title="Онлайн"></i>';
 
             if (this.params.metrics.hdop) {
                 html += core.utilities.getHDOPIndicator(this.params.metrics.hdop, this.params.sat_count);
@@ -485,8 +486,12 @@ var PosMarker = function (params, instance_map) {
             if (this.params.metrics.csq) {
                 html += core.utilities.getCSQIndicator(this.params.metrics.csq);
             }
+
+            if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.fls === true && (this.params.metrics.params.fuel || this.params.metrics.params.fuel === 0)) {
+                html += core.utilities.getFuelIndicator(this.params.metrics.params.fuel, this.params.metrics.params.fuel_tank_capacity, true);
+            }
         } else {
-            html += '<span class="small gray">Офлайн</span>';
+            html += '<i class="gray icon-signal-1" title="Офлайн"></i>';
         }
 
         html += '</span><div class="clear"></div>';
@@ -512,10 +517,6 @@ var PosMarker = function (params, instance_map) {
 
             if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.power_bat_normal_level && (this.params.metrics.params.power_bat || this.params.metrics.params.power_bat === 0)) {
                 html += '<tr><th>Батарея терминала</th><td colspan="2">' + core.utilities.getVoltsIndicator(this.params.metrics.params.power_bat, this.params.metrics.params.power_bat_normal_level) + '</td></tr>';
-            }
-
-            if (this.params.metrics && this.params.metrics.params && this.params.metrics.params.fls === true && (this.params.metrics.params.fuel || this.params.metrics.params.fuel === 0)) {
-                html += '<tr><th>Топливо</th><td colspan="2">' + core.utilities.getFuelIndicator(this.params.metrics.params.fuel, this.params.metrics.params.fuel_tank_capacity, true) + '</td></tr>';
             }
 
             html += '</table></div>';
