@@ -189,7 +189,8 @@ var Marker = function (params, instance_map) {
         focus_on_click: false,
         on_click: null,
         geocoder_data: null,
-        geocoder: false, // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
+        geocoder_decoded: null,
+        geocoder: true, // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
         draw: true
     };
 
@@ -284,6 +285,19 @@ var Marker = function (params, instance_map) {
 
             core.map_tools.geocodingRequest(this.params.metrics.lat, this.params.metrics.lng, function (data) {
                 t.params.geocoder_data = data;
+
+                if(
+                    data.response &&
+                    data.response.GeoObjectCollection &&
+                    data.response.GeoObjectCollection.featureMember &&
+                    data.response.GeoObjectCollection.featureMember[0]
+                ){
+                    var fm = data.response.GeoObjectCollection.featureMember[0];
+
+                    t.params.geocoder_decoded.text = fm.GeoObject.metaDataProperty.GeocoderMetaData.text;
+                    t.params.geocoder_decoded.name = fm.GeoObject.name;
+                    t.params.geocoder_decoded.description = fm.GeoObject.description;
+                }
             });
         }
     };
@@ -377,7 +391,7 @@ var PosMarker = function (params, instance_map) {
             title: (params.car_label_data && params.car_label_data.name) ? params.car_label_data.name + ' - текущее положение' : 'Текущее положение',
             zIndexOffset: 10000
         },
-        geocoder: false // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
+        geocoder: true // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
     };
 
     $.extend(true, this.params, params);
@@ -562,7 +576,7 @@ var WpMarker = function (params, instance_map) {
             title: '',
             zIndexOffset: 5000
         },
-        geocoder: false // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
+        geocoder: true // TODO: WARNING, DO NOT ENABLE!!! VERY EXPERIMENTAL FEATURE, STILL IN PRIVATE BETA!
     };
 
     $.extend(true, this.params, params);

@@ -1998,7 +1998,11 @@ footer a:active {
 }
 
 .status-info-table-block .car-item.odd td {
-    background: #F9F9F9 !important;
+    background: #FCFCFC !important;
+}
+
+.status-info-table-block .car-item:last-of-type td {
+    border-radius: 3px;
 }
 
 .status-info-table-block .car-name {
@@ -2006,12 +2010,12 @@ footer a:active {
 }
 
 .status-info-table-block .status-block .item .signal-indicator {
-    margin-right: 6px;
-    width: 33px !important;
+    margin-right: 2px;
+    width: 16px !important;
 }
 
 .status-info-table-block .status-block .item .signal-indicator i {
-    top: -8px;
+    top: -6px;
 }
 
 .status-info-table-block .status-block .item:first-child {

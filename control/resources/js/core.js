@@ -1284,7 +1284,7 @@ core.map_tools = {
     },
 
     geocodingRequest: function (lat, lng, callback) {
-        var url = 'http://api.tiles.mapbox.com/v3/ruslanchek.map-e89iu6uu/geocode/' + lat + ',' + lng + '.json';
+        var url = 'http://geocode-maps.yandex.ru/1.x/?format=json&geocode=' + lng + ',' + lat + '';
 
         if (callback) {
             $.ajax({
